@@ -1,5 +1,8 @@
-include: "/views/core/sales_orders_rfn.view"
-include: "/views/core/sales_orders__lines_rfn.view"
+include: "/views/test/sales_orders_rfn.view"
+include: "/views/test/sales_orders__lines_rfn.view"
+
+include: "/views/core/sales_orders__lines__item_categories_rfn.view"
+include: "/views/core/sales_orders__lines__item_descriptions_rfn.view"
 include: "/views/core/sales_orders__lines__return_line_ids_rfn.view"
 
 include: "/views/core/currency_conversion_sdt.view"
@@ -10,7 +13,7 @@ include: "/views/core/apply_currency_conversion_to_sales_xvw.view"
 
 explore: sales_orders {
   hidden: no
-
+  label: "TEST Sales Orders TEST"
   join: sales_orders__lines {
     view_label: "Sales Orders: Lines"
     sql: CROSS JOIN UNNEST(${sales_orders.lines}) as sales_orders__lines ;;
@@ -44,17 +47,17 @@ explore: sales_orders {
     view_label: "Sales Orders: Lines"
     relationship: one_to_one
     sql:  ;;
-  }
-  # join: sales_orders__lines__item_categories {
-  #   view_label: "Sales Orders: Lines Item Categories"
-  #   sql: LEFT JOIN UNNEST(${sales_orders__lines.item_categories}) as sales_orders__lines__item_categories ;;
-  #   sql_where: ${sales_orders__lines__item_categories.category_set_name} in ("Unknown",{% parameter sales_orders__lines.parameter_category_set_name %}) ;;
-  #   relationship: one_to_many
-  # }
-  # join: sales_orders__lines__item_descriptions {
-  #   view_label: "Sales Orders: Lines Item Descriptions"
-  #   sql: LEFT JOIN UNNEST(${sales_orders__lines.item_descriptions}) as sales_orders__lines__item_descriptions ;;
-  #   sql_where: ${sales_orders__lines__item_descriptions.language} in ("Unknown", {% parameter sales_orders__lines.parameter_language %}) ;;
-  #   relationship: one_to_many
-  # }
+}
+join: sales_orders__lines__item_categories {
+  view_label: "Sales Orders: Lines Item Categories"
+  sql: LEFT JOIN UNNEST(${sales_orders__lines.item_categories}) as sales_orders__lines__item_categories ;;
+  sql_where: ${sales_orders__lines__item_categories.category_set_name} in ("Unknown",{% parameter sales_orders__lines.parameter_category_set_name %}) ;;
+  relationship: one_to_many
+}
+join: sales_orders__lines__item_descriptions {
+  view_label: "Sales Orders: Lines Item Descriptions"
+  sql: LEFT JOIN UNNEST(${sales_orders__lines.item_descriptions}) as sales_orders__lines__item_descriptions ;;
+  sql_where: ${sales_orders__lines__item_descriptions.language} in ("Unknown", {% parameter sales_orders__lines.parameter_language %}) ;;
+  relationship: one_to_many
+}
 }

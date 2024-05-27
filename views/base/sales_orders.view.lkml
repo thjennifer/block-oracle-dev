@@ -92,9 +92,9 @@ view: sales_orders {
     type: yesno
     sql: ${TABLE}.HAS_HOLD ;;
   }
-  dimension: has_return {
+  dimension: has_return_line {
     type: yesno
-    sql: ${TABLE}.HAS_RETURN ;;
+    sql: ${TABLE}.HAS_RETURN_LINE ;;
   }
   dimension: header_id {
     type: number
@@ -247,15 +247,15 @@ view: sales_orders {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-  ledger_name,
-  sold_to_customer_name,
-  fiscal_period_set_name,
-  order_source_name,
-  fiscal_period_name,
-  ship_to_customer_name,
-  business_unit_name,
-  bill_to_customer_name
-  ]
+      ledger_name,
+      sold_to_customer_name,
+      fiscal_period_set_name,
+      order_source_name,
+      fiscal_period_name,
+      ship_to_customer_name,
+      business_unit_name,
+      bill_to_customer_name
+    ]
   }
 
 }

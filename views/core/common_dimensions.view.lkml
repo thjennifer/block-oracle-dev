@@ -1,15 +1,7 @@
 view: common_dimensions {
   extension: required
 
-#########################################################
-# Business Unit and Order Source Dimensions
-#{
 
-  dimension: business_unit_id {hidden: no}
-  dimension: business_unit_name {hidden: no}
-  dimension: order_source_id {hidden:no}
-  dimension: order_source_name {hidden:no}
-#} end business unit and order source dimensions
 
 #########################################################
 # Customer Dimensions

@@ -31,6 +31,8 @@ view: +sales_orders_daily_agg {
   fields_hidden_by_default: yes
   extends: [common_dimensions]
 
+  sql_table_name: `@{GCP_PROJECT_ID}.{% parameter parameter_use_test_or_demo_data %}.SalesOrdersDailyAgg` ;;
+
   dimension: key {
     type: string
     primary_key: yes
@@ -40,18 +42,51 @@ view: +sales_orders_daily_agg {
   dimension: ordered_date_key {
     type: date
     hidden: yes
-    sql: ${TABLE}.ORDERED_DATE) ;;
+    sql: ${TABLE}.ORDERED_DATE ;;
     convert_tz: no
   }
 
+
+  parameter: parameter_use_test_or_demo_data {
+    hidden: no
+    type: unquoted
+    view_label: "🔍 Filters & 🛠 Tools"
+    label: "Use Test or Demo Data"
+    allowed_value: {label: "test" value:"CORTEX_ORACLE_REPORTING_VISION"}
+    allowed_value: {label: "demo" value: "CORTEX_ORACLE_REPORTING"}
+    default_value: "CORTEX_ORACLE_REPORTING_VISION"
+  }
+
+
   dimension_group: ordered { hidden: no}
 
+#########################################################
+# Business Unit and Order Source Dimensions
+#{
+
+  dimension: business_unit_id {hidden: no}
+
+  dimension: business_unit_name {
+    hidden: no
+    sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CAST(${business_unit_id} as STRING)) ;;
+  }
+
+  dimension: order_source_id {
+    hidden: no
+    sql: COALESCE(${TABLE}.ORDER_SOURCE_ID,-1);;
+  }
+
+  dimension: order_source_name {
+    hidden: no
+    sql: COALESCE(${TABLE}.ORDER_SOURCE_NAME,COALESCE(CAST(NULLIF(${order_source_id},-1) AS STRING),"Unknown")) ;;
+  }
+#} end business unit and order source dimensions
 
 
 
   measure: count {
     hidden:no
-    label: "Count Rows"}
+    label: "Row Count"}
 
   measure: count_blocked_orders {
     hidden: no
@@ -78,7 +113,7 @@ view: +sales_orders_daily_agg {
     type: sum
     sql: ${num_open_orders} ;;
   }
-  measure: count_orders {
+  measure: total_sales_orders {
     hidden: no
     type: sum
     sql: ${num_orders} ;;

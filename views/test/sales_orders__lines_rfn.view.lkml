@@ -87,41 +87,41 @@ view: +sales_orders__lines {
     sql: COALESCE(${TABLE}.ITEM_ORGANIZATION_NAME,CAST(${item_organization_id} AS STRING)) ;;
   }
 
-  dimension: item_description {
-    hidden: no
-    group_label: "Item Description and Category"
-    sql: COALESCE((SELECT d.TEXT FROM UNNEST(${item_descriptions}) AS d WHERE d.language = {% parameter sales_orders__lines.parameter_language %} ), CAST(${inventory_item_id} AS STRING)) ;;
-    full_suggestions: yes
-  }
+  # dimension: item_description {
+  #   hidden: no
+  #   group_label: "Item Description and Category"
+  #   sql: COALESCE((SELECT d.TEXT FROM UNNEST(${item_descriptions}) AS d WHERE d.language = {% parameter sales_orders__lines.parameter_language %} ), ${inventory_item_id}) ;;
+  #   full_suggestions: yes
+  # }
 
-  dimension: item_description_language {
-    hidden: no
-    group_label: "Item Description and Category"
-    sql: (SELECT d.LANGUAGE FROM UNNEST(${item_descriptions}) AS d WHERE d.LANGUAGE = {% parameter sales_orders__lines.parameter_language %} ) ;;
-    full_suggestions: yes
-  }
+  # dimension: item_description_language {
+  #   hidden: no
+  #   group_label: "Item Description and Category"
+  #   sql: (SELECT d.LANGUAGE FROM UNNEST(${item_descriptions}) AS d WHERE d.LANGUAGE = {% parameter sales_orders__lines.parameter_language %} ) ;;
+  #   full_suggestions: yes
+  # }
 
-  dimension: category_description {
-    hidden: no
-    group_label: "Item Description and Category"
-    sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter parameter_category_set_name %} )
-         ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
-    full_suggestions: yes
-  }
+  # dimension: category_description {
+  #   hidden: no
+  #   group_label: "Item Description and Category"
+  #   sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter parameter_category_set_name %} )
+  #     ,COALESCE(CAST(${category_id} AS STRING),"Unknown")));;
+  #   full_suggestions: yes
+  # }
 
-  dimension: category_id {
-    hidden: no
-    group_label: "Item Description and Category"
-    sql: COALESCE((select c.id FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter parameter_category_set_name %}), -1 ) ;;
-    full_suggestions: yes
-  }
+  # dimension: category_id {
+  #   hidden: no
+  #   group_label: "Item Description and Category"
+  #   sql: (select c.id FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter parameter_category_set_name %} ) ;;
+  #   full_suggestions: yes
+  # }
 
-  dimension: category_group {
-    hidden: no
-    group_label: "Item Description and Category"
-    sql: COALESCE((select c.category_name FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter parameter_category_set_name %}),"Unknown" ) ;;
-    full_suggestions: yes
-  }
+  # dimension: category_group {
+  #   hidden: no
+  #   group_label: "Item Description and Category"
+  #   sql: COALESCE((select c.category_name FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter parameter_category_set_name %},"Unknown Category Group") ) ;;
+  #   full_suggestions: yes
+  # }
 
 
 #} end item dimensions
@@ -385,7 +385,7 @@ view: +sales_orders__lines {
   dimension: ordered_weight {
     hidden: no
     group_label: "Weights"
-    }
+  }
 
   dimension: shipped_weight {
     hidden: no
@@ -460,7 +460,7 @@ view: +sales_orders__lines {
   measure: average_days_from_promise_to_fulfillment {
     hidden: no
     type: average
-    description: "Average number of days between fulfillment date and delivery promise date per order line"
+    description: "Average Number of Days between Fulfillment Date and Delivery Promise Date per Order Line"
     sql: ${fulfillment_days_after_promise_date} ;;
   }
 
@@ -474,10 +474,8 @@ view: +sales_orders__lines {
   measure: average_cycle_time_days {
     hidden: no
     type: average
-    description: "Average number of days from order to fulfillment per order line. Item Category or ID must be in query or compution will return null."
-    sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or category_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
-    value_format_name: decimal_2
-    # required_fields: [category_description]
+    description: "Average Number of Days from Order to Fulfillment per Order Line"
+    sql: ${cycle_time_days} ;;
   }
 
 
@@ -579,4 +577,4 @@ view: +sales_orders__lines {
 
 
 
-   }
+}

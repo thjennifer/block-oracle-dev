@@ -1,21 +1,18 @@
 include: "/views/base/sales_orders.view"
 include: "/views/core/common_dimensions.view"
-
 view: +sales_orders {
   extends: [common_dimensions]
+  label: "Sales Orders TEST"
 
   fields_hidden_by_default: yes
 
-  # sql_table_name: `@{GCP_PROJECT_ID}.{% parameter parameter_use_test_or_demo_data %}.SalesOrders` ;;
 
-  sql_table_name: {% assign p = parameter_use_test_or_demo_data._parameter_value %}
-                  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_REPORTING_VISION' %}
-                  {% else %}{% assign t = 'CORTEX_ORACLE_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesOrders` ;;
+  sql_table_name: `@{GCP_PROJECT_ID}.{% parameter parameter_use_test_or_demo_data %}.SalesOrders` ;;
 
-  # dimension: business_unit_name {
-  #   hidden: no
-  #   sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CAST(${business_unit_id} as STRING)) ;;
-  # }
+  dimension: business_unit_name {
+    hidden: no
+    sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CAST(${business_unit_id} as STRING)) ;;
+  }
 
   dimension: header_id {
     hidden: no
@@ -42,20 +39,10 @@ view: +sales_orders {
     type: unquoted
     view_label: "🔍 Filters & 🛠 Tools"
     label: "Use Test or Demo Data"
-    allowed_value: {label: "test" value:"test"}
-    allowed_value: {label: "demo" value: "demo"}
-    default_value: "test"
+    allowed_value: {label: "test" value:"CORTEX_ORACLE_REPORTING_VISION"}
+    allowed_value: {label: "demo" value: "CORTEX_ORACLE_REPORTING"}
+    default_value: "CORTEX_ORACLE_REPORTING_VISION"
   }
-
-  # parameter: parameter_use_test_or_demo_data {
-  #   hidden: no
-  #   type: unquoted
-  #   view_label: "🔍 Filters & 🛠 Tools"
-  #   label: "Use Test or Demo Data"
-  #   allowed_value: {label: "test" value:"CORTEX_ORACLE_REPORTING_VISION"}
-  #   allowed_value: {label: "demo" value: "CORTEX_ORACLE_REPORTING"}
-  #   default_value: "CORTEX_ORACLE_REPORTING_VISION"
-  # }
 
   filter: filter_ordered_date {
     hidden: no
@@ -83,33 +70,6 @@ view: +sales_orders {
 
   dimension: sales_rep {hidden: no}
 
-  dimension: num_lines {
-    hidden: no
-    label: "Number of Lines"
-  }
-
-#########################################################
-# Business Unit and Order Source Dimensions
-#{
-
-  dimension: business_unit_id {hidden: no}
-
-  dimension: business_unit_name {
-    hidden: no
-    sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CAST(${business_unit_id} as STRING)) ;;
-  }
-
-  dimension: order_source_id {
-    hidden: no
-    sql: COALESCE(${TABLE}.ORDER_SOURCE_ID,-1);;
-  }
-
-  dimension: order_source_name {
-    hidden: no
-    sql: COALESCE(${TABLE}.ORDER_SOURCE_NAME,COALESCE(CAST(NULLIF(${order_source_id},-1) AS STRING),"Unknown")) ;;
-  }
-#} end business unit and order source dimensions
-
 #########################################################
 # Dates
 #
@@ -123,7 +83,7 @@ view: +sales_orders {
   dimension_group: booked {
     hidden: no
     timeframes: [raw, date, week, month, quarter, year, yesno]
-    }
+  }
 
   dimension_group: booked {
     hidden: no
@@ -139,7 +99,7 @@ view: +sales_orders {
   dimension: fiscal_month {
     hidden: no
     group_label: "Ordered Date"
-   }
+  }
   dimension: fiscal_period_name {
     hidden: no
     group_label: "Ordered Date"
@@ -189,8 +149,6 @@ view: +sales_orders {
   dimension: is_backordered {
     hidden: no
     group_label: "Order Status"
-##NEEDS REVIEW -- confirm definition--finding some Orders as is_fulfilled but also is_backordered--how does timing impact these
-    description: "Yes if at least one order line does not enough available inventory to fill immediately."
   }
 
   dimension: is_booked {
@@ -214,8 +172,15 @@ view: +sales_orders {
   dimension: is_fulfilled {
     hidden: no
     group_label: "Order Status"
-    description: "Yes if all order lines are fulfilled (inventory is reserved and ready to be shipped)."
+    description: "Yes if all order lines are fulfilled."
     # derived as LOGICAL_AND(Lines.IS_FULFILLED)
+  }
+
+  dimension: is_on_time {
+    hidden: no
+    type: yesno
+    description: "All lines of order fulfilled by promise date."
+    sql: ${num_lines} = ${num_lines_fulfilled_by_promise_date} ;;
   }
 
   dimension: is_held {
@@ -247,47 +212,7 @@ view: +sales_orders {
     description: "Sales order has at least 1 line with a return."
   }
 
-  dimension: is_blocked {
-    hidden: no
-    type: yesno
-    group_label: "Order Status"
-    description: "Order is either held or backordered."
-    sql: ${is_backordered} OR ${is_held} ;;
-  }
-
-  dimension: open_closed_cancelled {
-    hidden: no
-    type: string
-    group_label: "Order Status"
-    sql: CASE WHEN ${header_status} in ("CLOSED","CANCELLED") THEN INITCAP(${header_status})
-              WHEN ${is_open} THEN "Open" END;;
-  }
-
-  dimension: open_closed_cancelled_with_symbols {
-    group_label: "Order Status"
-    hidden: no
-    type: string
-    sql: ${open_closed_cancelled} ;;
-    html: {% if value == "Open" %}{%assign sym = "〇" %}{% assign color = "#98B6B1" %}
-          {% elsif value == "Closed" %}{%assign sym = "◉"%}{% assign color = "#BFBDC1" %}
-          {% elsif value == "Cancelled" %}{%assign sym = "X"%}{% assign color = "#EB9486" %}
-            {% else %}
-             {%assign sym = "" %}{% assign color = "#080808" %}
-            {%endif%}<p style="color: {{color}}"><b> {{sym}} {{value}}</b> </p>;;
-  }
-
-  dimension: is_on_time_in_full {
-    hidden: no
-    type: yesno
-    group_label: "Order Status"
-    label: "Is On-Time and In-Full (OTIF)"
-    description: "All lines of order are fulfilled by requested delivery date."
-    sql: ${num_lines} > 0 AND ${num_lines} = ${num_lines_fulfilled_by_request_date} ;;
-  }
-
 #} end header status
-
-
 
 
 #########################################################
@@ -296,116 +221,10 @@ view: +sales_orders {
 #{
 
   measure: count {
-    hidden: yes }
-
-  measure: order_count {
     hidden: no
-    type: count
     label: "Total Sales Orders"
     drill_fields: [header_details*]
   }
-
-  measure: one_touch_order_count {
-    hidden: no
-    type: count
-    label: "One Touch Orders"
-    description: "Count of sales orders without any hold."
-    filters: [has_hold: "No"]
-    drill_fields: [header_details*]
-  }
-
-  measure: one_touch_order_percent {
-    hidden: no
-    type: number
-    description: "The percentage of sales orders that never had a hold during processing."
-    sql: SAFE_DIVIDE(${one_touch_order_count},${order_count}) ;;
-    value_format_name: percent_1
-  }
-
-  measure: cancelled_order_count {
-    hidden: no
-    type: count
-    label: "Cancelled Orders"
-    description: "Number of sales orders completely cancelled (all lines cancelled)."
-    filters: [is_cancelled: "Yes"]
-  }
-
-  measure: cancelled_order_percent {
-    hidden: no
-    type: number
-    description: "The percentage of sales orders that have been cancelled (all lines cancelled)."
-    sql: SAFE_DIVIDE(${cancelled_order_count},${order_count}) ;;
-    value_format_name: percent_1
-  }
-
-  measure: has_return_count {
-    hidden: no
-    type: count
-    description: "Number of sales orders with at least one item returned (regardless of when returned)."
-    filters: [has_return_line: "Yes"]
-  }
-
-  measure: has_return_percent {
-    hidden: no
-    type: number
-    description: "The percentage of sales orders with at least one item returned."
-    sql: SAFE_DIVIDE(${has_return_count},${order_count}) ;;
-    value_format_name: percent_1
-  }
-
-  measure: blocked_order_count {
-    hidden: no
-    type: count
-    label: "Blocked Orders"
-    description: "Number of sales orders that are blocked (backordered or held)."
-    filters: [is_blocked: "Yes"]
-  }
-
-  measure: open_order_count {
-    hidden: no
-    type: count
-    label: "Open Orders"
-    description: "Number of sales orders that are open."
-    filters: [is_open: "Yes"]
-    # drill_fields: [header_details*]
-  }
-
-  measure: in_full_order_count {
-    hidden: no
-    type: count
-    label: "In-Full Orders"
-    description: "Number of sales orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
-    filters: [is_fulfilled: "Yes"]
-  }
-
-  measure: in_full_percent {
-    hidden: no
-    type: number
-    label: "In-Full Percent"
-    description: "The percentage of sales orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
-    sql: SAFE_DIVIDE(${in_full_order_count},${order_count}) ;;
-    value_format_name: percent_1
-
-  }
-
-  measure: on_time_in_full_order_count {
-    hidden: no
-    type: count
-    label: "On-Time & In-Full Orders"
-    description: "Number of sales orders that are fulfilled on-time (all lines fulfilled by requested delivery date)."
-    filters: [is_on_time_in_full: "Yes"]
-    # drill_fields: [header_details*]
-  }
-
-  measure: on_time_in_full_percent {
-    hidden: no
-    type: number
-    description: "The percentage of sales orders that are on-time (all lines fulfilled by requested delivery date)."
-    sql: SAFE_DIVIDE(${on_time_in_full_order_count},${order_count}) ;;
-    value_format_name: percent_1
-  }
-
-
 
   measure: ship_to_customer_count {
     hidden: no
@@ -441,10 +260,10 @@ view: +sales_orders {
 # TO BE REMOVED
 #{
 
-  # dimension: num_lines {
-  #   hidden: no
-  #   view_label: "TEST STUFF"
-  # }
+  dimension: num_lines {
+    hidden: no
+    view_label: "TEST STUFF"
+  }
 
   dimension: num_lines_fulfilled_by_promise_date {
     hidden: no
@@ -549,4 +368,4 @@ view: +sales_orders {
   }
 
 
-   }
+}

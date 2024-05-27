@@ -8,6 +8,7 @@
 view: sales_orders_daily_agg {
   sql_table_name: `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesOrdersDailyAgg` ;;
 
+  # sql_table_name:  `thjennifer1.CORTEX_ORACLE_REPORTING.SalesOrdersDailyAgg` ;;
   dimension: bill_to_customer_country {
     type: string
     sql: ${TABLE}.BILL_TO_CUSTOMER_COUNTRY ;;
