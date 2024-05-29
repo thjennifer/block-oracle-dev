@@ -16,7 +16,10 @@ view: currency_conversion_sdt {
           CONVERSION_RATE
         FROM
           --`@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.CurrencyRateMD`
-          `@{GCP_PROJECT_ID}.{% parameter sales_orders.parameter_use_test_or_demo_data %}.CurrencyRateMD`
+          --`@{GCP_PROJECT_ID}.{% parameter sales_orders.parameter_use_test_or_demo_data %}.CurrencyRateMD`
+                  {% assign p = shared_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
+                  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_REPORTING_VISION' %}
+                  {% else %}{% assign t = 'CORTEX_ORACLE_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.CurrencyRateMD`
         WHERE
             TO_CURRENCY = {% parameter parameter_target_currency %}
           {% if _explore._name == 'sales_orders' %}

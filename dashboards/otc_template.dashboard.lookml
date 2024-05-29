@@ -115,7 +115,7 @@
       display: inline
     explore: sales_orders
     listens_to_filters: [Test or Demo]
-    field: sales_orders.parameter_use_test_or_demo_data
+    field: shared_parameters_xvw.parameter_use_test_or_demo_data
 
 
   # elements:

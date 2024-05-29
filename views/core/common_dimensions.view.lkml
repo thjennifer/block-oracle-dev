@@ -14,6 +14,7 @@ view: common_dimensions {
   dimension: bill_to_customer_name {
     hidden: no
     group_label: "Bill to Customer"
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CAST(${bill_to_customer_number} AS STRING)) ;;
   }
   dimension: bill_to_customer_number {
     hidden: no

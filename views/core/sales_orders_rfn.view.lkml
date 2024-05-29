@@ -8,7 +8,7 @@ view: +sales_orders {
 
   # sql_table_name: `@{GCP_PROJECT_ID}.{% parameter parameter_use_test_or_demo_data %}.SalesOrders` ;;
 
-  sql_table_name: {% assign p = parameter_use_test_or_demo_data._parameter_value %}
+  sql_table_name: {% assign p = shared_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
                   {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_REPORTING_VISION' %}
                   {% else %}{% assign t = 'CORTEX_ORACLE_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesOrders` ;;
 
@@ -37,15 +37,15 @@ view: +sales_orders {
   #   full_suggestions: yes
   # }
 
-  parameter: parameter_use_test_or_demo_data {
-    hidden: no
-    type: unquoted
-    view_label: "🔍 Filters & 🛠 Tools"
-    label: "Use Test or Demo Data"
-    allowed_value: {label: "test" value:"test"}
-    allowed_value: {label: "demo" value: "demo"}
-    default_value: "test"
-  }
+  # parameter: parameter_use_test_or_demo_data {
+  #   hidden: no
+  #   type: unquoted
+  #   view_label: "🔍 Filters & 🛠 Tools"
+  #   label: "Use Test or Demo Data"
+  #   allowed_value: {label: "test" value:"test"}
+  #   allowed_value: {label: "demo" value: "demo"}
+  #   default_value: "test"
+  # }
 
   # parameter: parameter_use_test_or_demo_data {
   #   hidden: no
@@ -107,6 +107,12 @@ view: +sales_orders {
   dimension: order_source_name {
     hidden: no
     sql: COALESCE(${TABLE}.ORDER_SOURCE_NAME,COALESCE(CAST(NULLIF(${order_source_id},-1) AS STRING),"Unknown")) ;;
+  }
+
+  dimension: bill_to_customer_name {
+    # hidden: no
+    # group_label: "Bill to Customer"
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CAST(${bill_to_customer_number} AS STRING)) ;;
   }
 #} end business unit and order source dimensions
 
@@ -405,7 +411,21 @@ view: +sales_orders {
     value_format_name: percent_1
   }
 
+  measure: backordered_count {
+    hidden: no
+    type: count
+    label: "Backordered Orders"
+    description: "Number of sales orders that have at least one order line on backorder."
+    filters: [is_backordered: "Yes"]
+  }
 
+  measure: backordered_percent {
+    hidden: no
+    type: number
+    description: "The percentage of sales orders that have at least one order line on backorder."
+    sql: SAFE_DIVIDE(${backordered_count},${order_count}) ;;
+    value_format_name: percent_1
+  }
 
   measure: ship_to_customer_count {
     hidden: no

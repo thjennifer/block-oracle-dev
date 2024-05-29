@@ -49,41 +49,42 @@ view: apply_currency_conversion_to_sales_xvw {
   measure: total_sales_amount_target_currency {
     hidden: no
     type: sum
-    label: "@{derive_currency_label}Total Sales Amount ({{currency}})"
+    label: "{% if total_sales_amount_target_currency._is_selected %}@{derive_currency_label}Total Sales Amount ({{currency}}){%else%}Total Sales Amount (Target Currency){%endif%}"
     description: "@{derive_currency_label}Sum of sales for order lines in target currency {{currency}}"
     sql: ${ordered_amount_target_currency} ;;
     sql_distinct_key: ${sales_orders__lines.key};;
-
-    value_format_name: decimal_0
+    value_format_name: format_large_numbers_d1
   }
 
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
     type: number
-    label: "@{derive_currency_label}Average Sales Amount per Order ({{currency}})"
+    label: "{% if average_sales_amount_per_order_target_currency._is_selected %}@{derive_currency_label}Average Sales Amount per Order ({{currency}}){%else%}Average Sales Amount per Order (Target Currency){%endif%}"
     sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.count})  ;;
     sql_distinct_key: ${sales_orders__lines.key};;
-    value_format_name: decimal_2
+    value_format_name: format_large_numbers_d1
   }
 
   measure: total_fulfilled_amount_target_currency {
     hidden: no
     type: sum
-    label: "@{derive_currency_label}Total Fulfilled Amount ({{currency}})"
+    label: "{% if total_fulfilled_amount_target_currency._is_selected %}@{derive_currency_label}Total Fulfilled Amount ({{currency}}){%else%}Total Fulfilled Amount (Target Currency){%endif%}"
     sql: ${ordered_amount_target_currency} ;;
     sql_distinct_key: ${sales_orders__lines.key};;
     filters: [sales_orders__lines.is_fulfilled: "Yes"]
-    value_format_name: decimal_0
+    value_format_name: format_large_numbers_d1
   }
 
   measure: total_shipped_amount_target_currency {
     hidden: no
     type: sum
+    label: "{% if total_shipped_amount_target_currency._is_selected %}@{derive_currency_label}Total Shipped Amount ({{currency}}){%else%}Total Shipped Amount (Target Currency){%endif%}"
+
     # label: "@{derive_currency_label}Total Shipped Amount ({{currency}})"
     # description: "@{derive_currency_label}Sum of sales for order lines in target currency {{currency}}"
     sql: ${shipped_amount_target_currency} ;;
     sql_distinct_key: ${sales_orders__lines.key};;
-    value_format_name: decimal_0
+    value_format_name: format_large_numbers_d1
   }
 
    }

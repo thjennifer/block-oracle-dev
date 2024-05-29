@@ -52,13 +52,15 @@ view: +sales_orders__lines {
     default_value: "Purchasing"
   }
 
-  # parameter: parameter_target_currency {
-  #   type: string
-  #   label: "Target Currency"
-  #   suggest_explore: currency_rate_md
-  #   suggest_dimension: currency_rate_md.to_currency
-  #   full_suggestions: yes
-  # }
+  parameter: parameter_display_product_level {
+    hidden: no
+    type: unquoted
+    view_label: "🔍 Filters & 🛠 Tools"
+    label: "Display Categories or Items"
+    allowed_value: {label: "Category" value: "Category"}
+    allowed_value: {label: "Item" value: "Item"}
+    default_value: "Category"
+  }
 
 #} end parameters
 
@@ -121,6 +123,24 @@ view: +sales_orders__lines {
     group_label: "Item Description and Category"
     sql: COALESCE((select c.category_name FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter parameter_category_set_name %}),"Unknown" ) ;;
     full_suggestions: yes
+  }
+
+  dimension: selected_product_dimension_description {
+    hidden: no
+    group_label: "Item Description and Category"
+    label: "{% if selected_product_dimension_description._is_selected %}
+                {% if parameter_display_product_level._parameter_value == 'Item' %}Item{%else%}Category{%endif%}
+            {%else%}Selected Product Dimenstion Description{%endif%}"
+    sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${item_description}{%else%}${category_description}{%endif%} ;;
+  }
+
+  dimension: selected_product_dimension_id {
+    hidden: no
+    group_label: "Item Description and Category"
+    label: "{% if selected_product_dimension_id._is_selected %}
+    {% if parameter_display_product_level._parameter_value == 'Item' %}Inventory Item ID{%else%}Category ID{%endif%}
+    {%else%}Selected Product Dimenstion ID{%endif%}"
+    sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${category_id}{%endif%} ;;
   }
 
 
@@ -441,12 +461,31 @@ view: +sales_orders__lines {
     value_format_name: decimal_0
   }
 
-  measure: total_order_quantity_by_product {
+  measure: total_ordered_quantity_by_item {
     hidden: no
     type: sum
-    description: "Sum of order quantity by product. Inventory Item ID is required field to avoid summing across multiple Unit of Measures."
+    description: "Sum of order quantity by item. Inventory Item ID is required field to avoid summing across multiple Unit of Measures."
     sql: ${ordered_quantity} ;;
     required_fields: [inventory_item_id]
+    value_format_name: format_large_numbers_d1
+  }
+
+  measure: total_fulfilled_quantity_by_item {
+    hidden: no
+    type: sum
+    description: "Sum of fulfilled quantity by item. Inventory Item ID is required field to avoid summing across multiple Unit of Measures."
+    sql: ${fulfilled_quantity} ;;
+    required_fields: [inventory_item_id]
+    value_format_name: format_large_numbers_d1
+  }
+
+  measure: difference_ordered_fulfilled_quantity_by_item {
+    hidden: no
+    type: number
+    description: "Ordered minus fulfilled quantity by item. Inventory Item ID is required field to avoid reporting quantitites across multiple Unit of Measures."
+    sql: ${total_ordered_quantity_by_item} - ${total_fulfilled_quantity_by_item} ;;
+    required_fields: [inventory_item_id]
+    value_format_name: format_large_numbers_d1
   }
 
   measure: count_inventory_item {
@@ -475,7 +514,7 @@ view: +sales_orders__lines {
     hidden: no
     type: average
     description: "Average number of days from order to fulfillment per order line. Item Category or ID must be in query or compution will return null."
-    sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or category_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
+    sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or category_description._is_selected or selected_product_dimension_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
     value_format_name: decimal_2
     # required_fields: [category_description]
   }
@@ -531,7 +570,7 @@ view: +sales_orders__lines {
     sql: ${unit_selling_price} is null ;;
   }
 
-  dimension: has_fulfilled_quantity_gt_0{
+  dimension: has_fulfilled_quantity_gt_0 {
     hidden: no
     type: yesno
     view_label: "TEST STUFF"
@@ -577,6 +616,11 @@ view: +sales_orders__lines {
   }
   # (SELECT value.string_value FROM UNNEST(event_params) AS param WHERE param.key='page_location')
 
-
+  dimension: test_parameter_value {
+    view_label: "TEST STUFF"
+    hidden: no
+    type: string
+    sql: {% assign p = parameter_display_product_level._parameter_value %}'{{p}}' ;;
+  }
 
    }
