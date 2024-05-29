@@ -245,6 +245,7 @@ view: +sales_orders {
   dimension: is_open {
     hidden: no
     group_label: "Order Status"
+    sql: IF(${header_status} = "CANCELLED",FALSE,${TABLE}.IS_OPEN) ;;
   }
 
   dimension: has_return_line {
@@ -266,7 +267,8 @@ view: +sales_orders {
     type: string
     group_label: "Order Status"
     sql: CASE WHEN ${header_status} in ("CLOSED","CANCELLED") THEN INITCAP(${header_status})
-              WHEN ${is_open} THEN "Open" END;;
+              WHEN ${is_open} THEN "Open"
+              WHEN ${is_open} = false THEN 'Closed' END;;
   }
 
   dimension: open_closed_cancelled_with_symbols {
@@ -309,6 +311,30 @@ view: +sales_orders {
     type: count
     label: "Total Sales Orders"
     drill_fields: [header_details*]
+  }
+
+  measure: order_count_with_details_link {
+    hidden: yes
+    type: number
+    sql: ${order_count} ;;
+
+    ## dynamic capture of filters with link
+    # link: {
+    #   label: "Open Order Details Dashboard"
+    #   icon_url: "/favicon.ico"
+    #   url: "
+    #   @{link_generate_variable_defaults}
+    #   {% assign link = link_generator._link %}
+    #   {% assign filters_mapping = '@{link_otc_shared_filters}' | strip_new_lines | append: '||across_sales_and_billing_summary_xvw.order_status|Order Status||deliveries.is_blocked|Is Blocked' %}
+
+    #   {% assign model = _model._name %}
+    #   {% assign target_dashboard = _model._name | append: '::otc_order_details' %}
+
+    #   {% assign default_filters_override = false %}
+
+    #   @{link_generate_dashboard_url}
+    #   "
+    # }
   }
 
   measure: one_touch_order_count {
@@ -445,6 +471,12 @@ view: +sales_orders {
     description: "Average number of lines per order"
     sql: ${num_lines} ;;
     value_format_name: decimal_1
+  }
+
+  measure: max_open_closed_cancelled {
+    hidden: yes
+    type: max
+    sql: ${open_closed_cancelled} ;;
   }
 
 

@@ -10,10 +10,10 @@
 
   elements:
 
-  # - title: navigation
-  #   name: navigation
-  #   filters:
-  #     navigation_otc_ext.navigation_focus_page: '1'
+  - title: navigation
+    name: navigation
+    filters:
+      navigation_otc_ext.navigation_focus_page: '3'
 
   - title: In Full %
     name: In Full %
@@ -22,8 +22,8 @@
     fields: [sales_orders.in_full_percent]
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -34,7 +34,7 @@
     note_text: "The percentage of sales orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
     row: 2
     col: 0
-    width: 4
+    width: 3
     height: 3
 
   # - title: On Time %
@@ -65,8 +65,8 @@
     fields: [sales_orders.on_time_in_full_percent]
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -76,7 +76,7 @@
     note_text: "The percentage of sales orders fulfilled completely (for all line items) by the requested delivery date."
     row: 6
     col: 0
-    width: 4
+    width: 3
     height: 3
 
   - title: Backordered %
@@ -89,8 +89,8 @@
     #     font_color: "#DB4C40", bold: false, italic: false, strikethrough: false, fields: !!null ''}]
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -100,7 +100,7 @@
     note_text: "The percentage of sales orders with at least 1 order line on backorder."
     row: 9
     col: 0
-    width: 4
+    width: 3
     height: 3
 
   - title: Delivery Performance by Month
@@ -137,15 +137,15 @@
     defaults_version: 1
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
       Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
     row: 2
-    col: 4
-    width: 14
+    col: 3
+    width: 9
     height: 9
 
   - title: Longest Average Order Cycle Time (Days)
@@ -160,6 +160,7 @@
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
     filters:
       sales_orders__lines.average_cycle_time_days: ">0"
+      sales_orders__lines.parameter_display_product_level: "Item"
     x_axis_gridlines: false
     y_axis_gridlines: true
     show_y_axis_labels: true
@@ -209,28 +210,28 @@
         \     },\n        \n      },\n    ],\n    \n\n  }, ],\n}"
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
       Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
-      Product Level to Display: sales_orders__lines.parameter_display_product_level
+      # Product Level to Display: sales_orders__lines.parameter_display_product_level
     note_state: collapsed
     note_display: hover
     note_text: "Order cycle time is average number of days between order placement and order delivery. "
-    row: 10
-    col: 0
-    width: 12
-    height: 12
+    row: 2
+    col: 12
+    width: 9
+    height: 9
 
 
 
   - title: Order vs Fulfillment Efficiency
     name: Order vs Fulfillment Efficiency
     explore: sales_orders
-    # type: looker_line
-    type: looker_bar
+    type: looker_line
+    # type: looker_bar
     fields: [sales_orders__lines.inventory_item_id, sales_orders__lines.item_description,
     sales_orders__lines.total_ordered_quantity_by_item, sales_orders__lines.total_fulfilled_quantity_by_item,
     sales_orders__lines.difference_ordered_fulfilled_quantity_by_item]
@@ -324,26 +325,26 @@
     note_text: Top 10 Items with Largest Difference between Quantity Ordered and Fulfilled
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
       Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
     row: 10
-    col: 12
-    width: 12
+    col: 0
+    width: 21
     height: 12
 
-  filters:
-    - name: Product Level to Display
-      title: Product Level to Display
-      type: field_filter
-      default_value: "Category"
-      allow_multiple_values: false
-      required: false
-      ui_config:
-        type: button_toggles
-        display: inline
-      explore: sales_orders
-      field: sales_orders__lines.parameter_display_product_level
+  # filters:
+  #   - name: Product Level to Display
+  #     title: Product Level to Display
+  #     type: field_filter
+  #     default_value: "Category"
+  #     allow_multiple_values: false
+  #     required: false
+  #     ui_config:
+  #       type: button_toggles
+  #       display: inline
+  #     explore: sales_orders
+  #     field: sales_orders__lines.parameter_display_product_level

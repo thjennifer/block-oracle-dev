@@ -485,7 +485,7 @@ view: +sales_orders__lines {
     description: "Ordered minus fulfilled quantity by item. Inventory Item ID is required field to avoid reporting quantitites across multiple Unit of Measures."
     sql: ${total_ordered_quantity_by_item} - ${total_fulfilled_quantity_by_item} ;;
     required_fields: [inventory_item_id]
-    value_format_name: format_large_numbers_d1
+    value_format_name: decimal_0
   }
 
   measure: count_inventory_item {

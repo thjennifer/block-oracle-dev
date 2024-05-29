@@ -25,10 +25,10 @@
 
   elements:
 
-  # - title: navigation
-  #   name: navigation
-  #   filters:
-  #     navigation_otc_ext.navigation_focus_page: '3'
+  - title: navigation
+    name: navigation
+    filters:
+      navigation_otc_ext.navigation_focus_page: '2'
 
 
   - name: Top Products by Sales
@@ -64,8 +64,8 @@
 
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -119,8 +119,8 @@
 
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -170,8 +170,8 @@
     y_axis_zoom: true
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -219,8 +219,8 @@
 
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -376,8 +376,8 @@
 
     listen:
       Order Date: sales_orders.ordered_date
-      Sold to Country: sales_orders.bill_to_customer_country
-      Sold to Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.bill_to_customer_country
+      Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description

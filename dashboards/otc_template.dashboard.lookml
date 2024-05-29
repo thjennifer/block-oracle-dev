@@ -35,9 +35,7 @@
     listens_to_filters: [Test or Demo]
     field: sales_orders.business_unit_name
 
-
-
-  - name: Sold to Country
+  - name: Country
     title: Sold to Country
     type: field_filter
     default_value: ''
@@ -47,10 +45,10 @@
       type: checkboxes
       display: popover
     explore: sales_orders
-    listens_to_filters: [Test or Demo]
+    listens_to_filters: [Test or Demo, Business Unit]
     field: sales_orders.bill_to_customer_country
 
-  - name: Sold to Customer
+  - name: Customer
     title: Sold to Customer
     type: field_filter
     default_value: ''
@@ -60,7 +58,7 @@
       type: advanced
       display: popover
     explore: sales_orders
-    listens_to_filters: [Test or Demo]
+    listens_to_filters: [Test or Demo, Country]
     field: sales_orders.bill_to_customer_name
 
   - name: Order Source
@@ -118,26 +116,27 @@
     field: shared_parameters_xvw.parameter_use_test_or_demo_data
 
 
-  # elements:
-  #   - title: navigation
-  #     name: navigation
-  #     explore: sales_orders_v2
-  #     type: single_value
-  #     fields: [navigation_otc_ext.navigation]
-  #     filters:
-  #       navigation_otc_ext.navigation_focus_page: '1'
-  #       navigation_otc_ext.navigation_style: 'tabs'
-  #     show_single_value_title: false
-  #     show_comparison: false
-  #     listen:
-  #       Order Date: navigation_otc_ext.filter1
-  #       Country: navigation_otc_ext.filter2
-  #       Sales Org: navigation_otc_ext.filter3
-  #       Distribution Channel: navigation_otc_ext.filter4
-  #       Division: navigation_otc_ext.filter5
-  #       Product: navigation_otc_ext.filter6
-  #       Sold to: navigation_otc_ext.filter7
-  #     row: 0
-  #     col: 0
-  #     width: 24
-  #     height: 1
+  elements:
+    - title: navigation
+      name: navigation
+      explore: sales_orders
+      type: single_value
+      fields: [navigation_otc_ext.navigation]
+      filters:
+        navigation_otc_ext.navigation_focus_page: '1'
+        navigation_otc_ext.navigation_style: 'tabs'
+      show_single_value_title: false
+      show_comparison: false
+      listen:
+        Order Date: navigation_otc_ext.filter1
+        Business Unit: navigation_otc_ext.filter2
+        Country: navigation_otc_ext.filter3
+        Customer: navigation_otc_ext.filter4
+        Order Source: navigation_otc_ext.filter5
+        Item Category: navigation_otc_ext.filter6
+        Target Currency: navigation_otc_ext.filter7
+        Test or Demo: navigation_otc_ext.filter8
+      row: 0
+      col: 0
+      width: 24
+      height: 1
