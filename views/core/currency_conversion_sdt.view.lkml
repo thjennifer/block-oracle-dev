@@ -17,11 +17,11 @@ view: currency_conversion_sdt {
         FROM
           --`@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.CurrencyRateMD`
           --`@{GCP_PROJECT_ID}.{% parameter sales_orders.parameter_use_test_or_demo_data %}.CurrencyRateMD`
-                  {% assign p = shared_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
+                  {% assign p = sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
                   {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_REPORTING_VISION' %}
                   {% else %}{% assign t = 'CORTEX_ORACLE_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.CurrencyRateMD`
         WHERE
-            TO_CURRENCY = {% parameter parameter_target_currency %}
+            TO_CURRENCY = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}
           {% if _explore._name == 'sales_orders' %}
 
             --AND {% condition sales_orders.filter_ordered_date %} TIMESTAMP(CONVERSION_DATE) {% endcondition %}
@@ -56,7 +56,7 @@ view: currency_conversion_sdt {
   dimension: to_currency {
     type: string
     label: "Currency (Target)"
-    sql: COALESCE(${TABLE}.TO_CURRENCY,{% parameter parameter_target_currency %}) ;;
+    sql: COALESCE(${TABLE}.TO_CURRENCY,{% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}) ;;
     # sql: ${TABLE}.TO_CURRENCY ;;
   }
 
@@ -75,16 +75,16 @@ view: currency_conversion_sdt {
     type: date
   }
 
-  parameter: parameter_target_currency {
-    hidden: no
-    type: string
-    view_label: "🔍 Filters & 🛠 Tools"
-    label: "Target Currency"
-    suggest_explore: currency_rate_md
-    suggest_dimension: currency_rate_md.to_currency
-    default_value: "USD"
-    # full_suggestions: yes
-  }
+  # parameter: parameter_target_currency {
+  #   hidden: no
+  #   type: string
+  #   view_label: "🔍 Filters & 🛠 Tools"
+  #   label: "Target Currency"
+  #   suggest_explore: currency_rate_md
+  #   suggest_dimension: currency_rate_md.to_currency
+  #   default_value: "USD"
+  #   # full_suggestions: yes
+  # }
 
 
 

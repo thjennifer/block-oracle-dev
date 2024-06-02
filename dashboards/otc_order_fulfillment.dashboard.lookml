@@ -19,7 +19,8 @@
     name: In Full %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.in_full_percent]
+    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
+    hidden_fields: [sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
     listen:
       Order Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
@@ -27,7 +28,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
 
     note_state: collapsed
     note_display: hover
@@ -37,32 +38,12 @@
     width: 3
     height: 3
 
-  # - title: On Time %
-  #   name: On Time %
-  #   explore: sales_orders_v2
-  #   type: single_value
-  #   fields: [sales_order_item_delivery_summary_ndt.percent_orders_delivered_on_time]
-  #   listen:
-  #     Order Date: sales_orders_v2.creation_date_erdat_date
-  #     Country: countries_md.country_name_landx
-  #     Sales Org: sales_organizations_md.sales_org_name_vtext
-  #     Distribution Channel: distribution_channels_md.distribution_channel_name_vtext
-  #     Product: materials_md.material_text_maktx
-  #     Division: divisions_md.division_name_vtext
-  #     Sold to: customers_md.customer_name
-  #   note_state: collapsed
-  #   note_display: hover
-  #   note_text: "The percentage of sales orders fulfilled by the promised delivery date."
-  #   row: 2
-  #   col: 0
-  #   width: 6
-  #   height: 3
-
   - title: OTIF %
     name: OTIF %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.on_time_in_full_percent]
+    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
+    hidden_fields: [sales_orders.fulfilled_order_percent,sales_orders.has_backorder_order_percent]
     listen:
       Order Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
@@ -70,7 +51,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders fulfilled completely (for all line items) by the requested delivery date."
@@ -83,7 +64,8 @@
     name: Backordered %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.backordered_percent]
+    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
+    hidden_fields: [sales_orders.fulfilled_order_percent,sales_orders.fulfilled_by_request_date_order_percent]
     # enable_conditional_formatting: true
     # conditional_formatting: [{type: greater than, value: 0.05, background_color: '',
     #     font_color: "#DB4C40", bold: false, italic: false, strikethrough: false, fields: !!null ''}]
@@ -94,10 +76,10 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
-    note_text: "The percentage of sales orders with at least 1 order line on backorder."
+    note_text: "The percentage of sales orders with at least one item on backorder."
     row: 9
     col: 0
     width: 3
@@ -107,7 +89,7 @@
     name: Delivery Performance by Month
     explore: sales_orders
     type: looker_line
-    fields: [sales_orders.ordered_month,sales_orders.in_full_percent,sales_orders.on_time_in_full_percent]
+    fields: [sales_orders.ordered_month,sales_orders.fulfilled_order_percent,sales_orders.fulfilled_by_request_date_order_percent]
     sorts: [sales_orders.ordered_month]
     limit: 500
     column_limit: 50
@@ -121,18 +103,18 @@
     x_axis_zoom: true
     y_axis_zoom: true
     series_types:
-      # sales_order_item_delivery_summary_ndt.percent_orders_delivered_on_time: column
-      sales_orders.ordered_month,sales_orders.in_full_percent: line
-      sales_orders.on_time_in_full_percent: line
+
+      sales_orders.fulfilled_order_percent: line
+      sales_orders.fulfilled_by_request_date_order_percent: line
     series_colors:
       # sales_order_item_delivery_summary_ndt.percent_orders_delivered_on_time: "#F39B6D"
-      sales_orders.ordered_month,sales_orders.in_full_percent: "#6494AA"
-      sales_orders.on_time_in_full_percent: "#89BD9E"
+      sales_orders.fulfilled_order_percent: "#6494AA"
+      sales_orders.fulfilled_by_request_date_order_percent: "#89BD9E"
     series_labels:
       # sales_order_item_delivery_summary_ndt.percent_orders_delivered_on_time: On Time %
       # sales_orders.ordered_month
-      sales_orders.in_full_percent: In Full %
-      sales_orders.on_time_in_full_percent: OTIF %
+      sales_orders.fulfilled_order_percent: In Full %
+      sales_orders.fulfilled_by_request_date_order_percent: OTIF %
     x_axis_datetime_label: "%B %y"
     defaults_version: 1
     listen:
@@ -142,7 +124,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 2
     col: 3
     width: 9
@@ -215,11 +197,11 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
       # Product Level to Display: sales_orders__lines.parameter_display_product_level
     note_state: collapsed
     note_display: hover
-    note_text: "Order cycle time is average number of days between order placement and order delivery. "
+    note_text: "Order cycle time is average number of days between order placement and order fulfillment. "
     row: 2
     col: 12
     width: 9
@@ -330,7 +312,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 10
     col: 0
     width: 21

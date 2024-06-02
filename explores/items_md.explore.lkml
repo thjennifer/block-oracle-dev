@@ -1,7 +1,7 @@
 include: "/views/core/item_md_rfn.view"
 include: "/views/core/item_md__item_categories_rfn.view"
 include: "/views/core/item_md__item_descriptions_rfn.view"
-include: "/views/core/shared_parameters_xvw.view"
+include: "/views/core/sales_orders_common_parameters_xvw.view"
 
 explore: item_md {
   hidden: yes
@@ -18,7 +18,7 @@ explore: item_md {
     relationship: one_to_many
   }
 
-  join: shared_parameters_xvw {
+  join: sales_orders_common_parameters_xvw {
     relationship: one_to_one
     sql:  ;;
 }

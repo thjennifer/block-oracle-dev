@@ -35,8 +35,8 @@
     title: Top Products by Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency]
-    sorts: [apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency desc]
+    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.total_sales_amount_target_currency]
+    sorts: [sales_orders__lines.total_sales_amount_target_currency desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
 
     limit: 10
@@ -54,9 +54,9 @@
     x_axis_scale: auto
     y_axis_combined: true
     series_colors:
-      {apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency: "#74A09F"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency,
-            id: apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency
+      {sales_orders__lines.total_sales_amount_target_currency: "#74A09F"}
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.total_sales_amount_target_currency,
+            id: sales_orders__lines.total_sales_amount_target_currency
             }], showLabels: true, showValues: false,
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
@@ -69,8 +69,8 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Target Currency: currency_conversion_sdt.parameter_target_currency
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
       Product Level to Display: sales_orders__lines.parameter_display_product_level
 
     # note_state: expanded
@@ -87,8 +87,8 @@
     title: Top Products by Avg Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, apply_currency_conversion_to_sales_xvw.average_sales_amount_per_order_target_currency]
-    sorts: [apply_currency_conversion_to_sales_xvw.average_sales_amount_per_order_target_currency desc]
+    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.average_sales_amount_per_order_target_currency]
+    sorts: [sales_orders__lines.average_sales_amount_per_order_target_currency desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
 
     # filters:
@@ -108,10 +108,10 @@
     x_axis_scale: auto
     y_axis_combined: true
     series_colors:
-      {apply_currency_conversion_to_sales_xvw.average_sales_amount_per_order_target_currency: "#53575E"}
+      {sales_orders__lines.average_sales_amount_per_order_target_currency: "#53575E"}
 
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: apply_currency_conversion_to_sales_xvw.average_sales_amount_per_order_target_currency,
-            id: apply_currency_conversion_to_sales_xvw.average_sales_amount_per_order_target_currency, name: Avg Sales per Order}], showLabels: true, showValues: false,
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.average_sales_amount_per_order_target_currency,
+            id: sales_orders__lines.average_sales_amount_per_order_target_currency, name: Avg Sales per Order}], showLabels: true, showValues: false,
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
     y_axis_zoom: true
@@ -124,8 +124,8 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Target Currency: currency_conversion_sdt.parameter_target_currency
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
       Product Level to Display: sales_orders__lines.parameter_display_product_level
 
     # note_state: expanded
@@ -142,8 +142,8 @@
     title: Top Business Unit by Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders.business_unit_id,sales_orders.business_unit_name,apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency]
-    sorts: [apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency desc]
+    fields: [sales_orders.business_unit_id,sales_orders.business_unit_name,sales_orders__lines.total_sales_amount_target_currency]
+    sorts: [sales_orders__lines.total_sales_amount_target_currency desc]
     hidden_fields: [sales_orders.business_unit_id]
     limit: 10
     x_axis_gridlines: false
@@ -160,10 +160,10 @@
     x_axis_scale: auto
     y_axis_combined: true
     series_colors:
-      {apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency: "#74A09F"}
+      {sales_orders__lines.total_sales_amount_target_currency: "#74A09F"}
 
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency,
-            id: apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currencyt, name: Total
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.total_sales_amount_target_currency,
+            id: sales_orders__lines.total_sales_amount_target_currencyt, name: Total
               Sales}], showLabels: true, showValues: false,
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
@@ -175,8 +175,8 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Target Currency: currency_conversion_sdt.parameter_target_currency
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
 
     row: 20
     col: 0
@@ -187,8 +187,8 @@
     title: Top Customers by Avg Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders.bill_to_customer_number, sales_orders.bill_to_customer_name, apply_currency_conversion_to_sales_xvw.average_sales_amount_per_order_target_currency]
-    sorts: [apply_currency_conversion_to_sales_xvw.average_sales_amount_per_order_target_currency desc]
+    fields: [sales_orders.bill_to_customer_number, sales_orders.bill_to_customer_name, sales_orders__lines.average_sales_amount_per_order_target_currency]
+    sorts: [sales_orders__lines.average_sales_amount_per_order_target_currency desc]
     hidden_fields: [sales_orders.bill_to_customer_number]
     # filters:
     #   sales_orders_v2.count_orders: ">=10"
@@ -207,10 +207,10 @@
     x_axis_scale: auto
     y_axis_combined: true
     series_colors:
-      {apply_currency_conversion_to_sales_xvw.average_sales_amount_per_order_target_currency: "#53575E"}
+      {sales_orders__lines.average_sales_amount_per_order_target_currency: "#53575E"}
 
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: apply_currency_conversion_to_sales_xvw.average_sales_amount_per_order_target_currency,
-            id: apply_currency_conversion_to_sales_xvw.average_sales_amount_per_order_target_currency
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.average_sales_amount_per_order_target_currency,
+            id: sales_orders__lines.average_sales_amount_per_order_target_currency
     }], showLabels: true, showValues: false,
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
@@ -224,8 +224,8 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Target Currency: currency_conversion_sdt.parameter_target_currency
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     # note_state: expanded
     note_display: hover
     note_text: |-
@@ -240,9 +240,9 @@
     title: Sales by Order Source
     explore: sales_orders
     type: looker_pie
-    fields: [apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency, sales_orders.order_source_id,
+    fields: [sales_orders__lines.total_sales_amount_target_currency, sales_orders.order_source_id,
       sales_orders.order_source_name]
-    sorts: [apply_currency_conversion_to_sales_xvw.total_sales_amount_target_currency desc 0]
+    sorts: [sales_orders__lines.total_sales_amount_target_currency desc 0]
     hidden_fields: [sales_orders.order_source_id]
 
     limit: 50
@@ -381,8 +381,8 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Target Currency: currency_conversion_sdt.parameter_target_currency
-      Test or Demo: shared_parameters_xvw.parameter_use_test_or_demo_data
+      Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
+      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
 
     row: 21
     col: 0

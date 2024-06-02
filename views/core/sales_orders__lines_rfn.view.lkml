@@ -1,9 +1,11 @@
 ## when column is duplicate of another in header (like is_open) then restate sql using ${TABLE}. reference
-include: "/views/base/sales_orders.view"
+include: "/views/base/sales_orders__lines.view"
+include: "/views/core/sales_orders__lines_common_measures_ext.view"
 
 view: +sales_orders__lines {
 
   fields_hidden_by_default: yes
+  extends: [sales_orders__lines_common_measures_ext]
 
   dimension: key {
     type: string
@@ -42,15 +44,15 @@ view: +sales_orders__lines {
     default_value: "US"
   }
 
-  parameter: parameter_category_set_name {
-    hidden: no
-    type: string
-    view_label: "🔍 Filters & 🛠 Tools"
-    label: "Category Set Name"
-    suggest_explore: item_md
-    suggest_dimension: item_md__item_categories.category_set_name
-    default_value: "Purchasing"
-  }
+  # parameter: parameter_category_set_name {
+  #   hidden: no
+  #   type: string
+  #   view_label: "🔍 Filters & 🛠 Tools"
+  #   label: "Category Set Name"
+  #   suggest_explore: item_md
+  #   suggest_dimension: item_md__item_categories.category_set_name
+  #   default_value: "Purchasing"
+  # }
 
   parameter: parameter_display_product_level {
     hidden: no
@@ -66,8 +68,6 @@ view: +sales_orders__lines {
 
 #########################################################
 # Item dimensions
-#
-#
 #{
 
   dimension: inventory_item_id {
@@ -106,41 +106,45 @@ view: +sales_orders__lines {
   dimension: category_description {
     hidden: no
     group_label: "Item Description and Category"
-    sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter parameter_category_set_name %} )
+    sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %} )
          ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
     full_suggestions: yes
   }
 
   dimension: category_id {
     hidden: no
+    type: number
     group_label: "Item Description and Category"
-    sql: COALESCE((select c.id FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter parameter_category_set_name %}), -1 ) ;;
+    sql: COALESCE((select c.id FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}), -1 ) ;;
     full_suggestions: yes
+    value_format_name: id
   }
 
   dimension: category_group {
     hidden: no
     group_label: "Item Description and Category"
-    sql: COALESCE((select c.category_name FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter parameter_category_set_name %}),"Unknown" ) ;;
+    sql: COALESCE((select c.category_name FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}),"Unknown" ) ;;
     full_suggestions: yes
   }
 
   dimension: selected_product_dimension_description {
     hidden: no
     group_label: "Item Description and Category"
-    label: "{% if selected_product_dimension_description._is_selected %}
+    label: "{% if _field._is_selected %}
                 {% if parameter_display_product_level._parameter_value == 'Item' %}Item{%else%}Category{%endif%}
             {%else%}Selected Product Dimenstion Description{%endif%}"
     sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${item_description}{%else%}${category_description}{%endif%} ;;
+    can_filter: no
   }
 
   dimension: selected_product_dimension_id {
     hidden: no
     group_label: "Item Description and Category"
-    label: "{% if selected_product_dimension_id._is_selected %}
+    label: "{% if _field._is_selected %}
     {% if parameter_display_product_level._parameter_value == 'Item' %}Inventory Item ID{%else%}Category ID{%endif%}
     {%else%}Selected Product Dimenstion ID{%endif%}"
     sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${category_id}{%endif%} ;;
+    can_filter: no
   }
 
 
@@ -153,6 +157,7 @@ view: +sales_orders__lines {
 
   dimension_group: fulfillment {
     hidden: no
+    timeframes: [raw,date,week,month,quarter,year,yesno]
     sql: ${TABLE}.FULFILLMENT_DATE ;;
   }
 
@@ -198,7 +203,7 @@ view: +sales_orders__lines {
 #} end dates
 
 #########################################################
-# Order Line Status
+# Line Status
 #{
 
 
@@ -319,22 +324,21 @@ view: +sales_orders__lines {
 #} end  line status
 
 #########################################################
-# Line Cycle Times
+# Fulfillment Cycle Days Dimensions
+# dimensions hidden and shown in Explore as average measure
 #{
 
 # shown in Explore as measure average_days_from_promise_to_fulfillment
   dimension: fulfillment_days_after_promise_date {
     hidden: yes
-    group_label: "Fulfillment Flags"
-    label: "Fulfillment Days from Promise Date"
+    label: "Fulfillment Days after Promise Date"
     description: "Number of days between Fulfillment Date and Delivery Promise Date."
   }
 
 # shown in Explore as measure average_days_from_request_to_fulfillment
   dimension: fulfillment_days_after_request_date {
     hidden: yes
-    group_label: "Fulfillment Flags"
-    label: "Fulfillment Days from Request Date"
+    label: "Fulfillment Days after Request Date"
     description: "Number of days between Fulfillment Date and Delivery Request Date."
   }
 
@@ -344,14 +348,12 @@ view: +sales_orders__lines {
     description: "Number of Days between Ordered Date and Fulfillment Date"
   }
 
-#} end order line fulfillment status
+#} end fulfillment cycle days dimensions
 
 
 #########################################################
-# Item quantities and weights
+# Item quantities and weights as dimensions
 #{
-
-
   dimension: quantity_uom {
     hidden: no
     group_label: "Quantities"
@@ -363,25 +365,21 @@ view: +sales_orders__lines {
   dimension: ordered_quantity {
     hidden: no
     group_label: "Quantities"
-    # required_fields: [item_part_number]
   }
 
   dimension: fulfilled_quantity {
     hidden: no
     group_label: "Quantities"
-    # required_fields: [item_part_number]
   }
 
   dimension: shipped_quantity {
     hidden: no
     group_label: "Quantities"
-    # required_fields: [item_part_number]
   }
 
   dimension: invoiced_quantity {
     hidden: no
     group_label: "Quantities"
-    # required_fields: [item_part_number]
   }
 
   dimension: cancelled_quantity {
@@ -422,24 +420,26 @@ view: +sales_orders__lines {
     hidden: no
     value_format_name: decimal_2
   }
+
   dimension: shipped_amount {
     hidden: no
     value_format_name: decimal_2
   }
+
   dimension: unit_cost {
     hidden: no
     value_format_name: decimal_2
   }
+
   dimension: unit_list_price {
     hidden: no
     value_format_name: decimal_2
   }
+
   dimension: unit_selling_price {
     hidden: no
     value_format_name: decimal_2
   }
-
-
 
 #} end item ordered/shipped amounts, prices and cost
 
@@ -496,17 +496,17 @@ view: +sales_orders__lines {
 
 
 
-  measure: average_days_from_promise_to_fulfillment {
+  measure: average_fulfillment_days_after_promise_date {
     hidden: no
     type: average
-    description: "Average number of days between fulfillment date and delivery promise date per order line"
+    description: "Average number of days between fulfillment date and promised delivery date per order line. Positive values indicate fulfillment occurred after requested delivery date."
     sql: ${fulfillment_days_after_promise_date} ;;
   }
 
-  measure: average_days_from_request_to_fulfillment {
+  measure: average_fulfillment_days_after_request_date {
     hidden: no
     type: average
-    description: "Average Number of Days between Fulfillment Date and Delivery Request Date per Order Line"
+    description: "Average number of days between fulfillment date and requested delivery date per order line. Positive values indicate fulfillment occurred after requested delivery date. "
     sql: ${fulfillment_days_after_request_date} ;;
   }
 
@@ -514,12 +514,72 @@ view: +sales_orders__lines {
     hidden: no
     type: average
     description: "Average number of days from order to fulfillment per order line. Item Category or ID must be in query or compution will return null."
-    sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or category_description._is_selected or selected_product_dimension_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
+    sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or category_id._is_selected or category_description._is_selected or selected_product_dimension_id._is_selected or selected_product_dimension_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
     value_format_name: decimal_2
+    filters: [is_cancelled: "No"]
     # required_fields: [category_description]
   }
 
+#########################################################
+# Target Currency dimensions and measures
+#{
 
+  dimension: ordered_amount_target_currency {
+    hidden: yes
+    type: number
+    sql: ${ordered_amount} * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: shipped_amount_target_currency {
+    hidden: yes
+    type: number
+    sql: ${shipped_amount} * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: is_incomplete_conversion {
+    hidden: yes
+    type: yesno
+    sql: ${sales_orders.currency_code} <> {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %} AND ${currency_conversion_sdt.from_currency} is NULL ;;
+  }
+
+  measure: total_sales_amount_target_currency {
+    hidden: no
+    type: sum
+    #label defined in sales_orders__lines_common_measures_ext
+    #description defined in sales_orders__lines_common_measures_ext
+    sql: ${ordered_amount_target_currency} ;;
+    # value_format defined in sales_orders__lines_common_measures_ext
+  }
+
+  measure: average_sales_amount_per_order_target_currency {
+    hidden: no
+    type: number
+    #label defined in sales_orders__lines_common_measures_ext
+    #description defined in sales_orders__lines_common_measures_ext
+    sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_order_count})  ;;
+    # value_format defined in sales_orders__lines_common_measures_ext
+  }
+
+  measure: total_fulfilled_amount_target_currency {
+    hidden: no
+    type: sum
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Fulfilled Amount ({{currency}}){%else%}Total Fulfilled Amount (Target Currency){%endif%}"
+    sql: ${ordered_amount_target_currency} ;;
+    filters: [sales_orders__lines.is_fulfilled: "Yes"]
+    value_format_name: format_large_numbers_d1
+  }
+
+  measure: total_shipped_amount_target_currency {
+    hidden: no
+    type: sum
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Shipped Amount ({{currency}}){%else%}Total Shipped Amount (Target Currency){%endif%}"
+    sql: ${shipped_amount_target_currency} ;;
+    value_format_name: format_large_numbers_d1
+  }
+
+#} end target currency dimensions and measures
 
   set: order_line_details {
     fields: [sales_orders.header_id, sales_orders.order_number, sales_orders.ordered_date, line_id, line_number, status_code, inventory_item_id, sales_orders__lines__item_descriptions.item_description, ordered_quantity, ordered_amount]
@@ -598,7 +658,10 @@ view: +sales_orders__lines {
   #   sql: ${fulfillment_date} <> ${actual_ship_date} ;;
   # }
 
-
+  dimension: cycle_time_days {
+    hidden: no
+    view_label: "TEST STUFF"
+  }
 
 
 

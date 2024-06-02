@@ -186,7 +186,7 @@ view: navigation_template {
       {% assign divStyle = "border-radius: 5px; padding-top: 6px; padding-bottom: 20px; height: 60px; background: #F5F5F5;" %}
       {% assign spanStyle = "font-size: 18px; display: table; margin:0 auto;" %}
       {% assign imgStyle = "float: left; vertical-align: middle; height: 45px;" %}
-      {% assign imgSrc = "https://marketplace-api.looker.com/block-icons/cortex_icon.png" %}
+      {% assign imgSrc = "@{image_dashboard_navigation}" %}
       {% when "tabs" %}
       {% assign sharedStyle = "font-color: #4285F4; padding: 5px 15px; border-style: solid; border-radius: 5px 5px 0 0; float: left; line-height: 20px; "%}
       {% assign linkStyle = sharedStyle | append: "border-width: 1px; border-color: #D3D3D3;" %}
@@ -194,7 +194,7 @@ view: navigation_template {
       {% assign divStyle = "border-bottom: solid 2px #808080; padding: 6px 10px 5px 10px; height: 40px;" %}
       {% assign spanStyle = "font-size: 16px; padding: 6px 10px 0 10px; height: 40px;" %}
       {% assign imgStyle = "float: left; vertical-align: middle; height: 39px;" %}
-      {% assign imgSrc = "https://marketplace-api.looker.com/block-icons/cortex_icon.png" %}
+      {% assign imgSrc = "@{image_dashboard_navigation}" %}
       {% when "small" %}
       {% assign linkStyle = "color: #0059D6; padding: 5px 15px; float: left; line-height: 40px;" %}
       {% assign currentPageLinkStyle = linkStyle | append: "font-weight:bold;font-size: 12px;" %}

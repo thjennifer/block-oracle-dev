@@ -1,5 +1,5 @@
 ## when column is duplicate of another in header (like is_open) then restate sql using ${TABLE}. reference
-include: "/views/base/sales_orders.view"
+include: "/views/base/sales_orders__lines.view"
 
 view: +sales_orders__lines {
 

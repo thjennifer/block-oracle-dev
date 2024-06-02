@@ -6,8 +6,8 @@ include: "/views/core/currency_conversion_sdt.view"
 # include: "/views/core/currency_rate_md_rfn.view"
 
 # field-only views
-include: "/views/core/apply_currency_conversion_to_sales_xvw.view"
-include: "/views/core/shared_parameters_xvw.view"
+# include: "/views/core/apply_currency_conversion_to_sales_xvw.view"
+include: "/views/core/sales_orders_common_parameters_xvw.view"
 include: "/views/core/navigation_otc_ext.view"
 
 explore: sales_orders {
@@ -42,13 +42,13 @@ explore: sales_orders {
     relationship: one_to_many
   }
 
-  join: apply_currency_conversion_to_sales_xvw {
-    view_label: "Sales Orders: Lines"
-    relationship: one_to_one
-    sql:  ;;
-  }
+  # join: apply_currency_conversion_to_sales_xvw {
+  #   view_label: "Sales Orders: Lines"
+  #   relationship: one_to_one
+  #   sql:  ;;
+  # }
 
-  join: shared_parameters_xvw {
+  join: sales_orders_common_parameters_xvw {
     relationship: one_to_one
     sql:  ;;
   }
@@ -62,7 +62,7 @@ explore: sales_orders {
   # join: sales_orders__lines__item_categories {
   #   view_label: "Sales Orders: Lines Item Categories"
   #   sql: LEFT JOIN UNNEST(${sales_orders__lines.item_categories}) as sales_orders__lines__item_categories ;;
-  #   sql_where: ${sales_orders__lines__item_categories.category_set_name} in ("Unknown",{% parameter sales_orders__lines.parameter_category_set_name %}) ;;
+  #   sql_where: ${sales_orders__lines__item_categories.category_set_name} in ("Unknown",{% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}) ;;
   #   relationship: one_to_many
   # }
   # join: sales_orders__lines__item_descriptions {

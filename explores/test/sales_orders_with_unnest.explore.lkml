@@ -10,7 +10,7 @@ include: "/views/core/currency_conversion_sdt.view"
 
 # field-only views
 include: "/views/core/apply_currency_conversion_to_sales_xvw.view"
-include: "/views/core/shared_parameters_xvw.view"
+include: "/views/core/sales_orders_common_parameters_xvw.view"
 
 explore: sales_orders {
   hidden: no
@@ -50,7 +50,7 @@ explore: sales_orders {
     sql:  ;;
   }
 
-  join: shared_parameters_xvw {
+  join: sales_orders_common_parameters_xvw {
     relationship: one_to_one
     sql:  ;;
   }

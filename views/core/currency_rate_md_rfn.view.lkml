@@ -4,7 +4,7 @@ view: +currency_rate_md {
 
   label: "Currency Rate MD"
 
-  sql_table_name: {% assign p = shared_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
+  sql_table_name: {% assign p = sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
                   {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_REPORTING_VISION' %}
                   {% else %}{% assign t = 'CORTEX_ORACLE_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.CurrencyRateMD` ;;
 
@@ -25,18 +25,18 @@ view: +currency_rate_md {
     sql: ${conversion_raw} ;;
   }
 
-  parameter: parameter_target_currency {
-    hidden: no
-    type: string
-    view_label: "🔍 Filters & 🛠 Tools"
-    label: "Target Currency"
-    suggest_dimension: to_currency
-    default_value: "USD"
-    full_suggestions: no
-  }
+  # parameter: parameter_target_currency {
+  #   hidden: no
+  #   type: string
+  #   view_label: "🔍 Filters & 🛠 Tools"
+  #   label: "Target Currency"
+  #   suggest_dimension: to_currency
+  #   default_value: "USD"
+  #   full_suggestions: no
+  # }
 
   dimension: to_currency {
-    sql: COALESCE(${TABLE}.TO_CURRENCY,{% parameter parameter_target_currency %}) ;;
+    sql: COALESCE(${TABLE}.TO_CURRENCY,{% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}) ;;
 
   }
 

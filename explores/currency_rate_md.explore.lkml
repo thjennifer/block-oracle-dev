@@ -5,14 +5,14 @@
 #########################################################}
 
 include: "/views/core/currency_rate_md_rfn.view"
-include: "/views/core/shared_parameters_xvw.view"
+include: "/views/core/sales_orders_common_parameters_xvw.view"
 
 explore: currency_rate_md {
   hidden: yes
 
   label: "Currency Rate MD"
 
-  join: shared_parameters_xvw {
+  join: sales_orders_common_parameters_xvw {
     relationship: one_to_one
     sql:  ;;
 }

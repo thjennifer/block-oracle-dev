@@ -8,7 +8,6 @@
 view: sales_orders_daily_agg {
   sql_table_name: `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesOrdersDailyAgg` ;;
 
-  # sql_table_name:  `thjennifer1.CORTEX_ORACLE_REPORTING.SalesOrdersDailyAgg` ;;
   dimension: bill_to_customer_country {
     type: string
     sql: ${TABLE}.BILL_TO_CUSTOMER_COUNTRY ;;
@@ -148,6 +147,14 @@ view: sales_orders_daily_agg__lines {
     hidden: yes
     sql: AMOUNTS ;;
   }
+  dimension: item_category_description {
+    type: string
+    sql: ITEM_CATEGORY_DESCRIPTION ;;
+  }
+  dimension: item_category_id {
+    type: number
+    sql: ITEM_CATEGORY_ID ;;
+  }
   dimension: item_category_name {
     type: string
     sql: ITEM_CATEGORY_NAME ;;
@@ -160,9 +167,17 @@ view: sales_orders_daily_agg__lines {
     type: string
     sql: ITEM_CATEGORY_SET_NAME ;;
   }
+  dimension: item_organization_id {
+    type: number
+    sql: ITEM_ORGANIZATION_ID ;;
+  }
   dimension: item_organization_name {
     type: string
     sql: ITEM_ORGANIZATION_NAME ;;
+  }
+  dimension: num_fulfilled_order_lines {
+    type: number
+    sql: NUM_FULFILLED_ORDER_LINES ;;
   }
   dimension: num_order_lines {
     type: number
@@ -181,9 +196,13 @@ view: sales_orders_daily_agg__lines {
 
 view: sales_orders_daily_agg__lines__amounts {
 
-  dimension: currency_code {
+  dimension: is_incomplete_conversion {
+    type: yesno
+    sql: ${TABLE}.IS_INCOMPLETE_CONVERSION ;;
+  }
+  dimension: target_currency_code {
     type: string
-    sql: ${TABLE}.CURRENCY_CODE ;;
+    sql: ${TABLE}.TARGET_CURRENCY_CODE ;;
   }
   dimension: total_invoiced {
     type: number

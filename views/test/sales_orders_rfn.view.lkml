@@ -1,7 +1,7 @@
 include: "/views/base/sales_orders.view"
-include: "/views/core/common_dimensions.view"
+include: "/views/core/sales_orders_common_dimensions_ext.view"
 view: +sales_orders {
-  extends: [common_dimensions]
+  extends: [sales_orders_common_dimensions_ext]
   label: "Sales Orders TEST"
 
   fields_hidden_by_default: yes

@@ -1,4 +1,4 @@
-view: common_dimensions {
+view: sales_orders_common_dimensions_ext {
   extension: required
 
 
@@ -6,6 +6,14 @@ view: common_dimensions {
 #########################################################
 # Customer Dimensions
 #{
+
+
+  # dimension: business_unit_id {hidden: no}
+
+  # dimension: business_unit_name {
+  #   hidden: no
+  #   sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CAST(${business_unit_id} as STRING)) ;;
+  # }
 
   dimension: bill_to_customer_country {
     hidden: no

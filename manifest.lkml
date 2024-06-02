@@ -33,7 +33,37 @@ constant: REPORTING_DATASET {
 #     label: "@{derive_currency_label}Total Sales ({{currency}})"
 #     sql: ${ordered_amount_target_currency} ;;
 #     }
-#
+
 constant: derive_currency_label {
-  value: "{% assign currency = currency_conversion_sdt.parameter_target_currency._parameter_value | remove: \"'\" %}"
+  value: "{% assign currency = sales_orders_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" %}"
+}
+
+
+
+
+constant: image_dashboard_navigation {
+  value: ""
+  # value: "https://marketplace-api.looker.com/block-icons/cortex_icon.png"
+}
+
+# Constant is_agg_category_in_query
+# provides first part of liquid IF statement to check if any of these category fields from
+# sales_orders_agg__lines are in the query (either selected dimension or filter):
+#     item_category_id, item_category_description, item_category_name,
+#     item_organization_id, item_orgranization_name
+#
+# when used, must complete the rest of the statement (what to return when true and false
+# For example:
+#   measure: order_count {
+#     type: sum
+#     sql: @{is_agg_category_selected}NULL {%else} ${num_orders} {% endif %} ;;
+#.  }
+
+constant: is_agg_category_in_query {
+  value: "{% if sales_orders_daily_agg__lines.item_category_id._in_query or
+                sales_orders_daily_agg__lines.item_category_description._in_query or
+                sales_orders_daily_agg__lines.item_category_name._in_query or
+                sales_orders_daily_agg__lines.item_organization_id._in_query or
+                sales_orders_daily_agg__lines.item_organization_name._in_query
+                %}"
 }

@@ -1,4 +1,4 @@
-include: "/views/base/sales_orders.view"
+include: "/views/base/sales_orders__lines__item_descriptions.view"
 
 view: +sales_orders__lines__item_descriptions {
   fields_hidden_by_default: yes

@@ -260,269 +260,269 @@ view: sales_orders {
 
 }
 
-view: sales_orders__lines {
-  # drill_fields: [return_line_ids]
+# view: sales_orders__lines {
+#   # drill_fields: [return_line_ids]
 
-  dimension: return_line_ids {
-    primary_key: yes
-    hidden: yes
-    sql: RETURN_LINE_IDS ;;
-  }
-  dimension_group: actual_ship {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ACTUAL_SHIP_DATE ;;
-  }
-  dimension: cancel_reason {
-    type: string
-    sql: CANCEL_REASON ;;
-  }
-  dimension: cancelled_quantity {
-    type: number
-    sql: CANCELLED_QUANTITY ;;
-  }
-  dimension: category_code {
-    type: string
-    sql: CATEGORY_CODE ;;
-  }
-  dimension_group: creation {
-    type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
-    sql: CREATION_DATE ;;
-  }
-  dimension: cycle_time_days {
-    type: number
-    sql: CYCLE_TIME_DAYS ;;
-  }
-  dimension: fulfilled_quantity {
-    type: number
-    sql: FULFILLED_QUANTITY ;;
-  }
-  dimension_group: fulfillment {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: FULFILLMENT_DATE ;;
-  }
-  dimension: fulfillment_days_after_promise_date {
-    type: number
-    sql: FULFILLMENT_DAYS_AFTER_PROMISE_DATE ;;
-  }
-  dimension: fulfillment_days_after_request_date {
-    type: number
-    sql: FULFILLMENT_DAYS_AFTER_REQUEST_DATE ;;
-  }
-  dimension: has_return {
-    type: yesno
-    sql: HAS_RETURN ;;
-  }
-  dimension: inventory_item_id {
-    type: number
-    sql: INVENTORY_ITEM_ID ;;
-  }
-  dimension: invoiced_amount {
-    type: number
-    sql: INVOICED_AMOUNT ;;
-  }
-  dimension: invoiced_quantity {
-    type: number
-    sql: INVOICED_QUANTITY ;;
-  }
-  dimension: is_backlog {
-    type: yesno
-    sql: IS_BACKLOG ;;
-  }
-  dimension: is_backordered {
-    type: yesno
-    sql: IS_BACKORDERED ;;
-  }
-  dimension: is_booked {
-    type: yesno
-    sql: IS_BOOKED ;;
-  }
-  dimension: is_booking {
-    type: yesno
-    sql: IS_BOOKING ;;
-  }
-  dimension: is_cancelled {
-    type: yesno
-    sql: IS_CANCELLED ;;
-  }
-  dimension: is_fulfilled {
-    type: yesno
-    sql: IS_FULFILLED ;;
-  }
-  dimension: is_fulfilled_by_promise_date {
-    type: yesno
-    sql: IS_FULFILLED_BY_PROMISE_DATE ;;
-  }
-  dimension: is_fulfilled_by_request_date {
-    type: yesno
-    sql: IS_FULFILLED_BY_REQUEST_DATE ;;
-  }
-  dimension: is_open {
-    type: yesno
-    sql: IS_OPEN ;;
-  }
-  dimension: item_categories {
-    hidden: yes
-    sql: ITEM_CATEGORIES ;;
-  }
-  dimension: item_descriptions {
-    hidden: yes
-    sql: ITEM_DESCRIPTIONS ;;
-  }
-  dimension: item_organization_id {
-    type: number
-    sql: ITEM_ORGANIZATION_ID ;;
-  }
-  dimension: item_organization_name {
-    type: string
-    sql: ITEM_ORGANIZATION_NAME ;;
-  }
-  dimension: item_part_number {
-    type: string
-    sql: ITEM_PART_NUMBER ;;
-  }
-  dimension_group: last_update {
-    type: time
-    timeframes: [raw, time, date, week, month, quarter, year]
-    sql: LAST_UPDATE_DATE ;;
-  }
-  dimension: line_id {
-    type: number
-    sql: LINE_ID ;;
-  }
-  dimension: line_number {
-    type: number
-    sql: LINE_NUMBER ;;
-  }
-  dimension: ordered_amount {
-    type: number
-    sql: ORDERED_AMOUNT ;;
-  }
-  dimension: ordered_quantity {
-    type: number
-    sql: ORDERED_QUANTITY ;;
-  }
-  dimension: ordered_weight {
-    type: number
-    sql: ORDERED_WEIGHT ;;
-  }
-  dimension_group: promise_date {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: PROMISE_DATE ;;
-  }
-  dimension: quantity_uom {
-    type: string
-    sql: QUANTITY_UOM ;;
-  }
-  dimension_group: request_date {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: REQUEST_DATE ;;
-  }
-  dimension: sales_orders__lines {
-    type: string
-    hidden: yes
-    sql: sales_orders__lines ;;
-  }
-  dimension_group: schedule_ship {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: SCHEDULE_SHIP_DATE ;;
-  }
-  dimension: shipped_amount {
-    type: number
-    sql: SHIPPED_AMOUNT ;;
-  }
-  dimension: shipped_quantity {
-    type: number
-    sql: SHIPPED_QUANTITY ;;
-  }
-  dimension: shipped_weight {
-    type: number
-    sql: SHIPPED_WEIGHT ;;
-  }
-  dimension: status_code {
-    type: string
-    sql: STATUS_CODE ;;
-  }
-  dimension: unit_cost {
-    type: number
-    sql: UNIT_COST ;;
-  }
-  dimension: unit_list_price {
-    type: number
-    sql: UNIT_LIST_PRICE ;;
-  }
-  dimension: unit_selling_price {
-    type: number
-    sql: UNIT_SELLING_PRICE ;;
-  }
-  dimension: unit_weight {
-    type: number
-    sql: UNIT_WEIGHT ;;
-  }
-  dimension: weight_uom {
-    type: string
-    sql: WEIGHT_UOM ;;
-  }
-}
+#   dimension: return_line_ids {
+#     primary_key: yes
+#     hidden: yes
+#     sql: RETURN_LINE_IDS ;;
+#   }
+#   dimension_group: actual_ship {
+#     type: time
+#     timeframes: [raw, date, week, month, quarter, year]
+#     convert_tz: no
+#     datatype: date
+#     sql: ACTUAL_SHIP_DATE ;;
+#   }
+#   dimension: cancel_reason {
+#     type: string
+#     sql: CANCEL_REASON ;;
+#   }
+#   dimension: cancelled_quantity {
+#     type: number
+#     sql: CANCELLED_QUANTITY ;;
+#   }
+#   dimension: category_code {
+#     type: string
+#     sql: CATEGORY_CODE ;;
+#   }
+#   dimension_group: creation {
+#     type: time
+#     timeframes: [raw, time, date, week, month, quarter, year]
+#     sql: CREATION_DATE ;;
+#   }
+#   dimension: cycle_time_days {
+#     type: number
+#     sql: CYCLE_TIME_DAYS ;;
+#   }
+#   dimension: fulfilled_quantity {
+#     type: number
+#     sql: FULFILLED_QUANTITY ;;
+#   }
+#   dimension_group: fulfillment {
+#     type: time
+#     timeframes: [raw, date, week, month, quarter, year]
+#     convert_tz: no
+#     datatype: date
+#     sql: FULFILLMENT_DATE ;;
+#   }
+#   dimension: fulfillment_days_after_promise_date {
+#     type: number
+#     sql: FULFILLMENT_DAYS_AFTER_PROMISE_DATE ;;
+#   }
+#   dimension: fulfillment_days_after_request_date {
+#     type: number
+#     sql: FULFILLMENT_DAYS_AFTER_REQUEST_DATE ;;
+#   }
+#   dimension: has_return {
+#     type: yesno
+#     sql: HAS_RETURN ;;
+#   }
+#   dimension: inventory_item_id {
+#     type: number
+#     sql: INVENTORY_ITEM_ID ;;
+#   }
+#   dimension: invoiced_amount {
+#     type: number
+#     sql: INVOICED_AMOUNT ;;
+#   }
+#   dimension: invoiced_quantity {
+#     type: number
+#     sql: INVOICED_QUANTITY ;;
+#   }
+#   dimension: is_backlog {
+#     type: yesno
+#     sql: IS_BACKLOG ;;
+#   }
+#   dimension: is_backordered {
+#     type: yesno
+#     sql: IS_BACKORDERED ;;
+#   }
+#   dimension: is_booked {
+#     type: yesno
+#     sql: IS_BOOKED ;;
+#   }
+#   dimension: is_booking {
+#     type: yesno
+#     sql: IS_BOOKING ;;
+#   }
+#   dimension: is_cancelled {
+#     type: yesno
+#     sql: IS_CANCELLED ;;
+#   }
+#   dimension: is_fulfilled {
+#     type: yesno
+#     sql: IS_FULFILLED ;;
+#   }
+#   dimension: is_fulfilled_by_promise_date {
+#     type: yesno
+#     sql: IS_FULFILLED_BY_PROMISE_DATE ;;
+#   }
+#   dimension: is_fulfilled_by_request_date {
+#     type: yesno
+#     sql: IS_FULFILLED_BY_REQUEST_DATE ;;
+#   }
+#   dimension: is_open {
+#     type: yesno
+#     sql: IS_OPEN ;;
+#   }
+#   dimension: item_categories {
+#     hidden: yes
+#     sql: ITEM_CATEGORIES ;;
+#   }
+#   dimension: item_descriptions {
+#     hidden: yes
+#     sql: ITEM_DESCRIPTIONS ;;
+#   }
+#   dimension: item_organization_id {
+#     type: number
+#     sql: ITEM_ORGANIZATION_ID ;;
+#   }
+#   dimension: item_organization_name {
+#     type: string
+#     sql: ITEM_ORGANIZATION_NAME ;;
+#   }
+#   dimension: item_part_number {
+#     type: string
+#     sql: ITEM_PART_NUMBER ;;
+#   }
+#   dimension_group: last_update {
+#     type: time
+#     timeframes: [raw, time, date, week, month, quarter, year]
+#     sql: LAST_UPDATE_DATE ;;
+#   }
+#   dimension: line_id {
+#     type: number
+#     sql: LINE_ID ;;
+#   }
+#   dimension: line_number {
+#     type: number
+#     sql: LINE_NUMBER ;;
+#   }
+#   dimension: ordered_amount {
+#     type: number
+#     sql: ORDERED_AMOUNT ;;
+#   }
+#   dimension: ordered_quantity {
+#     type: number
+#     sql: ORDERED_QUANTITY ;;
+#   }
+#   dimension: ordered_weight {
+#     type: number
+#     sql: ORDERED_WEIGHT ;;
+#   }
+#   dimension_group: promise_date {
+#     type: time
+#     timeframes: [raw, date, week, month, quarter, year]
+#     convert_tz: no
+#     datatype: date
+#     sql: PROMISE_DATE ;;
+#   }
+#   dimension: quantity_uom {
+#     type: string
+#     sql: QUANTITY_UOM ;;
+#   }
+#   dimension_group: request_date {
+#     type: time
+#     timeframes: [raw, date, week, month, quarter, year]
+#     convert_tz: no
+#     datatype: date
+#     sql: REQUEST_DATE ;;
+#   }
+#   dimension: sales_orders__lines {
+#     type: string
+#     hidden: yes
+#     sql: sales_orders__lines ;;
+#   }
+#   dimension_group: schedule_ship {
+#     type: time
+#     timeframes: [raw, date, week, month, quarter, year]
+#     convert_tz: no
+#     datatype: date
+#     sql: SCHEDULE_SHIP_DATE ;;
+#   }
+#   dimension: shipped_amount {
+#     type: number
+#     sql: SHIPPED_AMOUNT ;;
+#   }
+#   dimension: shipped_quantity {
+#     type: number
+#     sql: SHIPPED_QUANTITY ;;
+#   }
+#   dimension: shipped_weight {
+#     type: number
+#     sql: SHIPPED_WEIGHT ;;
+#   }
+#   dimension: status_code {
+#     type: string
+#     sql: STATUS_CODE ;;
+#   }
+#   dimension: unit_cost {
+#     type: number
+#     sql: UNIT_COST ;;
+#   }
+#   dimension: unit_list_price {
+#     type: number
+#     sql: UNIT_LIST_PRICE ;;
+#   }
+#   dimension: unit_selling_price {
+#     type: number
+#     sql: UNIT_SELLING_PRICE ;;
+#   }
+#   dimension: unit_weight {
+#     type: number
+#     sql: UNIT_WEIGHT ;;
+#   }
+#   dimension: weight_uom {
+#     type: string
+#     sql: WEIGHT_UOM ;;
+#   }
+# }
 
-view: sales_orders__lines__return_line_ids {
+# view: sales_orders__lines__return_line_ids {
 
-  dimension: sales_orders__lines__return_line_ids {
-    type: number
-    value_format_name: id
-    sql: sales_orders__lines__return_line_ids ;;
-  }
-}
+#   dimension: sales_orders__lines__return_line_ids {
+#     type: number
+#     value_format_name: id
+#     sql: sales_orders__lines__return_line_ids ;;
+#   }
+# }
 
-view: sales_orders__lines__item_categories {
-  # drill_fields: [id]
+# view: sales_orders__lines__item_categories {
+#   # drill_fields: [id]
 
-  dimension: id {
-    primary_key: yes
-    type: number
-    sql: ${TABLE}.ID ;;
-  }
-  dimension: category_name {
-    type: string
-    sql: ${TABLE}.CATEGORY_NAME ;;
-  }
-  dimension: category_set_id {
-    type: number
-    sql: ${TABLE}.CATEGORY_SET_ID ;;
-  }
-  dimension: category_set_name {
-    type: string
-    sql: ${TABLE}.CATEGORY_SET_NAME ;;
-  }
-  dimension: description {
-    type: string
-    sql: ${TABLE}.DESCRIPTION ;;
-  }
-}
+#   dimension: id {
+#     primary_key: yes
+#     type: number
+#     sql: ${TABLE}.ID ;;
+#   }
+#   dimension: category_name {
+#     type: string
+#     sql: ${TABLE}.CATEGORY_NAME ;;
+#   }
+#   dimension: category_set_id {
+#     type: number
+#     sql: ${TABLE}.CATEGORY_SET_ID ;;
+#   }
+#   dimension: category_set_name {
+#     type: string
+#     sql: ${TABLE}.CATEGORY_SET_NAME ;;
+#   }
+#   dimension: description {
+#     type: string
+#     sql: ${TABLE}.DESCRIPTION ;;
+#   }
+# }
 
-view: sales_orders__lines__item_descriptions {
+# view: sales_orders__lines__item_descriptions {
 
-  dimension: language {
-    type: string
-    sql: ${TABLE}.LANGUAGE ;;
-  }
-  dimension: text {
-    type: string
-    sql: ${TABLE}.TEXT ;;
-  }
-}
+#   dimension: language {
+#     type: string
+#     sql: ${TABLE}.LANGUAGE ;;
+#   }
+#   dimension: text {
+#     type: string
+#     sql: ${TABLE}.TEXT ;;
+#   }
+# }

@@ -1,4 +1,4 @@
-include: "/views/base/sales_orders.view"
+include: "/views/base/sales_orders__lines__item_categories.view"
 
 view: +sales_orders__lines__item_categories {
 
@@ -12,12 +12,12 @@ view: +sales_orders__lines__item_categories {
 
   dimension: id {
     primary_key: no
-    label: "Category ID"
+    label: "Item Category ID"
     sql: COALESCE(${TABLE}.ID,-1) ;;
   }
 
   dimension: category_name {
-    label: "Category Group"
+    label: "Item Category Name Group"
     full_suggestions: yes
     sql: COALESCE(${TABLE}.CATEGORY_NAME,"Unknown") ;;
   }
@@ -33,7 +33,7 @@ view: +sales_orders__lines__item_categories {
   }
 
   dimension: description {
-    label: "Category Description"
+    label: "Item Category Description"
     full_suggestions: yes
     sql: COALESCE(${TABLE}.DESCRIPTION,COALESCE(CAST(NULLIF(${id},-1) AS STRING),"Unknown")) ;;
   }
