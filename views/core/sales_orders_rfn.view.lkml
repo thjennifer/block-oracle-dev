@@ -196,7 +196,7 @@ view: +sales_orders {
     group_label: "Order Status"
   }
 
-  dimension: is_backordered {
+  dimension: has_backorder {
     hidden: no
     group_label: "Order Status"
     label: "Has Backorder"
@@ -209,7 +209,7 @@ view: +sales_orders {
     group_label: "Order Status"
     description: "Yes, if sales order can be met with available inventory (no items are backordered)."
     # did not use ${is_backordered} = No becuase would count orders where ${TABLE}.IS_BACKORDERED = NULL
-    sql: ${TABLE}.IS_BACKORDERED = FALSE ;;
+    sql: ${TABLE}.HAS_BACKORDER = FALSE ;;
   }
 
   dimension: is_booked {
@@ -272,7 +272,7 @@ view: +sales_orders {
     type: yesno
     group_label: "Order Status"
     description: "Order is either held or backordered."
-    sql: ${is_backordered} OR ${is_held} ;;
+    sql: ${has_backorder} OR ${is_held} ;;
   }
 
   dimension: open_closed_cancelled {
@@ -385,7 +385,7 @@ view: +sales_orders {
     type: count
     label: "Has Backorder Orders"
     description: "Number of sales orders that have at least one order line on backorder."
-    filters: [is_backordered: "Yes"]
+    filters: [has_backorder: "Yes"]
   }
 
   measure: has_backorder_order_percent {
@@ -657,5 +657,5 @@ view: +sales_orders {
     sql: ${TABLE}.LEDGER_ID IS NULL ;;
   }
 
-
+#} end test stuff
    }

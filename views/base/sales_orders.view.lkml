@@ -104,9 +104,9 @@ view: sales_orders {
     type: string
     sql: ${TABLE}.HEADER_STATUS ;;
   }
-  dimension: is_backordered {
+  dimension: has_backorder {
     type: yesno
-    sql: ${TABLE}.IS_BACKORDERED ;;
+    sql: ${TABLE}.HAS_BACKORDER ;;
   }
   dimension: is_booked {
     type: yesno
