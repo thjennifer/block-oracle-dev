@@ -100,6 +100,12 @@ view: +sales_orders_daily_agg {
     hidden: no
     sql: COALESCE(${TABLE}.ORDER_SOURCE_NAME,COALESCE(CAST(NULLIF(${order_source_id},-1) AS STRING),"Unknown")) ;;
   }
+
+  dimension: bill_to_customer_name {
+    # hidden: no
+    # group_label: "Bill to Customer"
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CAST(${bill_to_customer_number} AS STRING)) ;;
+  }
 #} end business unit and order source dimensions
 
 #########################################################

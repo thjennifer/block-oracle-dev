@@ -28,6 +28,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
+      Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
@@ -87,7 +88,7 @@
     name: Blocked Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.order_count_with_details_link]
+    fields: [sales_orders.order_count]
     filters:
       sales_orders.is_blocked: 'Yes'
     listen:
@@ -97,6 +98,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
+      Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover

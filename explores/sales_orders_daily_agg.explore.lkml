@@ -11,16 +11,17 @@ explore: sales_orders_daily_agg {
   join: sales_orders_daily_agg__lines {
     view_label: "Sales Orders Daily Agg: Item Categories"
     sql: LEFT JOIN UNNEST(${sales_orders_daily_agg.lines}) as sales_orders_daily_agg__lines ;;
-    sql_where: ${sales_orders_daily_agg__lines.item_category_set_name} in ("Unknown",{% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}) ;;
+    sql_where: ${sales_orders_daily_agg__lines.item_category_set_name} in ("Unknown",'{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}') ;;
+    # sql_where: ${sales_orders_daily_agg__lines.item_category_set_name} in ("Unknown",{% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}) ;;
     relationship: one_to_many
   }
 
-  join: sales_orders_daily_agg__lines__amounts {
-    view_label: "Sales Orders Daily Agg: Item Categories Amounts"
-    sql: LEFT JOIN UNNEST(${sales_orders_daily_agg__lines.amounts}) as sales_orders_daily_agg__lines__amounts ;;
-    sql_where: ${sales_orders_daily_agg__lines__amounts.target_currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %} ;;
-    relationship: one_to_many
-  }
+  # join: sales_orders_daily_agg__lines__amounts {
+  #   view_label: "Sales Orders Daily Agg: Item Categories Amounts"
+  #   sql: LEFT JOIN UNNEST(${sales_orders_daily_agg__lines.amounts}) as sales_orders_daily_agg__lines__amounts ;;
+  #   sql_where: ${sales_orders_daily_agg__lines__amounts.target_currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %} ;;
+  #   relationship: one_to_many
+  # }
 
   join: sales_orders_common_parameters_xvw {
     relationship: one_to_one

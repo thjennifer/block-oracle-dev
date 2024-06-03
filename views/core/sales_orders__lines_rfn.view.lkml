@@ -1,11 +1,11 @@
 ## when column is duplicate of another in header (like is_open) then restate sql using ${TABLE}. reference
 include: "/views/base/sales_orders__lines.view"
-include: "/views/core/sales_orders__lines_common_measures_ext.view"
+include: "/views/core/sales_orders__lines_common_fields_ext.view"
 
 view: +sales_orders__lines {
 
   fields_hidden_by_default: yes
-  extends: [sales_orders__lines_common_measures_ext]
+  extends: [sales_orders__lines_common_fields_ext]
 
   dimension: key {
     type: string
@@ -59,6 +59,7 @@ view: +sales_orders__lines {
     type: unquoted
     view_label: "🔍 Filters & 🛠 Tools"
     label: "Display Categories or Items"
+    description: "Select whether to display categories or items in report. Use with dimensions Selected Product Dimension ID and Selected Product Dimension Description."
     allowed_value: {label: "Category" value: "Category"}
     allowed_value: {label: "Item" value: "Item"}
     default_value: "Category"
@@ -91,58 +92,67 @@ view: +sales_orders__lines {
 
   dimension: item_description {
     hidden: no
-    group_label: "Item Description and Category"
+    group_label: "Item Categories & Descriptions"
     sql: COALESCE((SELECT d.TEXT FROM UNNEST(${item_descriptions}) AS d WHERE d.language = {% parameter sales_orders__lines.parameter_language %} ), CAST(${inventory_item_id} AS STRING)) ;;
     full_suggestions: yes
   }
 
   dimension: item_description_language {
     hidden: no
-    group_label: "Item Description and Category"
+    group_label: "Item Categories & Descriptions"
     sql: (SELECT d.LANGUAGE FROM UNNEST(${item_descriptions}) AS d WHERE d.LANGUAGE = {% parameter sales_orders__lines.parameter_language %} ) ;;
-    full_suggestions: yes
-  }
-
-  dimension: category_description {
-    hidden: no
-    group_label: "Item Description and Category"
-    sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %} )
-         ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
     full_suggestions: yes
   }
 
   dimension: category_id {
     hidden: no
     type: number
-    group_label: "Item Description and Category"
-    sql: COALESCE((select c.id FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}), -1 ) ;;
+    group_label: "Item Categories & Descriptions"
+    label: "Item Category ID"
+    sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}'), -1 ) ;;
+    # sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}), -1 ) ;;
     full_suggestions: yes
     value_format_name: id
   }
 
-  dimension: category_group {
+  dimension: category_description {
     hidden: no
-    group_label: "Item Description and Category"
-    sql: COALESCE((select c.category_name FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}),"Unknown" ) ;;
+    group_label: "Item Categories & Descriptions"
+    label: "Item Category Description"
+    sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}' )
+         ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
+    # sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %} )
+    # ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
+    full_suggestions: yes
+  }
+
+  dimension: category_name {
+    hidden: no
+    group_label: "Item Categories & Descriptions"
+    label: "Item Category Name Group"
+    sql: COALESCE((SELECT c.CATEGORY_NAME FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}'),"Unknown" ) ;;
+    # sql: COALESCE((SELECT c.category_name FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}),"Unknown" ) ;;
     full_suggestions: yes
   }
 
   dimension: selected_product_dimension_description {
     hidden: no
-    group_label: "Item Description and Category"
+    group_label: "Item Categories & Descriptions"
     label: "{% if _field._is_selected %}
                 {% if parameter_display_product_level._parameter_value == 'Item' %}Item{%else%}Category{%endif%}
             {%else%}Selected Product Dimenstion Description{%endif%}"
+    description: "Values are either Item Description or Item Category Description based on user selection for Parameter Display Categories or Items."
     sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${item_description}{%else%}${category_description}{%endif%} ;;
     can_filter: no
   }
 
   dimension: selected_product_dimension_id {
     hidden: no
-    group_label: "Item Description and Category"
+    group_label: "Item Categories & Descriptions"
     label: "{% if _field._is_selected %}
     {% if parameter_display_product_level._parameter_value == 'Item' %}Inventory Item ID{%else%}Category ID{%endif%}
     {%else%}Selected Product Dimenstion ID{%endif%}"
+    description: "Values are either Item Inventory ID or Item Category ID based on user selection for Parameter Display Categories or Items."
     sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${category_id}{%endif%} ;;
     can_filter: no
   }
@@ -524,9 +534,41 @@ view: +sales_orders__lines {
 # Target Currency dimensions and measures
 #{
 
+  dimension: currency_source {
+    hidden: no
+    type: string
+    group_label: "Currency Conversion"
+    label: "Currency (Source)"
+    description: "Currency of the order header."
+    sql: ${sales_orders.currency_code} ;;
+  }
+
+  dimension: currency_target {
+    hidden: no
+    type: string
+    group_label: "Currency Conversion"
+    label: "Currency (Target)"
+    sql: {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %} ;;
+  }
+
+  dimension: currency_conversion_rate {
+    hidden: no
+    group_label: "Currency Conversion"
+    sql: IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    value_format_name: decimal_4
+  }
+
+  dimension: is_incomplete_conversion {
+    hidden: no
+    type: yesno
+    group_label: "Currency Conversion"
+    sql: ${sales_orders.currency_code} <> {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %} AND ${currency_conversion_sdt.from_currency} is NULL ;;
+  }
+
   dimension: ordered_amount_target_currency {
     hidden: yes
     type: number
+    group_label: "Currency Conversion"
     sql: ${ordered_amount} * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
     value_format_name: decimal_2
   }
@@ -534,32 +576,27 @@ view: +sales_orders__lines {
   dimension: shipped_amount_target_currency {
     hidden: yes
     type: number
+    group_label: "Currency Conversion"
     sql: ${shipped_amount} * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
     value_format_name: decimal_2
-  }
-
-  dimension: is_incomplete_conversion {
-    hidden: yes
-    type: yesno
-    sql: ${sales_orders.currency_code} <> {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 
   measure: total_sales_amount_target_currency {
     hidden: no
     type: sum
-    #label defined in sales_orders__lines_common_measures_ext
-    #description defined in sales_orders__lines_common_measures_ext
+    #label defined in sales_orders__lines_common_fields_ext
+    #description defined in sales_orders__lines_common_fields_ext
     sql: ${ordered_amount_target_currency} ;;
-    # value_format defined in sales_orders__lines_common_measures_ext
+    # value_format defined in sales_orders__lines_common_fields_ext
   }
 
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
     type: number
-    #label defined in sales_orders__lines_common_measures_ext
-    #description defined in sales_orders__lines_common_measures_ext
+    #label defined in sales_orders__lines_common_fields_ext
+    #description defined in sales_orders__lines_common_fields_ext
     sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_order_count})  ;;
-    # value_format defined in sales_orders__lines_common_measures_ext
+    # value_format defined in sales_orders__lines_common_fields_ext
   }
 
   measure: total_fulfilled_amount_target_currency {

@@ -21,6 +21,7 @@ view: +sales_orders {
   dimension: header_id {
     hidden: no
     primary_key: yes
+    value_format_name: id
   }
 
 #########################################################
@@ -58,12 +59,12 @@ view: +sales_orders {
   #   default_value: "CORTEX_ORACLE_REPORTING_VISION"
   # }
 
-  filter: filter_ordered_date {
-    hidden: no
-    type: date
-    view_label: "🔍 Filters & 🛠 Tools"
-    sql: {% condition %} ${ordered_date} {% endcondition %} ;;
-  }
+  # filter: filter_ordered_date {
+  #   hidden: no
+  #   type: date
+  #   view_label: "🔍 Filters & 🛠 Tools"
+  #   sql: {% condition %} ${ordered_date} {% endcondition %} ;;
+  # }
 
 #} end parameters
 
@@ -78,7 +79,10 @@ view: +sales_orders {
     description: "Currency of the order."
   }
 
-  dimension: ledger_id {hidden: no}
+  dimension: ledger_id {
+    hidden: no
+    value_format_name: id
+    }
 
   dimension: ledger_name {hidden: no}
 
@@ -103,6 +107,7 @@ view: +sales_orders {
   dimension: order_source_id {
     hidden: no
     sql: COALESCE(${TABLE}.ORDER_SOURCE_ID,-1);;
+    value_format_name: id
   }
 
   dimension: order_source_name {
@@ -312,6 +317,28 @@ view: +sales_orders {
 
 #} end header status
 
+#########################################################
+# Total Order Amounts
+#{
+
+  dimension: total_order_amount {
+    hidden: no
+    label: "Total Order Amount (Source Currency)"
+    description: "Total amount for an order in source currency."
+    value_format_name: decimal_2
+  }
+
+  dimension: total_order_amount_target_currency {
+    hidden: no
+    type: number
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Order Amount ({{currency}}){%else%}Total Order Amount (Target Currency){%endif%}"
+    description: "Total amount for an order in target currency."
+    sql: COALESCE(${total_order_amount},0) * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    value_format_name: decimal_2
+  }
+
+#} end order amount
+
 
 #########################################################
 # Measures
@@ -482,7 +509,7 @@ view: +sales_orders {
 
 #} end measures
   set: header_details {
-    fields: [header_id,order_number,header_status,ordered_date,sold_to_site_use_id, bill_to_site_use_id, total_order_amount]
+    fields: [header_id,order_number,header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_order_amount_target_currency]
   }
 
 
@@ -510,12 +537,15 @@ view: +sales_orders {
   }
 
 
-  measure: total_amount {
-    hidden: no
-    type: sum
-    view_label: "TEST STUFF"
-    sql: ${total_order_amount} ;;
-  }
+
+
+  # dimension: ordered_amount_target_currency {
+  #   hidden: yes
+  #   type: number
+  #   group_label: "Currency Conversion"
+  #   sql: ${ordered_amount} * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+  #   value_format_name: decimal_2
+  # }
 
   measure: date_count {
     hidden: no

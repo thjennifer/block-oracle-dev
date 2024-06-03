@@ -1,13 +1,13 @@
   # set full suggestions to yes so that filter suggestions populate properly for nested fields
   # value of yes means Looker queries the nest field as part of the full explore rather than a standalone table
 
-include: "/views/base/sales_orders_daily_agg.view"
-include: "/views/core/sales_orders__lines_common_measures_ext.view"
+include: "/views/base/sales_orders_daily_agg__lines.view"
+include: "/views/core/sales_orders__lines_common_fields_ext.view"
 
 view: +sales_orders_daily_agg__lines {
   fields_hidden_by_default: yes
   label: "Sales Orders Daily Agg: Item Categories"
-  extends: [sales_orders__lines_common_measures_ext]
+  extends: [sales_orders__lines_common_fields_ext]
 
   dimension: key {
     hidden: yes
@@ -68,15 +68,17 @@ view: +sales_orders_daily_agg__lines {
   }
 
   measure: total_num_order_lines {
-    hidden: no
+    hidden: yes
     type: sum
+    label: "Total Order Lines"
     description: "Total number of non-cancelled order lines."
     sql: ${num_order_lines} ;;
   }
 
   measure: total_num_fulfilled_order_lines {
-    hidden: no
+    hidden: yes
     type: sum
+    label: "Total Fulfilled Order Lines"
     description: "Total number of fulfilled order lines."
     sql: ${num_fulfilled_order_lines} ;;
   }
@@ -99,19 +101,19 @@ view: +sales_orders_daily_agg__lines {
   measure: total_sales_amount_target_currency {
     hidden: no
     type: sum
-    #label defined in sales_orders__lines_common_measures_ext
-    #description defined in sales_orders__lines_common_measures_ext
+    #label defined in sales_orders__lines_common_fields_ext
+    #description defined in sales_orders__lines_common_fields_ext
     sql: ${ordered_amount_target_currency} ;;
-    #value format defined in sales_orders__lines_common_measures_ext
+    #value format defined in sales_orders__lines_common_fields_ext
   }
 
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
     type: number
-    #label defined in sales_orders__lines_common_measures_ext
-    #description defined in sales_orders__lines_common_measures_ext
+    #label defined in sales_orders__lines_common_fields_ext
+    #description defined in sales_orders__lines_common_fields_ext
     sql: SAFE_DIVIDE(${total_sales_amount_target_currency},(${sales_orders_daily_agg.non_cancelled_order_count})) ;;
-    #value format defined in sales_orders__lines_common_measures_ext
+    #value format defined in sales_orders__lines_common_fields_ext
   }
 
 

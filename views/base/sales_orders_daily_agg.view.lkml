@@ -141,75 +141,75 @@ view: sales_orders_daily_agg {
   }
 }
 
-view: sales_orders_daily_agg__lines {
+# view: sales_orders_daily_agg__lines {
 
-  dimension: amounts {
-    hidden: yes
-    sql: AMOUNTS ;;
-  }
-  dimension: item_category_description {
-    type: string
-    sql: ITEM_CATEGORY_DESCRIPTION ;;
-  }
-  dimension: item_category_id {
-    type: number
-    sql: ITEM_CATEGORY_ID ;;
-  }
-  dimension: item_category_name {
-    type: string
-    sql: ITEM_CATEGORY_NAME ;;
-  }
-  dimension: item_category_set_id {
-    type: number
-    sql: ITEM_CATEGORY_SET_ID ;;
-  }
-  dimension: item_category_set_name {
-    type: string
-    sql: ITEM_CATEGORY_SET_NAME ;;
-  }
-  dimension: item_organization_id {
-    type: number
-    sql: ITEM_ORGANIZATION_ID ;;
-  }
-  dimension: item_organization_name {
-    type: string
-    sql: ITEM_ORGANIZATION_NAME ;;
-  }
-  dimension: num_fulfilled_order_lines {
-    type: number
-    sql: NUM_FULFILLED_ORDER_LINES ;;
-  }
-  dimension: num_order_lines {
-    type: number
-    sql: NUM_ORDER_LINES ;;
-  }
-  dimension: sales_orders_daily_agg__lines {
-    type: string
-    hidden: yes
-    sql: sales_orders_daily_agg__lines ;;
-  }
-  dimension: total_cycle_time_days {
-    type: number
-    sql: TOTAL_CYCLE_TIME_DAYS ;;
-  }
-}
+#   dimension: amounts {
+#     hidden: yes
+#     sql: AMOUNTS ;;
+#   }
+#   dimension: item_category_description {
+#     type: string
+#     sql: ITEM_CATEGORY_DESCRIPTION ;;
+#   }
+#   dimension: item_category_id {
+#     type: number
+#     sql: ITEM_CATEGORY_ID ;;
+#   }
+#   dimension: item_category_name {
+#     type: string
+#     sql: ITEM_CATEGORY_NAME ;;
+#   }
+#   dimension: item_category_set_id {
+#     type: number
+#     sql: ITEM_CATEGORY_SET_ID ;;
+#   }
+#   dimension: item_category_set_name {
+#     type: string
+#     sql: ITEM_CATEGORY_SET_NAME ;;
+#   }
+#   dimension: item_organization_id {
+#     type: number
+#     sql: ITEM_ORGANIZATION_ID ;;
+#   }
+#   dimension: item_organization_name {
+#     type: string
+#     sql: ITEM_ORGANIZATION_NAME ;;
+#   }
+#   dimension: num_fulfilled_order_lines {
+#     type: number
+#     sql: NUM_FULFILLED_ORDER_LINES ;;
+#   }
+#   dimension: num_order_lines {
+#     type: number
+#     sql: NUM_ORDER_LINES ;;
+#   }
+#   dimension: sales_orders_daily_agg__lines {
+#     type: string
+#     hidden: yes
+#     sql: sales_orders_daily_agg__lines ;;
+#   }
+#   dimension: total_cycle_time_days {
+#     type: number
+#     sql: TOTAL_CYCLE_TIME_DAYS ;;
+#   }
+# }
 
-view: sales_orders_daily_agg__lines__amounts {
+# view: sales_orders_daily_agg__lines__amounts {
 
-  dimension: is_incomplete_conversion {
-    type: yesno
-    sql: ${TABLE}.IS_INCOMPLETE_CONVERSION ;;
-  }
-  dimension: target_currency_code {
-    type: string
-    sql: ${TABLE}.TARGET_CURRENCY_CODE ;;
-  }
-  dimension: total_invoiced {
-    type: number
-    sql: ${TABLE}.TOTAL_INVOICED ;;
-  }
-  dimension: total_ordered {
-    type: number
-    sql: ${TABLE}.TOTAL_ORDERED ;;
-  }
-}
+#   dimension: is_incomplete_conversion {
+#     type: yesno
+#     sql: ${TABLE}.IS_INCOMPLETE_CONVERSION ;;
+#   }
+#   dimension: target_currency_code {
+#     type: string
+#     sql: ${TABLE}.TARGET_CURRENCY_CODE ;;
+#   }
+#   dimension: total_invoiced {
+#     type: number
+#     sql: ${TABLE}.TOTAL_INVOICED ;;
+#   }
+#   dimension: total_ordered {
+#     type: number
+#     sql: ${TABLE}.TOTAL_ORDERED ;;
+#   }
+# }

@@ -27,10 +27,12 @@ view: sales_orders_common_dimensions_ext {
   dimension: bill_to_customer_number {
     hidden: no
     group_label: "Bill to Customer"
+    value_format_name: id
   }
   dimension: bill_to_site_use_id {
     hidden: no
     group_label: "Bill to Customer"
+    value_format_name: id
   }
   dimension: ship_to_customer_country {
     hidden: no
@@ -43,10 +45,12 @@ view: sales_orders_common_dimensions_ext {
   dimension: ship_to_customer_number {
     hidden: no
     group_label: "Ship to Customer"
+    value_format_name: id
   }
   dimension: ship_to_site_use_id {
     hidden: no
     group_label: "Ship to Customer"
+    value_format_name: id
   }
   dimension: sold_to_customer_country {
     hidden: no
@@ -59,10 +63,12 @@ view: sales_orders_common_dimensions_ext {
   dimension: sold_to_customer_number {
     hidden: no
     group_label: "Sold to Customer"
+    value_format_name: id
   }
   dimension: sold_to_site_use_id {
     hidden: no
     group_label: "Sold to Customer"
+    value_format_name: id
   }
 
 #} end customer dimensions

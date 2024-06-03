@@ -22,15 +22,6 @@ view: currency_conversion_sdt {
                   {% else %}{% assign t = 'CORTEX_ORACLE_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.CurrencyRateMD`
         WHERE
             TO_CURRENCY = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}
-          {% if _explore._name == 'sales_orders' %}
-
-            --AND {% condition sales_orders.filter_ordered_date %} TIMESTAMP(CONVERSION_DATE) {% endcondition %}
-          {% else %}
-            AND {% condition filter_date %} TIMESTAMP(CONVERSION_DATE) {% endcondition %}
-          {% endif %}
-
-
-          --AND {% condition filter_date %} TIMESTAMP(CONVERSION_DATE) {% endcondition %}
          ;;
   }
 
@@ -49,42 +40,27 @@ view: currency_conversion_sdt {
   dimension: from_currency {
     type: string
     label: "Currency (Source)"
-    # sql: COALESCE(${TABLE}.FROM_CURRENCY,{% parameter parameter_target_currency %}) ;;
     sql: ${TABLE}.FROM_CURRENCY ;;
   }
 
   dimension: to_currency {
     type: string
     label: "Currency (Target)"
-    sql: COALESCE(${TABLE}.TO_CURRENCY,{% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}) ;;
-    # sql: ${TABLE}.TO_CURRENCY ;;
+    sql: ${TABLE}.TO_CURRENCY ;;
   }
 
   dimension: conversion_rate {
     type: number
-    # sql: COALESCE(${TABLE}.CONVERSION_RATE,1) ;;
     sql: ${TABLE}.CONVERSION_RATE ;;
     value_format_name: decimal_4
   }
 
-
-
-
-
-  filter: filter_date {
-    type: date
+  dimension: conversion_rate2 {
+    type: number
+    sql: ${TABLE}.CONVERSION_RATE ;;
+    value_format_name: decimal_4
   }
 
-  # parameter: parameter_target_currency {
-  #   hidden: no
-  #   type: string
-  #   view_label: "🔍 Filters & 🛠 Tools"
-  #   label: "Target Currency"
-  #   suggest_explore: currency_rate_md
-  #   suggest_dimension: currency_rate_md.to_currency
-  #   default_value: "USD"
-  #   # full_suggestions: yes
-  # }
 
 
 

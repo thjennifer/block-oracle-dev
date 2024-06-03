@@ -163,6 +163,7 @@ view: navigation_template {
   dimension: navigation {
     type: string
     hidden: no
+    label: "Dashboard Navigation Links"
     description: "Add to Single Value Visualization. Defined HTML styling will be shown."
     sql: '' ;;
     html:
