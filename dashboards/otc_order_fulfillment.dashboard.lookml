@@ -13,7 +13,7 @@
   - title: navigation
     name: navigation
     filters:
-      navigation_otc_ext.navigation_focus_page: '3'
+      otc_dashboard_navigation_ext.navigation_focus_page: '3'
 
   - title: In Full %
     name: In Full %
@@ -27,7 +27,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
+      Item Category: sales_orders__lines.item_category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
 
     note_state: collapsed
@@ -50,7 +50,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
+      Item Category: sales_orders__lines.item_category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
@@ -75,7 +75,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
+      Item Category: sales_orders__lines.item_category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
@@ -123,7 +123,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
+      Item Category: sales_orders__lines.item_category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 2
     col: 3
@@ -196,7 +196,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
+      Item Category: sales_orders__lines.item_category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
       # Product Level to Display: sales_orders__lines.parameter_display_product_level
     note_state: collapsed
@@ -311,7 +311,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
+      Item Category: sales_orders__lines.item_category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 10
     col: 0

@@ -36,6 +36,10 @@ view: sales_orders_daily_agg {
     hidden: yes
     sql: ${TABLE}.LINES ;;
   }
+  dimension: num_backordered_orders {
+    type: number
+    sql: ${TABLE}.NUM_BACKORDERED_ORDERS ;;
+  }
   dimension: num_blocked_orders {
     type: number
     sql: ${TABLE}.NUM_BLOCKED_ORDERS ;;

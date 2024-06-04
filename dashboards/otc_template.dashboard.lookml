@@ -85,7 +85,7 @@
       display: popover
     explore: sales_orders
     listens_to_filters: [Test or Demo]
-    field: sales_orders__lines.category_description
+    field: sales_orders__lines.item_category_description
 
   - name: Target Currency
     title: Target Currency
@@ -121,21 +121,21 @@
       name: navigation
       explore: sales_orders
       type: single_value
-      fields: [navigation_otc_ext.navigation]
+      fields: [otc_dashboard_navigation_ext.navigation]
       filters:
-        navigation_otc_ext.navigation_focus_page: '1'
-        navigation_otc_ext.navigation_style: 'tabs'
+        otc_dashboard_navigation_ext.navigation_focus_page: '1'
+        otc_dashboard_navigation_ext.navigation_style: 'tabs'
       show_single_value_title: false
       show_comparison: false
       listen:
-        Order Date: navigation_otc_ext.filter1
-        Business Unit: navigation_otc_ext.filter2
-        Country: navigation_otc_ext.filter3
-        Customer: navigation_otc_ext.filter4
-        Order Source: navigation_otc_ext.filter5
-        Item Category: navigation_otc_ext.filter6
-        Target Currency: navigation_otc_ext.filter7
-        Test or Demo: navigation_otc_ext.filter8
+        Order Date: otc_dashboard_navigation_ext.filter1
+        Business Unit: otc_dashboard_navigation_ext.filter2
+        Country: otc_dashboard_navigation_ext.filter3
+        Customer: otc_dashboard_navigation_ext.filter4
+        Order Source: otc_dashboard_navigation_ext.filter5
+        Item Category: otc_dashboard_navigation_ext.filter6
+        Target Currency: otc_dashboard_navigation_ext.filter7
+        Test or Demo: otc_dashboard_navigation_ext.filter8
       row: 0
       col: 0
       width: 24

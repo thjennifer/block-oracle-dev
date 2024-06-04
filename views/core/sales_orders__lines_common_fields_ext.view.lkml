@@ -26,7 +26,7 @@ view: sales_orders__lines_common_fields_ext {
 
   measure: average_sales_amount_per_order_target_currency {
     label: "{% if _field._is_selected %}@{derive_currency_label}Average Sales Amount per Order ({{currency}}){%else%}Average Sales Amount per Order (Target Currency){%endif%}"
-    value_format_name: decimal_2
+    value_format_name: decimal_0
   }
 
   measure: alert_note_for_incomplete_currency_conversion {

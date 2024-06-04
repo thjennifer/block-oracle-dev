@@ -28,7 +28,7 @@
   - title: navigation
     name: navigation
     filters:
-      navigation_otc_ext.navigation_focus_page: '2'
+      otc_dashboard_navigation_ext.navigation_focus_page: '2'
 
 
   - name: Top Products by Sales
@@ -68,7 +68,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
+      Item Category: sales_orders__lines.item_category_description
       Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
       Product Level to Display: sales_orders__lines.parameter_display_product_level
@@ -121,7 +121,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
+      Item Category: sales_orders__lines.item_category_description
       Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
       Product Level to Display: sales_orders__lines.parameter_display_product_level
@@ -216,7 +216,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
+      Item Category: sales_orders__lines.item_category_description
       Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     # note_state: expanded

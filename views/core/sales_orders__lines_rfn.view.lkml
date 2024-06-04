@@ -1,11 +1,12 @@
 ## when column is duplicate of another in header (like is_open) then restate sql using ${TABLE}. reference
 include: "/views/base/sales_orders__lines.view"
 include: "/views/core/sales_orders__lines_common_fields_ext.view"
+include: "/views/core/otc__lines_common_product_dimensions_ext.view"
 
 view: +sales_orders__lines {
 
   fields_hidden_by_default: yes
-  extends: [sales_orders__lines_common_fields_ext]
+  extends: [sales_orders__lines_common_fields_ext,otc__lines_common_product_dimensions_ext]
 
   dimension: key {
     type: string
@@ -15,6 +16,7 @@ view: +sales_orders__lines {
 
   dimension: line_id {
     hidden: no
+    sql: COALESCE(${TABLE}.LINE_ID,-1) ;;
   }
 
   dimension: line_number {
@@ -90,50 +92,50 @@ view: +sales_orders__lines {
     sql: COALESCE(${TABLE}.ITEM_ORGANIZATION_NAME,CAST(${item_organization_id} AS STRING)) ;;
   }
 
-  dimension: item_description {
-    hidden: no
-    group_label: "Item Categories & Descriptions"
-    sql: COALESCE((SELECT d.TEXT FROM UNNEST(${item_descriptions}) AS d WHERE d.language = {% parameter sales_orders__lines.parameter_language %} ), CAST(${inventory_item_id} AS STRING)) ;;
-    full_suggestions: yes
-  }
+  # dimension: item_description {
+  #   hidden: no
+  #   group_label: "Item Categories & Descriptions"
+  #   sql: COALESCE((SELECT d.TEXT FROM UNNEST(${item_descriptions}) AS d WHERE d.language = {% parameter sales_orders__lines.parameter_language %} ), CAST(${inventory_item_id} AS STRING)) ;;
+  #   full_suggestions: yes
+  # }
 
-  dimension: item_description_language {
-    hidden: no
-    group_label: "Item Categories & Descriptions"
-    sql: (SELECT d.LANGUAGE FROM UNNEST(${item_descriptions}) AS d WHERE d.LANGUAGE = {% parameter sales_orders__lines.parameter_language %} ) ;;
-    full_suggestions: yes
-  }
+  # dimension: item_description_language {
+  #   hidden: no
+  #   group_label: "Item Categories & Descriptions"
+  #   sql: (SELECT d.LANGUAGE FROM UNNEST(${item_descriptions}) AS d WHERE d.LANGUAGE = {% parameter sales_orders__lines.parameter_language %} ) ;;
+  #   full_suggestions: yes
+  # }
 
-  dimension: category_id {
-    hidden: no
-    type: number
-    group_label: "Item Categories & Descriptions"
-    label: "Item Category ID"
-    sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}'), -1 ) ;;
-    # sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}), -1 ) ;;
-    full_suggestions: yes
-    value_format_name: id
-  }
+  # dimension: category_id {
+  #   hidden: no
+  #   type: number
+  #   group_label: "Item Categories & Descriptions"
+  #   label: "Item Category ID"
+  #   sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}'), -1 ) ;;
+  #   # sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}), -1 ) ;;
+  #   full_suggestions: yes
+  #   value_format_name: id
+  # }
 
-  dimension: category_description {
-    hidden: no
-    group_label: "Item Categories & Descriptions"
-    label: "Item Category Description"
-    sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}' )
-         ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
-    # sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %} )
-    # ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
-    full_suggestions: yes
-  }
+  # dimension: category_description {
+  #   hidden: no
+  #   group_label: "Item Categories & Descriptions"
+  #   label: "Item Category Description"
+  #   sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}' )
+  #       ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
+  #   # sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %} )
+  #   # ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
+  #   full_suggestions: yes
+  # }
 
-  dimension: category_name {
-    hidden: no
-    group_label: "Item Categories & Descriptions"
-    label: "Item Category Name Group"
-    sql: COALESCE((SELECT c.CATEGORY_NAME FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}'),"Unknown" ) ;;
-    # sql: COALESCE((SELECT c.category_name FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}),"Unknown" ) ;;
-    full_suggestions: yes
-  }
+  # dimension: category_name {
+  #   hidden: no
+  #   group_label: "Item Categories & Descriptions"
+  #   label: "Item Category Name Group"
+  #   sql: COALESCE((SELECT c.CATEGORY_NAME FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}'),"Unknown" ) ;;
+  #   # sql: COALESCE((SELECT c.category_name FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}),"Unknown" ) ;;
+  #   full_suggestions: yes
+  # }
 
   dimension: selected_product_dimension_description {
     hidden: no
@@ -142,7 +144,7 @@ view: +sales_orders__lines {
                 {% if parameter_display_product_level._parameter_value == 'Item' %}Item{%else%}Category{%endif%}
             {%else%}Selected Product Dimenstion Description{%endif%}"
     description: "Values are either Item Description or Item Category Description based on user selection for Parameter Display Categories or Items."
-    sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${item_description}{%else%}${category_description}{%endif%} ;;
+    sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${item_description}{%else%}${item_category_description}{%endif%} ;;
     can_filter: no
   }
 
@@ -153,7 +155,7 @@ view: +sales_orders__lines {
     {% if parameter_display_product_level._parameter_value == 'Item' %}Inventory Item ID{%else%}Category ID{%endif%}
     {%else%}Selected Product Dimenstion ID{%endif%}"
     description: "Values are either Item Inventory ID or Item Category ID based on user selection for Parameter Display Categories or Items."
-    sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${category_id}{%endif%} ;;
+    sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${item_category_id}{%endif%} ;;
     can_filter: no
   }
 
@@ -524,7 +526,7 @@ view: +sales_orders__lines {
     hidden: no
     type: average
     description: "Average number of days from order to fulfillment per order line. Item Category or ID must be in query or compution will return null."
-    sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or category_id._is_selected or category_description._is_selected or selected_product_dimension_id._is_selected or selected_product_dimension_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
+    sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or item_category_id._is_selected or item_category_description._is_selected or selected_product_dimension_id._is_selected or selected_product_dimension_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
     value_format_name: decimal_2
     filters: [is_cancelled: "No"]
     # required_fields: [category_description]
@@ -721,6 +723,13 @@ view: +sales_orders__lines {
     hidden: no
     type: string
     sql: {% assign p = parameter_display_product_level._parameter_value %}'{{p}}' ;;
+  }
+
+  measure: count_distinct_item_part_number {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: count_distinct
+    sql: COALESCE(${item_part_number},'Unknown') ;;
   }
 
    }

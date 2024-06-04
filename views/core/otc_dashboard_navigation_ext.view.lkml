@@ -1,6 +1,6 @@
 include: "/views/base/navigation_template.view"
 
-view: navigation_otc_ext {
+view: otc_dashboard_navigation_ext {
   extends: [navigation_template]
 
   dimension: dash_bindings {

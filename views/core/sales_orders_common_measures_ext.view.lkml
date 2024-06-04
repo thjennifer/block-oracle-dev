@@ -13,6 +13,7 @@
 #   fulfilled_order_count
 #   fulfilled_by_request_date_order_count
 #   fulfilled_by_promise_date_order_count
+#   has_backorder_order_count
 #   has_return_order_count
 #   no_holds_order_count
 #   non_cancelled_order_count
@@ -88,6 +89,20 @@ view: sales_orders_common_measures_ext {
   measure: fulfilled_by_promise_date_order_count {
     label: "Fulfilled by Promise Date Order Count"
     description: "Number of sales orders that are fulfilled on-time (all lines fulfilled by promised delivery date)."
+  }
+
+  measure: has_backorder_order_count {
+    label: "Has Backorder Orders"
+    description: "Number of sales orders with at least one item backordered."
+  }
+
+  measure: has_backorder_order_percent {
+    hidden: no
+    type: number
+    label: "Has Backorder Percent"
+    description: "The percentage of sales orders with at least one item backordered."
+    sql: SAFE_DIVIDE(${has_backorder_order_count},${order_count}) ;;
+    value_format_name: percent_1
   }
 
   measure: has_return_order_count {

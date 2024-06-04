@@ -124,11 +124,13 @@ view: +sales_orders_daily_agg {
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders}{%endif%} ;;
   }
 
-  # measure: backordered_order_count {
-  #   hidden: no
-  #   type: number
-  #   sql: ${order_count} - ${fillable_order_count} ;;
-  # }
+  measure: has_backorder_order_count {
+    hidden: no
+    type: sum
+    #label defined in sales_orders_common_measures_ext
+    #description defined in sales_orders_common_measures_ext
+    sql: @{is_agg_category_in_query}NULL{%else%}${num_backordered_orders}{%endif%};;
+  }
 
   measure: blocked_order_count {
     hidden: no

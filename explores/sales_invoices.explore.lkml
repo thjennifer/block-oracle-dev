@@ -1,5 +1,5 @@
 include: "/views/core/sales_invoices_rfn.view"
-include: "/views/base/sales_invoices__lines.view"
+include: "/views/core/sales_invoices__lines_rfn.view"
 include: "/views/base/sales_invoices__lines__item_categories.view"
 include: "/views/base/sales_invoices__lines__item_descriptions.view"
 include: "/views/core/sales_orders_common_parameters_xvw.view"

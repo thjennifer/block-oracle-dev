@@ -101,7 +101,7 @@ view: +sales_orders {
 
   dimension: business_unit_name {
     hidden: no
-    sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CAST(${business_unit_id} as STRING)) ;;
+    sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CONCAT("Business Unit ID: ", CAST(${business_unit_id} as STRING))) ;;
   }
 
   dimension: order_source_id {
@@ -116,10 +116,14 @@ view: +sales_orders {
   }
 
   dimension: bill_to_customer_name {
-    # hidden: no
-    # group_label: "Bill to Customer"
-    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CAST(${bill_to_customer_number} AS STRING)) ;;
+    hidden: no
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CONCAT("Bill to Customer Number: ",CAST(${bill_to_customer_number} AS STRING))) ;;
   }
+
+    dimension: bill_to_customer_country {
+      sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_COUNTRY,"Unknown") ;;
+    }
+
 #} end business unit and order source dimensions
 
 #########################################################
@@ -258,7 +262,7 @@ view: +sales_orders {
   dimension: is_open {
     hidden: no
     group_label: "Order Status"
-    sql: IF(${header_status} = "CANCELLED",FALSE,${TABLE}.IS_OPEN) ;;
+
   }
 
   dimension: has_return_line {
@@ -383,18 +387,19 @@ view: +sales_orders {
   measure: has_backorder_order_count {
     hidden: no
     type: count
-    label: "Has Backorder Orders"
-    description: "Number of sales orders that have at least one order line on backorder."
+    #label defined in sales_orders_common_measures_ext
+    #description defined in sales_orders_common_measures_ext
     filters: [has_backorder: "Yes"]
   }
 
-  measure: has_backorder_order_percent {
-    hidden: no
-    type: number
-    description: "The percentage of sales orders that have at least one order line on backorder."
-    sql: SAFE_DIVIDE(${has_backorder_order_count},${order_count}) ;;
-    value_format_name: percent_1
-  }
+  # measure: has_backorder_order_percent {
+  #   hidden: no
+  #   type: number
+  #   label: "Has Backorder Percent"
+  #   description: "The percentage of sales orders that have at least one order line on backorder."
+  #   sql: SAFE_DIVIDE(${has_backorder_order_count},${order_count}) ;;
+  #   value_format_name: percent_1
+  # }
 
   measure: blocked_order_count {
     hidden: no

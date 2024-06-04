@@ -8,7 +8,7 @@ include: "/views/core/currency_conversion_sdt.view"
 
 # field-only views
 include: "/views/core/sales_orders_common_parameters_xvw.view"
-include: "/views/core/navigation_otc_ext.view"
+include: "/views/core/otc_dashboard_navigation_ext.view"
 
 explore: sales_orders {
   hidden: no
@@ -49,7 +49,7 @@ explore: sales_orders {
     sql:  ;;
   }
 
-  join: navigation_otc_ext {
+  join: otc_dashboard_navigation_ext {
     view_label: "🔍 Filters & 🛠 Tools"
     relationship: one_to_one
     sql:  ;;
