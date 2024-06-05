@@ -55,13 +55,13 @@ explore: sales_orders {
     sql:  ;;
   }
 
-  # join: sales_orders__lines__item_categories {
-  #   view_label: "Sales Orders: Lines Item Categories"
-  #   sql: LEFT JOIN UNNEST(${sales_orders__lines.item_categories}) as sales_orders__lines__item_categories ;;
-  #   sql_where: ${sales_orders__lines__item_categories.category_set_name} in ("Unknown",'{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}') ;;
-  #   # sql_where: ${sales_orders__lines__item_categories.category_set_name} in ("Unknown",{% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}) ;;
-  #   relationship: one_to_many
-  # }
+  join: sales_orders__lines__item_categories {
+    view_label: "Sales Orders: Lines Item Categories"
+    sql: LEFT JOIN UNNEST(${sales_orders__lines.item_categories}) as sales_orders__lines__item_categories ;;
+    sql_where: @{get_category_set} ${sales_orders__lines__item_categories.category_set_name} in ("Unknown",'{{ category_set }}') ;;
+    # sql_where: ${sales_orders__lines__item_categories.category_set_name} in ("Unknown",{% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}) ;;
+    relationship: one_to_many
+  }
 
   # join: sales_orders__lines__item_descriptions {
   #   view_label: "Sales Orders: Lines Item Descriptions"

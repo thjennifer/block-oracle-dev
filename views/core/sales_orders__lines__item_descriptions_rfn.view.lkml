@@ -7,7 +7,7 @@ view: +sales_orders__lines__item_descriptions {
   dimension: key {
     type: string
     primary_key: yes
-    sql: CONCAT(${sales_orders.header_id},${sales_orders__lines.line_id},${sales_orders__lines.item_part_number},${language}) ;;
+    sql: CONCAT(${sales_orders.header_id},${sales_orders__lines.line_id},${sales_orders__lines.inventory_item_id},${sales_orders__lines.item_part_number},${language}) ;;
   }
 
   dimension: item_description {

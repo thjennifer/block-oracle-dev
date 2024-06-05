@@ -7,7 +7,7 @@ view: sales_orders_top_n_sdt {
          {% assign catset = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
          {% assign to_curr = sales_orders_common_parameters_xvw.parameter_target_currency._parameter_value %}
          --to_curr {{to_curr}}
-         {% if d0 == "test" %}{%assign d = 'CORTEX_ORACLE_REPORTING_VISION' %}{% else %}{% assign d = 'CORTEX_ORACLE_REPORTING' %}{% endif %}
+         {% if d0 == "test" %}{%assign d = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}{% else %}{% assign d = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}
          {% if m == "average_sales"%}{% assign t = "SalesOrders" %}
             {% elsif rdim  == "product" and ic == "Item" %}{% assign t = "SalesOrders" %}
             {%else%}{%assign t = "SalesOrdersDailyAgg" %}{%endif%}

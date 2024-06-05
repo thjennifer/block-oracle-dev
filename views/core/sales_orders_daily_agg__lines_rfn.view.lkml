@@ -12,37 +12,39 @@ view: +sales_orders_daily_agg__lines {
   dimension: key {
     hidden: yes
     primary_key: yes
-    sql: CONCAT(${sales_orders_daily_agg.key},${item_category_set_id},${item_category_id},${item_organization_id}) ;;
+    sql: CONCAT(${sales_orders_daily_agg.key},${category_set_id},${category_id},${item_organization_id}) ;;
   }
 
-  dimension: item_category_set_id {
+  dimension: category_set_id {
     sql:  COALESCE(${TABLE}.ITEM_CATEGORY_SET_ID,-1) ;;
     full_suggestions: yes
   }
 
-  dimension: item_category_set_name {
+  dimension: category_set_name {
     sql: COALESCE(${TABLE}.ITEM_CATEGORY_SET_NAME,"Unknown") ;;
     full_suggestions: yes
     }
 
   dimension: item_category_id {
-    hidden: no
+    hidden: yes
     primary_key: no
-    label: "Item Category ID"
+  }
+
+  dimension: category_id {
+    hidden: no
     sql: COALESCE(${TABLE}.ITEM_CATEGORY_ID,-1) ;;
     full_suggestions: yes
   }
 
-  dimension: item_category_name {
+  dimension: category_name_code {
     hidden: no
-    label: "Item Category Name Group"
     sql: COALESCE(${TABLE}.ITEM_CATEGORY_NAME,"Unknown") ;;
     full_suggestions: yes
   }
 
-  dimension: item_category_description {
+  dimension: category_description {
     hidden: no
-    sql: COALESCE(${TABLE}.ITEM_CATEGORY_DESCRIPTION,COALESCE(CAST(NULLIF(${item_category_id},-1) AS STRING),"Unknown")) ;;
+    sql: COALESCE(${TABLE}.category_description,COALESCE(CAST(NULLIF(${item_category_id},-1) AS STRING),"Unknown")) ;;
     full_suggestions: yes
   }
 
@@ -94,7 +96,7 @@ view: +sales_orders_daily_agg__lines {
     hidden: no
     type: number
     description: "Average number of days from order to fulfillment per order line. Item Category must be in query or compution will return null."
-    sql: {% if item_category_id._is_selected or item_category_description._is_selected%}SAFE_DIVIDE(${sum_total_cycle_time_days},${total_num_fulfilled_order_lines}){%else%}sum(null){%endif%} ;;
+    sql: {% if item_category_id._is_selected or category_description._is_selected%}SAFE_DIVIDE(${sum_total_cycle_time_days},${total_num_fulfilled_order_lines}){%else%}sum(null){%endif%} ;;
     value_format_name: decimal_2
   }
 

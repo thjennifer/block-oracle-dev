@@ -27,7 +27,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
@@ -51,7 +51,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
@@ -74,7 +74,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
@@ -97,7 +97,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
@@ -166,7 +166,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 2
     col: 4
@@ -273,7 +273,7 @@
   #     Customer: sales_orders.bill_to_customer_name
   #     Business Unit: sales_orders.business_unit_name
   #     Order Source: sales_orders.order_source_name
-  #     Item Category: sales_orders__lines.item_category_description
+  #     Item Category: sales_orders__lines.category_description
   #     Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
   #   row: 2
   #   col: 4

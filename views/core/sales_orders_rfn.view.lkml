@@ -10,8 +10,8 @@ view: +sales_orders {
   # sql_table_name: `@{GCP_PROJECT_ID}.{% parameter parameter_use_test_or_demo_data %}.SalesOrders` ;;
 
   sql_table_name: {% assign p = sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
-                  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_REPORTING_VISION' %}
-                  {% else %}{% assign t = 'CORTEX_ORACLE_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesOrders` ;;
+                  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
+                  {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesOrders` ;;
 
   # dimension: business_unit_name {
   #   hidden: no
@@ -54,9 +54,9 @@ view: +sales_orders {
   #   type: unquoted
   #   view_label: "🔍 Filters & 🛠 Tools"
   #   label: "Use Test or Demo Data"
-  #   allowed_value: {label: "test" value:"CORTEX_ORACLE_REPORTING_VISION"}
-  #   allowed_value: {label: "demo" value: "CORTEX_ORACLE_REPORTING"}
-  #   default_value: "CORTEX_ORACLE_REPORTING_VISION"
+  #   allowed_value: {label: "test" value:"CORTEX_ORACLE_EBS_REPORTING_VISION"}
+  #   allowed_value: {label: "demo" value: "CORTEX_ORACLE_EBS_REPORTING"}
+  #   default_value: "CORTEX_ORACLE_EBS_REPORTING_VISION"
   # }
 
   # filter: filter_ordered_date {
@@ -614,6 +614,18 @@ view: +sales_orders {
           {% else %}${ship_to_customer_country}
           {% endif %} is null
           THEN 'yes' else 'no' end;;
+  }
+
+  measure: distinct_customer_count {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: count_distinct
+    sql:  {% assign c = sold_ship_bill._parameter_value %}
+          {% if c == "bi"%}${bill_to_site_use_id}
+          {% elsif c == "so" %}${sold_to_site_use_id}
+          {% else %}${ship_to_site_use_id}
+          {% endif %}
+      ;;
   }
 
   dimension: is_pre_2021_order {

@@ -45,8 +45,8 @@ view: +sales_orders_daily_agg {
 
   # sql_table_name: `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesOrdersDailyAgg` ;;
   sql_table_name: {% assign p = sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
-                  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_REPORTING_VISION' %}
-                  {% else %}{% assign t = 'CORTEX_ORACLE_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesOrdersDailyAgg`;;
+                  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
+                  {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesOrdersDailyAgg`;;
 
   dimension: key {
     type: string
@@ -234,7 +234,7 @@ view: +sales_orders_daily_agg {
   # dimension: is_field_selected {
   #   hidden: no
   #   view_label: "TEST STUFF"
-  #   sql: {% assign field_list = 'item_category_id,item_category_description' | split: ',' %}
+  #   sql: {% assign field_list = 'item_category_id,category_description' | split: ',' %}
   #       {% assign r = 'false' %}
   #       {% for field in field_list %}
   #         {% assign field_in_query = 'sales_orders_daily_agg__lines.' | append: field | append: '._in_query' %}

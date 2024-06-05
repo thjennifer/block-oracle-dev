@@ -84,14 +84,14 @@
       type: checkboxes
       display: popover
     explore: sales_orders
+    field: sales_orders__lines.category_description
     listens_to_filters: [Test or Demo]
-    field: sales_orders__lines.item_category_description
 
   - name: Target Currency
     title: Target Currency
     type: field_filter
-    # default_value: "{{ _user_attributes['cortex_oracle_default_target_currency'] }}"
-    default_value: 'USD'
+    default_value: "{{ _user_attributes['cortex_oracle_ebs_default_currency'] }}"
+    # default_value: 'USD'
     allow_multiple_values: false
     required: false
     ui_config:

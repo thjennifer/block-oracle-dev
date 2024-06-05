@@ -22,6 +22,23 @@
     explore: sales_orders
     field: sales_orders__lines.parameter_display_product_level
 
+  - name: Language
+    title: Language of Item Description
+    type: field_filter
+    default_value: "{{ _user_attributes['cortex_oracle_ebs_default_language'] }}"
+    # default_value: 'US'
+    allow_multiple_values: false
+    required: false
+    ui_config:
+      type: dropdown_menu
+      display: inline
+      options: []
+    # explore: item_md
+    # field: item_md__item_descriptions.language
+    explore: language_codes_sdt
+    field: language_codes_sdt.language_code
+    listens_to_filters: [Test or Demo]
+
 
   elements:
 
@@ -68,10 +85,11 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
       Product Level to Display: sales_orders__lines.parameter_display_product_level
+      Language: sales_orders__lines.parameter_language
 
     # note_state: expanded
     note_display: hover
@@ -121,10 +139,11 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
       Product Level to Display: sales_orders__lines.parameter_display_product_level
+      Language: sales_orders__lines.parameter_language
     # note_state: expanded
     note_display: hover
     note_text: |-
@@ -170,7 +189,7 @@
       Customer: sales_orders_daily_agg.bill_to_customer_name
       Business Unit: sales_orders_daily_agg.business_unit_name
       Order Source: sales_orders_daily_agg.order_source_name
-      Item Category: sales_orders_daily_agg__lines.item_category_description
+      Item Category: sales_orders_daily_agg__lines.category_description
       Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
 
@@ -216,7 +235,7 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     # note_state: expanded
@@ -294,7 +313,7 @@
       Customer: sales_orders_daily_agg.bill_to_customer_name
       Business Unit: sales_orders_daily_agg.business_unit_name
       Order Source: sales_orders_daily_agg.order_source_name
-      Item Category: sales_orders_daily_agg__lines.item_category_description
+      Item Category: sales_orders_daily_agg__lines.category_description
       Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 21

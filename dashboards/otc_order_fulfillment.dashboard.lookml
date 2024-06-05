@@ -8,6 +8,25 @@
   # if using navigation_focus_page parameter for active dashboard update navigation tile to use the correct filter
   extends: otc_template
 
+  filters:
+  - name: Language
+    title: Language of Item Description
+    type: field_filter
+    default_value: "{{ _user_attributes['cortex_oracle_ebs_default_language'] }}"
+    # default_value: 'US'
+    allow_multiple_values: false
+    required: false
+    ui_config:
+      type: dropdown_menu
+      display: inline
+      options: []
+    # explore: item_md
+    # field: item_md__item_descriptions.language
+    explore: language_codes_sdt
+    field: language_codes_sdt.language_code
+    listens_to_filters: [Test or Demo]
+
+
   elements:
 
   - title: navigation
@@ -27,15 +46,14 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
-
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
     row: 2
     col: 0
-    width: 3
+    width: 4
     height: 3
 
   - title: OTIF %
@@ -50,14 +68,14 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders fulfilled completely (for all line items) by the requested delivery date."
     row: 6
     col: 0
-    width: 3
+    width: 4
     height: 3
 
   - title: Backordered %
@@ -75,14 +93,14 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders with at least one item on backorder."
     row: 9
     col: 0
-    width: 3
+    width: 4
     height: 3
 
   - title: Delivery Performance by Month
@@ -103,7 +121,6 @@
     x_axis_zoom: true
     y_axis_zoom: true
     series_types:
-
       sales_orders.fulfilled_order_percent: line
       sales_orders.fulfilled_by_request_date_order_percent: line
     series_colors:
@@ -123,11 +140,11 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 2
-    col: 3
-    width: 9
+    col: 4
+    width: 10
     height: 9
 
   - title: Longest Average Order Cycle Time (Days)
@@ -196,15 +213,16 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Language: sales_orders__lines.parameter_language
       # Product Level to Display: sales_orders__lines.parameter_display_product_level
     note_state: collapsed
     note_display: hover
     note_text: "Order cycle time is average number of days between order placement and order fulfillment. "
     row: 2
-    col: 12
-    width: 9
+    col: 14
+    width: 10
     height: 9
 
 
@@ -311,22 +329,10 @@
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.item_category_description
+      Item Category: sales_orders__lines.category_description
       Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Language: sales_orders__lines.parameter_language
     row: 10
     col: 0
-    width: 21
+    width: 24
     height: 12
-
-  # filters:
-  #   - name: Product Level to Display
-  #     title: Product Level to Display
-  #     type: field_filter
-  #     default_value: "Category"
-  #     allow_multiple_values: false
-  #     required: false
-  #     ui_config:
-  #       type: button_toggles
-  #       display: inline
-  #     explore: sales_orders
-  #     field: sales_orders__lines.parameter_display_product_level

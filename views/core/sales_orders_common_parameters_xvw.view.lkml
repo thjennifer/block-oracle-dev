@@ -16,7 +16,7 @@ view: sales_orders_common_parameters_xvw {
     label: "Category Set Name"
     suggest_explore: item_md
     suggest_dimension: item_md__item_categories.category_set_name
-    default_value: "Purchasing"
+    default_value: "BE_INV_ITEM_CATEGORY_SET"
   }
 
   parameter: parameter_use_test_or_demo_data {

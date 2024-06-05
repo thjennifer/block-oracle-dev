@@ -9,7 +9,7 @@ constant: GCP_PROJECT_ID {
 }
 
 constant: REPORTING_DATASET {
-  value: "CORTEX_ORACLE_REPORTING_VISION"
+  value: "CORTEX_ORACLE_EBS_REPORTING_VISION"
   export: override_required
 }
 
@@ -49,7 +49,7 @@ constant: image_dashboard_navigation {
 # Constant is_agg_category_in_query
 # provides first part of liquid IF statement to check if any of these category fields from
 # sales_orders_agg__lines are in the query (either selected dimension or filter):
-#     item_category_id, item_category_description, item_category_name,
+#     item_category_id, category_description, item_category_name,
 #     item_organization_id, item_orgranization_name
 #
 # when used, must complete the rest of the statement (what to return when true and false
@@ -61,9 +61,20 @@ constant: image_dashboard_navigation {
 
 constant: is_agg_category_in_query {
   value: "{% if sales_orders_daily_agg__lines.item_category_id._in_query or
-                sales_orders_daily_agg__lines.item_category_description._in_query or
+                sales_orders_daily_agg__lines.category_description._in_query or
                 sales_orders_daily_agg__lines.item_category_name._in_query or
                 sales_orders_daily_agg__lines.item_organization_id._in_query or
                 sales_orders_daily_agg__lines.item_organization_name._in_query
                 %}"
+}
+
+
+
+
+constant: get_category_set {
+  value: "{% assign d = sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
+          {% if d == 'test' %}{% assign category_set = 'Purchasing' %}{%elsif d == 'demo' %}
+          {% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
+          {% else %} {% assign category_set = d %}
+          {% endif %}"
 }

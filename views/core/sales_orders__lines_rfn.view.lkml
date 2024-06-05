@@ -1,12 +1,12 @@
 ## when column is duplicate of another in header (like is_open) then restate sql using ${TABLE}. reference
 include: "/views/base/sales_orders__lines.view"
 include: "/views/core/sales_orders__lines_common_fields_ext.view"
-include: "/views/core/otc__lines_common_product_dimensions_ext.view"
+include: "/views/core/otc_derive_common_product_fields_ext.view"
 
 view: +sales_orders__lines {
 
   fields_hidden_by_default: yes
-  extends: [sales_orders__lines_common_fields_ext,otc__lines_common_product_dimensions_ext]
+  extends: [sales_orders__lines_common_fields_ext,otc_derive_common_product_fields_ext]
 
   dimension: key {
     type: string
@@ -144,7 +144,7 @@ view: +sales_orders__lines {
                 {% if parameter_display_product_level._parameter_value == 'Item' %}Item{%else%}Category{%endif%}
             {%else%}Selected Product Dimenstion Description{%endif%}"
     description: "Values are either Item Description or Item Category Description based on user selection for Parameter Display Categories or Items."
-    sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${item_description}{%else%}${item_category_description}{%endif%} ;;
+    sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${item_description}{%else%}${category_description}{%endif%} ;;
     can_filter: no
   }
 
@@ -155,7 +155,7 @@ view: +sales_orders__lines {
     {% if parameter_display_product_level._parameter_value == 'Item' %}Inventory Item ID{%else%}Category ID{%endif%}
     {%else%}Selected Product Dimenstion ID{%endif%}"
     description: "Values are either Item Inventory ID or Item Category ID based on user selection for Parameter Display Categories or Items."
-    sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${item_category_id}{%endif%} ;;
+    sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${category_id}{%endif%} ;;
     can_filter: no
   }
 
@@ -526,7 +526,7 @@ view: +sales_orders__lines {
     hidden: no
     type: average
     description: "Average number of days from order to fulfillment per order line. Item Category or ID must be in query or compution will return null."
-    sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or item_category_id._is_selected or item_category_description._is_selected or selected_product_dimension_id._is_selected or selected_product_dimension_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
+    sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or category_id._is_selected or category_description._is_selected or selected_product_dimension_id._is_selected or selected_product_dimension_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
     value_format_name: decimal_2
     filters: [is_cancelled: "No"]
     # required_fields: [category_description]

@@ -1,7 +1,7 @@
 include: "/views/core/sales_invoices_rfn.view"
 include: "/views/core/sales_invoices__lines_rfn.view"
-include: "/views/base/sales_invoices__lines__item_categories.view"
-include: "/views/base/sales_invoices__lines__item_descriptions.view"
+include: "/views/core/sales_invoices__lines__item_categories_rfn.view"
+include: "/views/core/sales_invoices__lines__item_descriptions_rfn.view"
 include: "/views/core/sales_orders_common_parameters_xvw.view"
 
 
@@ -15,11 +15,13 @@ explore: sales_invoices {
   join: sales_invoices__lines__item_categories {
     view_label: "Sales Invoices: Lines Item Categories"
     sql: LEFT JOIN UNNEST(${sales_invoices__lines.item_categories}) as sales_invoices__lines__item_categories ;;
+    sql_where: ${sales_invoices__lines__item_categories.category_set_name} in ("Unknown",'{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}') ;;
     relationship: one_to_many
   }
   join: sales_invoices__lines__item_descriptions {
     view_label: "Sales Invoices: Lines Item Descriptions"
     sql: LEFT JOIN UNNEST(${sales_invoices__lines.item_descriptions}) as sales_invoices__lines__item_descriptions ;;
+    sql_where: ${sales_invoices__lines__item_descriptions.language} in ("Unknown", {% parameter sales_invoices__lines.parameter_language %}) ;;
     relationship: one_to_many
   }
 

@@ -39,9 +39,9 @@ view: +sales_orders {
     type: unquoted
     view_label: "🔍 Filters & 🛠 Tools"
     label: "Use Test or Demo Data"
-    allowed_value: {label: "test" value:"CORTEX_ORACLE_REPORTING_VISION"}
-    allowed_value: {label: "demo" value: "CORTEX_ORACLE_REPORTING"}
-    default_value: "CORTEX_ORACLE_REPORTING_VISION"
+    allowed_value: {label: "test" value:"CORTEX_ORACLE_EBS_REPORTING_VISION"}
+    allowed_value: {label: "demo" value: "CORTEX_ORACLE_EBS_REPORTING"}
+    default_value: "CORTEX_ORACLE_EBS_REPORTING_VISION"
   }
 
   filter: filter_ordered_date {

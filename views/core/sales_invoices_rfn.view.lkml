@@ -3,8 +3,8 @@ include: "/views/base/sales_invoices.view"
 view: +sales_invoices {
 
   sql_table_name: {% assign p = sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
-  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_REPORTING_VISION' %}
-  {% else %}{% assign t = 'CORTEX_ORACLE_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesInvoices` ;;
+  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
+  {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesInvoices` ;;
 
 
   dimension: invoice_id {
@@ -129,6 +129,12 @@ view: +sales_invoices {
     view_label: "TEST STUFF"
     type: number
     sql: ${TABLE}.INVOICE_YEAR ;;
+  }
+
+  measure: count_distinct_ledger_id {
+    view_label: "TEST STUFF"
+    type: count_distinct
+    sql: COALESCE(${ledger_id},-1) ;;
   }
 
 #}
