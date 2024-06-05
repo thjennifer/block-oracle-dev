@@ -9,7 +9,7 @@ view: +sales_orders {
 
   # sql_table_name: `@{GCP_PROJECT_ID}.{% parameter parameter_use_test_or_demo_data %}.SalesOrders` ;;
 
-  sql_table_name: {% assign p = sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
+  sql_table_name: {% assign p = otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
                   {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
                   {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesOrders` ;;
 
@@ -337,7 +337,7 @@ view: +sales_orders {
     type: number
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Order Amount ({{currency}}){%else%}Total Order Amount (Target Currency){%endif%}"
     description: "Total amount for an order in target currency."
-    sql: COALESCE(${total_order_amount},0) * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    sql: COALESCE(${total_order_amount},0) * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
     value_format_name: decimal_2
   }
 
@@ -548,7 +548,7 @@ view: +sales_orders {
   #   hidden: yes
   #   type: number
   #   group_label: "Currency Conversion"
-  #   sql: ${ordered_amount} * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+  #   sql: ${ordered_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
   #   value_format_name: decimal_2
   # }
 

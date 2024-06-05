@@ -41,5 +41,18 @@ view: +sales_orders__lines__item_categories {
   # }
 
 
+    dimension: liquid_view_name {
+      hidden: no
+      view_label: "TEST STUFF"
+      sql: {% assign v = _view._name  %}
+          {% if v contains "sales_orders_daily_agg" %}{% assign f = "ITEM_CATEGORY_ID"%}
+            {% elsif v contains "item_categories" %}{% assign f = "ID" %}
+            {% else %}{% assign f = "subquery" %}
+
+          {%endif%} --vn {{v}}
+            '{{f}}';;
+    }
+
+
 
    }

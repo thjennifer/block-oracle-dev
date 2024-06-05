@@ -28,8 +28,8 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Target Currency: otc_common_parameters_xvw.parameter_target_currency
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The number of sales orders."
@@ -52,7 +52,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders with a product return."
@@ -75,7 +75,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders processed without any holds."
@@ -98,8 +98,8 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Target Currency: sales_orders_common_parameters_xvw.parameter_target_currency
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Target Currency: otc_common_parameters_xvw.parameter_target_currency
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The number of sales orders blocked (has hold or backorder)."
@@ -167,7 +167,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 2
     col: 4
     width: 10
@@ -274,7 +274,7 @@
   #     Business Unit: sales_orders.business_unit_name
   #     Order Source: sales_orders.order_source_name
   #     Item Category: sales_orders__lines.category_description
-  #     Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+  #     Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
   #   row: 2
   #   col: 4
   #   width: 4

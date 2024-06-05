@@ -1,11 +1,11 @@
 view: sales_orders_top_n_sdt {
 
   derived_table: {
-    sql: {% assign d0 = sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
+    sql: {% assign d0 = otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
          {% assign m = parameter_rank_by_measure._parameter_value%}{% assign rdim = parameter_rank_dimension._parameter_value %}
          {% assign ic = parameter_display_product_level._parameter_value %}{% assign language = parameter_language._parameter_value %}
          {% assign catset = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
-         {% assign to_curr = sales_orders_common_parameters_xvw.parameter_target_currency._parameter_value %}
+         {% assign to_curr = otc_common_parameters_xvw.parameter_target_currency._parameter_value %}
          --to_curr {{to_curr}}
          {% if d0 == "test" %}{%assign d = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}{% else %}{% assign d = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}
          {% if m == "average_sales"%}{% assign t = "SalesOrders" %}

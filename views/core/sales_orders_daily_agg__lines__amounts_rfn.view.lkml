@@ -17,7 +17,7 @@ view: +sales_orders_daily_agg__lines__amounts {
     hidden: no
     label: "Currency (Target)"
     full_suggestions: yes
-    sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}) ;;
+    sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
   }
 
   dimension: is_incomplete_conversion {

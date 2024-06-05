@@ -11,20 +11,20 @@ view: apply_currency_conversion_to_sales_xvw {
   dimension: ordered_amount_target_currency {
     hidden: no
     type: number
-    sql: ${sales_orders__lines.ordered_amount} * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    sql: ${sales_orders__lines.ordered_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
     value_format_name: decimal_2
   }
 
   dimension: shipped_amount_target_currency {
     hidden: no
     type: number
-    sql: ${sales_orders__lines.shipped_amount} * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    sql: ${sales_orders__lines.shipped_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
     value_format_name: decimal_2
   }
 
   dimension: is_incomplete_conversion {
     type: yesno
-    sql: ${sales_orders.currency_code} <> {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %} AND ${currency_conversion_sdt.from_currency} is NULL ;;
+    sql: ${sales_orders.currency_code} <> {% parameter otc_common_parameters_xvw.parameter_target_currency %} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 
   measure: total_sales_amount_target_currency {

@@ -16,21 +16,22 @@ extension: required
 # Item dimensions
 #{
 
-  parameter: parameter_language {
-    hidden: no
-    type: string
-    view_label: "🔍 Filters & 🛠 Tools"
-    label: "Language"
-    description: "Select language to display for item descriptions. Default is 'US'."
-    suggest_explore: item_md
-    suggest_dimension: item_md__item_descriptions.language
-    default_value: "US"
-  }
+  # parameter: parameter_language {
+  #   hidden: no
+  #   type: string
+  #   view_label: "🔍 Filters & 🛠 Tools"
+  #   label: "Language"
+  #   description: "Select language to display for item descriptions. Default is 'US'."
+  #   suggest_explore: item_md
+  #   suggest_dimension: item_md__item_descriptions.language_code
+  #   default_value: "US"
+  #   suggest_persist_for: "0 seconds"
+  # }
 
   dimension: item_description {
     hidden: no
     group_label: "Item Categories & Descriptions"
-    sql: COALESCE((SELECT d.TEXT FROM UNNEST(${item_descriptions}) AS d WHERE d.language = {% parameter parameter_language %} ), CONCAT("Inventory Item ID: ",CAST(${inventory_item_id} AS STRING))) ;;
+    sql: COALESCE((SELECT d.TEXT FROM UNNEST(${item_descriptions}) AS d WHERE d.language = {% parameter otc_common_parameters_xvw.parameter_language %} ), CONCAT("Inventory Item ID: ",CAST(${inventory_item_id} AS STRING))) ;;
     full_suggestions: yes
   }
 
@@ -38,7 +39,7 @@ extension: required
     hidden: no
     group_label: "Item Categories & Descriptions"
     description: "Language in which to display item descriptions."
-    sql: (SELECT d.LANGUAGE FROM UNNEST(${item_descriptions}) AS d WHERE d.LANGUAGE = {% parameter parameter_language %} ) ;;
+    sql: (SELECT d.LANGUAGE FROM UNNEST(${item_descriptions}) AS d WHERE d.LANGUAGE = {% parameter otc_common_parameters_xvw.parameter_language %} ) ;;
     full_suggestions: yes
   }
 
@@ -48,7 +49,7 @@ extension: required
     group_label: "Item Categories & Descriptions"
 
     sql: @{get_category_set} COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME =  '{{ category_set }}' ), -1 ) ;;
-    # sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}), -1 ) ;;
+    # sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter otc_common_parameters_xvw.parameter_category_set_name %}), -1 ) ;;
     full_suggestions: yes
     value_format_name: id
   }
@@ -58,7 +59,7 @@ extension: required
     group_label: "Item Categories & Descriptions"
     sql: @{get_category_set} COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = '{{ category_set }}' )
       ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
-    # sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %} )
+    # sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter otc_common_parameters_xvw.parameter_category_set_name %} )
     # ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
     full_suggestions: yes
   }
@@ -67,7 +68,7 @@ extension: required
     hidden: no
     group_label: "Item Categories & Descriptions"
     sql: @{get_category_set} COALESCE((SELECT c.CATEGORY_NAME FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ category_set }}'),"Unknown" ) ;;
-    # sql: COALESCE((SELECT c.category_name FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}),"Unknown" ) ;;
+    # sql: COALESCE((SELECT c.category_name FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter otc_common_parameters_xvw.parameter_category_set_name %}),"Unknown" ) ;;
     full_suggestions: yes
   }
 

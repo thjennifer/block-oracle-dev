@@ -17,11 +17,11 @@ view: currency_conversion_sdt {
         FROM
           --`@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.CurrencyRateMD`
           --`@{GCP_PROJECT_ID}.{% parameter sales_orders.parameter_use_test_or_demo_data %}.CurrencyRateMD`
-                  {% assign p = sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
+                  {% assign p = otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
                   {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
                   {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.CurrencyRateMD`
         WHERE
-            TO_CURRENCY = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}
+            TO_CURRENCY = {% parameter otc_common_parameters_xvw.parameter_target_currency %}
          ;;
   }
 

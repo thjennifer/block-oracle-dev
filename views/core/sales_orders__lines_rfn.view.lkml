@@ -2,12 +2,13 @@
 include: "/views/base/sales_orders__lines.view"
 include: "/views/core/sales_orders__lines_common_fields_ext.view"
 include: "/views/core/otc_derive_common_product_fields_ext.view"
+# include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
 
 view: +sales_orders__lines {
 
   fields_hidden_by_default: yes
   extends: [sales_orders__lines_common_fields_ext,otc_derive_common_product_fields_ext]
-
+  # extends: [sales_orders__lines_common_fields_ext,otc_unnest_item_categories_common_fields_ext]
   dimension: key {
     type: string
     primary_key: yes
@@ -35,16 +36,16 @@ view: +sales_orders__lines {
 # parameter_target_currency to choose the desired currency into which the order currency should be converted
 #{
 
-  parameter: parameter_language {
-    hidden: no
-    type: string
-    view_label: "🔍 Filters & 🛠 Tools"
-    label: "Language"
-    description: "Select language to display for item descriptions. Default is 'US'."
-    suggest_explore: item_md
-    suggest_dimension: item_md__item_descriptions.language
-    default_value: "US"
-  }
+  # parameter: parameter_language {
+  #   hidden: no
+  #   type: string
+  #   view_label: "🔍 Filters & 🛠 Tools"
+  #   label: "Language"
+  #   description: "Select language to display for item descriptions. Default is 'US'."
+  #   suggest_explore: item_md
+  #   suggest_dimension: item_md__item_descriptions.language
+  #   default_value: "US"
+  # }
 
   # parameter: parameter_category_set_name {
   #   hidden: no
@@ -112,7 +113,7 @@ view: +sales_orders__lines {
   #   group_label: "Item Categories & Descriptions"
   #   label: "Item Category ID"
   #   sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}'), -1 ) ;;
-  #   # sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}), -1 ) ;;
+  #   # sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter otc_common_parameters_xvw.parameter_category_set_name %}), -1 ) ;;
   #   full_suggestions: yes
   #   value_format_name: id
   # }
@@ -123,7 +124,7 @@ view: +sales_orders__lines {
   #   label: "Item Category Description"
   #   sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}' )
   #       ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
-  #   # sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %} )
+  #   # sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter otc_common_parameters_xvw.parameter_category_set_name %} )
   #   # ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
   #   full_suggestions: yes
   # }
@@ -133,7 +134,7 @@ view: +sales_orders__lines {
   #   group_label: "Item Categories & Descriptions"
   #   label: "Item Category Name Group"
   #   sql: COALESCE((SELECT c.CATEGORY_NAME FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}'),"Unknown" ) ;;
-  #   # sql: COALESCE((SELECT c.category_name FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter sales_orders_common_parameters_xvw.parameter_category_set_name %}),"Unknown" ) ;;
+  #   # sql: COALESCE((SELECT c.category_name FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter otc_common_parameters_xvw.parameter_category_set_name %}),"Unknown" ) ;;
   #   full_suggestions: yes
   # }
 
@@ -550,13 +551,13 @@ view: +sales_orders__lines {
     type: string
     group_label: "Currency Conversion"
     label: "Currency (Target)"
-    sql: {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %} ;;
+    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
   }
 
   dimension: currency_conversion_rate {
     hidden: no
     group_label: "Currency Conversion"
-    sql: IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    sql: IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
     value_format_name: decimal_4
   }
 
@@ -564,14 +565,14 @@ view: +sales_orders__lines {
     hidden: no
     type: yesno
     group_label: "Currency Conversion"
-    sql: ${sales_orders.currency_code} <> {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %} AND ${currency_conversion_sdt.from_currency} is NULL ;;
+    sql: ${sales_orders.currency_code} <> {% parameter otc_common_parameters_xvw.parameter_target_currency %} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 
   dimension: ordered_amount_target_currency {
     hidden: yes
     type: number
     group_label: "Currency Conversion"
-    sql: ${ordered_amount} * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    sql: ${ordered_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
     value_format_name: decimal_2
   }
 
@@ -579,7 +580,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Currency Conversion"
-    sql: ${shipped_amount} * IF(${sales_orders.currency_code} = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    sql: ${shipped_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
     value_format_name: decimal_2
   }
 
@@ -731,5 +732,19 @@ view: +sales_orders__lines {
     type: count_distinct
     sql: COALESCE(${item_part_number},'Unknown') ;;
   }
+
+
+  dimension: liquid_view_name2 {
+    hidden: no
+    view_label: "TEST STUFF"
+    sql: {% assign v = _view._name  %}
+          {% if v contains "sales_orders_daily_agg" %}{% assign f = "ITEM_CATEGORY_ID"%}
+            {% elsif v contains "item_categories" %}{% assign f = "ID" %}
+            {% else %}{% assign f = "subquery" %}
+
+          {%endif%} --vn {{v}}
+            '{{f}}';;
+  }
+
 
    }

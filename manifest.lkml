@@ -35,7 +35,7 @@ constant: REPORTING_DATASET {
 #     }
 
 constant: derive_currency_label {
-  value: "{% assign currency = sales_orders_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" %}"
+  value: "{% assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" %}"
 }
 
 
@@ -72,7 +72,7 @@ constant: is_agg_category_in_query {
 
 
 constant: get_category_set {
-  value: "{% assign d = sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
+  value: "{% assign d = otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
           {% if d == 'test' %}{% assign category_set = 'Purchasing' %}{%elsif d == 'demo' %}
           {% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
           {% else %} {% assign category_set = d %}

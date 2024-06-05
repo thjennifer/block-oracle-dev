@@ -5,16 +5,16 @@
 #########################################################}
 
 include: "/views/core/currency_rate_md_rfn.view"
-include: "/views/core/sales_orders_common_parameters_xvw.view"
+include: "/views/core/otc_common_parameters_xvw.view"
 
 explore: currency_rate_md {
   hidden: yes
-
   label: "Currency Rate MD"
 
-  join: sales_orders_common_parameters_xvw {
+  join: otc_common_parameters_xvw {
     relationship: one_to_one
     sql:  ;;
+    fields: [otc_common_parameters_xvw.parameter_use_test_or_demo_data]
 }
 
 }

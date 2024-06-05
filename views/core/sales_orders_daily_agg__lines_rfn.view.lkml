@@ -3,11 +3,12 @@
 
 include: "/views/base/sales_orders_daily_agg__lines.view"
 include: "/views/core/sales_orders__lines_common_fields_ext.view"
+include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
 
 view: +sales_orders_daily_agg__lines {
   fields_hidden_by_default: yes
   label: "Sales Orders Daily Agg: Item Categories"
-  extends: [sales_orders__lines_common_fields_ext]
+  extends: [sales_orders__lines_common_fields_ext,otc_unnest_item_categories_common_fields_ext]
 
   dimension: key {
     hidden: yes
@@ -30,23 +31,23 @@ view: +sales_orders_daily_agg__lines {
     primary_key: no
   }
 
-  dimension: category_id {
-    hidden: no
-    sql: COALESCE(${TABLE}.ITEM_CATEGORY_ID,-1) ;;
-    full_suggestions: yes
-  }
+  # dimension: category_id {
+  #   hidden: no
+  #   sql: COALESCE(${TABLE}.ITEM_CATEGORY_ID,-1) ;;
+  #   full_suggestions: yes
+  # }
 
-  dimension: category_name_code {
-    hidden: no
-    sql: COALESCE(${TABLE}.ITEM_CATEGORY_NAME,"Unknown") ;;
-    full_suggestions: yes
-  }
+  # dimension: category_name_code {
+  #   hidden: no
+  #   sql: COALESCE(${TABLE}.ITEM_CATEGORY_NAME,"Unknown") ;;
+  #   full_suggestions: yes
+  # }
 
-  dimension: category_description {
-    hidden: no
-    sql: COALESCE(${TABLE}.category_description,COALESCE(CAST(NULLIF(${item_category_id},-1) AS STRING),"Unknown")) ;;
-    full_suggestions: yes
-  }
+  # dimension: category_description {
+  #   hidden: no
+  #   sql: COALESCE(${TABLE}.category_description,COALESCE(CAST(NULLIF(${item_category_id},-1) AS STRING),"Unknown")) ;;
+  #   full_suggestions: yes
+  # }
 
   dimension: item_organization_id {
     hidden:no
@@ -61,12 +62,12 @@ view: +sales_orders_daily_agg__lines {
 
   dimension: ordered_amount_target_currency {
     type: number
-    sql: (select TOTAL_ORDERED FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}) ;;
+    sql: (select TOTAL_ORDERED FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
   }
 
   dimension: is_incomplete_conversion {
     type: yesno
-    sql: (select IS_INCOMPLETE_CONVERSION FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter sales_orders_common_parameters_xvw.parameter_target_currency %}) ;;
+    sql: (select IS_INCOMPLETE_CONVERSION FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
   }
 
   measure: total_num_order_lines {
@@ -118,5 +119,17 @@ view: +sales_orders_daily_agg__lines {
     #value format defined in sales_orders__lines_common_fields_ext
   }
 
+
+dimension: liquid_view_name {
+  hidden: no
+  view_label: "TEST STUFF"
+  sql: {% assign v = _view._name  %}
+          {% if v == "sales_orders_daily_agg__lines" %}{% assign f = "ITEM_CATEGORY_ID"%}
+            {% elsif v contains "item_categories" %}{% assign f = "ID" %}
+            {% else %}{% assign f = "subquery" %}
+
+          {%endif%} --vn {{v}}
+            '{{f}}';;
+}
 
  }

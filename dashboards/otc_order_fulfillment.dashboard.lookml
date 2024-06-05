@@ -47,7 +47,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
@@ -69,7 +69,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders fulfilled completely (for all line items) by the requested delivery date."
@@ -94,7 +94,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders with at least one item on backorder."
@@ -141,7 +141,7 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 2
     col: 4
     width: 10
@@ -214,8 +214,8 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
-      Language: sales_orders__lines.parameter_language
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+      Language: otc_common_parameters_xvw.parameter_language
       # Product Level to Display: sales_orders__lines.parameter_display_product_level
     note_state: collapsed
     note_display: hover
@@ -330,8 +330,8 @@
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      Test or Demo: sales_orders_common_parameters_xvw.parameter_use_test_or_demo_data
-      Language: sales_orders__lines.parameter_language
+      Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+      Language: otc_common_parameters_xvw.parameter_language
     row: 10
     col: 0
     width: 24

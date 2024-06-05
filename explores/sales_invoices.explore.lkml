@@ -2,7 +2,7 @@ include: "/views/core/sales_invoices_rfn.view"
 include: "/views/core/sales_invoices__lines_rfn.view"
 include: "/views/core/sales_invoices__lines__item_categories_rfn.view"
 include: "/views/core/sales_invoices__lines__item_descriptions_rfn.view"
-include: "/views/core/sales_orders_common_parameters_xvw.view"
+include: "/views/core/otc_common_parameters_xvw.view"
 
 
 explore: sales_invoices {
@@ -21,11 +21,11 @@ explore: sales_invoices {
   join: sales_invoices__lines__item_descriptions {
     view_label: "Sales Invoices: Lines Item Descriptions"
     sql: LEFT JOIN UNNEST(${sales_invoices__lines.item_descriptions}) as sales_invoices__lines__item_descriptions ;;
-    sql_where: ${sales_invoices__lines__item_descriptions.language} in ("Unknown", {% parameter sales_invoices__lines.parameter_language %}) ;;
+    sql_where: ${sales_invoices__lines__item_descriptions.language_code} in ("Unknown", {% parameter otc_common_parameters_xvw.parameter_language %}) ;;
     relationship: one_to_many
   }
 
-  join: sales_orders_common_parameters_xvw {
+  join: otc_common_parameters_xvw {
     relationship: one_to_one
     sql:  ;;
   }
