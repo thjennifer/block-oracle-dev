@@ -19,8 +19,8 @@
     name: Total Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.order_count,sales_orders.has_return_order_percent,sales_orders.no_holds_order_percent]
-    hidden_fields: [sales_orders.has_return_order_percent,sales_orders.no_holds_order_percent]
+    fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
+    hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     listen:
       Order Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
@@ -42,9 +42,9 @@
     name: Return Orders
     explore: sales_orders
     type: single_value
-    # fields: [sales_orders.has_return_order_percent]
-    fields: [sales_orders.order_count,sales_orders.has_return_order_percent,sales_orders.no_holds_order_percent]
-    hidden_fields: [sales_orders.order_count,sales_orders.no_holds_order_percent]
+    # fields: [sales_orders.has_return_sales_order_percent]
+    fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
+    hidden_fields: [sales_orders.order_count,sales_orders.no_holds_sales_order_percent]
     listen:
       Order Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
@@ -65,9 +65,9 @@
     name: One Touch Orders
     explore: sales_orders
     type: single_value
-    # fields: [sales_orders.no_holds_order_percent]
-    fields: [sales_orders.order_count,sales_orders.has_return_order_percent,sales_orders.no_holds_order_percent]
-    hidden_fields: [sales_orders.order_count,sales_orders.has_return_order_percent]
+    # fields: [sales_orders.no_holds_sales_order_percent]
+    fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
+    hidden_fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent]
     listen:
       Order Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country

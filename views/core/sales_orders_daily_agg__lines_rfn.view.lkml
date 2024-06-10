@@ -6,14 +6,14 @@ include: "/views/core/sales_orders__lines_common_fields_ext.view"
 include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
 
 view: +sales_orders_daily_agg__lines {
-  fields_hidden_by_default: yes
+  fields_hidden_by_default: no
   label: "Sales Orders Daily Agg: Item Categories"
   extends: [sales_orders__lines_common_fields_ext,otc_unnest_item_categories_common_fields_ext]
 
   dimension: key {
     hidden: yes
     primary_key: yes
-    sql: CONCAT(${sales_orders_daily_agg.key},${category_set_id},${category_id},${item_organization_id}) ;;
+    sql: CONCAT(${sales_orders_daily_agg.key},${category_set_id},${category_id},${item_organization_id},${line_category_code}) ;;
   }
 
   dimension: category_set_id {
@@ -29,6 +29,11 @@ view: +sales_orders_daily_agg__lines {
   dimension: item_category_id {
     hidden: yes
     primary_key: no
+  }
+
+  dimension: line_category_code {
+    hidden: no
+    sql:  COALESCE(${TABLE}.LINE_CATEGORY_CODE,IF(${sales_orders_daily_agg.order_category_code}='MIXED','Unknown',${sales_orders_daily_agg.order_category_code})) ;;
   }
 
   # dimension: category_id {
@@ -61,13 +66,14 @@ view: +sales_orders_daily_agg__lines {
   }
 
   dimension: ordered_amount_target_currency {
+    hidden: no
     type: number
-    sql: (select TOTAL_ORDERED FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+    sql: (select SUM(TOTAL_ORDERED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
   }
 
   dimension: is_incomplete_conversion {
     type: yesno
-    sql: (select IS_INCOMPLETE_CONVERSION FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+    sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
   }
 
   measure: total_num_order_lines {
@@ -107,6 +113,7 @@ view: +sales_orders_daily_agg__lines {
     #label defined in sales_orders__lines_common_fields_ext
     #description defined in sales_orders__lines_common_fields_ext
     sql: ${ordered_amount_target_currency} ;;
+    filters: [sales_orders_daily_agg.order_category_code: "-RETURN"]
     #value format defined in sales_orders__lines_common_fields_ext
   }
 
@@ -115,7 +122,7 @@ view: +sales_orders_daily_agg__lines {
     type: number
     #label defined in sales_orders__lines_common_fields_ext
     #description defined in sales_orders__lines_common_fields_ext
-    sql: SAFE_DIVIDE(${total_sales_amount_target_currency},(${sales_orders_daily_agg.non_cancelled_order_count})) ;;
+    sql: SAFE_DIVIDE(${total_sales_amount_target_currency},(${sales_orders_daily_agg.non_cancelled_sales_order_count})) ;;
     #value format defined in sales_orders__lines_common_fields_ext
   }
 

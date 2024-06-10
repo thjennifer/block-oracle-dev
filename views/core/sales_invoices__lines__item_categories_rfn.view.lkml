@@ -5,10 +5,13 @@ view: +sales_invoices__lines__item_categories {
   fields_hidden_by_default: yes
   extends: [otc_unnest_item_categories_common_fields_ext]
 
-   dimension: key {
+  dimension: key {
     type: string
     primary_key: yes
-    sql: CONCAT(${sales_invoices.invoice_id},${sales_invoices__lines.line_id},${category_set_id},${category_id}) ;;
+    sql: {% if sales_invoices__lines__item_descriptions._in_query %}
+                  CONCAT(${sales_invoices.invoice_id},${sales_invoices__lines.line_id},${sales_invoices__lines__item_descriptions.language_code},${category_set_id})
+          {%else%}CONCAT(${sales_invoices.invoice_id},${sales_invoices__lines.line_id},${category_set_id})
+          {%endif%};;
   }
 
   dimension: id {

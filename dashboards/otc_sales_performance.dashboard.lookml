@@ -52,8 +52,8 @@
     title: Top Products by Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.total_sales_amount_target_currency]
-    sorts: [sales_orders__lines.total_sales_amount_target_currency desc]
+    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.total_sales_amount_target_currency_format_large_numbers]
+    sorts: [sales_orders__lines.total_sales_amount_target_currency_format_large_numbers desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
 
     limit: 10
@@ -71,9 +71,9 @@
     x_axis_scale: auto
     y_axis_combined: true
     series_colors:
-      {sales_orders__lines.total_sales_amount_target_currency: "#74A09F"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.total_sales_amount_target_currency,
-            id: sales_orders__lines.total_sales_amount_target_currency
+      {sales_orders__lines.total_sales_amount_target_currency_format_large_numbers: "#74A09F"}
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.total_sales_amount_target_currency_format_large_numbers,
+            id: sales_orders__lines.total_sales_amount_target_currency_format_large_numbers
             }], showLabels: true, showValues: false,
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
@@ -158,8 +158,8 @@
     title: Top Business Unit by Sales
     explore: sales_orders_daily_agg
     type: looker_bar
-    fields: [sales_orders_daily_agg.business_unit_id,sales_orders_daily_agg.business_unit_name,sales_orders_daily_agg__lines.total_sales_amount_target_currency]
-    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency desc]
+    fields: [sales_orders_daily_agg.business_unit_id,sales_orders_daily_agg.business_unit_name,sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers]
+    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers desc]
     hidden_fields: [sales_orders_daily_agg.business_unit_id]
     limit: 10
     x_axis_gridlines: false
@@ -176,9 +176,9 @@
     x_axis_scale: auto
     y_axis_combined: true
     series_colors:
-      {sales_orders_daily_agg__lines.total_sales_amount_target_currency: "#74A09F"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders_daily_agg__lines.total_sales_amount_target_currency,
-            id: sales_orders_daily_agg__lines.total_sales_amount_target_currencyt, name: Total
+      {sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers: "#74A09F"}
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers,
+            id: sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numberst, name: Total
               Sales}], showLabels: true, showValues: false,
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
@@ -252,9 +252,9 @@
     title: Sales by Order Source
     explore: sales_orders_daily_agg
     type: looker_pie
-    fields: [sales_orders_daily_agg__lines.total_sales_amount_target_currency, sales_orders_daily_agg.order_source_id,
+    fields: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers, sales_orders_daily_agg.order_source_id,
       sales_orders_daily_agg.order_source_name]
-    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency desc 0]
+    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers desc 0]
     hidden_fields: [sales_orders_daily_agg.order_source_id]
     limit: 50
     column_limit: 50

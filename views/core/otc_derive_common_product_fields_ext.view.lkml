@@ -28,6 +28,14 @@ extension: required
   #   suggest_persist_for: "0 seconds"
   # }
 
+  # dimension: item_organization_id {
+  #   description: "ID of Organization that shipped item."
+  # }
+
+  # dimension: item_organization_name {
+  #   description: "Name of Organization that shipped item."
+  # }
+
   dimension: item_description {
     hidden: no
     group_label: "Item Categories & Descriptions"

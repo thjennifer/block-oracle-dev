@@ -95,14 +95,26 @@ view: sales_invoices {
     hidden: yes
     sql: ${TABLE}.LINES ;;
   }
+  dimension: total_revenue_amount {
+    type: number
+    sql: ${TABLE}.TOTAL_REVENUE_AMOUNT ;;
+  }
+  dimension: total_tax_amount {
+    type: number
+    sql: ${TABLE}.TOTAL_TAX_AMOUNT ;;
+  }
+  dimension: total_transaction_amount {
+    type: number
+    sql: ${TABLE}.TOTAL_TRANSACTION_AMOUNT ;;
+  }
   measure: count {
     type: count
-    drill_fields: [invoice_type_name, ledger_name, business_unit_name, bill_to_customer_name]
+    drill_fields: [ledger_name, business_unit_name, bill_to_customer_name, invoice_type_name]
   }
 }
 
 # view: sales_invoices__lines {
-#   # drill_fields: [order_line_id]
+#   drill_fields: [order_line_id]
 
 #   dimension: order_line_id {
 #     primary_key: yes

@@ -38,8 +38,8 @@
     name: In Full %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
-    hidden_fields: [sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
+    fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
+    hidden_fields: [sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     listen:
       Order Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
@@ -60,8 +60,8 @@
     name: OTIF %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
-    hidden_fields: [sales_orders.fulfilled_order_percent,sales_orders.has_backorder_order_percent]
+    fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
+    hidden_fields: [sales_orders.fulfilled_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     listen:
       Order Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
@@ -82,8 +82,8 @@
     name: Backordered %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
-    hidden_fields: [sales_orders.fulfilled_order_percent,sales_orders.fulfilled_by_request_date_order_percent]
+    fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
+    hidden_fields: [sales_orders.fulfilled_sales_order_percent,sales_orders.fulfilled_by_request_date_sales_order_percent]
     # enable_conditional_formatting: true
     # conditional_formatting: [{type: greater than, value: 0.05, background_color: '',
     #     font_color: "#DB4C40", bold: false, italic: false, strikethrough: false, fields: !!null ''}]
@@ -107,7 +107,7 @@
     name: Delivery Performance by Month
     explore: sales_orders
     type: looker_line
-    fields: [sales_orders.ordered_month,sales_orders.fulfilled_order_percent,sales_orders.fulfilled_by_request_date_order_percent]
+    fields: [sales_orders.ordered_month,sales_orders.fulfilled_sales_order_percent,sales_orders.fulfilled_by_request_date_sales_order_percent]
     sorts: [sales_orders.ordered_month]
     limit: 500
     column_limit: 50
@@ -121,17 +121,17 @@
     x_axis_zoom: true
     y_axis_zoom: true
     series_types:
-      sales_orders.fulfilled_order_percent: line
-      sales_orders.fulfilled_by_request_date_order_percent: line
+      sales_orders.fulfilled_sales_order_percent: line
+      sales_orders.fulfilled_by_request_date_sales_order_percent: line
     series_colors:
       # sales_order_item_delivery_summary_ndt.percent_orders_delivered_on_time: "#F39B6D"
-      sales_orders.fulfilled_order_percent: "#6494AA"
-      sales_orders.fulfilled_by_request_date_order_percent: "#89BD9E"
+      sales_orders.fulfilled_sales_order_percent: "#6494AA"
+      sales_orders.fulfilled_by_request_date_sales_order_percent: "#89BD9E"
     series_labels:
       # sales_order_item_delivery_summary_ndt.percent_orders_delivered_on_time: On Time %
       # sales_orders.ordered_month
-      sales_orders.fulfilled_order_percent: In Full %
-      sales_orders.fulfilled_by_request_date_order_percent: OTIF %
+      sales_orders.fulfilled_sales_order_percent: In Full %
+      sales_orders.fulfilled_by_request_date_sales_order_percent: OTIF %
     x_axis_datetime_label: "%B %y"
     defaults_version: 1
     listen:

@@ -105,7 +105,7 @@
   - name: Test or Demo
     title: Test or Demo Data
     type: field_filter
-    default_value: "test"
+    default_value: "demo"
     allow_multiple_values: false
     required: false
     ui_config:

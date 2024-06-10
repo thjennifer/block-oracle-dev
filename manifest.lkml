@@ -4,7 +4,7 @@ constant: CONNECTION_NAME {
 }
 
 constant: GCP_PROJECT_ID {
-  value: "kittycorn-dev"
+  value: "kittycorn-dev-incorta"
   export: override_required
 }
 
@@ -49,7 +49,7 @@ constant: image_dashboard_navigation {
 # Constant is_agg_category_in_query
 # provides first part of liquid IF statement to check if any of these category fields from
 # sales_orders_agg__lines are in the query (either selected dimension or filter):
-#     item_category_id, category_description, item_category_name,
+#     category_id, category_description, category_name,
 #     item_organization_id, item_orgranization_name
 #
 # when used, must complete the rest of the statement (what to return when true and false
@@ -60,9 +60,9 @@ constant: image_dashboard_navigation {
 #.  }
 
 constant: is_agg_category_in_query {
-  value: "{% if sales_orders_daily_agg__lines.item_category_id._in_query or
+  value: "{% if sales_orders_daily_agg__lines.category_id._in_query or
                 sales_orders_daily_agg__lines.category_description._in_query or
-                sales_orders_daily_agg__lines.item_category_name._in_query or
+                sales_orders_daily_agg__lines.category_name._in_query or
                 sales_orders_daily_agg__lines.item_organization_id._in_query or
                 sales_orders_daily_agg__lines.item_organization_name._in_query
                 %}"
@@ -77,4 +77,11 @@ constant: get_category_set {
           {% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
           {% else %} {% assign category_set = d %}
           {% endif %}"
+}
+
+constant: default_target_date {
+  value: "{% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'Yes' %}
+               {% if otc_common_parameters.parameter_use_test_or_demo_data._parameter_value == 'demo'
+                      {% assign td = '2024-04-01' %} {%else%} {% assign td = '2011-01-01' %}
+          {%else%}{% assign td = now | date: '%Y-%m-%d' %}{%endif%}"
 }

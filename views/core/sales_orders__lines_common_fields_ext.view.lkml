@@ -1,7 +1,10 @@
 #########################################################{
 # PURPOSE
 # Provide the same labels/descriptions for measures
-# used in both sales_orders__lines and sales_orders_daily_agg__lines and sales_orders_daily_agg__lines__amounts
+# used in:
+#    sales_orders__lines
+#    sales_orders_daily_agg__lines
+#    sales_orders_daily_agg__lines__amounts
 #
 # To use, extend into desired view.
 #
@@ -21,6 +24,14 @@ view: sales_orders__lines_common_fields_ext {
   measure: total_sales_amount_target_currency {
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Sales Amount ({{currency}}){%else%}Total Sales Amount (Target Currency){%endif%}"
     description: "@{derive_currency_label}Sum of sales in target currency {{currency}}"
+    value_format_name: decimal_0
+  }
+
+  measure: total_sales_amount_target_currency_format_large_numbers {
+    type: number
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Sales Amount ({{currency}}){%else%}Total Sales Amount (Target Currency) Formatted {%endif%}"
+    description: "@{derive_currency_label}Sum of sales in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
+    sql: ${total_sales_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
   }
 

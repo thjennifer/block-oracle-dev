@@ -9,7 +9,7 @@ view: +sales_orders__lines__item_categories {
   dimension: key {
     type: string
     primary_key: yes
-    sql: CONCAT(${sales_orders.header_id},${sales_orders__lines.line_id},${category_set_id},${category_id}) ;;
+    sql: CONCAT(${sales_orders.header_id},${sales_orders__lines.line_id},${category_set_id}) ;;
   }
 
   dimension: id {

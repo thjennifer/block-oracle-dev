@@ -68,29 +68,89 @@ view: +sales_invoices {
   }
 
   dimension: is_complete {
-
   }
 
+#########################################################
+# Invoice Total Amounts as Dimensions and with Currency Conversion
+#
+#{
+
+
   dimension: currency_code {
+    group_label: "Amounts"
     label: "Currency Code (Source)"
     description: "Currency code of the invoice transaction."
   }
+
+  dimension: total_revenue_amount {
+    group_label: "Amounts"
+    label: "Invoice Revenue Amount (Source Currency)"
+  }
+
+  dimension: total_tax_amount {
+    group_label: "Amounts"
+    label: "Invoice Tax Amount (Source Currency)"
+  }
+
+  dimension: total_transaction_amount {
+    group_label: "Amounts"
+    label: "Invoice Transaction Amount (Source Currency)"
+  }
+
+  dimension: total_revenue_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Revenue Amount ({{currency}}){%else%}Invoice Revenue Amount (Target Currency){%endif%}"
+    description: "Total amount recognized as revenue for accounting purposes for the entire invoice (in target currency)."
+    sql: ${total_revenue_amount} * IF(${currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: total_transaction_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Transaction Amount ({{currency}}){%else%}Invoice Transactions Amount (Target Currency){%endif%}"
+    description: "Total transaction amount of invoice in target currency."
+    sql: ${total_transaction_amount} * IF(${currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: total_tax_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Tax Amount ({{currency}}){%else%}Invoice Tax Amount (Target Currency){%endif%}"
+    description: "Total tax amount of invoice in target currency."
+    sql: ${total_tax_amount} * IF(${currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    value_format_name: decimal_2
+  }
+
+#} end invoice amounts as dimensions
+
 #########################################################
 # Dates
 #
 #{
 
   dimension_group: invoice {
-    timeframes: [raw,date,week,month,quarter,year]
+    timeframes: [raw, date, week, month, quarter, year]
   }
 
   dimension_group: creation {
-    timeframes: [raw,date,week,month,quarter,year]
+    hidden: no
+    timeframes: [raw, date, time]
+    description: "Creation date of record in Oracle source table."
   }
 
   dimension_group: last_update {
-    timeframes: [raw,date,week,month,quarter,year]
+    hidden: no
+    timeframes: [raw, date, time]
+    description: "Last update date of record in Oracle source table."
   }
+
+
 
 #} end dates
 
@@ -105,9 +165,14 @@ view: +sales_invoices {
 
   measure: invoice_count {
     type: count
+    drill_fields: [invoice_header_details*]
   }
 
 #} end measures
+
+set: invoice_header_details {
+  fields: [invoice_id,invoice_number,invoice_date,invoice_type_name, total_revenue_amount_target_currency, total_tax_amount_target_currency]
+}
 
 #########################################################
 # TEST STUFF
@@ -135,6 +200,12 @@ view: +sales_invoices {
     view_label: "TEST STUFF"
     type: count_distinct
     sql: COALESCE(${ledger_id},-1) ;;
+  }
+
+  dimension: invoice_number_length {
+    view_label: "TEST STUFF"
+    type: number
+    sql: LENGTH(${invoice_number}) ;;
   }
 
 #}

@@ -15,10 +15,6 @@ view: sales_invoices__lines {
     type: number
     sql: CREDITED_QUANTITY ;;
   }
-  dimension: description {
-    type: string
-    sql: DESCRIPTION ;;
-  }
   dimension: fiscal_gl_month {
     type: number
     sql: FISCAL_GL_MONTH ;;
@@ -78,6 +74,10 @@ view: sales_invoices__lines {
     convert_tz: no
     datatype: date
     sql: LEDGER_DATE ;;
+  }
+  dimension: line_description {
+    type: string
+    sql: LINE_DESCRIPTION ;;
   }
   dimension: line_id {
     type: number

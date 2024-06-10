@@ -2,10 +2,11 @@ include: "/views/base/sales_orders.view"
 include: "/views/core/sales_orders_common_dimensions_ext.view"
 include: "/views/core/sales_orders_common_measures_ext.view"
 
+
 view: +sales_orders {
   extends: [sales_orders_common_dimensions_ext,sales_orders_common_measures_ext]
 
-  fields_hidden_by_default: yes
+  fields_hidden_by_default: no
 
   # sql_table_name: `@{GCP_PROJECT_ID}.{% parameter parameter_use_test_or_demo_data %}.SalesOrders` ;;
 
@@ -88,13 +89,18 @@ view: +sales_orders {
 
   dimension: sales_rep {hidden: no}
 
+  dimension: order_category_code {
+    hidden: no
+    sql: UPPER(${TABLE}.ORDER_CATEGORY_CODE) ;;
+  }
+
   dimension: num_lines {
     hidden: no
     label: "Number of Lines"
   }
 
 #########################################################
-# Business Unit and Order Source Dimensions
+# Business Unit / Order Source / Customer Dimensions
 #{
 
   dimension: business_unit_id {hidden: no}
@@ -124,7 +130,7 @@ view: +sales_orders {
       sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_COUNTRY,"Unknown") ;;
     }
 
-#} end business unit and order source dimensions
+#} end business unit / order source / customer dimensions
 
 #########################################################
 # Dates
@@ -133,58 +139,60 @@ view: +sales_orders {
 
   dimension_group: ordered {
     hidden: no
-    timeframes: [raw, date, week, month, quarter, year, yesno]
+    timeframes: [raw, date, week, month, month_num, quarter, quarter_of_year, year, yesno]
   }
 
   dimension_group: booked {
     hidden: no
-    timeframes: [raw, date, week, month, quarter, year, yesno]
+    timeframes: [raw, date, week, month, month_num, quarter, quarter_of_year, year, yesno]
     }
 
-  dimension_group: booked {
+  dimension_group: fulfillment {
     hidden: no
-    timeframes: [raw, date, week, month, quarter, year, yesno]
+    timeframes: [raw, date, week, month, month_num, quarter, quarter_of_year, year, yesno]
   }
 
   dimension_group: request_date {
     hidden: no
     label: "Request"
-    timeframes: [raw, date, week, month, quarter, year, yesno]
+    timeframes: [raw, date, week, month, month_num, quarter, year, yesno]
   }
 
   dimension: fiscal_month {
     hidden: no
-    group_label: "Ordered Date"
+    group_label: "Fiscal Date"
    }
   dimension: fiscal_period_name {
     hidden: no
-    group_label: "Ordered Date"
+    group_label: "Fiscal Date"
   }
   dimension: fiscal_period_set_name {
     hidden: no
-    group_label: "Ordered Date"
+    group_label: "Fiscal Date"
   }
   dimension: fiscal_period_type {
     hidden: no
-    group_label: "Ordered Date"
+    group_label: "Fiscal Date"
   }
   dimension: fiscal_quarter {
     hidden: no
-    group_label: "Ordered Date"
+    group_label: "Fiscal Date"
   }
   dimension: fiscal_year {
     hidden: no
-    group_label: "Ordered Date"
+    group_label: "Fiscal Date"
   }
 
   dimension_group: creation {
-    hidden: yes
-    timeframes: [raw, date, week, month, quarter, year, yesno]
+    hidden: no
+    timeframes: [raw, date, time]
+    description: "Creation date of record in Oracle source table."
   }
 
   dimension_group: last_update {
-    hidden: yes
-    timeframes: [raw, date, week, month, quarter, year, yesno]
+    hidden: no
+    timeframes: [raw, date, time]
+    description: "Last update date of record in Oracle source table."
   }
 
 #} end dates
@@ -257,12 +265,12 @@ view: +sales_orders {
   dimension: is_intercompany {
     hidden: no
     group_label: "Order Status"
+    description: "Yes indicates transaction was internal within the company."
   }
 
   dimension: is_open {
     hidden: no
     group_label: "Order Status"
-
   }
 
   dimension: has_return_line {
@@ -360,6 +368,24 @@ view: +sales_orders {
     drill_fields: [header_details*]
   }
 
+  measure: sales_order_count {
+    hidden: no
+    type: count
+    #label defined in sales_orders_common_measures_ext
+    #description defined in sales_orders_common_measures_ext
+    filters: [order_category_code: "-RETURN"]
+    drill_fields: [header_details*]
+  }
+
+  measure: return_order_count {
+    hidden: no
+    type: count
+    #label defined in sales_orders_common_measures_ext
+    #description defined in sales_orders_common_measures_ext
+    filters: [order_category_code: "RETURN"]
+    drill_fields: [header_details*]
+  }
+
   measure: order_count_with_details_link {
     hidden: yes
     type: number
@@ -384,102 +410,102 @@ view: +sales_orders {
     # }
   }
 
-  measure: has_backorder_order_count {
+  measure: has_backorder_sales_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
-    filters: [has_backorder: "Yes"]
+    filters: [has_backorder: "Yes", order_category_code: "-RETURN"]
   }
 
-  # measure: has_backorder_order_percent {
+  # measure: has_backorder_sales_order_percent {
   #   hidden: no
   #   type: number
   #   label: "Has Backorder Percent"
   #   description: "The percentage of sales orders that have at least one order line on backorder."
-  #   sql: SAFE_DIVIDE(${has_backorder_order_count},${order_count}) ;;
+  #   sql: SAFE_DIVIDE(${has_backorder_sales_order_count},${order_count}) ;;
   #   value_format_name: percent_1
   # }
 
-  measure: blocked_order_count {
+  measure: blocked_sales_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
-    filters: [is_blocked: "Yes"]
+    filters: [is_blocked: "Yes", order_category_code: "-RETURN"]
   }
 
-  measure: cancelled_order_count {
+  measure: cancelled_sales_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
-    filters: [is_cancelled: "Yes"]
+    filters: [is_cancelled: "Yes", order_category_code: "-RETURN"]
   }
 
-  measure: has_return_order_count {
+  measure: has_return_sales_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
-    filters: [has_return_line: "Yes"]
+    filters: [has_return_line: "Yes", order_category_code: "-RETURN"]
   }
 
-  measure: fillable_order_count {
+  measure: fillable_sales_order_count {
     hidden: no
     type: count
     label: "Fillable Orders"
     description: "Number of sales orders that can be met with the available inventory (none of items are backordered)."
-    filters: [is_fillable: "Yes"]
+    filters: [is_fillable: "Yes", order_category_code: "-RETURN"]
   }
 
-  measure: fulfilled_order_count {
+  measure: fulfilled_sales_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
-    filters: [is_fulfilled: "Yes"]
+    filters: [is_fulfilled: "Yes", order_category_code: "-RETURN"]
   }
 
-  measure: fulfilled_by_request_date_order_count {
+  measure: fulfilled_by_request_date_sales_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
-    filters: [is_fulfilled_by_request_date : "Yes"]
+    filters: [is_fulfilled_by_request_date : "Yes", order_category_code: "-RETURN"]
   }
 
-  measure: fulfilled_by_promise_date_order_count {
+  measure: fulfilled_by_promise_date_sales_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
-    filters: [is_fulfilled_by_promise_date : "Yes"]
+    filters: [is_fulfilled_by_promise_date : "Yes", order_category_code: "-RETURN"]
   }
 
-  measure: no_holds_order_count {
+  measure: no_holds_sales_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
-    filters: [has_hold: "No"]
+    filters: [has_hold: "No", order_category_code: "-RETURN"]
     drill_fields: [header_details*]
   }
 
-  measure: non_cancelled_order_count {
+  measure: non_cancelled_sales_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
-    filters: [is_cancelled: "No"]
+    filters: [is_cancelled: "No", order_category_code: "-RETURN"]
   }
 
-  measure: open_order_count {
+  measure: open_sales_order_count {
     hidden: no
     type: count
     label: "Open Orders"
     description: "Number of sales orders that are open."
-    filters: [is_open: "Yes"]
+    filters: [is_open: "Yes", order_category_code: "-RETURN"]
     # drill_fields: [header_details*]
   }
 

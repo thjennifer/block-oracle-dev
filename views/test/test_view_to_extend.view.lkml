@@ -8,6 +8,6 @@ dimension: business_unit_id {
 
 dimension: business_unit_name {
   label: "BUSINESS NAME"
-  sql: COALESCE(${TABLE}.business_unit_name,CAST(${TABLE}.businnes_unit_id as STRING)) ;;
+  sql: COALESCE(${TABLE}.business_unit_name,'Unknown')) ;;
 }
  }

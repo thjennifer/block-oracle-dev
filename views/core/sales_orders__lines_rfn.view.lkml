@@ -202,16 +202,17 @@ view: +sales_orders__lines {
   }
 
   dimension_group: creation {
-    hidden: yes
-    description: "Creation date of order line."
-    sql: ${TABLE}.CREATION_DATE ;;
+    hidden: no
+    timeframes: [raw, date, time]
+    description: "Creation date of record in Oracle source table."
   }
 
   dimension_group: last_update {
-    hidden: yes
-    description: "Last update date of order line."
-    sql: ${TABLE}.LAST_UPDATE_DATE ;;
+    hidden: no
+    timeframes: [raw, date, time]
+    description: "Last update date of record in Oracle source table."
   }
+
 
 #} end dates
 
@@ -220,17 +221,14 @@ view: +sales_orders__lines {
 #{
 
 
-  dimension: status_code {
+  dimension: line_status {
     hidden: no
     group_label: "Line Status"
-    label: "Line Status"
     full_suggestions: yes
   }
 
-#????? only 1 value of 'ORDER' -- is this needed
-  dimension: category_code {
+  dimension: line_category_code {
     hidden: no
-    label: "Line Category Code"
   }
 
   dimension: is_backlog {
@@ -426,18 +424,10 @@ view: +sales_orders__lines {
 #} end item quantities and weights
 
 #########################################################
-# Item ordered/shipped amounts, prices and cost
+# Item prices and cost
 #{
 
-  dimension: ordered_amount {
-    hidden: no
-    value_format_name: decimal_2
-  }
 
-  dimension: shipped_amount {
-    hidden: no
-    value_format_name: decimal_2
-  }
 
   dimension: unit_cost {
     hidden: no
@@ -454,9 +444,75 @@ view: +sales_orders__lines {
     value_format_name: decimal_2
   }
 
-#} end item ordered/shipped amounts, prices and cost
+#} end item prices and cost
 
+#########################################################
+# Amounts as dimensions including Currency Conversions
+#{
+  dimension: ordered_amount {
+    hidden: no
+    group_label: "Amounts"
+    label: "Ordered Amount (Source Currency)"
+    value_format_name: decimal_2
+  }
 
+  dimension: shipped_amount {
+    hidden: no
+    group_label: "Amounts"
+    label: "Shipped Amount (Source Currency)"
+    value_format_name: decimal_2
+  }
+
+  dimension: currency_source {
+    hidden: no
+    type: string
+    group_label: "Amounts"
+    label: "Currency (Source)"
+    description: "Currency of the order header."
+    sql: ${sales_orders.currency_code} ;;
+  }
+
+  dimension: currency_target {
+    hidden: no
+    type: string
+    group_label: "Amounts"
+    label: "Currency (Target)"
+    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
+  }
+
+  dimension: currency_conversion_rate {
+    hidden: no
+    group_label: "Amounts"
+    sql: IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    value_format_name: decimal_4
+  }
+
+  dimension: is_incomplete_conversion {
+    hidden: no
+    type: yesno
+    group_label: "Amounts"
+    sql: ${sales_orders.currency_code} <> {% parameter otc_common_parameters_xvw.parameter_target_currency %} AND ${currency_conversion_sdt.from_currency} is NULL ;;
+  }
+
+  dimension: ordered_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Ordered Amount ({{currency}}){%else%}Ordered Amount (Target Currency){%endif%}"
+    sql: ${ordered_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: shipped_amount_target_currency {
+    hidden: yes
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Shipped Amount ({{currency}}){%else%}Shipped Amount (Target Currency){%endif%}"
+    sql: ${shipped_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    value_format_name: decimal_2
+  }
+
+#} end amount dimensions
 
   measure: count_order_lines {
     hidden: no
@@ -534,55 +590,10 @@ view: +sales_orders__lines {
   }
 
 #########################################################
-# Target Currency dimensions and measures
+# Amounts in Target Currency measures
 #{
 
-  dimension: currency_source {
-    hidden: no
-    type: string
-    group_label: "Currency Conversion"
-    label: "Currency (Source)"
-    description: "Currency of the order header."
-    sql: ${sales_orders.currency_code} ;;
-  }
 
-  dimension: currency_target {
-    hidden: no
-    type: string
-    group_label: "Currency Conversion"
-    label: "Currency (Target)"
-    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
-  }
-
-  dimension: currency_conversion_rate {
-    hidden: no
-    group_label: "Currency Conversion"
-    sql: IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
-    value_format_name: decimal_4
-  }
-
-  dimension: is_incomplete_conversion {
-    hidden: no
-    type: yesno
-    group_label: "Currency Conversion"
-    sql: ${sales_orders.currency_code} <> {% parameter otc_common_parameters_xvw.parameter_target_currency %} AND ${currency_conversion_sdt.from_currency} is NULL ;;
-  }
-
-  dimension: ordered_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Currency Conversion"
-    sql: ${ordered_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
-    value_format_name: decimal_2
-  }
-
-  dimension: shipped_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Currency Conversion"
-    sql: ${shipped_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
-    value_format_name: decimal_2
-  }
 
   measure: total_sales_amount_target_currency {
     hidden: no
@@ -590,6 +601,7 @@ view: +sales_orders__lines {
     #label defined in sales_orders__lines_common_fields_ext
     #description defined in sales_orders__lines_common_fields_ext
     sql: ${ordered_amount_target_currency} ;;
+    filters: [sales_orders.order_category_code: "-RETURN"]
     # value_format defined in sales_orders__lines_common_fields_ext
   }
 
@@ -598,7 +610,7 @@ view: +sales_orders__lines {
     type: number
     #label defined in sales_orders__lines_common_fields_ext
     #description defined in sales_orders__lines_common_fields_ext
-    sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_order_count})  ;;
+    sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_sales_order_count})  ;;
     # value_format defined in sales_orders__lines_common_fields_ext
   }
 
@@ -607,7 +619,7 @@ view: +sales_orders__lines {
     type: sum
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Fulfilled Amount ({{currency}}){%else%}Total Fulfilled Amount (Target Currency){%endif%}"
     sql: ${ordered_amount_target_currency} ;;
-    filters: [sales_orders__lines.is_fulfilled: "Yes"]
+    filters: [sales_orders__lines.is_fulfilled: "Yes", sales_orders.order_category_code: "-RETURN"]
     value_format_name: format_large_numbers_d1
   }
 
@@ -616,13 +628,14 @@ view: +sales_orders__lines {
     type: sum
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Shipped Amount ({{currency}}){%else%}Total Shipped Amount (Target Currency){%endif%}"
     sql: ${shipped_amount_target_currency} ;;
+    filters: [sales_orders.order_category_code: "-RETURN"]
     value_format_name: format_large_numbers_d1
   }
 
 #} end target currency dimensions and measures
 
   set: order_line_details {
-    fields: [sales_orders.header_id, sales_orders.order_number, sales_orders.ordered_date, line_id, line_number, status_code, inventory_item_id, sales_orders__lines__item_descriptions.item_description, ordered_quantity, ordered_amount]
+    fields: [sales_orders.header_id, sales_orders.order_number, sales_orders.ordered_date, line_id, line_number, line_status, inventory_item_id, sales_orders__lines__item_descriptions.item_description, ordered_quantity, ordered_amount]
   }
 
 
@@ -654,6 +667,20 @@ view: +sales_orders__lines {
     type: yesno
     view_label: "TEST STUFF"
     sql: ${unit_cost} is null ;;
+  }
+
+  dimension: is_negative_quantity {
+    hidden: no
+    type: yesno
+    view_label: "TEST STUFF"
+    sql: ${ordered_quantity} < 0 ;;
+  }
+
+  dimension: is_negative_amount {
+    hidden: no
+    type: yesno
+    view_label: "TEST STUFF"
+    sql: ${ordered_amount} < 0 ;;
   }
 
   dimension: is_null_unit_list_price {

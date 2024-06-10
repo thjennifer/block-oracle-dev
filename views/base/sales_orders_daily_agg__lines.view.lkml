@@ -32,6 +32,10 @@ view: sales_orders_daily_agg__lines {
     type: string
     sql: ITEM_ORGANIZATION_NAME ;;
   }
+  dimension: line_category_code {
+    type: string
+    sql: LINE_CATEGORY_CODE ;;
+  }
   dimension: num_fulfilled_order_lines {
     type: number
     sql: NUM_FULFILLED_ORDER_LINES ;;

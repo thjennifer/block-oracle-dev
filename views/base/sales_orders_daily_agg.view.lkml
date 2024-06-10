@@ -80,6 +80,10 @@ view: sales_orders_daily_agg {
     type: number
     sql: ${TABLE}.NUM_ORDERS_WITH_RETURNS ;;
   }
+  dimension: order_category_code {
+    type: string
+    sql: ${TABLE}.ORDER_CATEGORY_CODE ;;
+  }
   dimension: order_source_id {
     type: number
     sql: ${TABLE}.ORDER_SOURCE_ID ;;
@@ -178,6 +182,10 @@ view: sales_orders_daily_agg {
 #   dimension: item_organization_name {
 #     type: string
 #     sql: ITEM_ORGANIZATION_NAME ;;
+#   }
+#   dimension: line_category_code {
+#     type: string
+#     sql: LINE_CATEGORY_CODE ;;
 #   }
 #   dimension: num_fulfilled_order_lines {
 #     type: number

@@ -41,7 +41,7 @@ view: apply_currency_conversion_to_sales_xvw {
     hidden: no
     type: number
     label: "{% if _field._is_selected %}@{derive_currency_label}Average Sales Amount per Order ({{currency}}){%else%}Average Sales Amount per Order (Target Currency){%endif%}"
-    sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_order_count})  ;;
+    sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_sales_order_count})  ;;
     sql_distinct_key: ${sales_orders__lines.key};;
     value_format_name: decimal_2
   }

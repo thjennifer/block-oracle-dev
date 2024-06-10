@@ -84,6 +84,10 @@ view: sales_orders {
     datatype: date
     sql: ${TABLE}.FULFILLMENT_DATE ;;
   }
+  dimension: has_backorder {
+    type: yesno
+    sql: ${TABLE}.HAS_BACKORDER ;;
+  }
   dimension: has_cancelled {
     type: yesno
     sql: ${TABLE}.HAS_CANCELLED ;;
@@ -103,10 +107,6 @@ view: sales_orders {
   dimension: header_status {
     type: string
     sql: ${TABLE}.HEADER_STATUS ;;
-  }
-  dimension: has_backorder {
-    type: yesno
-    sql: ${TABLE}.HAS_BACKORDER ;;
   }
   dimension: is_booked {
     type: yesno
@@ -160,6 +160,10 @@ view: sales_orders {
   dimension: num_lines_fulfilled_by_request_date {
     type: number
     sql: ${TABLE}.NUM_LINES_FULFILLED_BY_REQUEST_DATE ;;
+  }
+  dimension: order_category_code {
+    type: string
+    sql: ${TABLE}.ORDER_CATEGORY_CODE ;;
   }
   dimension: order_number {
     type: number
@@ -261,7 +265,7 @@ view: sales_orders {
 }
 
 # view: sales_orders__lines {
-#   # drill_fields: [return_line_ids]
+#   drill_fields: [return_line_ids]
 
 #   dimension: return_line_ids {
 #     primary_key: yes
@@ -282,10 +286,6 @@ view: sales_orders {
 #   dimension: cancelled_quantity {
 #     type: number
 #     sql: CANCELLED_QUANTITY ;;
-#   }
-#   dimension: category_code {
-#     type: string
-#     sql: CATEGORY_CODE ;;
 #   }
 #   dimension_group: creation {
 #     type: time
@@ -392,6 +392,10 @@ view: sales_orders {
 #     timeframes: [raw, time, date, week, month, quarter, year]
 #     sql: LAST_UPDATE_DATE ;;
 #   }
+#   dimension: line_category_code {
+#     type: string
+#     sql: LINE_CATEGORY_CODE ;;
+#   }
 #   dimension: line_id {
 #     type: number
 #     sql: LINE_ID ;;
@@ -399,6 +403,10 @@ view: sales_orders {
 #   dimension: line_number {
 #     type: number
 #     sql: LINE_NUMBER ;;
+#   }
+#   dimension: line_status {
+#     type: string
+#     sql: LINE_STATUS ;;
 #   }
 #   dimension: ordered_amount {
 #     type: number
@@ -453,10 +461,6 @@ view: sales_orders {
 #   dimension: shipped_weight {
 #     type: number
 #     sql: SHIPPED_WEIGHT ;;
-#   }
-#   dimension: status_code {
-#     type: string
-#     sql: STATUS_CODE ;;
 #   }
 #   dimension: unit_cost {
 #     type: number

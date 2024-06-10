@@ -1,5 +1,5 @@
 view: sales_orders__lines {
-  # drill_fields: [return_line_ids]
+  drill_fields: [return_line_ids]
 
   dimension: return_line_ids {
     primary_key: yes
@@ -20,10 +20,6 @@ view: sales_orders__lines {
   dimension: cancelled_quantity {
     type: number
     sql: CANCELLED_QUANTITY ;;
-  }
-  dimension: category_code {
-    type: string
-    sql: CATEGORY_CODE ;;
   }
   dimension_group: creation {
     type: time
@@ -130,6 +126,10 @@ view: sales_orders__lines {
     timeframes: [raw, time, date, week, month, quarter, year]
     sql: LAST_UPDATE_DATE ;;
   }
+  dimension: line_category_code {
+    type: string
+    sql: LINE_CATEGORY_CODE ;;
+  }
   dimension: line_id {
     type: number
     sql: LINE_ID ;;
@@ -137,6 +137,10 @@ view: sales_orders__lines {
   dimension: line_number {
     type: number
     sql: LINE_NUMBER ;;
+  }
+  dimension: line_status {
+    type: string
+    sql: LINE_STATUS ;;
   }
   dimension: ordered_amount {
     type: number
@@ -191,10 +195,6 @@ view: sales_orders__lines {
   dimension: shipped_weight {
     type: number
     sql: SHIPPED_WEIGHT ;;
-  }
-  dimension: status_code {
-    type: string
-    sql: STATUS_CODE ;;
   }
   dimension: unit_cost {
     type: number

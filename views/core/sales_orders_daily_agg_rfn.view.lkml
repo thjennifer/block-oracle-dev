@@ -51,7 +51,8 @@ view: +sales_orders_daily_agg {
   dimension: key {
     type: string
     primary_key: yes
-    sql: CONCAT(${ordered_date_key},${business_unit_id},${order_source_id},${sold_to_site_use_id},${bill_to_site_use_id},${ship_to_site_use_id}) ;;
+    sql: CONCAT(${ordered_date_key},${business_unit_id},${order_source_id},${order_category_code}
+                ,${sold_to_site_use_id},${bill_to_site_use_id},${ship_to_site_use_id}) ;;
   }
 
   dimension: ordered_date_key {
@@ -63,22 +64,11 @@ view: +sales_orders_daily_agg {
 
   dimension_group: ordered {hidden: no}
 
-#########################################################
-# Parameters
-# parameter category set name is required to determine which set of categories to show.
-#{
+  dimension: order_category_code {
+    hidden: no
+    sql: UPPER(${TABLE}.ORDER_CATEGORY_CODE);;
+    }
 
-  # parameter: parameter_category_set_name {
-  #   hidden: no
-  #   type: string
-  #   view_label: "🔍 Filters & 🛠 Tools"
-  #   label: "Category Set Name"
-  #   suggest_explore: item_md
-  #   suggest_dimension: item_md__item_categories.category_set_name
-  #   default_value: "Purchasing"
-  # }
-
-#} end parameters
 
 #########################################################
 # Business Unit and Order Source Dimensions
@@ -124,95 +114,121 @@ view: +sales_orders_daily_agg {
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders}{%endif%} ;;
   }
 
-  measure: has_backorder_order_count {
+  measure: sales_order_count {
+    hidden: no
+    type: sum
+    #label defined in sales_orders_common_measures_ext
+    #description defined in sales_orders_common_measures_ext
+    sql: @{is_agg_category_in_query}NULL{%else%}${num_orders}{%endif%} ;;
+    filters: [order_category_code: "-RETURN"]
+  }
+
+  measure: return_order_count {
+    hidden: no
+    type: sum
+    #label defined in sales_orders_common_measures_ext
+    #description defined in sales_orders_common_measures_ext
+    sql: @{is_agg_category_in_query}NULL{%else%}${num_orders}{%endif%} ;;
+    filters: [order_category_code: "RETURN"]
+  }
+
+  measure: has_backorder_sales_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_backordered_orders}{%endif%};;
+    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: blocked_order_count {
+  measure: blocked_sales_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_blocked_orders}{%endif%};;
+    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: cancelled_order_count {
+  measure: cancelled_sales_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_cancelled_orders}{%endif%};;
+    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: fillable_order_count {
+  measure: fillable_sales_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_fillable_orders}{%endif%} ;;
+    filters: [order_category_code: "-RETURN"]
   }
 
 
-  measure: fulfilled_order_count {
+  measure: fulfilled_sales_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_fulfilled_orders}{%endif%} ;;
+    filters: [order_category_code: "-RETURN"]
   }
 
-########## REVIEW DATA QUALITY num_orders_fulfilled_by_request_date needs to add logic for num_lines > 0
-  measure: fulfilled_by_request_date_order_count {
+  measure: fulfilled_by_request_date_sales_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_fulfilled_by_request_date}{%endif%} ;;
+    filters: [order_category_code: "-RETURN"]
   }
 
-########## REVIEW DATA QUALITY num_orders_fulfilled_by_request_date needs to add logic for num_lines > 0
-  measure: fulfilled_by_promise_date_order_count {
+  measure: fulfilled_by_promise_date_sales_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_fulfilled_by_promise_date}{%endif%} ;;
+    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: has_return_order_count {
+  measure: has_return_sales_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_with_returns}{%endif%};;
+    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: no_holds_order_count {
+  measure: no_holds_sales_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_with_no_holds}{%endif%} ;;
+    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: non_cancelled_order_count {
+  measure: non_cancelled_sales_order_count {
     hidden: no
     type: number
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
-    sql: ${order_count} - ${cancelled_order_count};;
+    sql: ${sales_order_count} - ${cancelled_sales_order_count};;
   }
 
-  measure: open_order_count {
+  measure: open_sales_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_measures_ext
     #description defined in sales_orders_common_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_open_orders}{%endif%} ;;
+    filters: [order_category_code: "-RETURN"]
   }
 
 
