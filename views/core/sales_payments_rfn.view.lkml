@@ -104,13 +104,13 @@ view: +sales_payments {
 
 
   dimension_group: creation {
-    hidden: yes
+    hidden: no
     timeframes: [raw, date, time]
     description: "Creation date of record in Oracle source table."
   }
 
   dimension_group: last_update {
-    hidden: yes
+    hidden: no
     timeframes: [raw, date, time]
     description: "Last update date of record in Oracle source table."
   }
@@ -303,8 +303,8 @@ view: +sales_payments {
     hidden: no
     type: sum
     label: "{% if _field._is_selected %}@{derive_currency_label}Amount Applied ({{currency}}){%else%}Amount Applied (Target Currency){%endif%}"
-    sql: ${amount_applied_target_currency} * -1 ;;
-    filters: [payment_class_code: "PMT,CM"]
+    sql: ${amount_applied_target_currency}  ;;
+    # filters: [payment_class_code: "PMT,CM"]
     # sql: ${amount_applied_target_currency} ;;
     # filters: [payment_class_code: "INV"]
     value_format_name: decimal_2
@@ -332,7 +332,7 @@ view: +sales_payments {
     type: sum
     label: "{% if _field._is_selected %}@{derive_currency_label}Amount Due Original ({{currency}}){%else%}Amount Due Original (Target Currency){%endif%}"
     sql: ${amount_due_original_target_currency} ;;
-    filters: [payment_class_code: "INV,CM"]
+    # filters: [payment_class_code: "INV,CM"]
     value_format_name: decimal_2
   }
 

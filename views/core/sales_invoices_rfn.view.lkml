@@ -71,6 +71,28 @@ view: +sales_invoices {
   }
 
 #########################################################
+# Dates
+#{
+
+  dimension_group: invoice {
+    timeframes: [raw, date, week, month, quarter, year]
+  }
+
+  dimension_group: creation {
+    hidden: no
+    timeframes: [raw, date, time]
+    description: "Creation date of record in Oracle source table."
+  }
+
+  dimension_group: last_update {
+    hidden: no
+    timeframes: [raw, date, time]
+    description: "Last update date of record in Oracle source table."
+  }
+
+#} end dates
+
+#########################################################
 # Invoice Total Amounts as Dimensions and with Currency Conversion
 #
 #{
@@ -129,30 +151,7 @@ view: +sales_invoices {
 
 #} end invoice amounts as dimensions
 
-#########################################################
-# Dates
-#
-#{
 
-  dimension_group: invoice {
-    timeframes: [raw, date, week, month, quarter, year]
-  }
-
-  dimension_group: creation {
-    hidden: no
-    timeframes: [raw, date, time]
-    description: "Creation date of record in Oracle source table."
-  }
-
-  dimension_group: last_update {
-    hidden: no
-    timeframes: [raw, date, time]
-    description: "Last update date of record in Oracle source table."
-  }
-
-
-
-#} end dates
 
 #########################################################
 # Measures

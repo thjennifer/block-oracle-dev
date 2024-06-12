@@ -32,6 +32,7 @@ view: +sales_invoices__lines {
   dimension: order_line_id {
     primary_key: no
     group_label: "Order Details"
+    value_format_name: id
     }
 
   dimension: order_source_id {
@@ -346,6 +347,7 @@ dimension_group: last_update {
     type: sum
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Net Revenue Amount ({{currency}}){%else%}Total Net Revenue Amount (Target Currency){%endif%}"
     sql: ${revenue_amount_target_currency} ;;
+    value_format_name: decimal_0
   }
 
   measure: total_gross_revenue_amount_target_currency {
@@ -353,6 +355,7 @@ dimension_group: last_update {
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Gross Revenue Amount ({{currency}}){%else%}Total Gross Revenue Amount (Target Currency){%endif%}"
     sql: ${gross_revenue_amount_target_currency} ;;
     drill_fields: [invoice_line_details*]
+    value_format_name: decimal_0
   }
 
   measure: total_tax_amount_target_currency {
@@ -360,6 +363,7 @@ dimension_group: last_update {
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Tax Amount ({{currency}}){%else%}Total Tax Amount (Target Currency){%endif%}"
     sql: ${tax_amount_target_currency} ;;
     drill_fields: [invoice_line_details*]
+    value_format_name: decimal_0
   }
 
   measure: total_discount_amount_target_currency {
@@ -367,6 +371,12 @@ dimension_group: last_update {
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Tax Amount ({{currency}}){%else%}Total Tax Amount (Target Currency){%endif%}"
     sql: ${discount_amount_target_currency} ;;
     drill_fields: [invoice_line_details*]
+    value_format_name: decimal_0
+  }
+
+  measure: total_invoiced_quantity {
+    type: sum
+    sql: ${invoiced_quantity} ;;
   }
 
 
