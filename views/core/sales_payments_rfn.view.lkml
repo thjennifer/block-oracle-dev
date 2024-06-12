@@ -2,16 +2,22 @@ include: "/views/base/sales_payments.view"
 
 view: +sales_payments {
 
-  sql_table_name: {% assign p = otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
-  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
-  {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesPayments` ;;
+  # sql_table_name: {% assign p = otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
+  # {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
+  # {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesPayments` ;;
+
+
 
 
   dimension: payment_schedule_id {
     primary_key: yes
   }
 
-  dimension: cash_receipt_id {hidden: no}
+  dimension: cash_receipt_id {
+    hidden: no
+    label: "Receipt ID"
+  }
+
   dimension: invoice_id {hidden: no}
   dimension: invoice_number {hidden: no}
 
@@ -54,6 +60,7 @@ view: +sales_payments {
 #########################################################
 # Dates
 #{
+  dimension_group: payment {}
 
   dimension_group: ledger {}
 
@@ -90,18 +97,20 @@ view: +sales_payments {
 
   dimension: fiscal_period_name {
     group_label: "Ledger Date"
+    description: "Name of fiscal period. For example 'Jan-2024'."
   }
+
   dimension: fiscal_period_set_name {
     group_label: "Ledger Date"
   }
+
   dimension: fiscal_period_type {
     group_label: "Ledger Date"
   }
 
   dimension_group: discount {}
-  dimension_group: due {}
-  dimension_group: payment {}
 
+  dimension_group: due {}
 
   dimension_group: creation {
     hidden: no
@@ -287,26 +296,24 @@ view: +sales_payments {
   measure: payment_count {
     hidden: no
     type: count
+    drill_fields: [payments_details*]
   }
 
-#####REVIEW need to confirm the payment_class_code filters needed if any
+
   measure: total_amount_adjusted_target_currency {
     hidden: no
     type: sum
     label: "{% if _field._is_selected %}@{derive_currency_label}Amount Adjusted ({{currency}}){%else%}Amount Adjusted (Target Currency){%endif%}"
     sql: ${amount_adjusted_target_currency} ;;
-    # filters: [payment_class_code: "INV,CM"]
     value_format_name: decimal_2
   }
 
+#####REVIEW need to confirm the payment_class_code filters needed if any
   measure: total_amount_applied_target_currency {
     hidden: no
     type: sum
     label: "{% if _field._is_selected %}@{derive_currency_label}Amount Applied ({{currency}}){%else%}Amount Applied (Target Currency){%endif%}"
     sql: ${amount_applied_target_currency}  ;;
-    # filters: [payment_class_code: "PMT,CM"]
-    # sql: ${amount_applied_target_currency} ;;
-    # filters: [payment_class_code: "INV"]
     value_format_name: decimal_2
   }
 
@@ -363,6 +370,9 @@ view: +sales_payments {
 
 
 
+set: payments_details {
+  fields: [payment_schedule_id,invoice_number,bill_to_customer_name,payment_date,due_date,total_amount_due_original_target_currency,total_amount_due_remaining_target_currency]
+}
 
 
 
@@ -440,6 +450,18 @@ view: +sales_payments {
     view_label: "TEST STUFF"
     type: number
     sql: LENGTH(${invoice_number}) ;;
+  }
+
+  dimension: is_late_payment {
+    hidden: no
+    view_label: "TEST STUFF"
+    sql: ${due_raw} < ${payment_date} ;;
+  }
+
+  dimension: test_target_date  {
+    hidden: no
+    view_label: "TEST STUFF"
+    sql: @{default_target_date}'{{td}}' ;;
   }
 
 

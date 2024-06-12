@@ -4,7 +4,7 @@
 #
 ######################
 
-- dashboard: otc_template
+- dashboard: otc_template_test
   extension: required
 
   filters:
@@ -32,7 +32,7 @@
       type: checkboxes
       display: popover
     explore: sales_orders
-    # listens_to_filters: [Test or Demo]
+    listens_to_filters: [Test or Demo]
     field: sales_orders.business_unit_name
 
   - name: Country
@@ -71,7 +71,7 @@
       type: checkboxes
       display: popover
     explore: sales_orders
-    # listens_to_filters: [Test or Demo]
+    listens_to_filters: [Test or Demo]
     field: sales_orders.order_source_name
 
   - name: Item Category
@@ -85,7 +85,7 @@
       display: popover
     explore: sales_orders
     field: sales_orders__lines.category_description
-    # listens_to_filters: [Test or Demo]
+    listens_to_filters: [Test or Demo]
 
   - name: Target Currency
     title: Target Currency
@@ -99,21 +99,21 @@
       display: inline
       options: []
     explore: currency_rate_md
-    # listens_to_filters: [Test or Demo]
+    listens_to_filters: [Test or Demo]
     field: currency_rate_md.to_currency
 
-  # - name: Test or Demo
-  #   title: Test or Demo Data
-  #   type: field_filter
-  #   default_value: "demo"
-  #   allow_multiple_values: false
-  #   required: false
-  #   ui_config:
-  #     type: button_toggles
-  #     display: inline
-  #   explore: sales_orders
-  #   listens_to_filters: [Test or Demo]
-  #   field: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+  - name: Test or Demo
+    title: Test or Demo Data
+    type: field_filter
+    default_value: "demo"
+    allow_multiple_values: false
+    required: false
+    ui_config:
+      type: button_toggles
+      display: inline
+    explore: sales_orders
+
+    field: otc_common_parameters_xvw.parameter_use_demo_or_test_data
 
 
   elements:
@@ -135,7 +135,7 @@
         Order Source: otc_dashboard_navigation_ext.filter5
         Item Category: otc_dashboard_navigation_ext.filter6
         Target Currency: otc_dashboard_navigation_ext.filter7
-        # Test or Demo: otc_dashboard_navigation_ext.filter8
+        Test or Demo: otc_dashboard_navigation_ext.filter8
       row: 0
       col: 0
       width: 24

@@ -2,13 +2,11 @@ include: "/views/base/sales_cash_receipts.view"
 
 view: +sales_cash_receipts {
 
-  sql_table_name: {% assign p = otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
-                  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
-                  {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesCashReceipts` ;;
 
   dimension: cash_receipt_id {
     primary_key: yes
     label: "Receipt ID"
+    value_format_name: id
   }
 
   dimension: bill_to_site_use_id {
@@ -33,6 +31,14 @@ view: +sales_cash_receipts {
 
   dimension: business_unit_name {
     sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CONCAT("Business Unit ID: ",${business_unit_id})) ;;
+  }
+
+  dimension: invoice_id {
+    value_format_name: id
+  }
+
+  dimension: ledger_id {
+    value_format_name: id
   }
 
 #########################################################

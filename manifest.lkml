@@ -9,7 +9,7 @@ constant: GCP_PROJECT_ID {
 }
 
 constant: REPORTING_DATASET {
-  value: "CORTEX_ORACLE_EBS_REPORTING_VISION"
+  value: "CORTEX_ORACLE_EBS_REPORTING"
   export: override_required
 }
 
@@ -72,16 +72,17 @@ constant: is_agg_category_in_query {
 
 
 constant: get_category_set {
-  value: "{% assign d = otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
+  value: "{% assign d = otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value %}
           {% if d == 'test' %}{% assign category_set = 'Purchasing' %}{%elsif d == 'demo' %}
           {% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
-          {% else %} {% assign category_set = d %}
+          {% else %} {% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
           {% endif %}"
 }
 
 constant: default_target_date {
-  value: "{% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'Yes' %}
-               {% if otc_common_parameters.parameter_use_test_or_demo_data._parameter_value == 'demo'
+  value: "{% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+               {% if otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value == 'demo' %}
                       {% assign td = '2024-04-01' %} {%else%} {% assign td = '2011-01-01' %}
+               {% endif %}
           {%else%}{% assign td = now | date: '%Y-%m-%d' %}{%endif%}"
 }

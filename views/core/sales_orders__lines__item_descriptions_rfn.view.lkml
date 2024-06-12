@@ -12,13 +12,4 @@ view: +sales_orders__lines__item_descriptions {
   }
 
 
-
-  measure: count_distinct_description {
-    hidden: no
-    type: count_distinct
-    view_label: "TEST STUFF"
-    sql: ${item_description} ;;
-  }
-
-
    }

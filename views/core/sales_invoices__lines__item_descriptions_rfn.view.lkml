@@ -15,12 +15,6 @@ view: +sales_invoices__lines__item_descriptions {
           {%endif%};;
   }
 
-  measure: count_distinct_description {
-    hidden: no
-    type: count_distinct
-    view_label: "TEST STUFF"
-    sql: ${item_description} ;;
-  }
 
 
    }

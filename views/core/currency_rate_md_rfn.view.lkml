@@ -4,11 +4,6 @@ view: +currency_rate_md {
 
   label: "Currency Rate MD"
 
-  sql_table_name: {% assign p = otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
-                  {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
-                  {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.CurrencyRateMD` ;;
-
-
   dimension: key {
     type: string
     primary_key: yes

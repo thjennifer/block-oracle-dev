@@ -1,5 +1,5 @@
 view: sales_cash_receipts {
-  sql_table_name: `kittycorn-dev-incorta.CORTEX_ORACLE_EBS_REPORTING.SalesCashReceipts` ;;
+  sql_table_name: `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesCashReceipts` ;;
 
   dimension: amount {
     type: number
