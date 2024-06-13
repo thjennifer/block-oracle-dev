@@ -4,7 +4,7 @@
 #
 ######################
 
-- dashboard: otc_template
+- dashboard: otc_accounts_receivable_template_test
   extension: required
 
   filters:
@@ -32,10 +32,11 @@
       type: checkboxes
       display: popover
     explore: sales_orders
+    listens_to_filters: [Test or Demo]
     field: sales_orders.business_unit_name
 
   - name: Country
-    title: Sold to Country
+    title: Customer Country
     type: field_filter
     default_value: ''
     allow_multiple_values: true
@@ -44,11 +45,11 @@
       type: checkboxes
       display: popover
     explore: sales_orders
-    listens_to_filters: [Business Unit]
+    listens_to_filters: [Business Unit, Test or Demo]
     field: sales_orders.bill_to_customer_country
 
   - name: Customer
-    title: Sold to Customer
+    title: Customer Name
     type: field_filter
     default_value: ''
     allow_multiple_values: true
@@ -57,33 +58,8 @@
       type: advanced
       display: popover
     explore: sales_orders
-    listens_to_filters: [Country]
+    listens_to_filters: [Country, Test or Demo]
     field: sales_orders.bill_to_customer_name
-
-  - name: Order Source
-    title: Order Source
-    type: field_filter
-    default_value: ''
-    allow_multiple_values: true
-    required: false
-    ui_config:
-      type: checkboxes
-      display: popover
-    explore: sales_orders
-    field: sales_orders.order_source_name
-
-  - name: Item Category
-    title: Item Category
-    type: field_filter
-    default_value: ''
-    allow_multiple_values: true
-    required: false
-    ui_config:
-      type: checkboxes
-      display: popover
-    explore: sales_orders
-    field: sales_orders__lines.category_description
-
 
   - name: Target Currency
     title: Target Currency
@@ -97,8 +73,21 @@
       display: inline
       options: []
     explore: currency_rate_md
+    listens_to_filters: [Test or Demo]
     field: currency_rate_md.to_currency
 
+  - name: Test or Demo
+    title: Test or Demo Data
+    type: field_filter
+    default_value: "demo"
+    allow_multiple_values: false
+    required: false
+    ui_config:
+      type: button_toggles
+      display: inline
+    explore: sales_orders
+    listens_to_filters: [Test or Demo]
+    field: otc_common_parameters_xvw.parameter_use_demo_or_test_data
 
 
   elements:
@@ -117,9 +106,8 @@
         Business Unit: otc_dashboard_navigation_ext.filter2
         Country: otc_dashboard_navigation_ext.filter3
         Customer: otc_dashboard_navigation_ext.filter4
-        Order Source: otc_dashboard_navigation_ext.filter5
-        Item Category: otc_dashboard_navigation_ext.filter6
         Target Currency: otc_dashboard_navigation_ext.filter7
+        Test or Demo: otc_dashboard_navigation_ext.filter8
       row: 0
       col: 0
       width: 24

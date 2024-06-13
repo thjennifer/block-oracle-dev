@@ -8,8 +8,8 @@
   extension: required
 
   filters:
-  - name: Order Date
-    title: Order Date
+  - name: Date
+    title: Date
     type: date_filter
     default_value:  ""
     # default_value: "2022/03/02 to 2022/03/03"
@@ -128,7 +128,7 @@
       show_single_value_title: false
       show_comparison: false
       listen:
-        Order Date: otc_dashboard_navigation_ext.filter1
+        Date: otc_dashboard_navigation_ext.filter1
         Business Unit: otc_dashboard_navigation_ext.filter2
         Country: otc_dashboard_navigation_ext.filter3
         Customer: otc_dashboard_navigation_ext.filter4

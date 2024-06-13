@@ -8,6 +8,10 @@
   # if using navigation_focus_page parameter for active dashboard update navigation tile to use the correct filter
   extends: otc_template_test
 
+  filters:
+    - name: Date
+      title: Ordered Date
+
   elements:
 
   - title: navigation
@@ -22,7 +26,7 @@
     fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
@@ -46,7 +50,7 @@
     fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     hidden_fields: [sales_orders.order_count,sales_orders.no_holds_sales_order_percent]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
@@ -69,7 +73,7 @@
     fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     hidden_fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
@@ -92,7 +96,7 @@
     filters:
       sales_orders.is_blocked: 'Yes'
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
@@ -161,7 +165,7 @@
     show_totals_labels: false
     title_hidden: true
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name

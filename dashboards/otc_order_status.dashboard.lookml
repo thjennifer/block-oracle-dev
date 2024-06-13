@@ -8,6 +8,10 @@
   # if using navigation_focus_page parameter for active dashboard update navigation tile to use the correct filter
   extends: otc_template
 
+  filters:
+  - name: Date
+    title: Ordered Date
+
   elements:
 
   - title: navigation
@@ -22,14 +26,14 @@
     fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+
     note_state: collapsed
     note_display: hover
     note_text: "The number of sales orders."
@@ -46,13 +50,13 @@
     fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     hidden_fields: [sales_orders.order_count,sales_orders.no_holds_sales_order_percent]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders with a product return."
@@ -69,13 +73,13 @@
     fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     hidden_fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders processed without any holds."
@@ -92,14 +96,14 @@
     filters:
       sales_orders.is_blocked: 'Yes'
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+
     note_state: collapsed
     note_display: hover
     note_text: "The number of sales orders blocked (has hold or backorder)."
@@ -161,13 +165,13 @@
     show_totals_labels: false
     title_hidden: true
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+
     row: 2
     col: 4
     width: 10

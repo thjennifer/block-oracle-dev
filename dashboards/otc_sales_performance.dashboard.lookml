@@ -10,7 +10,10 @@
   extends: otc_template
 
   filters:
-  - name: Product Level to Display
+  - name: Date
+    title: Ordered Date
+
+  - name: Product Level
     title: Product Level to Display
     type: field_filter
     default_value: "Category"
@@ -37,7 +40,7 @@
     # field: item_md__item_descriptions.language
     explore: language_codes_sdt
     field: language_codes_sdt.language_code
-    # listens_to_filters: [Test or Demo]
+
 
 
   elements:
@@ -80,15 +83,14 @@
     y_axis_zoom: true
 
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
-      Product Level to Display: sales_orders__lines.parameter_display_product_level
+      Product Level: sales_orders__lines.parameter_display_product_level
       Language: otc_common_parameters_xvw.parameter_language
 
     # note_state: expanded
@@ -134,15 +136,14 @@
     x_axis_zoom: true
     y_axis_zoom: true
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
-      Product Level to Display: sales_orders__lines.parameter_display_product_level
+      Product Level: sales_orders__lines.parameter_display_product_level
       Language: otc_common_parameters_xvw.parameter_language
     # note_state: expanded
     note_display: hover
@@ -184,14 +185,13 @@
     x_axis_zoom: true
     y_axis_zoom: true
     listen:
-      Order Date: sales_orders_daily_agg.ordered_date
+      Date: sales_orders_daily_agg.ordered_date
       Country: sales_orders_daily_agg.bill_to_customer_country
       Customer: sales_orders_daily_agg.bill_to_customer_name
       Business Unit: sales_orders_daily_agg.business_unit_name
       Order Source: sales_orders_daily_agg.order_source_name
       Item Category: sales_orders_daily_agg__lines.category_description
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
 
     row: 20
     col: 0
@@ -230,14 +230,14 @@
     x_axis_zoom: true
     y_axis_zoom: true
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+
     # note_state: expanded
     note_display: hover
     note_text: |-
@@ -308,14 +308,13 @@
     hidden_pivots: {}
     title_hidden: true
     listen:
-      Order Date: sales_orders_daily_agg.ordered_date
+      Date: sales_orders_daily_agg.ordered_date
       Country: sales_orders_daily_agg.bill_to_customer_country
       Customer: sales_orders_daily_agg.bill_to_customer_name
       Business Unit: sales_orders_daily_agg.business_unit_name
       Order Source: sales_orders_daily_agg.order_source_name
       Item Category: sales_orders_daily_agg__lines.category_description
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 21
     col: 0
     width: 10

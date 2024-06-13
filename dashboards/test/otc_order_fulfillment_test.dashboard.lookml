@@ -9,6 +9,9 @@
   extends: otc_template_test
 
   filters:
+  - name: Date
+    title: Ordered Date
+
   - name: Language
     title: Language of Item Description
     type: field_filter
@@ -41,7 +44,7 @@
     fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     hidden_fields: [sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
@@ -63,7 +66,7 @@
     fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     hidden_fields: [sales_orders.fulfilled_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
@@ -88,7 +91,7 @@
     # conditional_formatting: [{type: greater than, value: 0.05, background_color: '',
     #     font_color: "#DB4C40", bold: false, italic: false, strikethrough: false, fields: !!null ''}]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
@@ -135,7 +138,7 @@
     x_axis_datetime_label: "%B %y"
     defaults_version: 1
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
@@ -208,7 +211,7 @@
         \          verticalAlign: 'bottom',\n          x: 0,\n          y: -1,\n   \
         \     },\n        \n      },\n    ],\n    \n\n  }, ],\n}"
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
@@ -324,7 +327,7 @@
     note_display: above
     note_text: Top 10 Items with Largest Difference between Quantity Ordered and Fulfilled
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name

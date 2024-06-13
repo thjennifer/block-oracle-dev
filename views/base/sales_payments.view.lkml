@@ -70,13 +70,6 @@ view: sales_payments {
     type: number
     sql: ${TABLE}.DAYS_TO_PAYMENT ;;
   }
-  dimension_group: discount {
-    type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.DISCOUNT_DATE ;;
-  }
   dimension_group: due {
     type: time
     timeframes: [raw, date, week, month, quarter, year]
@@ -123,6 +116,10 @@ view: sales_payments {
   dimension: is_overdue {
     type: yesno
     sql: ${TABLE}.IS_OVERDUE ;;
+  }
+  dimension: is_payment_transaction {
+    type: yesno
+    sql: ${TABLE}.IS_PAYMENT_TRANSACTION ;;
   }
   dimension_group: last_update {
     type: time

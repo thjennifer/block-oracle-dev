@@ -19,14 +19,6 @@ view: otc_common_parameters_xvw {
     default_value: "BE_INV_ITEM_CATEGORY_SET"
   }
 
-  parameter: parameter_use_test_or_demo_data {
-    hidden: no
-    type: unquoted
-    label: "Use Test or Demo Data"
-    allowed_value: {label: "test" value:"test"}
-    allowed_value: {label: "demo" value: "demo"}
-    default_value: "demo"
-  }
 
   parameter: parameter_language {
     hidden: no

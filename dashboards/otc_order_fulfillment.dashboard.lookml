@@ -9,6 +9,9 @@
   extends: otc_template
 
   filters:
+  - name: Date
+    title: Ordered Date
+
   - name: Language
     title: Language of Item Description
     type: field_filter
@@ -41,13 +44,12 @@
     fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     hidden_fields: [sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
@@ -63,13 +65,12 @@
     fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     hidden_fields: [sales_orders.fulfilled_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders fulfilled completely (for all line items) by the requested delivery date."
@@ -88,13 +89,12 @@
     # conditional_formatting: [{type: greater than, value: 0.05, background_color: '',
     #     font_color: "#DB4C40", bold: false, italic: false, strikethrough: false, fields: !!null ''}]
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders with at least one item on backorder."
@@ -124,24 +124,20 @@
       sales_orders.fulfilled_sales_order_percent: line
       sales_orders.fulfilled_by_request_date_sales_order_percent: line
     series_colors:
-      # sales_order_item_delivery_summary_ndt.percent_orders_delivered_on_time: "#F39B6D"
       sales_orders.fulfilled_sales_order_percent: "#6494AA"
       sales_orders.fulfilled_by_request_date_sales_order_percent: "#89BD9E"
     series_labels:
-      # sales_order_item_delivery_summary_ndt.percent_orders_delivered_on_time: On Time %
-      # sales_orders.ordered_month
       sales_orders.fulfilled_sales_order_percent: In Full %
       sales_orders.fulfilled_by_request_date_sales_order_percent: OTIF %
     x_axis_datetime_label: "%B %y"
     defaults_version: 1
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 2
     col: 4
     width: 10
@@ -208,15 +204,13 @@
         \          verticalAlign: 'bottom',\n          x: 0,\n          y: -1,\n   \
         \     },\n        \n      },\n    ],\n    \n\n  }, ],\n}"
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
       Language: otc_common_parameters_xvw.parameter_language
-      # Product Level to Display: sales_orders__lines.parameter_display_product_level
     note_state: collapsed
     note_display: hover
     note_text: "Order cycle time is average number of days between order placement and order fulfillment. "
@@ -324,13 +318,12 @@
     note_display: above
     note_text: Top 10 Items with Largest Difference between Quantity Ordered and Fulfilled
     listen:
-      Order Date: sales_orders.ordered_date
+      Date: sales_orders.ordered_date
       Country: sales_orders.bill_to_customer_country
       Customer: sales_orders.bill_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
-      # Test or Demo: otc_common_parameters_xvw.parameter_use_test_or_demo_data
       Language: otc_common_parameters_xvw.parameter_language
     row: 10
     col: 0
