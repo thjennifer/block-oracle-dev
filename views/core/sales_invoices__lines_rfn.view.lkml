@@ -96,17 +96,19 @@ view: +sales_invoices__lines {
     group_label: "Ledger Date"
   }
 
-dimension_group: creation {
-  hidden: no
-  timeframes: [raw, date, time]
-  description: "Creation date of record in Oracle source table."
-}
+  dimension_group: creation_ts {
+    hidden: no
+    timeframes: [raw, date, time]
+    label: "Creation"
+    description: "Creation timestamp of record in Oracle source table."
+  }
 
-dimension_group: last_update {
-  hidden: no
-  timeframes: [raw, date, time]
-  description: "Last update date of record in Oracle source table."
-}
+  dimension_group: last_update_ts {
+    hidden: no
+    timeframes: [raw, date, time]
+    label: "Last Update"
+    description: "Last update timestamp of record in Oracle source table."
+  }
 
 #} end dates
 

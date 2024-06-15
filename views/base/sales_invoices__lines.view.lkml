@@ -6,10 +6,10 @@ view: sales_invoices__lines {
     type: number
     sql: ORDER_LINE_ID ;;
   }
-  dimension_group: creation {
+  dimension_group: creation_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: CREATION_DATE ;;
+    sql: CREATION_TS ;;
   }
   dimension: credited_quantity {
     type: number
@@ -63,10 +63,10 @@ view: sales_invoices__lines {
     type: string
     sql: ITEM_PART_NUMBER ;;
   }
-  dimension_group: last_update {
+  dimension_group: last_update_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: LAST_UPDATE_DATE ;;
+    sql: LAST_UPDATE_TS ;;
   }
   dimension_group: ledger {
     type: time

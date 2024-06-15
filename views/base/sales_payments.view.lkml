@@ -53,14 +53,18 @@ view: sales_payments {
     type: number
     sql: ${TABLE}.CASH_RECEIPT_ID ;;
   }
-  dimension_group: creation {
+  dimension_group: creation_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.CREATION_DATE ;;
+    sql: ${TABLE}.CREATION_TS ;;
   }
   dimension: currency_code {
     type: string
     sql: ${TABLE}.CURRENCY_CODE ;;
+  }
+  dimension: days_late {
+    type: number
+    sql: ${TABLE}.DAYS_LATE ;;
   }
   dimension: days_overdue {
     type: number
@@ -113,6 +117,10 @@ view: sales_payments {
     type: yesno
     sql: ${TABLE}.IS_DOUBTFUL ;;
   }
+  dimension: is_late {
+    type: yesno
+    sql: ${TABLE}.IS_LATE ;;
+  }
   dimension: is_overdue {
     type: yesno
     sql: ${TABLE}.IS_OVERDUE ;;
@@ -121,10 +129,10 @@ view: sales_payments {
     type: yesno
     sql: ${TABLE}.IS_PAYMENT_TRANSACTION ;;
   }
-  dimension_group: last_update {
+  dimension_group: last_update_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.LAST_UPDATE_DATE ;;
+    sql: ${TABLE}.LAST_UPDATE_TS ;;
   }
   dimension_group: ledger {
     type: time

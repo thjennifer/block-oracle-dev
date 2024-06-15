@@ -93,50 +93,7 @@ view: +sales_orders__lines {
     sql: COALESCE(${TABLE}.ITEM_ORGANIZATION_NAME,CAST(${item_organization_id} AS STRING)) ;;
   }
 
-  # dimension: item_description {
-  #   hidden: no
-  #   group_label: "Item Categories & Descriptions"
-  #   sql: COALESCE((SELECT d.TEXT FROM UNNEST(${item_descriptions}) AS d WHERE d.language = {% parameter sales_orders__lines.parameter_language %} ), CAST(${inventory_item_id} AS STRING)) ;;
-  #   full_suggestions: yes
-  # }
 
-  # dimension: item_description_language {
-  #   hidden: no
-  #   group_label: "Item Categories & Descriptions"
-  #   sql: (SELECT d.LANGUAGE FROM UNNEST(${item_descriptions}) AS d WHERE d.LANGUAGE = {% parameter sales_orders__lines.parameter_language %} ) ;;
-  #   full_suggestions: yes
-  # }
-
-  # dimension: category_id {
-  #   hidden: no
-  #   type: number
-  #   group_label: "Item Categories & Descriptions"
-  #   label: "Item Category ID"
-  #   sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}'), -1 ) ;;
-  #   # sql: COALESCE((SELECT c.ID FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter otc_common_parameters_xvw.parameter_category_set_name %}), -1 ) ;;
-  #   full_suggestions: yes
-  #   value_format_name: id
-  # }
-
-  # dimension: category_description {
-  #   hidden: no
-  #   group_label: "Item Categories & Descriptions"
-  #   label: "Item Category Description"
-  #   sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}' )
-  #       ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
-  #   # sql: COALESCE(COALESCE((select c.description FROM UNNEST(${item_categories}) AS c where c.category_set_name = {% parameter otc_common_parameters_xvw.parameter_category_set_name %} )
-  #   # ,COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")));;
-  #   full_suggestions: yes
-  # }
-
-  # dimension: category_name {
-  #   hidden: no
-  #   group_label: "Item Categories & Descriptions"
-  #   label: "Item Category Name Group"
-  #   sql: COALESCE((SELECT c.CATEGORY_NAME FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = '{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}'),"Unknown" ) ;;
-  #   # sql: COALESCE((SELECT c.category_name FROM UNNEST(${item_categories}) AS c WHERE c.CATEGORY_SET_NAME = {% parameter otc_common_parameters_xvw.parameter_category_set_name %}),"Unknown" ) ;;
-  #   full_suggestions: yes
-  # }
 
   dimension: selected_product_dimension_description {
     hidden: no
@@ -201,16 +158,18 @@ view: +sales_orders__lines {
     timeframes: [raw,date,week,month,quarter,year,yesno]
   }
 
-  dimension_group: creation {
+  dimension_group: creation_ts {
     hidden: no
     timeframes: [raw, date, time]
-    description: "Creation date of record in Oracle source table."
+    label: "Creation"
+    description: "Creation timestamp of record in Oracle source table."
   }
 
-  dimension_group: last_update {
+  dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
-    description: "Last update date of record in Oracle source table."
+    label: "Last Update"
+    description: "Last update timestamp of record in Oracle source table."
   }
 
 
@@ -268,11 +227,11 @@ view: +sales_orders__lines {
     sql: ${TABLE}.IS_CANCELLED ;;
   }
 
-  dimension: cancel_reason {
-    hidden: no
-    group_label: "Line Status"
-    full_suggestions: yes
-  }
+  # dimension: cancel_reason {
+  #   hidden: no
+  #   group_label: "Line Status"
+  #   full_suggestions: yes
+  # }
 
   dimension: is_open {
     hidden: no
@@ -333,6 +292,31 @@ view: +sales_orders__lines {
   }
 
 #} end  line status
+
+  dimension: cancel_reason_code {
+    hidden: no
+    type: string
+    group_label: "Cancel Reason"
+    sql: (SELECT d.CODE FROM UNNEST(CANCEL_REASON) AS d WHERE d.language = {% parameter otc_common_parameters_xvw.parameter_language %} ) ;;
+    full_suggestions: yes
+  }
+
+  dimension: cancel_reason_description {
+    hidden: no
+    type: string
+    group_label: "Cancel Reason"
+    label: "Cancel Reason"
+    sql: (SELECT d.MEANING FROM UNNEST(CANCEL_REASON) AS d WHERE d.language = {% parameter otc_common_parameters_xvw.parameter_language %} ) ;;
+    full_suggestions: yes
+  }
+
+  dimension: language_code {
+    hidden: no
+    group_label: "Cancel Reason"
+    description: "Language in which to display cancel reasons."
+    sql: (SELECT d.LANGUAGE FROM UNNEST(CANCEL_REASON) AS d WHERE d.LANGUAGE = {% parameter otc_common_parameters_xvw.parameter_language %} ) ;;
+    full_suggestions: yes
+  }
 
 #########################################################
 # Fulfillment Cycle Days Dimensions

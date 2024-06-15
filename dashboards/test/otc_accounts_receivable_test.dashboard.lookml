@@ -2,7 +2,41 @@
   title: Accounts Receivable TEST
   layout: newspaper
   preferred_viewer: dashboards-next
+  crossfilter_enabled: false
+  filters_location_top: false
+
   extends: otc_accounts_receivable_template_test
+
+  filters:
+  - name: aging_bucket_size
+    title: 'Aging Bucket: # of Days in Range'
+    type: field_filter
+    default_value: '30'
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: slider
+      display: inline
+      options:
+        min: 1
+        max: 365
+    explore: sales_payments
+    field: sales_payments_dynamic_aging_bucket_sdt.dummy_bucket_size
+
+  - name: aging_bucket_count
+    title: 'Aging Bucket: # of Ranges'
+    type: field_filter
+    default_value: '4'
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: slider
+      display: inline
+      options:
+        min: 1
+        max: 6
+    explore: sales_payments
+    field: sales_payments_dynamic_aging_bucket_sdt.dummy_bucket_number
 
   elements:
   - title: navigation
@@ -130,12 +164,13 @@
     width: 10
     height: 10
 
-  - title: Percent of Past Due Receivable by Aging Bucket
-    name: Percent of Past Due Receivable by Aging Bucket
+  - name: Past Due Receivables by Aging Bucket
+    title: Past Due Receivables by Aging Bucket
+
     explore: sales_payments
     type: looker_bar
-    fields: [sales_payments.aging_bucket, sales_payments.total_amount_due_remaining_target_currency,sales_payments.percent_of_total_receivables]
-    sorts: [sales_payments.aging_bucket]
+    fields: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_amount_due_remaining_target_currency,sales_payments.percent_of_total_receivables]
+    sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     filters:
       sales_payments.is_overdue: "Yes"
     limit: 50
@@ -163,13 +198,13 @@
     show_null_labels: false
     show_totals_labels: false
     show_silhouette: false
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_payments.percent_of_total_receivable,
+    y_axes: [{label: 'Percent of Past Due Receivables', orientation: bottom, series: [{axisId: sales_payments.percent_of_total_receivable,
             id: sales_payments.percent_of_total_receivable, name: Percent
               of Past Due Receivable}], showLabels: true, showValues: false, unpinAxis: false,
         tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
     y_axis_zoom: true
-    hidden_fields: [sales_payments.bill_to_customer_number,sales_payments.total_amount_due_remaining_target_currency]
+    hidden_fields: [sales_payments.total_amount_due_remaining_target_currency]
     listen:
       Date: sales_payments.payment_date
       Country: sales_payments.bill_to_customer_country
@@ -177,6 +212,8 @@
       Business Unit: sales_payments.business_unit_name
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
       Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      aging_bucket_size: sales_payments_dynamic_aging_bucket_sdt.parameter_aging_bucket_size
+      aging_bucket_count: sales_payments_dynamic_aging_bucket_sdt.parameter_aging_bucket_count
     row: 5
     col: 11
     width: 10

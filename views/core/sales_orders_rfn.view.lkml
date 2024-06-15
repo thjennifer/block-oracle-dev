@@ -19,15 +19,17 @@ view: +sales_orders {
 # parameter_target_currency to choose the desired currency into which the order currency should be converted
 #{
 
-  # parameter: parameter_target_currency {
-  #   hidden: no
-  #   type: string
-  #   view_label: "🔍 Filters & 🛠 Tools"
-  #   label: "Target Currency"
-  #   suggest_explore: currency_rate_md
-  #   suggest_dimension: currency_rate_md.to_currency
-  #   full_suggestions: yes
-  # }
+  parameter: parameter_customer_type {
+    hidden: no
+    type: unquoted
+    view_label: "@{view_label_for_filters}"
+    label: "Customer Type"
+    description: "Select customer type to use for Customer Name and Country to display and filter by."
+    allowed_value: {label: "Bill To" value: "bill" }
+    allowed_value: {label: "Sold To" value: "sold" }
+    allowed_value: {label: "Ship To" value: "ship" }
+    default_value: "bill"
+  }
 
   # parameter: parameter_use_test_or_demo_data {
   #   hidden: no
@@ -112,12 +114,63 @@ view: +sales_orders {
 
   dimension: bill_to_customer_name {
     hidden: no
-    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CONCAT("Bill to Customer Number: ",CAST(${bill_to_customer_number} AS STRING))) ;;
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,"Unknown") ;;
   }
 
-    dimension: bill_to_customer_country {
-      sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_COUNTRY,"Unknown") ;;
-    }
+  dimension: bill_to_customer_country {
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_COUNTRY,"Unknown") ;;
+  }
+
+  dimension: sold_to_customer_name {
+    hidden: no
+    sql: COALESCE(${TABLE}.SOLD_TO_CUSTOMER_NAME,"Unknown") ;;
+  }
+
+  dimension: sold_to_customer_country {
+    sql: COALESCE(${TABLE}.SOLD_TO_CUSTOMER_COUNTRY,"Unknown") ;;
+  }
+
+  dimension: selected_customer_name {
+    group_label: "Selected Customer Type"
+    label: "{% if _field._is_selected %}
+            {% assign cust = parameter_customer_type._parameter_value %}
+                {% if cust == 'bill' %}Bill To
+                {% elsif cust == 'sold' %}Sold To
+                {% elsif cust == 'ship' %}Ship To
+                {% endif %}Customer
+            {%else%}Selected Customer Name{%endif%}"
+    sql:{% assign cust = parameter_customer_type._parameter_value %}
+        {% if cust == 'bill' %}${bill_to_customer_name}
+        {% elsif cust == 'sold' %}${sold_to_customer_name}
+        {% elsif cust == 'ship' %}${ship_to_customer_name}
+        {% endif %}
+        ;;
+  }
+
+  dimension: selected_customer_country {
+    group_label: "Selected Customer Type"
+    label: "{% if _field._is_selected %}
+    {% assign cust = parameter_customer_type._parameter_value %}
+    {% if cust == 'bill' %}Bill To
+    {% elsif cust == 'sold' %}Sold To
+    {% elsif cust == 'ship' %}Ship To
+    {% endif %}Country
+    {%else%}Selected Customer Country{%endif%}"
+    sql:{% assign cust = parameter_customer_type._parameter_value %}
+        {% if cust == 'bill' %}${bill_to_customer_country}
+        {% elsif cust == 'sold' %}${sold_to_customer_country}
+        {% elsif cust == 'ship' %}${ship_to_customer_country}
+        {% endif %}
+        ;;
+  }
+
+  dimension: selected_customer_type {
+    group_label: "Selected Customer Type"
+    sql:  {% assign cust = parameter_customer_type._parameter_value %}
+          '{{cust}}';;
+  }
+
+
 
 #} end business unit / order source / customer dimensions
 
@@ -172,16 +225,18 @@ view: +sales_orders {
     group_label: "Fiscal Date"
   }
 
-  dimension_group: creation {
+  dimension_group: creation_ts {
     hidden: no
     timeframes: [raw, date, time]
-    description: "Creation date of record in Oracle source table."
+    label: "Creation"
+    description: "Creation timestamp of record in Oracle source table."
   }
 
-  dimension_group: last_update {
+  dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
-    description: "Last update date of record in Oracle source table."
+    label: "Last Update"
+    description: "Last update timestamp of record in Oracle source table."
   }
 
 #} end dates
@@ -322,19 +377,19 @@ view: +sales_orders {
 # Total Order Amounts
 #{
 
-  dimension: total_order_amount {
+  dimension: total_ordered_amount {
     hidden: no
     label: "Total Order Amount (Source Currency)"
     description: "Total amount for an order in source currency."
     value_format_name: decimal_2
   }
 
-  dimension: total_order_amount_target_currency {
+  dimension: total_ordered_amount_target_currency {
     hidden: no
     type: number
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Order Amount ({{currency}}){%else%}Total Order Amount (Target Currency){%endif%}"
     description: "Total amount for an order in target currency."
-    sql: COALESCE(${total_order_amount},0) * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    sql: COALESCE(${total_ordered_amount},0) * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
     value_format_name: decimal_2
   }
 
@@ -529,7 +584,7 @@ view: +sales_orders {
 
 #} end measures
   set: header_details {
-    fields: [header_id,order_number,header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_order_amount_target_currency]
+    fields: [header_id,order_number,header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_ordered_amount_target_currency]
   }
 
 }

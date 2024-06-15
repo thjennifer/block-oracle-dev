@@ -1,5 +1,5 @@
 view: sales_orders__lines {
-  drill_fields: [return_line_ids]
+  # drill_fields: [return_line_ids]
 
   dimension: return_line_ids {
     primary_key: yes
@@ -14,17 +14,17 @@ view: sales_orders__lines {
     sql: ACTUAL_SHIP_DATE ;;
   }
   dimension: cancel_reason {
-    type: string
+    hidden: yes
     sql: CANCEL_REASON ;;
   }
   dimension: cancelled_quantity {
     type: number
     sql: CANCELLED_QUANTITY ;;
   }
-  dimension_group: creation {
+  dimension_group: creation_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: CREATION_DATE ;;
+    sql: CREATION_TS ;;
   }
   dimension: cycle_time_days {
     type: number
@@ -121,10 +121,10 @@ view: sales_orders__lines {
     type: string
     sql: ITEM_PART_NUMBER ;;
   }
-  dimension_group: last_update {
+  dimension_group: last_update_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: LAST_UPDATE_DATE ;;
+    sql: LAST_UPDATE_TS ;;
   }
   dimension: line_category_code {
     type: string

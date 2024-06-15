@@ -3,6 +3,7 @@ include: "/views/core/sales_orders__lines_rfn.view"
 include: "/views/core/sales_orders__lines__return_line_ids_rfn.view"
 include: "/views/core/sales_orders__lines__item_categories_rfn.view"
 include: "/views/core/sales_orders__lines__item_descriptions_rfn.view"
+include: "/views/core/sales_orders__lines__cancel_reason_rfn.view"
 
 include: "/views/core/currency_conversion_sdt.view"
 # include: "/views/core/currency_rate_md_rfn.view"
@@ -64,6 +65,13 @@ explore: sales_orders {
   #   sql_where: ${sales_orders__lines__item_descriptions.language_code} in ("Unknown", {% parameter otc_common_parameters_xvw.parameter_language %}) ;;
   #   relationship: one_to_many
   # }
+
+  join: sales_orders__lines__cancel_reason {
+    view_label: "Sales Orders: Lines Cancel Reasons"
+    sql: LEFT JOIN UNNEST(${sales_orders__lines.cancel_reason}) as sales_orders__lines__cancel_reason ;;
+    sql_where: ${sales_orders__lines__cancel_reason.language} in ("Unknown", {% parameter otc_common_parameters_xvw.parameter_language %}) ;;
+    relationship: one_to_many
+  }
 
   join: sales_orders__lines__return_line_ids {
     view_label: "Sales Orders: Lines Return Line IDs"

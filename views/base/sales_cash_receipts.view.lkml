@@ -37,10 +37,10 @@ view: sales_cash_receipts {
     type: number
     sql: ${TABLE}.CASH_RECEIPT_ID ;;
   }
-  dimension_group: creation {
+  dimension_group: creation_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.CREATION_DATE ;;
+    sql: ${TABLE}.CREATION_TS ;;
   }
   dimension: currency_code {
     type: string
@@ -86,13 +86,13 @@ view: sales_cash_receipts {
     sql: ${TABLE}.INVOICE_NUMBER ;;
   }
   dimension: is_confirmed {
-    type: string
+    type: yesno
     sql: ${TABLE}.IS_CONFIRMED ;;
   }
-  dimension_group: last_update {
+  dimension_group: last_update_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.LAST_UPDATE_DATE ;;
+    sql: ${TABLE}.LAST_UPDATE_TS ;;
   }
   dimension_group: ledger {
     type: time

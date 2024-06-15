@@ -13,7 +13,7 @@ view: otc_dashboard_navigation_ext {
   dimension: filter_bindings {
     hidden: yes
     type: string
-    sql: 'filter1|Date||filter2|Business+Unit||filter3|Country||filter4|Customer||filter5|Order+Source||filter6|Item+Cagegory||filter7|Target+Currency' ;;
+    sql: 'filter1|Date||filter2|Business+Unit||filter3|Customer+Type||filter4|Country||filter5|Customer||filter6|Order+Source||filter7|Item+Category||filter8|Target+Currency' ;;
     # sql: 'filter1|Order+Date||filter2|Country+Name' ;;
   }
 
@@ -50,31 +50,38 @@ view: otc_dashboard_navigation_ext {
     hidden: yes
     type: string
     group_label: "Dashboard Navigation"
-    label: "Country"
+    label: "Customer Type"
   }
 
   filter: filter4 {
     hidden: yes
     type: string
     group_label: "Dashboard Navigation"
-    label: "Customer"
+    label: "Country"
   }
 
   filter: filter5 {
     hidden: yes
     type: string
     group_label: "Dashboard Navigation"
-    label: "Order Source"
+    label: "Customer"
   }
 
   filter: filter6 {
     hidden: yes
     type: string
     group_label: "Dashboard Navigation"
-    label: "Item Category"
+    label: "Order Source"
   }
 
   filter: filter7 {
+    hidden: yes
+    type: string
+    group_label: "Dashboard Navigation"
+    label: "Item Category"
+  }
+
+  filter: filter8 {
     hidden: yes
     type: string
     group_label: "Dashboard Navigation"

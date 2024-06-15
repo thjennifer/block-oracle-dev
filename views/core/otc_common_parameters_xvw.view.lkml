@@ -1,5 +1,5 @@
 view: otc_common_parameters_xvw {
-  label: "🔍 Filters & 🛠 Tools"
+  label: "@{view_label_for_filters}"
 
   parameter: parameter_target_currency {
     hidden: no
@@ -23,7 +23,6 @@ view: otc_common_parameters_xvw {
   parameter: parameter_language {
     hidden: no
     type: string
-    view_label: "🔍 Filters & 🛠 Tools"
     label: "Language"
     description: "Select language to display for item descriptions. Default is 'US'."
     suggest_explore: item_md

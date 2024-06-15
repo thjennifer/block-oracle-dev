@@ -2,16 +2,14 @@ include: "/views/base/sales_payments.view"
 
 view: +sales_payments {
 
-  # sql_table_name: {% assign p = otc_common_parameters_xvw.parameter_use_test_or_demo_data._parameter_value %}
-  # {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
-  # {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesPayments` ;;
-
-
 
 
   dimension: payment_schedule_id {
     primary_key: yes
   }
+
+
+
 
   dimension: cash_receipt_id {
     hidden: no
@@ -29,20 +27,17 @@ view: +sales_payments {
   dimension: invoice_number {
     hidden: no
     description: "Invoice number associated with transaction."
-    # sql:  REGEXP_EXTRACT(${TABLE}.INVOICE_NUMBER,"([0-9]+)" );;
-    }
+  }
 
   dimension: is_payment_transaction {
     description: "Yes if Payment Class Code = 'PMT' else No."
   }
 
-   dimension: is_overdue {
-    sql:  {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
-             @{default_target_date}
-             ( ${due_raw} < DATE('{{td}}') AND ${is_open} )
-             OR ${due_raw} < ${payment_raw}
-          {% else %}${TABLE}.IS_OVERDUE
-          {% endif%};;
+  dimension: is_overdue {
+     sql:  {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+               @{default_target_date}${due_raw} < DATE('{{td}}') AND ${is_open}
+             {% else %}${TABLE}.IS_OVERDUE
+           {% endif%};;
   }
 
   dimension: days_overdue {
@@ -65,7 +60,7 @@ view: +sales_payments {
     sql: ${amount_due_remaining} > 0 ;;
   }
 
-  dimension: aging_bucket {
+  dimension: aging_bucket_1_to_120 {
     type: string
     sql: CASE WHEN ${days_overdue} <= 0 THEN "CURRENT"
               WHEN ${days_overdue} <= 30 THEN "30 Past Due"
@@ -74,10 +69,10 @@ view: +sales_payments {
               WHEN ${days_overdue} <= 120 THEN "120 Past Due"
           ELSE "121+ Past Due"
           END;;
-    order_by_field: aging_bucket_number
+    order_by_field: aging_bucket_1_to_120_sort_number
   }
 
-  dimension: aging_bucket_number {
+  dimension: aging_bucket_1_to_120_sort_number {
     hidden:yes
     type: number
     sql: CASE WHEN ${days_overdue} <= 0 THEN 1
@@ -89,15 +84,7 @@ view: +sales_payments {
           END;;
   }
 
-  # -- TODO: fix this logic to account for payments that were made.
-  # DATE_DIFF(CURRENT_DATE, Payments.DUE_DATE, DAY) AS DAYS_OVERDUE,
-  # DATE_DIFF(Payments.PAYMENT_DATE, Invoices.INVOICE_DATE, DAY) AS DAYS_TO_PAYMENT,
-  # (
-  #   (Payments.DUE_DATE < CURRENT_DATE AND Payments.AMOUNT_DUE_REMAINING > 0)
-  #   OR Payments.DUE_DATE < Payments.PAYMENT_DATE) AS IS_OVERDUE, -- noqa: LT02
-  # (
-  #   (DATE_DIFF(CURRENT_DATE, Payments.DUE_DATE, DAY) > 90)
-  #   AND Payments.AMOUNT_DUE_REMAINING > 0) AS IS_DOUBTFUL
+
 
 
 #########################################################
@@ -187,20 +174,20 @@ view: +sales_payments {
     group_label: "Ledger Date"
   }
 
-  dimension_group: discount {}
-
   dimension_group: due {}
 
-  dimension_group: creation {
+  dimension_group: creation_ts {
     hidden: no
     timeframes: [raw, date, time]
-    description: "Creation date of record in Oracle source table."
+    label: "Creation"
+    description: "Creation timestamp of record in Oracle source table."
   }
 
-  dimension_group: last_update {
+  dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
-    description: "Last update date of record in Oracle source table."
+    label: "Last Update"
+    description: "Last update timestamp of record in Oracle source table."
   }
 
 #} end dates
@@ -479,7 +466,7 @@ view: +sales_payments {
 
 
 set: payments_details {
-  fields: [payment_schedule_id,invoice_number,bill_to_customer_name,payment_date,due_date,total_amount_due_original_target_currency,total_amount_due_remaining_target_currency]
+  fields: [payment_schedule_id,invoice_id, invoice_number,bill_to_customer_name,payment_date,due_date,total_amount_due_original_target_currency,total_amount_due_remaining_target_currency]
 }
 
 

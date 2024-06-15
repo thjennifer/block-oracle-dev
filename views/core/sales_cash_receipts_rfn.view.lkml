@@ -93,16 +93,18 @@ view: +sales_cash_receipts {
 
   dimension_group: deposit {}
 
-  dimension_group: creation {
+  dimension_group: creation_ts {
     hidden: no
     timeframes: [raw, date, time]
-    description: "Creation date of record in Oracle source table."
+    label: "Creation"
+    description: "Creation timestamp of record in Oracle source table."
   }
 
-  dimension_group: last_update {
+  dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
-    description: "Last update date of record in Oracle source table."
+    label: "Last Update"
+    description: "Last update timestamp of record in Oracle source table."
   }
 
 #} end dates

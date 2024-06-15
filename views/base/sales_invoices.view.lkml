@@ -26,10 +26,10 @@ view: sales_invoices {
     type: string
     sql: ${TABLE}.BUSINESS_UNIT_NAME ;;
   }
-  dimension_group: creation {
+  dimension_group: creation_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.CREATION_DATE ;;
+    sql: ${TABLE}.CREATION_TS ;;
   }
   dimension: currency_code {
     type: string
@@ -78,10 +78,10 @@ view: sales_invoices {
     type: yesno
     sql: ${TABLE}.IS_COMPLETE ;;
   }
-  dimension_group: last_update {
+  dimension_group: last_update_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.LAST_UPDATE_DATE ;;
+    sql: ${TABLE}.LAST_UPDATE_TS ;;
   }
   dimension: ledger_id {
     type: number
@@ -121,18 +121,14 @@ view: sales_invoices {
 #     type: number
 #     sql: ORDER_LINE_ID ;;
 #   }
-#   dimension_group: creation {
+#   dimension_group: creation_ts {
 #     type: time
 #     timeframes: [raw, time, date, week, month, quarter, year]
-#     sql: CREATION_DATE ;;
+#     sql: CREATION_TS ;;
 #   }
 #   dimension: credited_quantity {
 #     type: number
 #     sql: CREDITED_QUANTITY ;;
-#   }
-#   dimension: description {
-#     type: string
-#     sql: DESCRIPTION ;;
 #   }
 #   dimension: fiscal_gl_month {
 #     type: number
@@ -182,10 +178,10 @@ view: sales_invoices {
 #     type: string
 #     sql: ITEM_PART_NUMBER ;;
 #   }
-#   dimension_group: last_update {
+#   dimension_group: last_update_ts {
 #     type: time
 #     timeframes: [raw, time, date, week, month, quarter, year]
-#     sql: LAST_UPDATE_DATE ;;
+#     sql: LAST_UPDATE_TS ;;
 #   }
 #   dimension_group: ledger {
 #     type: time
@@ -193,6 +189,10 @@ view: sales_invoices {
 #     convert_tz: no
 #     datatype: date
 #     sql: LEDGER_DATE ;;
+#   }
+#   dimension: line_description {
+#     type: string
+#     sql: LINE_DESCRIPTION ;;
 #   }
 #   dimension: line_id {
 #     type: number

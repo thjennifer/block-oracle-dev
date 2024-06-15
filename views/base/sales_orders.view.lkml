@@ -42,12 +42,10 @@ view: sales_orders {
     type: string
     sql: ${TABLE}.BUSINESS_UNIT_NAME ;;
   }
-  dimension_group: creation {
+  dimension_group: creation_ts {
     type: time
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.CREATION_DATE ;;
+    timeframes: [raw, time, date, week, month, quarter, year]
+    sql: ${TABLE}.CREATION_TS ;;
   }
   dimension: currency_code {
     type: string
@@ -132,10 +130,10 @@ view: sales_orders {
     type: yesno
     sql: ${TABLE}.IS_OPEN ;;
   }
-  dimension_group: last_update {
+  dimension_group: last_update_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.LAST_UPDATE_DATE ;;
+    sql: ${TABLE}.LAST_UPDATE_TS ;;
   }
   dimension: ledger_id {
     type: number
@@ -239,9 +237,9 @@ view: sales_orders {
     type: number
     sql: ${TABLE}.SOLD_TO_SITE_USE_ID ;;
   }
-  dimension: total_order_amount {
+  dimension: total_ordered_amount {
     type: number
-    sql: ${TABLE}.TOTAL_ORDER_AMOUNT ;;
+    sql: ${TABLE}.TOTAL_ORDERED_AMOUNT ;;
   }
   measure: count {
     type: count
@@ -280,17 +278,17 @@ view: sales_orders {
 #     sql: ACTUAL_SHIP_DATE ;;
 #   }
 #   dimension: cancel_reason {
-#     type: string
+#     hidden: yes
 #     sql: CANCEL_REASON ;;
 #   }
 #   dimension: cancelled_quantity {
 #     type: number
 #     sql: CANCELLED_QUANTITY ;;
 #   }
-#   dimension_group: creation {
+#   dimension_group: creation_ts {
 #     type: time
 #     timeframes: [raw, time, date, week, month, quarter, year]
-#     sql: CREATION_DATE ;;
+#     sql: CREATION_TS ;;
 #   }
 #   dimension: cycle_time_days {
 #     type: number
@@ -387,10 +385,10 @@ view: sales_orders {
 #     type: string
 #     sql: ITEM_PART_NUMBER ;;
 #   }
-#   dimension_group: last_update {
+#   dimension_group: last_update_ts {
 #     type: time
 #     timeframes: [raw, time, date, week, month, quarter, year]
-#     sql: LAST_UPDATE_DATE ;;
+#     sql: LAST_UPDATE_TS ;;
 #   }
 #   dimension: line_category_code {
 #     type: string
@@ -493,8 +491,24 @@ view: sales_orders {
 #   }
 # }
 
+# view: sales_orders__lines__cancel_reason {
+
+#   dimension: code {
+#     type: string
+#     sql: ${TABLE}.CODE ;;
+#   }
+#   dimension: language {
+#     type: string
+#     sql: ${TABLE}.LANGUAGE ;;
+#   }
+#   dimension: meaning {
+#     type: string
+#     sql: ${TABLE}.MEANING ;;
+#   }
+# }
+
 # view: sales_orders__lines__item_categories {
-#   # drill_fields: [id]
+#   drill_fields: [id]
 
 #   dimension: id {
 #     primary_key: yes

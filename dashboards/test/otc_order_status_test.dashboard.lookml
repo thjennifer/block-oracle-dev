@@ -2,6 +2,8 @@
   title: Order Status TEST
   layout: newspaper
   preferred_viewer: dashboards-next
+  crossfilter_enabled: false
+  filters_location_top: false
   description: ''
 
   # pull navigation bar and filters from template
@@ -19,7 +21,7 @@
     filters:
       otc_dashboard_navigation_ext.navigation_focus_page: '1'
 
-  - title: Total Orders
+  - title: Total Sales Orders
     name: Total Orders
     explore: sales_orders
     type: single_value
@@ -27,8 +29,8 @@
     hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.bill_to_customer_country
-      Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.sold_to_customer_country
+      Customer: sales_orders.sold_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -39,7 +41,7 @@
     note_text: "The number of sales orders."
     row: 2
     col: 0
-    width: 4
+    width: 6
     height: 2
 
   - title: Return Orders
@@ -51,8 +53,8 @@
     hidden_fields: [sales_orders.order_count,sales_orders.no_holds_sales_order_percent]
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.bill_to_customer_country
-      Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.sold_to_customer_country
+      Customer: sales_orders.sold_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -62,7 +64,7 @@
     note_text: "The percentage of sales orders with a product return."
     row: 3
     col: 0
-    width: 4
+    width: 6
     height: 2
 
   - title: One Touch Orders
@@ -74,8 +76,8 @@
     hidden_fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent]
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.bill_to_customer_country
-      Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.sold_to_customer_country
+      Customer: sales_orders.sold_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -85,7 +87,7 @@
     note_text: "The percentage of sales orders processed without any holds."
     row: 5
     col: 0
-    width: 4
+    width: 6
     height: 2
 
   - title: Blocked Orders
@@ -97,8 +99,8 @@
       sales_orders.is_blocked: 'Yes'
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.bill_to_customer_country
-      Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.sold_to_customer_country
+      Customer: sales_orders.sold_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -109,7 +111,7 @@
     note_text: "The number of sales orders blocked (has hold or backorder)."
     row: 7
     col: 0
-    width: 4
+    width: 6
     height: 2
 
   - title: Order Status
@@ -166,13 +168,13 @@
     title_hidden: true
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.bill_to_customer_country
-      Customer: sales_orders.bill_to_customer_name
+      Country: sales_orders.sold_to_customer_country
+      Customer: sales_orders.sold_to_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
       Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 2
-    col: 4
+    col: 6
     width: 10
     height: 8

@@ -46,6 +46,10 @@ constant: image_dashboard_navigation {
   # value: "https://marketplace-api.looker.com/block-icons/cortex_icon.png"
 }
 
+constant: view_label_for_filters {
+  value: "🔍 Filters & 🛠 Tools"
+}
+
 # Constant is_agg_category_in_query
 # provides first part of liquid IF statement to check if any of these category fields from
 # sales_orders_agg__lines are in the query (either selected dimension or filter):

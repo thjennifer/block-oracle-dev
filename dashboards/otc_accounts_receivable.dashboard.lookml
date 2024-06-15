@@ -2,6 +2,8 @@
   title: Accounts Receivable
   layout: newspaper
   preferred_viewer: dashboards-next
+  crossfilter_enabled: false
+  filters_location_top: false
   extends: otc_accounts_receivable_template
 
   elements:
@@ -129,8 +131,8 @@
     name: Percent of Past Due Receivable by Aging Bucket
     explore: sales_payments
     type: looker_bar
-    fields: [sales_payments.aging_bucket, sales_payments.total_amount_due_remaining_target_currency,sales_payments.percent_of_total_receivables]
-    sorts: [sales_payments.aging_bucket]
+    fields: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_amount_due_remaining_target_currency,sales_payments.percent_of_total_receivables]
+    sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     filters:
       sales_payments.is_overdue: "Yes"
     limit: 50
