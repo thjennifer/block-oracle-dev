@@ -81,6 +81,13 @@ view: sales_payments {
     datatype: date
     sql: ${TABLE}.DUE_DATE ;;
   }
+  dimension_group: exchange {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}.EXCHANGE_DATE ;;
+  }
   dimension: fiscal_gl_month {
     type: number
     sql: ${TABLE}.FISCAL_GL_MONTH ;;
@@ -153,21 +160,13 @@ view: sales_payments {
     type: string
     sql: ${TABLE}.PAYMENT_CLASS_CODE ;;
   }
-  dimension_group: payment {
+  dimension_group: payment_close {
     type: time
     timeframes: [raw, date, week, month, quarter, year]
     convert_tz: no
     datatype: date
-    sql: ${TABLE}.PAYMENT_DATE ;;
+    sql: ${TABLE}.PAYMENT_CLOSE_DATE ;;
   }
-  # dimension: payment_month {
-  #   type: number
-  #   sql: ${TABLE}.PAYMENT_MONTH ;;
-  # }
-  # dimension: payment_quarter {
-  #   type: number
-  #   sql: ${TABLE}.PAYMENT_QUARTER ;;
-  # }
   dimension: payment_schedule_id {
     type: number
     sql: ${TABLE}.PAYMENT_SCHEDULE_ID ;;
@@ -176,10 +175,6 @@ view: sales_payments {
     type: string
     sql: ${TABLE}.PAYMENT_STATUS_CODE ;;
   }
-  # dimension: payment_year {
-  #   type: number
-  #   sql: ${TABLE}.PAYMENT_YEAR ;;
-  # }
   dimension: tax_original {
     type: number
     sql: ${TABLE}.TAX_ORIGINAL ;;
@@ -188,6 +183,25 @@ view: sales_payments {
     type: number
     sql: ${TABLE}.TAX_REMAINING ;;
   }
+  dimension_group: transaction {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}.TRANSACTION_DATE ;;
+  }
+  # dimension: transaction_month {
+  #   type: number
+  #   sql: ${TABLE}.TRANSACTION_MONTH ;;
+  # }
+  # dimension: transaction_quarter {
+  #   type: number
+  #   sql: ${TABLE}.TRANSACTION_QUARTER ;;
+  # }
+  # dimension: transaction_year {
+  #   type: number
+  #   sql: ${TABLE}.TRANSACTION_YEAR ;;
+  # }
   measure: count {
     type: count
     drill_fields: [fiscal_period_name, ledger_name, business_unit_name, bill_to_customer_name, fiscal_period_set_name]

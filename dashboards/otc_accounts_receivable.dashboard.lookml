@@ -17,7 +17,7 @@
     show_comparison: false
     enable_conditional_formatting: false
     listen:
-      Date: sales_payments.payment_date
+      Date: sales_payments.transaction_date
       Country: sales_payments.bill_to_customer_country
       Customer: sales_payments.bill_to_customer_name
       Business Unit: sales_payments.business_unit_name
@@ -41,7 +41,7 @@
     note_display: hover
     note_text: "Overdue means past the due date."
     listen:
-      Date: sales_payments.payment_date
+      Date: sales_payments.transaction_date
       Country: sales_payments.bill_to_customer_country
       Customer: sales_payments.bill_to_customer_name
       Business Unit: sales_payments.business_unit_name
@@ -65,7 +65,7 @@
     note_display: hover
     note_text: "Doubtful means greater than 90 days past the due date."
     listen:
-      Date: sales_payments.payment_date
+      Date: sales_payments.transaction_date
       Country: sales_payments.bill_to_customer_country
       Customer: sales_payments.bill_to_customer_name
       Business Unit: sales_payments.business_unit_name
@@ -116,7 +116,7 @@
     y_axis_zoom: true
 
     listen:
-      Date: sales_payments.payment_date
+      Date: sales_payments.transaction_date
       Country: sales_payments.bill_to_customer_country
       Customer: sales_payments.bill_to_customer_name
       Business Unit: sales_payments.business_unit_name
@@ -168,7 +168,7 @@
     y_axis_zoom: true
     hidden_fields: [sales_payments.bill_to_customer_number,sales_payments.total_amount_due_remaining_target_currency]
     listen:
-      Date: sales_payments.payment_date
+      Date: sales_payments.transaction_date
       Country: sales_payments.bill_to_customer_country
       Customer: sales_payments.bill_to_customer_name
       Business Unit: sales_payments.business_unit_name

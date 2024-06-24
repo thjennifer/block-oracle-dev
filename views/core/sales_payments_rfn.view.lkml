@@ -40,12 +40,7 @@ view: +sales_payments {
            {% endif%};;
   }
 
-  dimension: days_overdue {
-    sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
-             @{default_target_date}
-              DATE_DIFF( DATE('{{td}}'), ${due_raw}, DAY)
-          {% else %}${TABLE}.DAYS_OVERDUE
-          {% endif%} ;;
+  dimension: is_late {
   }
 
   dimension: is_doubtful {
@@ -60,29 +55,41 @@ view: +sales_payments {
     sql: ${amount_due_remaining} > 0 ;;
   }
 
-  dimension: aging_bucket_1_to_120 {
-    type: string
-    sql: CASE WHEN ${days_overdue} <= 0 THEN "CURRENT"
-              WHEN ${days_overdue} <= 30 THEN "30 Past Due"
-              WHEN ${days_overdue} <= 60 THEN "60 Past Due"
-              WHEN ${days_overdue} <= 90 THEN "90 Past Due"
-              WHEN ${days_overdue} <= 120 THEN "120 Past Due"
-          ELSE "121+ Past Due"
-          END;;
-    order_by_field: aging_bucket_1_to_120_sort_number
+  dimension: days_overdue {
+    sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+             @{default_target_date}
+              DATE_DIFF( DATE('{{td}}'), ${due_raw}, DAY)
+          {% else %}${TABLE}.DAYS_OVERDUE
+          {% endif%} ;;
   }
 
-  dimension: aging_bucket_1_to_120_sort_number {
-    hidden:yes
-    type: number
-    sql: CASE WHEN ${days_overdue} <= 0 THEN 1
-              WHEN ${days_overdue} <= 30 THEN 2
-              WHEN ${days_overdue} <= 60 THEN 3
-              WHEN ${days_overdue} <= 90 THEN 4
-              WHEN ${days_overdue} <= 120 THEN 5
-          ELSE 6
-          END;;
-  }
+  dimension: days_late {}
+
+  dimension: days_to_payment {}
+
+  # dimension: aging_bucket_1_to_120 {
+  #   type: string
+  #   sql: CASE WHEN ${days_overdue} <= 0 THEN "CURRENT"
+  #             WHEN ${days_overdue} <= 30 THEN "30 Past Due"
+  #             WHEN ${days_overdue} <= 60 THEN "60 Past Due"
+  #             WHEN ${days_overdue} <= 90 THEN "90 Past Due"
+  #             WHEN ${days_overdue} <= 120 THEN "120 Past Due"
+  #         ELSE "121+ Past Due"
+  #         END;;
+  #   order_by_field: aging_bucket_1_to_120_sort_number
+  # }
+
+  # dimension: aging_bucket_1_to_120_sort_number {
+  #   hidden:yes
+  #   type: number
+  #   sql: CASE WHEN ${days_overdue} <= 0 THEN 1
+  #             WHEN ${days_overdue} <= 30 THEN 2
+  #             WHEN ${days_overdue} <= 60 THEN 3
+  #             WHEN ${days_overdue} <= 90 THEN 4
+  #             WHEN ${days_overdue} <= 120 THEN 5
+  #         ELSE 6
+  #         END;;
+  # }
 
 
 
@@ -126,7 +133,7 @@ view: +sales_payments {
 #########################################################
 # Dates
 #{
-  dimension_group: payment {}
+  dimension_group: transaction {}
 
   dimension_group: ledger {}
 
@@ -175,6 +182,10 @@ view: +sales_payments {
   }
 
   dimension_group: due {}
+
+  dimension_group: exchange {
+    description: "Date to use for exchange rate calculation."
+  }
 
   dimension_group: creation_ts {
     hidden: no
@@ -359,7 +370,7 @@ view: +sales_payments {
 
   measure: count {hidden:yes}
 
-  measure: payment_count {
+  measure: transaction_count {
     hidden: no
     type: count
     drill_fields: [payments_details*]
@@ -466,7 +477,7 @@ view: +sales_payments {
 
 
 set: payments_details {
-  fields: [payment_schedule_id,invoice_id, invoice_number,bill_to_customer_name,payment_date,due_date,total_amount_due_original_target_currency,total_amount_due_remaining_target_currency]
+  fields: [payment_schedule_id, payment_class_code, invoice_id, invoice_number, bill_to_customer_name, transaction_date, due_date, payment_close_date, total_amount_due_original_target_currency,total_amount_due_remaining_target_currency, payment_status_code, is_late, is_overdue]
 }
 
 

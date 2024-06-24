@@ -30,6 +30,12 @@ view: +sales_payments {
          {% endif%};;
   }
 
+  dimension_group: payment_close {
+    timeframes: [raw,date, month, week, quarter, year, yesno]
+    sql: NULLIF(${TABLE}.PAYMENT_CLOSE_DATE,PARSE_DATE('%F','4712-12-31'));;
+  }
+
+
   # -- TODO: fix this logic to account for payments that were made.
   # DATE_DIFF(CURRENT_DATE, Payments.DUE_DATE, DAY) AS DAYS_OVERDUE,
   # DATE_DIFF(Payments.PAYMENT_DATE, Invoices.INVOICE_DATE, DAY) AS DAYS_TO_PAYMENT,
@@ -122,14 +128,14 @@ dimension: is_late_payment {
   hidden: no
   type: yesno
   view_label: "TEST STUFF"
-  sql: ${due_raw} < ${payment_date} ;;
+  sql: ${due_raw} < ${TABLE}.PAYMENT_CLOSE_DATE ;;
 }
 
-dimension: test_target_date  {
-  hidden: no
-  view_label: "TEST STUFF"
-  sql: @{default_target_date}'{{td}}' ;;
-}
+# dimension: test_target_date  {
+#   hidden: no
+#   view_label: "TEST STUFF"
+#   sql: @{default_target_date}'{{td}}' ;;
+# }
 
 
 #}
