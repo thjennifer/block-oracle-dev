@@ -88,17 +88,17 @@ view: sales_payments {
     datatype: date
     sql: ${TABLE}.EXCHANGE_DATE ;;
   }
-  dimension: fiscal_gl_month {
+  dimension: fiscal_gl_month_num {
     type: number
-    sql: ${TABLE}.FISCAL_GL_MONTH ;;
+    sql: ${TABLE}.FISCAL_GL_MONTH_NUM ;;
   }
-  dimension: fiscal_gl_quarter {
+  dimension: fiscal_gl_quarter_num {
     type: number
-    sql: ${TABLE}.FISCAL_GL_QUARTER ;;
+    sql: ${TABLE}.FISCAL_GL_QUARTER_NUM ;;
   }
-  dimension: fiscal_gl_year {
+  dimension: fiscal_gl_year_num {
     type: number
-    sql: ${TABLE}.FISCAL_GL_YEAR ;;
+    sql: ${TABLE}.FISCAL_GL_YEAR_NUM ;;
   }
   dimension: fiscal_period_name {
     type: string
@@ -190,18 +190,18 @@ view: sales_payments {
     datatype: date
     sql: ${TABLE}.TRANSACTION_DATE ;;
   }
-  # dimension: transaction_month {
-  #   type: number
-  #   sql: ${TABLE}.TRANSACTION_MONTH ;;
-  # }
-  # dimension: transaction_quarter {
-  #   type: number
-  #   sql: ${TABLE}.TRANSACTION_QUARTER ;;
-  # }
-  # dimension: transaction_year {
-  #   type: number
-  #   sql: ${TABLE}.TRANSACTION_YEAR ;;
-  # }
+  dimension: transaction_month_num {
+    type: number
+    sql: ${TABLE}.TRANSACTION_MONTH_NUM ;;
+  }
+  dimension: transaction_quarter_num {
+    type: number
+    sql: ${TABLE}.TRANSACTION_QUARTER_NUM ;;
+  }
+  dimension: transaction_year_num {
+    type: number
+    sql: ${TABLE}.TRANSACTION_YEAR_NUM ;;
+  }
   measure: count {
     type: count
     drill_fields: [fiscal_period_name, ledger_name, business_unit_name, bill_to_customer_name, fiscal_period_set_name]

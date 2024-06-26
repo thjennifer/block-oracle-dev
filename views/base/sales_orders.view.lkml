@@ -51,9 +51,9 @@ view: sales_orders {
     type: string
     sql: ${TABLE}.CURRENCY_CODE ;;
   }
-  dimension: fiscal_month {
+  dimension: fiscal_month_num {
     type: number
-    sql: ${TABLE}.FISCAL_MONTH ;;
+    sql: ${TABLE}.FISCAL_MONTH_NUM ;;
   }
   dimension: fiscal_period_name {
     type: string
@@ -67,13 +67,13 @@ view: sales_orders {
     type: string
     sql: ${TABLE}.FISCAL_PERIOD_TYPE ;;
   }
-  dimension: fiscal_quarter {
+  dimension: fiscal_quarter_num {
     type: number
-    sql: ${TABLE}.FISCAL_QUARTER ;;
+    sql: ${TABLE}.FISCAL_QUARTER_NUM ;;
   }
-  dimension: fiscal_year {
+  dimension: fiscal_year_num {
     type: number
-    sql: ${TABLE}.FISCAL_YEAR ;;
+    sql: ${TABLE}.FISCAL_YEAR_NUM ;;
   }
   dimension_group: fulfillment {
     type: time
@@ -182,18 +182,18 @@ view: sales_orders {
     datatype: date
     sql: ${TABLE}.ORDERED_DATE ;;
   }
-  # dimension: ordered_month {
-  #   type: number
-  #   sql: ${TABLE}.ORDERED_MONTH ;;
-  # }
-  # dimension: ordered_quarter {
-  #   type: number
-  #   sql: ${TABLE}.ORDERED_QUARTER ;;
-  # }
-  # dimension: ordered_year {
-  #   type: number
-  #   sql: ${TABLE}.ORDERED_YEAR ;;
-  # }
+  dimension: ordered_month_num {
+    type: number
+    sql: ${TABLE}.ORDERED_MONTH_NUM ;;
+  }
+  dimension: ordered_quarter_num {
+    type: number
+    sql: ${TABLE}.ORDERED_QUARTER_NUM ;;
+  }
+  dimension: ordered_year_num {
+    type: number
+    sql: ${TABLE}.ORDERED_YEAR_NUM ;;
+  }
   dimension_group: request_date {
     type: time
     timeframes: [raw, date, week, month, quarter, year]

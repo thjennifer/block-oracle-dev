@@ -181,29 +181,49 @@ view: +sales_orders {
 
   dimension_group: ordered {
     hidden: no
-    timeframes: [raw, date, week, month, month_num, quarter, quarter_of_year, year, yesno]
+    timeframes: [raw, date, week, month, quarter, year]
+  }
+
+  dimension: ordered_month_num {
+    hidden: no
+    group_label: "Ordered Date"
+    group_item_label: "Month Num"
+    description: "Ordered Month as Number 1 to 12"
+  }
+
+  dimension: ordered_quarter_num {
+    hidden: no
+    group_label: "Ordered Date"
+    group_item_label: "Quarter Num"
+    description: "Ordered Quarter as Number 1 to 4"
+  }
+
+  dimension: ordered_year_num {
+    hidden: no
+    group_label: "Ordered Date"
+    group_item_label: "Year Num"
+    description: "Ordered Year as Integer"
+    value_format_name: id
   }
 
   dimension_group: booked {
     hidden: no
-    timeframes: [raw, date, week, month, month_num, quarter, quarter_of_year, year, yesno]
     }
 
   dimension_group: fulfillment {
     hidden: no
-    timeframes: [raw, date, week, month, month_num, quarter, quarter_of_year, year, yesno]
   }
 
   dimension_group: request_date {
     hidden: no
     label: "Request"
-    timeframes: [raw, date, week, month, month_num, quarter, year, yesno]
   }
 
-  dimension: fiscal_month {
+  dimension: fiscal_month_num {
     hidden: no
     group_label: "Fiscal Date"
    }
+
   dimension: fiscal_period_name {
     hidden: no
     group_label: "Fiscal Date"
@@ -216,13 +236,14 @@ view: +sales_orders {
     hidden: no
     group_label: "Fiscal Date"
   }
-  dimension: fiscal_quarter {
+  dimension: fiscal_quarter_num {
     hidden: no
     group_label: "Fiscal Date"
   }
-  dimension: fiscal_year {
+  dimension: fiscal_year_num {
     hidden: no
     group_label: "Fiscal Date"
+    value_format_name: id
   }
 
   dimension_group: creation_ts {

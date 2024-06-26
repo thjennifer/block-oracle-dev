@@ -135,37 +135,54 @@ view: +sales_payments {
 #{
   dimension_group: transaction {}
 
+  dimension: transaction_month_num {
+    hidden: no
+    group_label: "Transaction Date"
+    group_item_label: "Month Num"
+    description: "Transaction Month as Number 1 to 12"
+  }
+
+  dimension: transaction_quarter_num {
+    hidden: no
+    group_label: "Transaction Date"
+    group_item_label: "Quarter Num"
+    description: "Transaction Quarter as Number 1 to 4"
+  }
+
+  dimension: transaction_year_num {
+    hidden: no
+    group_label: "Transaction Date"
+    group_item_label: "Year Num"
+    description: "Transaction Year as Integer"
+    value_format_name: id
+  }
+
   dimension_group: ledger {}
 
-  dimension: fiscal_gl_month {
+  dimension: fiscal_gl_month_num {
     group_label: "Ledger Date"
-    label: "Fiscal GL Month Number"
+    label: "Fiscal GL Month Num"
     description: "Fiscal GL month of the ledger date as an integer."
   }
 
-  dimension: fiscal_gl_quarter {
+  dimension: fiscal_gl_quarter_num {
     group_label: "Ledger Date"
-    label: "Fiscal GL Quarter Number"
+    label: "Fiscal GL Quarter Num"
     description: "Fiscal GL Quarter of the ledger date as an integer."
   }
 
-  dimension: fiscal_gl_quarter {
+  dimension: fiscal_gl_year_num {
     group_label: "Ledger Date"
-    label: "Fiscal GL Quarter Number"
-    description: "Fiscal GL Quarter of the ledger date as an integer."
-  }
-
-  dimension: fiscal_gl_year {
-    group_label: "Ledger Date"
-    label: "Fiscal GL Year Number"
+    label: "Fiscal GL Year Num"
     description: "Fiscal GL Year of ledger date as an integer."
+    value_format_name: id
   }
 
   dimension: fiscal_gl_year_month {
     group_label: "Ledger Date"
     label: "Fiscal GL YYYY-MM"
     description: "Fiscal GL Year-Month formatted as YYYY-MM string."
-    sql: CONCAT(CAST(${fiscal_gl_year} AS STRING),"-",LPAD(CAST(${fiscal_gl_month} AS STRING),2,'0'));;
+    sql: CONCAT(CAST(${fiscal_gl_year_num} AS STRING),"-",LPAD(CAST(${fiscal_gl_month_num} AS STRING),2,'0'));;
   }
 
   dimension: fiscal_period_name {

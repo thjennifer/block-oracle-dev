@@ -99,18 +99,18 @@ view: sales_orders_daily_agg {
     datatype: date
     sql: ${TABLE}.ORDERED_DATE ;;
   }
-  # dimension: ordered_month {
-  #   type: number
-  #   sql: ${TABLE}.ORDERED_MONTH ;;
-  # }
-  # dimension: ordered_quarter {
-  #   type: number
-  #   sql: ${TABLE}.ORDERED_QUARTER ;;
-  # }
-  # dimension: ordered_year {
-  #   type: number
-  #   sql: ${TABLE}.ORDERED_YEAR ;;
-  # }
+  dimension: ordered_month_num {
+    type: number
+    sql: ${TABLE}.ORDERED_MONTH_NUM ;;
+  }
+  dimension: ordered_quarter_num {
+    type: number
+    sql: ${TABLE}.ORDERED_QUARTER_NUM ;;
+  }
+  dimension: ordered_year_num {
+    type: number
+    sql: ${TABLE}.ORDERED_YEAR_NUM ;;
+  }
   dimension: ship_to_customer_country {
     type: string
     sql: ${TABLE}.SHIP_TO_CUSTOMER_COUNTRY ;;

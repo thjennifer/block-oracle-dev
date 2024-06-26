@@ -57,12 +57,36 @@ view: +sales_orders_daily_agg {
     convert_tz: no
   }
 
-  dimension_group: ordered {hidden: no}
+  dimension_group: ordered {
+    hidden: no
+    }
+
+  dimension: ordered_month_num {
+    hidden: no
+    group_label: "Ordered Date"
+    group_item_label: "Month Num"
+    description: "Ordered Month as Number 1 to 12"
+  }
+
+  dimension: ordered_quarter_num {
+    hidden: no
+    group_label: "Ordered Date"
+    group_item_label: "Quarter Num"
+    description: "Ordered Quarter as Number 1 to 4"
+  }
+
+  dimension: ordered_year_num {
+    hidden: no
+    group_label: "Ordered Date"
+    group_item_label: "Year Num"
+    description: "Ordered Year as Integer"
+    value_format_name: id
+  }
 
   dimension: order_category_code {
     hidden: no
     sql: UPPER(${TABLE}.ORDER_CATEGORY_CODE);;
-    }
+  }
 
 
 #########################################################

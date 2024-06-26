@@ -131,6 +131,13 @@ dimension: is_late_payment {
   sql: ${due_raw} < ${TABLE}.PAYMENT_CLOSE_DATE ;;
 }
 
+dimension: is_transaction_date_same_as_invoice_date {
+  hidden: no
+  type: yesno
+  view_label: "TEST STUFF"
+  sql: ${transaction_raw} = ${sales_invoices.invoice_raw} ;;
+}
+
 # dimension: test_target_date  {
 #   hidden: no
 #   view_label: "TEST STUFF"

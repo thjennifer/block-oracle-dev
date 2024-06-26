@@ -73,7 +73,29 @@ view: +sales_invoices {
     timeframes: [raw, date, week, month, quarter, year]
   }
 
-   dimension_group: creation_ts {
+  dimension: invoice_month_num {
+    hidden: no
+    group_label: "Invoice Date"
+    group_item_label: "Month Num"
+    description: "Invoice Month as Number 1 to 12"
+  }
+
+  dimension: invoice_quarter_num {
+    hidden: no
+    group_label: "Invoice Date"
+    group_item_label: "Quarter Num"
+    description: "Invoice Quarter as Number 1 to 4"
+  }
+
+  dimension: invoice_year_num {
+    hidden: no
+    group_label: "Invoice Date"
+    group_item_label: "Year Num"
+    description: "Invoice Year as Integer"
+    value_format_name: id
+  }
+
+  dimension_group: creation_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"

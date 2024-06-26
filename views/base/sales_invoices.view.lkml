@@ -46,18 +46,18 @@ view: sales_invoices {
     type: number
     sql: ${TABLE}.INVOICE_ID ;;
   }
-  # dimension: invoice_month {
-  #   type: number
-  #   sql: ${TABLE}.INVOICE_MONTH ;;
-  # }
+  dimension: invoice_month_num {
+    type: number
+    sql: ${TABLE}.INVOICE_MONTH_NUM ;;
+  }
   dimension: invoice_number {
     type: string
     sql: ${TABLE}.INVOICE_NUMBER ;;
   }
-  # dimension: invoice_quarter {
-  #   type: number
-  #   sql: ${TABLE}.INVOICE_QUARTER ;;
-  # }
+  dimension: invoice_quarter_num {
+    type: number
+    sql: ${TABLE}.INVOICE_QUARTER_NUM ;;
+  }
   dimension: invoice_type {
     type: string
     sql: ${TABLE}.INVOICE_TYPE ;;
@@ -70,10 +70,10 @@ view: sales_invoices {
     type: string
     sql: ${TABLE}.INVOICE_TYPE_NAME ;;
   }
-  # dimension: invoice_year {
-  #   type: number
-  #   sql: ${TABLE}.INVOICE_YEAR ;;
-  # }
+  dimension: invoice_year_num {
+    type: number
+    sql: ${TABLE}.INVOICE_YEAR_NUM ;;
+  }
   dimension: is_complete {
     type: yesno
     sql: ${TABLE}.IS_COMPLETE ;;
