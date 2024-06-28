@@ -20,12 +20,11 @@ view: otc_dashboard_navigation_ext {
   parameter: navigation_focus_page {
     hidden: no
     group_label: "Dashboard Navigation"
-    allowed_value: {value:"1"}
-    allowed_value: {value:"2"}
+    # allowed_value: {value:"1"}
+    # allowed_value: {value:"2"}
+    ## additional allowed values beyond 2 tabs
     allowed_value: {value:"3"}
     allowed_value: {value:"4"}
-    # allowed_value: {value:"5"}
-    default_value: "1"
   }
 
   parameter: navigation_style {

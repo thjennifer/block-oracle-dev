@@ -134,7 +134,7 @@
     fields: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_amount_due_remaining_target_currency,sales_payments.percent_of_total_receivables]
     sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     filters:
-      sales_payments.is_overdue: "Yes"
+      sales_payments.is_open_and_overdue: "Yes"
     limit: 50
     x_axis_gridlines: false
     y_axis_gridlines: false

@@ -35,6 +35,13 @@ view: sales_invoices {
     type: string
     sql: ${TABLE}.CURRENCY_CODE ;;
   }
+  dimension_group: exchange {
+    type: time
+    timeframes: [raw, date, week, month, quarter, year]
+    convert_tz: no
+    datatype: date
+    sql: ${TABLE}.EXCHANGE_DATE ;;
+  }
   dimension_group: invoice {
     type: time
     timeframes: [raw, date, week, month, quarter, year]

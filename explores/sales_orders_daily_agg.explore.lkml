@@ -28,6 +28,5 @@ explore: sales_orders_daily_agg {
   join: otc_common_parameters_xvw {
     relationship: one_to_one
     sql:  ;;
-
-}
+  }
 }

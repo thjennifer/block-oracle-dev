@@ -6,10 +6,12 @@ include: "/views/core/sales_payments_dynamic_aging_bucket_sdt.view"
 
 explore: sales_payments {
 
+  fields: [ALL_FIELDS*,-otc_common_parameters_xvw.parameter_language]
+
   join: currency_conversion_sdt {
     view_label: "Sales Payments: Lines Currency Conversion"
     type: left_outer
-    sql_on:  ${sales_payments.exchange_raw} = ${currency_conversion_sdt.conversion_date} AND
+    sql_on:  COALESCE(${sales_payments.exchange_raw},${sales_payments.transaction_raw}) = ${currency_conversion_sdt.conversion_date} AND
       ${sales_payments.currency_code} = ${currency_conversion_sdt.from_currency} ;;
     relationship: many_to_one
     # no fields from currency conversion needed as all relevant fields are in sales_order__lines

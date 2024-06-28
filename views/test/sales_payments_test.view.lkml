@@ -8,10 +8,10 @@ view: +sales_payments {
   {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
   {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesPayments` ;;
 
-  dimension: is_overdue {
+  dimension: is_open_and_overdue {
     sql:  {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
              @{default_target_date_test} ${due_raw} < DATE('{{td}}') AND ${is_open}
-          {% else %}${TABLE}.IS_OVERDUE
+          {% else %}${TABLE}.IS_OPEN_AND_OVERDUE
           {% endif%};;
   }
 
@@ -25,15 +25,11 @@ view: +sales_payments {
 
   dimension: is_doubtful {
     sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
-         ${days_overdue} > 90 AND ${is_open}
+         ${days_overdue} > 90 AND ${is_open_and_overdue}
          {% else %}${TABLE}.IS_DOUBTFUL
          {% endif%};;
   }
 
-  dimension_group: payment_close {
-    timeframes: [raw,date, month, week, quarter, year, yesno]
-    sql: NULLIF(${TABLE}.PAYMENT_CLOSE_DATE,PARSE_DATE('%F','4712-12-31'));;
-  }
 
 
   # -- TODO: fix this logic to account for payments that were made.
@@ -51,6 +47,32 @@ view: +sales_payments {
 #########################################################
 # TEST STUFF
 #{
+
+  dimension_group: payment_close_with_null {
+    view_label: "TEST STUFF"
+    type: time
+    timeframes: [raw,date, month, week, quarter, year, yesno]
+    sql: NULLIF(${TABLE}.PAYMENT_CLOSE_DATE,PARSE_DATE('%F','4712-12-31'));;
+  }
+
+  dimension: days_late_using_null_payment_close {
+    view_label: "TEST STUFF"
+    sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+             @{default_target_date_test}
+              DATE_DIFF( ${payment_close_with_null_raw}, ${due_raw}, DAY)
+          {% else %}${TABLE}.DAYS_LATE
+          {% endif%} ;;
+  }
+
+  dimension: days_to_payment_using_null_payment_close {
+    view_label: "TEST STUFF"
+    sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+             @{default_target_date_test}
+              DATE_DIFF( ${payment_close_with_null_raw}, ${transaction_raw}, DAY)
+          {% else %}${TABLE}.DAYS_LATE
+          {% endif%} ;;
+  }
+
 
 dimension: is_null_business_unit_name {
   hidden: no
@@ -138,11 +160,20 @@ dimension: is_transaction_date_same_as_invoice_date {
   sql: ${transaction_raw} = ${sales_invoices.invoice_raw} ;;
 }
 
-# dimension: test_target_date  {
-#   hidden: no
-#   view_label: "TEST STUFF"
-#   sql: @{default_target_date}'{{td}}' ;;
-# }
+  dimension: is_negative_amount_due_remaining {
+    hidden: no
+    type: yesno
+    view_label: "TEST STUFF"
+    sql: ${amount_due_remaining} < 0 ;;
+  }
+
+dimension: test_target_date  {
+  type: string
+  hidden: no
+  view_label: "TEST STUFF"
+  sql: {% assign ua = _user_attributes['cortex_oracle_ebs_use_test_data'] %} '{{ua}}';;
+  # sql: @{default_target_date_test}'{{td}}' ;;
+}
 
 
 #}

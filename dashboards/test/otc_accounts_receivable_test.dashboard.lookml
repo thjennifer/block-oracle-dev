@@ -44,12 +44,13 @@
     filters:
       otc_dashboard_navigation_ext.navigation_focus_page: '4'
 
-  - title: Total Receivable
-    name: Total Receivable
+  - title: Total Receivables
+    name: Total Receivables
     explore: sales_payments
     type: single_value
     fields: [sales_payments.total_amount_due_remaining_target_currency]
-    filters: {}
+    filters:
+      sales_payments.is_payment_transaction: 'No'
     show_single_value_title: true
     show_comparison: false
     enable_conditional_formatting: false
@@ -65,12 +66,12 @@
     width: 5
     height: 2
 
-  - title: Total Past Due Receivable
-    name: Total Past Due Receivable
+  - title: Total Past Due Receivables
+    name: Total Past Due Receivables
     explore: sales_payments
     type: single_value
     fields: [sales_payments.total_overdue_receivables_target_currency]
-    filters: {}
+
     show_single_value_title: true
     show_comparison: false
     enable_conditional_formatting: false
@@ -89,8 +90,8 @@
     width: 5
     height: 2
 
-  - title: Total Doubtful Receivable
-    name: Total Doubtful Receivable
+  - title: Total Doubtful Receivables
+    name: Total Doubtful Receivables
     explore: sales_payments
     type: single_value
     fields: [sales_payments.total_doubtful_receivables_target_currency]
@@ -113,13 +114,15 @@
     width: 5
     height: 2
 
-  - title: Percent of Total Receivable by Company
-    name: Percent of Total Receivable by Company
+  - title: Total Receivables by Company
+    name: Total Receivables by Company
     explore: sales_payments
     type: looker_bar
     fields: [sales_payments.bill_to_customer_number, sales_payments.bill_to_customer_name, sales_payments.total_amount_due_remaining_target_currency]
     sorts: [sales_payments.total_amount_due_remaining_target_currency desc]
     hidden_fields: [sales_payments.bill_to_customer_number]
+    filters:
+      sales_payments.is_payment_transaction: 'No'
     limit: 10
     x_axis_gridlines: false
     y_axis_gridlines: false
@@ -172,7 +175,8 @@
     fields: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_amount_due_remaining_target_currency,sales_payments.percent_of_total_receivables]
     sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     filters:
-      sales_payments.is_overdue: "Yes"
+      sales_payments.is_open_and_overdue: "Yes"
+      sales_payments.is_payment_transaction: 'No'
     limit: 50
     x_axis_gridlines: false
     y_axis_gridlines: false

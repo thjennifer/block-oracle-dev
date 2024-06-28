@@ -1,7 +1,10 @@
 include: "/views/base/sales_payments.view"
+include: "/views/core/otc_fiscal_gl_dates_ext.view"
+include: "/views/core/sales_payments_common_fields_ext.view"
 
 view: +sales_payments {
 
+  extends: [otc_fiscal_gl_dates_ext,sales_payments_common_fields_ext]
 
 
   dimension: payment_schedule_id {
@@ -33,14 +36,14 @@ view: +sales_payments {
     description: "Yes if Payment Class Code = 'PMT' else No."
   }
 
-  dimension: is_overdue {
+  dimension: is_open_and_overdue {
      sql:  {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
                @{default_target_date}${due_raw} < DATE('{{td}}') AND ${is_open}
-             {% else %}${TABLE}.IS_OVERDUE
+             {% else %}${TABLE}.IS_OPEN_AND_OVERDUE
            {% endif%};;
   }
 
-  dimension: is_late {
+  dimension: was_closed_late {
   }
 
   dimension: is_doubtful {
@@ -95,9 +98,9 @@ view: +sales_payments {
 
 
 #########################################################
-# Business Unit / Order Source / Customer Dimensions
+# Payment Class / Business Unit / Customer Dimensions
 #{
-
+  dimension: payment_class_code {hidden: no}
   dimension: business_unit_id {hidden: no}
 
   dimension: business_unit_name {
@@ -107,12 +110,13 @@ view: +sales_payments {
 
   dimension: bill_to_site_use_id {
     group_label: "Bill to Customer"
+    sql: COALESCE(${TABLE}.BILL_TO_SITE_USE_ID,-1) ;;
   }
 
   dimension: bill_to_customer_name {
     hidden: no
     group_label: "Bill to Customer"
-    # sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CONCAT("Bill to Customer Number: ",CAST(${bill_to_customer_number} AS STRING))) ;;
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,"Unknown") ;;
   }
 
   dimension: bill_to_customer_number {
@@ -125,7 +129,7 @@ view: +sales_payments {
     sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_COUNTRY,"Unknown") ;;
   }
 
-#} end business unit / order source / customer dimensions
+#} end payment class / business unit / customer dimensions
 
 
 
@@ -158,45 +162,6 @@ view: +sales_payments {
   }
 
   dimension_group: ledger {}
-
-  dimension: fiscal_gl_month_num {
-    group_label: "Ledger Date"
-    label: "Fiscal GL Month Num"
-    description: "Fiscal GL month of the ledger date as an integer."
-  }
-
-  dimension: fiscal_gl_quarter_num {
-    group_label: "Ledger Date"
-    label: "Fiscal GL Quarter Num"
-    description: "Fiscal GL Quarter of the ledger date as an integer."
-  }
-
-  dimension: fiscal_gl_year_num {
-    group_label: "Ledger Date"
-    label: "Fiscal GL Year Num"
-    description: "Fiscal GL Year of ledger date as an integer."
-    value_format_name: id
-  }
-
-  dimension: fiscal_gl_year_month {
-    group_label: "Ledger Date"
-    label: "Fiscal GL YYYY-MM"
-    description: "Fiscal GL Year-Month formatted as YYYY-MM string."
-    sql: CONCAT(CAST(${fiscal_gl_year_num} AS STRING),"-",LPAD(CAST(${fiscal_gl_month_num} AS STRING),2,'0'));;
-  }
-
-  dimension: fiscal_period_name {
-    group_label: "Ledger Date"
-    description: "Name of fiscal period. For example 'Jan-2024'."
-  }
-
-  dimension: fiscal_period_set_name {
-    group_label: "Ledger Date"
-  }
-
-  dimension: fiscal_period_type {
-    group_label: "Ledger Date"
-  }
 
   dimension_group: due {}
 
@@ -382,6 +347,24 @@ view: +sales_payments {
     value_format_name: decimal_2
   }
 
+  dimension: overdue_receivables_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Past Due Receivables ({{currency}}){%else%}Past Due Receivables (Target Currency){%endif%}"
+    sql: IF(${is_payment_transaction}=FALSE AND ${is_open_and_overdue},${amount_due_remaining_target_currency},0)   ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: doubtful_receivables_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Doubtful Receivables ({{currency}}){%else%}Doubtful Receivables (Target Currency){%endif%}"
+    sql: IF(${is_payment_transaction}=FALSE AND ${is_doubtful},${amount_due_remaining_target_currency},0)   ;;
+    value_format_name: decimal_2
+  }
+
 #} end amount dimensions
 
 
@@ -393,108 +376,118 @@ view: +sales_payments {
     drill_fields: [payments_details*]
   }
 
+  # measure: total_amount_adjusted_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Amount Adjusted ({{currency}}){%else%}Amount Adjusted (Target Currency){%endif%}"
+  #   sql: ${amount_adjusted_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   # filters: [is_payment_transaction: "No"]
+  # }
 
-  measure: total_amount_adjusted_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Adjusted ({{currency}}){%else%}Amount Adjusted (Target Currency){%endif%}"
-    sql: ${amount_adjusted_target_currency} ;;
-    value_format_name: decimal_2
-    filters: [is_payment_transaction: "No"]
-  }
+  # measure: total_amount_applied_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Amount Applied ({{currency}}){%else%}Amount Applied (Target Currency){%endif%}"
+  #   sql: ${amount_applied_target_currency} * if(${payment_class_code} = 'CM',-1,1) ;;
+  #   value_format_name: decimal_2
+  #   # filters: [is_payment_transaction: "No"]
+  # }
 
-#####REVIEW need to confirm the payment_class_code filters needed if any
-  measure: total_amount_applied_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Applied ({{currency}}){%else%}Amount Applied (Target Currency){%endif%}"
-    sql: ${amount_applied_target_currency}  ;;
-    value_format_name: decimal_2
-    filters: [is_payment_transaction: "No"]
-  }
+  # measure: total_amount_credited_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Amount Credited ({{currency}}){%else%}Amount Credited (Target Currency){%endif%}"
+  #   sql: ${amount_credited_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   # filters: [is_payment_transaction: "No"]
+  # }
 
-  measure: total_amount_credited_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Credited ({{currency}}){%else%}Amount Credited (Target Currency){%endif%}"
-    sql: ${amount_credited_target_currency} ;;
-    value_format_name: decimal_2
-    filters: [is_payment_transaction: "No"]
-  }
+  # measure: total_amount_discounted_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Amount Discounted ({{currency}}){%else%}Amount Discounted (Target Currency){%endif%}"
+  #   sql: ${amount_discounted_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   # filters: [is_payment_transaction: "No"]
+  # }
 
-#####REVIEW need to confirm the payment_class_code filters needed if any
-  measure: total_amount_discounted_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Discounted ({{currency}}){%else%}Amount Discounted (Target Currency){%endif%}"
-    sql: ${amount_discounted_target_currency} ;;
-    value_format_name: decimal_2
-    filters: [is_payment_transaction: "No"]
-  }
+  # measure: total_amount_due_original_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Amount Due Original ({{currency}}){%else%}Amount Due Original (Target Currency){%endif%}"
+  #   sql: ${amount_due_original_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   # filters: [is_payment_transaction: "No"]
+  # }
 
-  measure: total_amount_due_original_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Due Original ({{currency}}){%else%}Amount Due Original (Target Currency){%endif%}"
-    sql: ${amount_due_original_target_currency} ;;
-    # filters: [payment_class_code: "INV,CM"]
-    value_format_name: decimal_2
-    filters: [is_payment_transaction: "No"]
-  }
+  # measure: total_amount_due_remaining_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Receivables ({{currency}}){%else%}Total Receivables (Target Currency){%endif%}"
+  #   sql: ${amount_due_remaining_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   # filters: [is_payment_transaction: "No"]
+  # }
 
-  measure: total_amount_due_remaining_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Receivables ({{currency}}){%else%}Total Receivables (Target Currency){%endif%}"
-    sql: ${amount_due_remaining_target_currency} ;;
-    value_format_name: decimal_2
-    filters: [is_payment_transaction: "No"]
-  }
+  # measure: total_tax_original_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount Original ({{currency}}){%else%}Tax Amount Original (Target Currency){%endif%}"
+  #   sql: ${tax_original_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   # filters: [is_payment_transaction: "No"]
+  # }
 
-  measure: total_tax_original_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount Original ({{currency}}){%else%}Tax Amount Original (Target Currency){%endif%}"
-    sql: ${tax_original_target_currency} ;;
-    value_format_name: decimal_2
-    filters: [is_payment_transaction: "No"]
-  }
+  # measure: total_tax_remaining_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount Remaining ({{currency}}){%else%}Tax Amount Remaining (Target Currency){%endif%}"
+  #   sql: ${tax_remaining_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   # filters: [is_payment_transaction: "No"]
+  # }
 
-  measure: total_tax_remaining_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount Remaining ({{currency}}){%else%}Tax Amount Remaining (Target Currency){%endif%}"
-    sql: ${tax_remaining_target_currency} ;;
-    value_format_name: decimal_2
-    filters: [is_payment_transaction: "No"]
-  }
+  # measure: total_overdue_receivables_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Past Due Receivables ({{currency}}){%else%}Past Due Receivables (Target Currency){%endif%}"
+  #   sql: ${amount_due_remaining_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   filters: [is_payment_transaction: "No" , is_overdue: "Yes"]
+  # }
 
-  measure: total_overdue_receivables_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Past Due Receivables ({{currency}}){%else%}Past Due Receivables (Target Currency){%endif%}"
-    sql: ${amount_due_remaining_target_currency} ;;
-    value_format_name: decimal_2
-    filters: [is_payment_transaction: "No" , is_overdue: "Yes"]
-  }
+  # measure: total_doubtful_receivables_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Doubtful Receivables ({{currency}}){%else%}Doubtful Receivables (Target Currency){%endif%}"
+  #   sql: ${amount_due_remaining_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   filters: [is_payment_transaction: "No" , is_doubtful: "Yes"]
+  # }
 
-  measure: total_doubtful_receivables_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Doubtful Receivables ({{currency}}){%else%}Doubtful Receivables (Target Currency){%endif%}"
-    sql: ${amount_due_remaining_target_currency} ;;
-    value_format_name: decimal_2
-    filters: [is_payment_transaction: "No" , is_doubtful: "Yes"]
-  }
+  # measure: percent_of_total_receivables {
+  #   type: percent_of_total
+  #   sql: ${total_amount_due_remaining_target_currency} ;;
+  # }
 
-  measure: percent_of_total_receivables {
-    type: percent_of_total
-    sql: ${total_amount_due_remaining_target_currency} ;;
-  }
+  # measure: total_overdue_receivables_target_currency {
+  #   sql: ${amount_due_remaining_target_currency} ;;
+  #   filters: [payment_class_code: "-PMT", is_overdue: "Yes"]
+  # }
+
+  # measure: total_doubtful_receivables_target_currency {
+  #   # hidden: no
+  #   # type: sum
+  #   # label: "{% if _field._is_selected %}@{derive_currency_label}Doubtful Receivables ({{currency}}){%else%}Doubtful Receivables (Target Currency){%endif%}"
+  #   sql: ${amount_due_remaining_target_currency} ;;
+  #   # value_format_name: decimal_2
+  #   filters: [payment_class_code: "-PMT" , is_doubtful: "Yes"]
+  # }
 
 
 set: payments_details {
-  fields: [payment_schedule_id, payment_class_code, invoice_id, invoice_number, bill_to_customer_name, transaction_date, due_date, payment_close_date, total_amount_due_original_target_currency,total_amount_due_remaining_target_currency, payment_status_code, is_late, is_overdue]
+  fields: [payment_schedule_id, payment_class_code, invoice_id, invoice_number, bill_to_customer_name, transaction_date, due_date, payment_close_date, total_amount_due_original_target_currency,total_amount_due_remaining_target_currency, payment_status_code, is_open_and_overdue]
 }
 
 
