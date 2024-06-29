@@ -9,12 +9,9 @@
 
   filters:
   - name: Date
-    title: Date
+    title: Invoice Date
     type: date_filter
     default_value:  ""
-    # default_value: "2022/03/02 to 2022/03/03"
-    # default_value: "last 1 year"
-    # default_value: "@{DEFAULT_DATE_RANGE}"
     allow_multiple_values: true
     required: false
     ui_config:
