@@ -9,10 +9,8 @@ view: +sales_payments {
 
   dimension: payment_schedule_id {
     primary_key: yes
+    value_format_name: id
   }
-
-
-
 
   dimension: cash_receipt_id {
     hidden: no
@@ -38,8 +36,8 @@ view: +sales_payments {
 
   dimension: is_open_and_overdue {
      sql:  {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
-               @{default_target_date}${due_raw} < DATE('{{td}}') AND ${is_open}
-             {% else %}${TABLE}.IS_OPEN_AND_OVERDUE
+               ${due_raw} < DATE(@{sample_target_date}) AND ${is_open}
+           {% else %}${TABLE}.IS_OPEN_AND_OVERDUE
            {% endif%};;
   }
 
@@ -48,53 +46,27 @@ view: +sales_payments {
 
   dimension: is_doubtful {
     sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
-         ${days_overdue} > 90 AND ${is_open}
+            ${days_overdue} > 90 AND ${is_open}
          {% else %}${TABLE}.IS_DOUBTFUL
          {% endif%};;
   }
 
   dimension: is_open {
+    hidden: yes
     type: yesno
     sql: ${amount_due_remaining} > 0 ;;
   }
 
   dimension: days_overdue {
     sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
-             @{default_target_date}
-              DATE_DIFF( DATE('{{td}}'), ${due_raw}, DAY)
-          {% else %}${TABLE}.DAYS_OVERDUE
-          {% endif%} ;;
+             DATE_DIFF(@{sample_target_date}), ${due_raw}, DAY)
+         {% else %}${TABLE}.DAYS_OVERDUE
+         {% endif%} ;;
   }
 
   dimension: days_late {}
 
   dimension: days_to_payment {}
-
-  # dimension: aging_bucket_1_to_120 {
-  #   type: string
-  #   sql: CASE WHEN ${days_overdue} <= 0 THEN "CURRENT"
-  #             WHEN ${days_overdue} <= 30 THEN "30 Past Due"
-  #             WHEN ${days_overdue} <= 60 THEN "60 Past Due"
-  #             WHEN ${days_overdue} <= 90 THEN "90 Past Due"
-  #             WHEN ${days_overdue} <= 120 THEN "120 Past Due"
-  #         ELSE "121+ Past Due"
-  #         END;;
-  #   order_by_field: aging_bucket_1_to_120_sort_number
-  # }
-
-  # dimension: aging_bucket_1_to_120_sort_number {
-  #   hidden:yes
-  #   type: number
-  #   sql: CASE WHEN ${days_overdue} <= 0 THEN 1
-  #             WHEN ${days_overdue} <= 30 THEN 2
-  #             WHEN ${days_overdue} <= 60 THEN 3
-  #             WHEN ${days_overdue} <= 90 THEN 4
-  #             WHEN ${days_overdue} <= 120 THEN 5
-  #         ELSE 6
-  #         END;;
-  # }
-
-
 
 
 #########################################################
@@ -138,6 +110,13 @@ view: +sales_payments {
 # Dates
 #{
   dimension_group: transaction {}
+
+  dimension_group: invoice {
+    hidden: yes
+    type: time
+    timeframes: [raw,date]
+    sql: IF(${payment_class_code}<>'PMT',${TABLE}.TRANSACTION_DATE,NULL);;
+  }
 
   dimension: transaction_month_num {
     hidden: no
@@ -373,7 +352,22 @@ view: +sales_payments {
   measure: transaction_count {
     hidden: no
     type: count
-    drill_fields: [payments_details*]
+    drill_fields: [payment_details*]
+  }
+
+  measure: total_receivables_target_currency {
+    # fully defined in sales_payments_common_fields
+    drill_fields: [invoice_payment_details*]
+  }
+
+  measure: total_overdue_receivables_target_currency {
+    # fully defined in sales_payments_common_fields
+    drill_fields: [overdue_details*]
+  }
+
+  measure: total_doubtful_receivables_target_currency {
+    # fully defined in sales_payments_common_fields
+    drill_fields: [overdue_details*]
   }
 
   # measure: total_amount_adjusted_target_currency {
@@ -486,9 +480,56 @@ view: +sales_payments {
   # }
 
 
-set: payments_details {
-  fields: [payment_schedule_id, payment_class_code, invoice_id, invoice_number, bill_to_customer_name, transaction_date, due_date, payment_close_date, total_amount_due_original_target_currency,total_amount_due_remaining_target_currency, payment_status_code, is_open_and_overdue]
+set: payment_details {
+    fields:   [
+      bill_to_customer_name,
+      invoice_number,
+      invoice_date,
+      payment_schedule_id,
+      payment_class_code,
+      transaction_date,
+      due_date,
+      payment_close_date,
+      is_open_and_overdue,
+      days_overdue,
+      total_amount_due_original_target_currency,
+      total_amount_due_remaining_target_currency,
+      total_amount_applied_target_currency
+    ]
+  }
+
+set: invoice_payment_details {
+  fields:   [
+            bill_to_customer_name,
+            invoice_number,
+            invoice_date,
+            payment_schedule_id,
+            payment_class_code,
+            due_date,
+            payment_close_date,
+            is_open_and_overdue,
+            days_overdue,
+            total_amount_due_original_target_currency,
+            total_amount_due_remaining_target_currency,
+            total_amount_applied_target_currency
+            ]
 }
+
+set: overdue_details {
+    fields:   [
+      bill_to_customer_name,
+      invoice_number,
+      invoice_date,
+      payment_schedule_id,
+      payment_class_code,
+      due_date,
+      is_open_and_overdue,
+      days_overdue,
+      total_amount_due_original_target_currency,
+      total_receivables_target_currency,
+      total_amount_applied_target_currency,
+      ]
+  }
 
 
 

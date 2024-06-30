@@ -1,5 +1,5 @@
-- dashboard: otc_accounts_receivable_test
-  title: Accounts Receivable TEST
+- dashboard: otc_accounts_receivable_using_sales_payments_test
+  title: Accounts Receivable using only Sales Payments TEST
   layout: newspaper
   preferred_viewer: dashboards-next
   crossfilter_enabled: false
@@ -39,16 +39,16 @@
     field: sales_payments_dynamic_aging_bucket_sdt.dummy_bucket_number
 
   elements:
-  - title: navigation
-    name: navigation
-    filters:
-      otc_dashboard_navigation_ext.navigation_focus_page: '4'
+  # - title: navigation
+  #   name: navigation
+  #   filters:
+  #     otc_dashboard_navigation_ext.navigation_focus_page: '4'
 
   - title: Total Receivables
     name: Total Receivables
     explore: sales_payments
     type: single_value
-    fields: [sales_payments.total_amount_due_remaining_target_currency]
+    fields: [sales_payments.total_receivables_target_currency]
     filters:
       sales_payments.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -74,7 +74,9 @@
     explore: sales_payments
     type: single_value
     fields: [sales_payments.total_overdue_receivables_target_currency]
-
+    filters:
+      sales_payments.is_payment_transaction: 'No'
+      sales_payments.is_open_and_overdue: 'Yes'
     show_single_value_title: true
     show_comparison: false
     enable_conditional_formatting: false
@@ -98,7 +100,9 @@
     explore: sales_payments
     type: single_value
     fields: [sales_payments.total_doubtful_receivables_target_currency]
-    filters: {}
+    filters:
+      sales_payments.is_payment_transaction: 'No'
+      sales_payments.is_doubtful: 'Yes'
     show_single_value_title: true
     show_comparison: false
     enable_conditional_formatting: false
@@ -121,7 +125,7 @@
     title: Past Due Receivables by Age
     explore: sales_payments
     type: looker_bar
-    fields: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_receivables_target_currency]
+    fields: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_overdue_receivables_target_currency]
     pivots: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     filters:
       sales_payments.is_open_and_overdue: 'Yes'
@@ -357,6 +361,7 @@
         is_entire_pivot_hidden: true
     filters:
       sales_payments.is_open_and_overdue: 'Yes'
+      sales_payments.payment_class_code: '-PMT'
     sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_receivables_target_currency
         desc 4]
     limit: 5000
