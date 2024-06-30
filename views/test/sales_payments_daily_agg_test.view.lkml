@@ -13,4 +13,12 @@ view: sales_payments_daily_agg_test {
   {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}${sales_payments_daily_agg_sample_pdt.SQL_TABLE_NAME}
   {%else%}`@{GCP_PROJECT_ID}.{{t}}.SalesPaymentsDailyAgg`{%endif%} ;;
 
+
+  measure: days_sales_outstanding {
+    hidden: no
+    type: string
+    sql: MAX('COMING SOON') ;;
+    html: "🚧" ;;
+  }
+
    }

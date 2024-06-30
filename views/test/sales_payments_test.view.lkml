@@ -175,6 +175,14 @@ dimension: test_target_date  {
   # sql: @{default_target_date_test}'{{td}}' ;;
 }
 
+  measure: days_sales_outstanding {
+    hidden: no
+    type: string
+    view_label: "TEST STUFF"
+    sql: MAX('COMING SOON') ;;
+    html: 🚧 ;;
+  }
+
 
 #}
 }

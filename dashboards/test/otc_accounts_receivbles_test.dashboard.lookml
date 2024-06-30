@@ -44,8 +44,8 @@
   #   filters:
   #     otc_dashboard_navigation_ext.navigation_focus_page: '4'
 
-  - title: Total Receivables
-    name: Total Receivables
+  - name: total_receivables
+    title: Total Receivables
     explore: sales_payments_daily_agg
     type: single_value
     fields: [sales_payments_daily_agg.total_receivables_target_currency]
@@ -69,8 +69,8 @@
     width: 5
     height: 3
 
-  - title: Total Past Due Receivables
-    name: Total Past Due Receivables
+  - name: past_due_receivables
+    title: Total Past Due Receivables
     explore: sales_payments_daily_agg
     type: single_value
     fields: [sales_payments_daily_agg.total_overdue_receivables_target_currency]
@@ -94,8 +94,8 @@
     width: 5
     height: 3
 
-  - title: Total Doubtful Receivables
-    name: Total Doubtful Receivables
+  - name: doubtful_receivables
+    title: Total Doubtful Receivables
     explore: sales_payments_daily_agg
     type: single_value
     fields: [sales_payments_daily_agg.total_doubtful_receivables_target_currency]
@@ -116,6 +116,31 @@
       Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 4
     col: 0
+    width: 5
+    height: 3
+
+  - name: days_sales_outstanding
+    title: Days Sales Outstanding
+    explore: sales_payments
+    type: single_value
+    fields: [sales_payments.days_sales_outstanding]
+    # filters:
+    #   sales_payments_daily_agg.is_payment_transaction: 'No'
+    show_single_value_title: true
+    show_comparison: false
+    enable_conditional_formatting: false
+    note_state: collapsed
+    note_display: hover
+    note_text: "Under Construction"
+    # listen:
+    #   Date: sales_payments_daily_agg.transaction_date
+    #   Country: sales_payments_daily_agg.bill_to_customer_country
+    #   Customer: sales_payments_daily_agg.bill_to_customer_name
+    #   Business Unit: sales_payments_daily_agg.business_unit_name
+    #   Target Currency: otc_common_parameters_xvw.parameter_target_currency
+    #   Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+    row: 4
+    col: 5
     width: 5
     height: 3
 
