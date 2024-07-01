@@ -29,8 +29,8 @@
     hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -53,8 +53,8 @@
     hidden_fields: [sales_orders.order_count,sales_orders.no_holds_sales_order_percent]
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -76,8 +76,8 @@
     hidden_fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent]
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -99,8 +99,8 @@
       sales_orders.is_blocked: 'Yes'
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -168,8 +168,8 @@
     title_hidden: true
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description

@@ -85,8 +85,8 @@
 
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -138,8 +138,8 @@
     y_axis_zoom: true
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -187,8 +187,8 @@
     y_axis_zoom: true
     listen:
       Date: sales_orders_daily_agg.ordered_date
-      Country: sales_orders_daily_agg.sold_to_customer_country
-      Customer: sales_orders_daily_agg.sold_to_customer_name
+      Country: sales_orders_daily_agg.selected_customer_country
+      Customer: sales_orders_daily_agg.selected_customer_name
       Business Unit: sales_orders_daily_agg.business_unit_name
       Order Source: sales_orders_daily_agg.order_source_name
       Item Category: sales_orders_daily_agg__lines.category_description
@@ -203,9 +203,9 @@
     title: Top Customers by Avg Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders.sold_to_customer_number, sales_orders.sold_to_customer_name, sales_orders__lines.average_sales_amount_per_order_target_currency]
+    fields: [sales_orders.selected_customer_number, sales_orders.selected_customer_name, sales_orders__lines.average_sales_amount_per_order_target_currency]
     sorts: [sales_orders__lines.average_sales_amount_per_order_target_currency desc]
-    hidden_fields: [sales_orders.sold_to_customer_number]
+    hidden_fields: [sales_orders.selected_customer_number]
     # filters:
     #   sales_orders_v2.count_orders: ">=10"
     limit: 10
@@ -232,8 +232,8 @@
     y_axis_zoom: true
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -310,8 +310,8 @@
     title_hidden: true
     listen:
       Date: sales_orders_daily_agg.ordered_date
-      Country: sales_orders_daily_agg.sold_to_customer_country
-      Customer: sales_orders_daily_agg.sold_to_customer_name
+      Country: sales_orders_daily_agg.selected_customer_country
+      Customer: sales_orders_daily_agg.selected_customer_name
       Business Unit: sales_orders_daily_agg.business_unit_name
       Order Source: sales_orders_daily_agg.order_source_name
       Item Category: sales_orders_daily_agg__lines.category_description

@@ -47,8 +47,8 @@
     hidden_fields: [sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -69,8 +69,8 @@
     hidden_fields: [sales_orders.fulfilled_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -94,8 +94,8 @@
     #     font_color: "#DB4C40", bold: false, italic: false, strikethrough: false, fields: !!null ''}]
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -141,8 +141,8 @@
     defaults_version: 1
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -214,8 +214,8 @@
         \     },\n        \n      },\n    ],\n    \n\n  }, ],\n}"
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
@@ -330,8 +330,8 @@
     note_text: Top 10 Items with Largest Difference between Quantity Ordered and Fulfilled
     listen:
       Date: sales_orders.ordered_date
-      Country: sales_orders.sold_to_customer_country
-      Customer: sales_orders.sold_to_customer_name
+      Country: sales_orders.selected_customer_country
+      Customer: sales_orders.selected_customer_name
       Business Unit: sales_orders.business_unit_name
       Order Source: sales_orders.order_source_name
       Item Category: sales_orders__lines.category_description
