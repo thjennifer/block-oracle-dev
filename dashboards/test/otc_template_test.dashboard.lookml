@@ -28,9 +28,9 @@
     ui_config:
       type: checkboxes
       display: popover
-    explore: sales_orders
+    explore: sales_orders_daily_agg
+    field: sales_orders_daily_agg.business_unit_name
     listens_to_filters: [Test or Demo]
-    field: sales_orders.business_unit_name
 
   - name: Customer Type
     title: 'Customer: Type'
@@ -44,8 +44,8 @@
       options:
         - bill
         - sold
-    explore: sales_orders
-    field: sales_orders.parameter_customer_type
+    explore: sales_orders_daily_agg
+    field: sales_orders_daily_agg.parameter_customer_type
 
   - name: Country
     title: 'Customer: Country'
@@ -56,9 +56,9 @@
     ui_config:
       type: checkboxes
       display: popover
-    explore: sales_orders
+    explore: sales_orders_daily_agg
     listens_to_filters: [Business Unit, Test or Demo, Customer Type]
-    field: sales_orders.selected_customer_country
+    field: sales_orders_daily_agg.selected_customer_country
 
   - name: Customer
     title: 'Customer: Name'
@@ -69,9 +69,9 @@
     ui_config:
       type: advanced
       display: popover
-    explore: sales_orders
+    explore: sales_orders_daily_agg
     listens_to_filters: [Country, Test or Demo, Customer Type]
-    field: sales_orders.selected_customer_name
+    field: sales_orders_daily_agg.selected_customer_name
 
   - name: Order Source
     title: Order Source
@@ -82,9 +82,9 @@
     ui_config:
       type: checkboxes
       display: popover
-    explore: sales_orders
+    explore: sales_orders_daily_agg
     listens_to_filters: [Test or Demo]
-    field: sales_orders.order_source_name
+    field: sales_orders_daily_agg.order_source_name
 
   - name: Item Category
     title: Item Category
@@ -95,8 +95,8 @@
     ui_config:
       type: checkboxes
       display: popover
-    explore: sales_orders
-    field: sales_orders__lines.category_description
+    explore: sales_orders_daily_agg
+    field: sales_orders_daily_agg__lines.category_description
     listens_to_filters: [Test or Demo]
 
   - name: Target Currency
@@ -123,8 +123,7 @@
     ui_config:
       type: button_toggles
       display: inline
-    explore: sales_orders
-
+    explore: sales_orders_daily_agg
     field: otc_common_parameters_xvw.parameter_use_demo_or_test_data
 
 
