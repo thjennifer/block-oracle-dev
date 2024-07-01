@@ -1,10 +1,10 @@
 view: otc_fiscal_gl_dates_ext {
   extension: required
 
-  dimension: fiscal_gl_month_num {
+  dimension: fiscal_gl_period_num {
     group_label: "Ledger Date"
-    label: "Fiscal GL Month Number"
-    description: "Fiscal GL month of the ledger date as an integer."
+    label: "Fiscal GL Period Number"
+    description: "Fiscal GL period of the ledger date as an integer."
   }
 
   dimension: fiscal_gl_quarter_num {
@@ -20,11 +20,12 @@ view: otc_fiscal_gl_dates_ext {
     value_format_name: id
   }
 
-  dimension: fiscal_gl_year_month_num {
+  dimension: fiscal_gl_year_period {
+    type: string
     group_label: "Ledger Date"
-    label: "Fiscal GL YYYY-MM"
-    description: "Fiscal GL Year-Month formatted as YYYY-MM string."
-    sql: CONCAT(CAST(${fiscal_gl_year_num} AS STRING),"-",LPAD(CAST(${fiscal_gl_month_num} AS STRING),2,'0'));;
+    label: "Fiscal GL Year-Period (YYYY-PPP)"
+    description: "Fiscal GL Year-Period formatted as YYYY-PPP string."
+    sql: CONCAT(CAST(${fiscal_gl_year_num} AS STRING),"-",LPAD(CAST(${fiscal_gl_period_num} AS STRING),3,'0'));;
   }
 
   dimension: fiscal_period_name {

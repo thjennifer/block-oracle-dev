@@ -1,12 +1,11 @@
 include: "/views/base/sales_payments_daily_agg.view"
-include: "/views/core/otc_fiscal_gl_dates_ext.view"
 include: "/views/core/sales_payments_common_fields_ext.view"
 include: "/views/core/sales_payments_daily_agg_sample_pdt.view"
 
 
 view: +sales_payments_daily_agg {
 
-  extends: [otc_fiscal_gl_dates_ext,sales_payments_common_fields_ext]
+  extends: [sales_payments_common_fields_ext]
 
   sql_table_name: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}${sales_payments_daily_agg_sample_pdt.SQL_TABLE_NAME}{%else%}`@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg`{%endif%} ;;
 

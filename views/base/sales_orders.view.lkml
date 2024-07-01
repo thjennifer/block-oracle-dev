@@ -51,9 +51,9 @@ view: sales_orders {
     type: string
     sql: ${TABLE}.CURRENCY_CODE ;;
   }
-  dimension: fiscal_month_num {
+  dimension: fiscal_period_num {
     type: number
-    sql: ${TABLE}.FISCAL_MONTH_NUM ;;
+    sql: ${TABLE}.FISCAL_PERIOD_NUM ;;
   }
   dimension: fiscal_period_name {
     type: string

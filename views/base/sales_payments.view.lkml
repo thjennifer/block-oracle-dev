@@ -88,9 +88,9 @@ view: sales_payments {
       datatype: date
       sql: ${TABLE}.EXCHANGE_DATE ;;
     }
-    dimension: fiscal_gl_month_num {
+    dimension: fiscal_gl_period_num {
       type: number
-      sql: ${TABLE}.FISCAL_GL_MONTH_NUM ;;
+      sql: ${TABLE}.FISCAL_GL_PERIOD_NUM ;;
     }
     dimension: fiscal_gl_quarter_num {
       type: number

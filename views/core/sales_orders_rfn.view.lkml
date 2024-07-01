@@ -219,7 +219,7 @@ view: +sales_orders {
     label: "Request"
   }
 
-  dimension: fiscal_month_num {
+  dimension: fiscal_period_num {
     hidden: no
     group_label: "Fiscal Date"
    }

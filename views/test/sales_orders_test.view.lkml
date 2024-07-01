@@ -150,11 +150,11 @@ view: +sales_orders {
     sql: ${TABLE}.BUSINESS_UNIT_NAME IS NULL ;;
   }
 
-  dimension: test_null_fiscal_month {
+  dimension: test_null_fiscal_period_num {
     hidden: no
     view_label: "TEST STUFF"
     type: yesno
-    sql: ${TABLE}.FISCAL_MONTH IS NULL ;;
+    sql: ${TABLE}.FISCAL_PERIOD_NUM IS NULL ;;
   }
 
   dimension: test_null_ledger_id {
