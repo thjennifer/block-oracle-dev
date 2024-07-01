@@ -1,14 +1,17 @@
 #########################################################{
 # PURPOSE
-# Extend into views that UNNEST __lines__item_categories:
-#   sales_orders__lines__item_categories
-#   sales_invoices__lines__item_categories
-#   item_md__lines__item_categories
-#
 # Provides consistent defintions and labels for:
 #   category_id
 #   category_name_code
 #   category_description
+#
+# Extend into views that UNNEST __lines__item_categories:
+#   sales_orders__lines__item_categories
+#   sales_orders_daily_agg__lines
+#   sales_invoices__lines__item_categories
+#   sales_invoices_daily_agg
+#   item_md__lines__item_categories
+#
 #########################################################}
 
 
@@ -37,7 +40,7 @@ view: otc_unnest_item_categories_common_fields_ext {
     hidden: no
     type: number
     sql:
-          {% if _view._name == "sales_orders_daily_agg__lines" %}{% assign f = "ITEM_CATEGORY_ID"%}
+          {% if _view._name == "sales_orders_daily_agg__lines" or _view._name == "sales_invoices_daily_agg" %}{% assign f = "ITEM_CATEGORY_ID"%}
           {% else %}{% assign f = "ID" %}{%endif%}
             COALESCE(${TABLE}.{{f}},-1)
             ;;
@@ -50,14 +53,14 @@ view: otc_unnest_item_categories_common_fields_ext {
   dimension: category_name_code {
     hidden: no
     type: string
-    sql: {% if _view._name == "sales_orders_daily_agg__lines" %}{% assign f = "ITEM_CATEGORY_NAME"%}{% else %}{% assign f = "CATEGORY_NAME" %}{%endif%}
+    sql: {% if _view._name == "sales_orders_daily_agg__lines" or _view._name == "sales_invoices_daily_agg" %}{% assign f = "ITEM_CATEGORY_NAME"%}{% else %}{% assign f = "CATEGORY_NAME" %}{%endif%}
         COALESCE(${TABLE}.{{f}},"Unknown") ;;
     full_suggestions: yes
   }
 
   dimension: category_description {
     hidden: no
-    sql: {% if _view._name == "sales_orders_daily_agg__lines" %}{% assign f = "ITEM_CATEGORY_DESCRIPTION"%}{% else %}{% assign f = "DESCRIPTION" %}{%endif%}
+    sql: {% if _view._name == "sales_orders_daily_agg__lines" or _view._name == "sales_invoices_daily_agg" %}{% assign f = "ITEM_CATEGORY_DESCRIPTION"%}{% else %}{% assign f = "DESCRIPTION" %}{%endif%}
          COALESCE(${TABLE}.{{f}},COALESCE(CAST(NULLIF(${category_id},-1) AS STRING),"Unknown")) ;;
     full_suggestions: yes
   }

@@ -46,7 +46,7 @@ view: +sales_invoices {
 
   dimension: bill_to_customer_name {
     group_label: "Bill to Customer"
-    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CONCAT("Bill To Customer Number: ",${bill_to_customer_number})) ;;
+    sql: COALESCE(COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CONCAT("Bill To Customer Number: ",${bill_to_customer_number})),"Unknown") ;;
   }
 
   dimension: bill_to_customer_country {
@@ -94,6 +94,8 @@ view: +sales_invoices {
     description: "Invoice Year as Integer"
     value_format_name: id
   }
+
+  dimension_group: exchange {}
 
   dimension_group: creation_ts {
     hidden: no

@@ -156,6 +156,20 @@ view: +sales_invoices__lines {
     value_format_name: percent_1
   }
 
+  dimension: unit_list_price_target_currency {
+    group_label: "Item Prices and Discounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Unit List Price ({{currency}}){%else%}Unit List Price (Target Currency){%endif%}"
+    sql: ${unit_list_price} * IF(${sales_invoices.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: unit_selling_price_target_currency {
+    group_label: "Item Prices and Discounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Unit Selling Price ({{currency}}){%else%}Unit Selling Price (Target Currency){%endif%}"
+    sql: ${unit_selling_price} * IF(${sales_invoices.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    value_format_name: decimal_2
+  }
+
 #} end item dimensions
 
 #########################################################
@@ -317,6 +331,36 @@ view: +sales_invoices__lines {
     drill_fields: [invoice_line_details*]
   }
 
+  measure: average_unit_list_price_target_currency {
+    type: average
+    label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit List Price ({{currency}}){%else%}Average Unit List Price (Target Currency){%endif%}"
+    sql: ${unit_list_price_target_currency} ;;
+    value_format_name: decimal_2
+  }
+
+  measure: average_unit_selling_price_target_currency {
+    type: average
+    label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit Selling Price ({{currency}}){%else%}Average Unit Selling Price (Target Currency){%endif%}"
+    sql: ${unit_selling_price_target_currency} ;;
+    value_format_name: decimal_2
+  }
+
+  measure: average_unit_list_price_when_discount_target_currency {
+    type: average
+    label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit List Price when Discount ({{currency}}){%else%}Average Unit List Price when Discount (Target Currency){%endif%}"
+    sql: ${unit_list_price_target_currency} ;;
+    filters: [is_discount_selling_price: "Yes"]
+    value_format_name: decimal_2
+  }
+
+  measure: average_unit_selling_price_when_discount_target_currency {
+    type: average
+    label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit Selling Price when Discount ({{currency}}){%else%}Average Unit Selling Price when Discount (Target Currency){%endif%}"
+    sql: ${unit_selling_price_target_currency} ;;
+    filters: [is_discount_selling_price: "Yes"]
+    value_format_name: decimal_2
+  }
+
   measure: discount_invoice_line_count {
     type: count
     filters: [is_discount_selling_price: "Yes"]
@@ -345,10 +389,18 @@ view: +sales_invoices__lines {
     value_format_name: percent_1
   }
 
+  measure: total_transaction_amount_target_currency {
+    type: sum
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Transaction Amount ({{currency}}){%else%}Total Transaction Amount (Target Currency){%endif%}"
+    sql: ${transaction_amount_target_currency} ;;
+    value_format_name: decimal_0
+  }
+
   measure: total_revenue_amount_target_currency {
     type: sum
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Net Revenue Amount ({{currency}}){%else%}Total Net Revenue Amount (Target Currency){%endif%}"
     sql: ${revenue_amount_target_currency} ;;
+    drill_fields: [invoice_line_details*]
     value_format_name: decimal_0
   }
 
@@ -370,7 +422,7 @@ view: +sales_invoices__lines {
 
   measure: total_discount_amount_target_currency {
     type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Tax Amount ({{currency}}){%else%}Total Tax Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Discount Amount ({{currency}}){%else%}Total Discount Amount (Target Currency){%endif%}"
     sql: ${discount_amount_target_currency} ;;
     drill_fields: [invoice_line_details*]
     value_format_name: decimal_0
@@ -385,8 +437,30 @@ view: +sales_invoices__lines {
 
 
 set: invoice_line_details {
-  fields: [sales_invocies.invoice_id, sales_invoices.invoice_number, sales_invoices.invoice_date,ledger_date,line_id,line_number,inventory_item_id,item_description,invoiced_or_credited_quantity, revenue_amount_target_currency]
+  fields: [sales_invoices.invoice_number,
+           sales_invoices.invoice_date,
+           ledger_date,
+           line_number,
+           is_intercompany,
+           inventory_item_id,
+           item_description,
+           unit_list_price_target_currency,
+           unit_selling_price_target_currency,
+           invoiced_or_credited_quantity,
+           total_revenue_amount_target_currency,
+           total_gross_revenue_amount_target_currency,
+           total_discount_amount_target_currency,
+           total_tax_amount_target_currency
+          ]
 }
+
+# Item Quantity
+# Item List price (per unit)
+# Unit Adjusted Price (per unit after discounts / rebates)
+# Item Intercompany Amount (actual value they paid for all units on that particular invoice)
+# Item Net Amount (Item Quantity multiplied by Item Adjusted Price)
+# Item Invoiced Amount (Item Quantity multiplied by Unit List Price)
+# Item Tax Amount
 
 
 
