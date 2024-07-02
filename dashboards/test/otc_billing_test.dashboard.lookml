@@ -120,137 +120,161 @@
     col: 18
     width: 6
     height: 2
-  # - title: Return Orders
-  #   name: Return Orders
-  #   explore: sales_orders
-  #   type: single_value
-  #   # fields: [sales_orders.has_return_sales_order_percent]
-  #   fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
-  #   hidden_fields: [sales_orders.order_count,sales_orders.no_holds_sales_order_percent]
-  #   listen:
-  #     Date: sales_orders.ordered_date
-  #     Country: sales_orders.sold_to_customer_country
-  #     Customer: sales_orders.sold_to_customer_name
-  #     Business Unit: sales_orders.business_unit_name
-  #     Order Source: sales_orders.order_source_name
-  #     Item Category: sales_orders__lines.category_description
-  #     Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-  #   note_state: collapsed
-  #   note_display: hover
-  #   note_text: "The percentage of sales orders with a product return."
-  #   row: 3
-  #   col: 0
-  #   width: 6
-  #   height: 2
 
-  # - title: One Touch Orders
-  #   name: One Touch Orders
-  #   explore: sales_orders
-  #   type: single_value
-  #   # fields: [sales_orders.no_holds_sales_order_percent]
-  #   fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
-  #   hidden_fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent]
-  #   listen:
-  #     Date: sales_orders.ordered_date
-  #     Country: sales_orders.sold_to_customer_country
-  #     Customer: sales_orders.sold_to_customer_name
-  #     Business Unit: sales_orders.business_unit_name
-  #     Order Source: sales_orders.order_source_name
-  #     Item Category: sales_orders__lines.category_description
-  #     Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-  #   note_state: collapsed
-  #   note_display: hover
-  #   note_text: "The percentage of sales orders processed without any holds."
-  #   row: 5
-  #   col: 0
-  #   width: 6
-  #   height: 2
+  - name: customer_discounts
+    title: Customers with Highest Volume of Discounts
+    model: cortex-oracle
+    explore: sales_invoices
+    type: looker_line
+    fields: [sales_invoices.bill_to_site_use_id, sales_invoices.bill_to_customer_name,
+      sales_invoices.invoice_count, sales_invoices__lines.average_percent_discount_when_taken,
+      sales_invoices__lines.invoice_line_count, sales_invoices__lines.total_discount_amount_target_currency,
+      sales_invoices__lines.discount_invoice_line_percent, sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
+      sales_invoices__lines.average_unit_selling_price_when_discount_target_currency]
+    filters:
+      sales_invoices__lines.is_intercompany: 'No'
+    sorts: [sales_invoices__lines.total_discount_amount_target_currency desc]
+    limit: 500
+    column_limit: 50
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_view_names: false
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    limit_displayed_rows: true
+    legend_position: center
+    point_style: circle
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    show_null_points: true
+    interpolation: step
+    color_application:
+      collection_id: legacy
+      palette_id: looker_classic
+      options:
+        steps: 5
+        reverse: false
+    y_axes: [{label: '', orientation: left, series: [{axisId: sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
+            id: sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
+            name: Average Unit List Price when Discount (USD)}, {axisId: sales_invoices__lines.average_unit_selling_price_when_discount_target_currency,
+            id: sales_invoices__lines.average_unit_selling_price_when_discount_target_currency,
+            name: Average Unit Selling Price when Discount (USD)}], showLabels: true,
+        showValues: true, valueFormat: '', unpinAxis: false, tickDensity: default, type: linear},
+      {label: Average % Discount, orientation: right, series: [{axisId: sales_invoices__lines.average_percent_discount_when_taken,
+            id: sales_invoices__lines.average_percent_discount_when_taken, name: Average
+              % Discount When Discount Taken}, {axisId: sales_invoices__lines.discount_invoice_line_percent,
+            id: sales_invoices__lines.discount_invoice_line_percent, name: Frequency of Discounts}], showLabels: false, showValues: false, maxValue: 1,
+        minValue: 0, unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
+    x_axis_zoom: true
+    y_axis_zoom: true
+    limit_displayed_rows_values:
+      show_hide: show
+      first_last: first
+      num_rows: '5'
+    series_types:
+      sales_invoices__lines.average_unit_list_price_when_discount_target_currency: column
+      sales_invoices__lines.average_unit_selling_price_when_discount_target_currency: column
+    series_labels:
+      sales_invoices__lines.discount_invoice_line_percent: "Discount Frequency (% of Invoice Lines)"
+    series_colors:
+      sales_invoices__lines.average_unit_list_price_when_discount_target_currency: "#abdbe3"
+      sales_invoices__lines.average_unit_selling_price_when_discount_target_currency: "#EFBC93"
+      sales_invoices__lines.discount_invoice_line_percent: "#192d54"
+      sales_invoices__lines.average_percent_discount_when_taken: "#873e23"
+    series_point_styles:
+      sales_invoices__lines.average_percent_discount_when_taken: triangle
+    advanced_vis_config: |-
+      {
+        series: [
+          {
+            id: 'sales_invoices__lines.average_percent_discount_when_taken',
+            tooltip: {
+              followPointer: false,
+            },
+          },
+          {
+            id: 'sales_invoices__lines.discount_invoice_line_percent',
 
-  # - title: Blocked Orders
-  #   name: Blocked Orders
-  #   explore: sales_orders
-  #   type: single_value
-  #   fields: [sales_orders.order_count]
-  #   filters:
-  #     sales_orders.is_blocked: 'Yes'
-  #   listen:
-  #     Date: sales_orders.ordered_date
-  #     Country: sales_orders.sold_to_customer_country
-  #     Customer: sales_orders.sold_to_customer_name
-  #     Business Unit: sales_orders.business_unit_name
-  #     Order Source: sales_orders.order_source_name
-  #     Item Category: sales_orders__lines.category_description
-  #     Target Currency: otc_common_parameters_xvw.parameter_target_currency
-  #     Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-  #   note_state: collapsed
-  #   note_display: hover
-  #   note_text: "The number of sales orders blocked (has hold or backorder)."
-  #   row: 7
-  #   col: 0
-  #   width: 6
-  #   height: 2
+            tooltip: {
+              followPointer: false,
+            },
+            type: 'line',
+            dashStyle: "dash",
+          },
+          {
+            id: 'sales_invoices__lines.average_unit_list_price_when_discount_target_currency',
+            dataLabels: {
+              enabled: false,
+            },
+            tooltip: {
+              followPointer: true,
+            },
+          },
+          {
+            id: 'sales_invoices__lines.average_unit_selling_price_when_discount_target_currency',
+            dataLabels: {
+              enabled: false,
+            },
+            tooltip: {
+              followPointer: true,
+            },
+          },
+        ],
+        tooltip: {
+          format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:.2f}<br/>{/each}',
+          shared: true,
+          backgroundColor: '#929292'
+        },
+      }
+    ordering: none
+    show_null_labels: false
+    show_dropoff: false
+    show_totals_labels: false
+    show_silhouette: false
+    totals_color: "#808080"
+    hidden_fields: [sales_invoices.bill_to_site_use_id, sales_invoices.invoice_count,
+      sales_invoices__lines.invoice_line_count, sales_invoices__lines.total_discount_amount_target_currency]
+    show_row_numbers: true
+    transpose: false
+    truncate_text: true
+    hide_totals: false
+    hide_row_totals: false
+    size_to_fit: true
+    table_theme: white
+    enable_conditional_formatting: false
+    header_text_alignment: left
+    header_font_size: 12
+    rows_font_size: 12
+    conditional_formatting_include_totals: false
+    conditional_formatting_include_nulls: false
+    defaults_version: 1
+    hidden_pivots: {}
 
-  # - title: Order Status
-  #   name: Order Status donut
-  #   explore: sales_orders
-  #   type: looker_pie
-  #   fields: [sales_orders.open_closed_cancelled, sales_orders.order_count]
-  #   filters:
-  #     sales_orders.open_closed_cancelled: "-NULL"
-  #   sorts: [sales_orders.open_closed_cancelled desc]
-  #   value_labels: labels
-  #   label_type: labVal
-  #   inner_radius: 60
-  #   start_angle:
-  #   end_angle:
-  #   series_colors:
-  #     Open: "#98B6B1"
-  #     Closed: "#BFBDC1"
-  #     Cancelled: "#EB9486"
-  #   advanced_vis_config: |-
-  #     {
-  #       plotOptions: {
-  #         pie: {
-  #           dataLabels: {
-  #             format: '<b>{key}</b><span style="font-weight: normal"> - <br>{percentage:.1f}%<br>{point.rendered}</span>',
-  #           }
-  #         }
-  #       },
-  #       title: {
-  #         text: 'Order<br>Status',
-  #         verticalAlign: 'middle',
-  #       }
-  #     }
-  #   show_value_labels: false
-  #   font_size: 12
-  #   hidden_pivots: {}
-  #   x_axis_gridlines: false
-  #   y_axis_gridlines: true
-  #   show_view_names: false
-  #   show_y_axis_labels: true
-  #   show_y_axis_ticks: true
-  #   y_axis_tick_density: default
-  #   y_axis_tick_density_custom: 5
-  #   show_x_axis_label: true
-  #   show_x_axis_ticks: true
-  #   legend_position: center
-  #   point_style: none
-  #   label_density: 25
-  #   x_axis_scale: auto
-  #   y_axis_combined: true
-  #   ordering: none
-  #   show_null_labels: false
-  #   show_totals_labels: false
-  #   title_hidden: true
-  #   listen:
-  #     Date: sales_orders.ordered_date
-  #     Country: sales_orders.sold_to_customer_country
-  #     Customer: sales_orders.sold_to_customer_name
-  #     Business Unit: sales_orders.business_unit_name
-  #     Order Source: sales_orders.order_source_name
-  #     Item Category: sales_orders__lines.category_description
-  #     Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-  #   row: 2
-  #   col: 6
-  #   width: 10
-  #   height: 8
+    listen:
+      date: sales_invoices.invoice_date
+      customer_country: sales_invoices.bill_to_customer_country
+      customer_name: sales_invoices.bill_to_customer_name
+      business_unit: sales_invoices.business_unit_name
+      order_source: sales_invoices__lines.order_source_name
+      item_category: sales_invoices__lines.category_description
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+    note_state: collapsed
+    note_display: hover
+    note_text: "Customers are ranked in descending order by Total Discount Amount across non-Intercompany invoice lines. Average Unit List Price and Average Unit Selling Price across invoice lines are shown as columns. The Average Discount % taken as well as the Frequncy of Discounts (as % of invoice lines) are also shown as lines."
+    row: 6
+    col: 0
+    width: 24
+    height: 10

@@ -1,8 +1,9 @@
 include: "/views/base/sales_invoices__lines.view"
+include: "/views/core/otc_fiscal_gl_dates_ext.view"
 include: "/views/core/otc_derive_common_product_fields_ext.view"
 
 view: +sales_invoices__lines {
-    extends: [otc_derive_common_product_fields_ext]
+    extends: [otc_fiscal_gl_dates_ext, otc_derive_common_product_fields_ext]
 
   dimension: key {
     hidden: yes
@@ -48,52 +49,11 @@ view: +sales_invoices__lines {
 
 #########################################################
 # Dates
-#
+# Fiscal Dates extended from otc_fiscal_gl_dates_ext and grouped under Ledger Date
 #{
 
   dimension_group: ledger {
     timeframes: [raw, date, week, month, quarter, year]
-  }
-
-  dimension: fiscal_gl_month {
-    group_label: "Ledger Date"
-    label: "Fiscal GL Month Number"
-    description: "Fiscal GL month of the ledger date as an integer."
-  }
-
-  dimension: fiscal_gl_quarter {
-    group_label: "Ledger Date"
-    label: "Fiscal GL Quarter Number"
-    description: "Fiscal GL Quarter of the ledger date as an integer."
-  }
-
-  dimension: fiscal_gl_quarter {
-    group_label: "Ledger Date"
-    label: "Fiscal GL Quarter Number"
-    description: "Fiscal GL Quarter of the ledger date as an integer."
-  }
-
-  dimension: fiscal_gl_year {
-    group_label: "Ledger Date"
-    label: "Fiscal GL Year Number"
-    description: "Fiscal GL Year of ledger date as an integer."
-  }
-
-  dimension: fiscal_gl_year_month {
-    group_label: "Ledger Date"
-    label: "Fiscal GL YYYY-MM"
-    description: "Fiscal GL Year-Month formatted as YYYY-MM string."
-    sql: CONCAT(CAST(${fiscal_gl_year} AS STRING),"-",LPAD(CAST(${fiscal_gl_month} AS STRING),2,'0'));;
-  }
-
-  dimension: fiscal_period_name {
-    group_label: "Ledger Date"
-  }
-  dimension: fiscal_period_set_name {
-    group_label: "Ledger Date"
-  }
-  dimension: fiscal_period_type {
-    group_label: "Ledger Date"
   }
 
   dimension_group: creation_ts {

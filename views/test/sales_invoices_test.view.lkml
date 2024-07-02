@@ -40,6 +40,18 @@ view: +sales_invoices {
     sql: LENGTH(${invoice_number}) ;;
   }
 
+  dimension: is_revenue_same_as_transaction {
+    type: yesno
+    view_label: "TEST STUFF"
+    sql: ${total_revenue_amount} = ${total_transaction_amount} ;;
+  }
+
+  dimension: is_0_tax_amount {
+    type: yesno
+    view_label: "TEST STUFF"
+    sql: ${total_tax_amount} = 0 or ${total_tax_amount} is null ;;
+  }
+
 #}
 
    }

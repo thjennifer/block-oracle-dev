@@ -6,7 +6,7 @@ include: "/views/core/otc_common_parameters_xvw.view"
 explore: sales_invoices_daily_agg {
   hidden: no
 
-  sql_always_where: @{get_category_set} ITEM_CATEGORY_SET_NAME in ("Unknown",'{{ category_set }}') ;;
+  sql_always_where: @{get_category_set} COALESCE(ITEM_CATEGORY_SET_NAME,'Unknown') in ("Unknown",'{{ category_set }}') ;;
 
   fields: [ALL_FIELDS*,-otc_common_parameters_xvw.parameter_language]
 

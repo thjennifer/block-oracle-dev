@@ -108,6 +108,7 @@ view: +sales_payments {
 
 #########################################################
 # Dates
+# Fiscal Dates extended from otc_fiscal_gl_dates_ext and grouped under Ledger Date
 #{
   dimension_group: transaction {}
 

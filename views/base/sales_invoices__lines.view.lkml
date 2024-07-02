@@ -15,17 +15,17 @@ view: sales_invoices__lines {
     type: number
     sql: CREDITED_QUANTITY ;;
   }
-  dimension: fiscal_gl_month {
+  dimension: fiscal_gl_period_num {
     type: number
-    sql: FISCAL_GL_MONTH ;;
+    sql: FISCAL_GL_PERIOD_NUM ;;
   }
-  dimension: fiscal_gl_quarter {
+  dimension: fiscal_gl_quarter_num {
     type: number
-    sql: FISCAL_GL_QUARTER ;;
+    sql: FISCAL_GL_QUARTER_NUM ;;
   }
-  dimension: fiscal_gl_year {
+  dimension: fiscal_gl_year_num {
     type: number
-    sql: FISCAL_GL_YEAR ;;
+    sql: FISCAL_GL_YEAR_NUM ;;
   }
   dimension: fiscal_period_name {
     type: string
