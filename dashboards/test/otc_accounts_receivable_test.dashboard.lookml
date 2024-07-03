@@ -5,9 +5,22 @@
   crossfilter_enabled: false
   filters_location_top: false
 
-  extends: otc_accounts_receivable_template_test
+  extends: otc_billing_template_test
 
   filters:
+
+  - name: business_unit
+    explore: sales_payments_daily_agg
+    field: sales_payments_daily_agg.business_unit_name
+
+  - name: customer_country
+    explore: sales_payments_daily_agg
+    field: sales_payments_daily_agg.bill_to_customer_country
+
+  - name: customer_name
+    explore: sales_payments_daily_agg
+    field: sales_payments_daily_agg.bill_to_customer_name
+
   - name: aging_bucket_size
     title: 'Aging Bucket: # of Days in Range'
     type: field_filter
@@ -39,10 +52,10 @@
     field: sales_payments_dynamic_aging_bucket_sdt.dummy_bucket_number
 
   elements:
-  # - title: navigation
-  #   name: navigation
-  #   filters:
-  #     otc_dashboard_navigation_ext.navigation_focus_page: '4'
+  - title: navigation
+    name: navigation
+    filters:
+      otc_billing_dashboard_navigation_ext.navigation_focus_page: '2'
 
   - name: total_receivables
     title: Total Receivables
@@ -58,12 +71,12 @@
     note_display: hover
     note_text: "Total value of all receivables not yet paid."
     listen:
-      Date: sales_payments_daily_agg.transaction_date
-      Country: sales_payments_daily_agg.bill_to_customer_country
-      Customer: sales_payments_daily_agg.bill_to_customer_name
-      Business Unit: sales_payments_daily_agg.business_unit_name
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_payments_daily_agg.transaction_date
+      customer_country: sales_payments_daily_agg.bill_to_customer_country
+      customer_name: sales_payments_daily_agg.bill_to_customer_name
+      business_unit: sales_payments_daily_agg.business_unit_name
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 2
     col: 0
     width: 5
@@ -83,12 +96,12 @@
     note_display: hover
     note_text: "Total value of receivables past their due date."
     listen:
-      Date: sales_payments_daily_agg.transaction_date
-      Country: sales_payments_daily_agg.bill_to_customer_country
-      Customer: sales_payments_daily_agg.bill_to_customer_name
-      Business Unit: sales_payments_daily_agg.business_unit_name
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_payments_daily_agg.transaction_date
+      customer_country: sales_payments_daily_agg.bill_to_customer_country
+      customer_name: sales_payments_daily_agg.bill_to_customer_name
+      business_unit: sales_payments_daily_agg.business_unit_name
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 2
     col: 5
     width: 5
@@ -108,12 +121,12 @@
     note_display: hover
     note_text: "Total value of receivables not yet paid and expected to become bad debt (receivables past due > 90 days)."
     listen:
-      Date: sales_payments_daily_agg.transaction_date
-      Country: sales_payments_daily_agg.bill_to_customer_country
-      Customer: sales_payments_daily_agg.bill_to_customer_name
-      Business Unit: sales_payments_daily_agg.business_unit_name
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_payments_daily_agg.transaction_date
+      customer_country: sales_payments_daily_agg.bill_to_customer_country
+      customer_name: sales_payments_daily_agg.bill_to_customer_name
+      business_unit: sales_payments_daily_agg.business_unit_name
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 4
     col: 0
     width: 5
@@ -207,12 +220,12 @@
     note_display: hover
     note_text: "Percent of past due receivables by age (or days past due). Number and size of age ranges are defined by dashboard parameters 'Aging Bucket: # of Days in Range' and 'Aging Bucket: # of Ranges'."
     listen:
-      Date: sales_payments.transaction_date
-      Country: sales_payments.bill_to_customer_country
-      Customer: sales_payments.bill_to_customer_name
-      Business Unit: sales_payments.business_unit_name
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_payments.transaction_date
+      customer_country: sales_payments.bill_to_customer_country
+      customer_name: sales_payments.bill_to_customer_name
+      business_unit: sales_payments.business_unit_name
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
       aging_bucket_size: sales_payments_dynamic_aging_bucket_sdt.parameter_aging_bucket_size
       aging_bucket_count: sales_payments_dynamic_aging_bucket_sdt.parameter_aging_bucket_count
     row: 2
@@ -298,12 +311,12 @@
       10 customers. To change, click Explore from Here. In the Visualization pane, click
       EDIT. Click on Plot tab and edit 'Limit Displayed Rows' property.
     listen:
-      Date: sales_payments_daily_agg.transaction_date
-      Country: sales_payments_daily_agg.bill_to_customer_country
-      Customer: sales_payments_daily_agg.bill_to_customer_name
-      Business Unit: sales_payments_daily_agg.business_unit_name
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_payments_daily_agg.transaction_date
+      customer_country: sales_payments_daily_agg.bill_to_customer_country
+      customer_name: sales_payments_daily_agg.bill_to_customer_name
+      business_unit: sales_payments_daily_agg.business_unit_name
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 6
     col: 0
     width: 10
@@ -438,12 +451,12 @@
       customers. To change, click Explore from Here. In the Visualization pane, click
       EDIT. Click on Plot tab and edit ''Limit Displayed Rows'' property.'
     listen:
-      Date: sales_payments.transaction_date
-      Country: sales_payments.bill_to_customer_country
-      Customer: sales_payments.bill_to_customer_name
-      Business Unit: sales_payments.business_unit_name
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_payments.transaction_date
+      customer_country: sales_payments.bill_to_customer_country
+      customer_name: sales_payments.bill_to_customer_name
+      business_unit: sales_payments.business_unit_name
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
       aging_bucket_size: sales_payments_dynamic_aging_bucket_sdt.parameter_aging_bucket_size
       aging_bucket_count: sales_payments_dynamic_aging_bucket_sdt.parameter_aging_bucket_count
     row: 6

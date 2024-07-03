@@ -1,6 +1,7 @@
 include: "/views/core/sales_payments_rfn.view"
 include: "/views/core/currency_conversion_sdt.view"
 include: "/views/core/otc_common_parameters_xvw.view"
+include: "/views/core/otc_billing_dashboard_navigation_ext.view"
 include: "/views/core/sales_payments_dynamic_aging_bucket_sdt.view"
 
 
@@ -28,7 +29,14 @@ explore: sales_payments {
   join: otc_common_parameters_xvw {
     relationship: one_to_one
     sql:  ;;
-}
+  }
+
+  join: otc_billing_dashboard_navigation_ext {
+    relationship: one_to_one
+    sql:  ;;
+  }
+
+
 
 
 }

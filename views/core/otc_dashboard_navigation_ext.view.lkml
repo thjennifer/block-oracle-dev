@@ -87,8 +87,4 @@ view: otc_dashboard_navigation_ext {
     label: "Target Currency"
   }
 
-
-
-
-
 }

@@ -188,6 +188,13 @@ view: +sales_invoices {
     drill_fields: [invoice_header_details*]
   }
 
+  measure: link_generator {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [link_generator]
+  }
+
 #} end measures
 
 set: invoice_header_details {

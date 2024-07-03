@@ -1,6 +1,7 @@
 include: "/views/core/sales_invoices_daily_agg_rfn.view"
 include: "/views/core/sales_invoices_daily_agg__amounts_rfn.view"
 include: "/views/core/otc_common_parameters_xvw.view"
+include: "/views/core/otc_billing_dashboard_navigation_ext.view"
 
 
 explore: sales_invoices_daily_agg {
@@ -19,6 +20,11 @@ explore: sales_invoices_daily_agg {
   }
 
   join: otc_common_parameters_xvw {
+    relationship: one_to_one
+    sql:  ;;
+  }
+
+  join: otc_billing_dashboard_navigation_ext {
     relationship: one_to_one
     sql:  ;;
 }
