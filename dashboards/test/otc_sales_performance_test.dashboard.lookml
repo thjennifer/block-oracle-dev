@@ -106,6 +106,7 @@
     col: 0
     width: 10
     height: 10
+    model: cortex-oracle-ebs-test
 
   - name: Top Products by Avg Sales
     title: Top Products by Avg Sales
@@ -159,6 +160,7 @@
     col: 11
     width: 10
     height: 10
+    model: cortex-oracle-ebs-test
 
   - name: Top Business Unit by Sales
     title: Top Business Unit by Sales
@@ -203,6 +205,7 @@
     col: 0
     width: 10
     height: 10
+    model: cortex-oracle-ebs-test
 
   - name: Top Customers by Avg Sales
     title: Top Customers by Avg Sales
@@ -253,6 +256,7 @@
     col: 11
     width: 10
     height: 10
+    model: cortex-oracle-ebs-test
 
   - name: Sales by Order Source
     title: Sales by Order Source
@@ -326,3 +330,4 @@
     col: 0
     width: 10
     height: 7
+    model: cortex-oracle-ebs-test

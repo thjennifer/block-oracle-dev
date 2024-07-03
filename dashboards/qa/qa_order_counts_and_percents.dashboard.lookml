@@ -7,7 +7,7 @@
   elements:
   - title: SalesOrders
     name: SalesOrders
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders
     type: looker_grid
     fields: [sales_orders.order_count, sales_orders.no_holds_sales_order_count, sales_orders.cancelled_sales_order_count,
@@ -78,7 +78,7 @@
     height: 3
   - title: Agg Counts
     name: Agg Counts
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     type: looker_grid
     fields: [sales_orders_daily_agg.order_count, sales_orders_daily_agg.no_holds_sales_order_count,
@@ -155,7 +155,7 @@
     height: 4
   - title: SalesOrders %s
     name: SalesOrders %s
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders
     type: looker_grid
     fields: [sales_orders.has_backorder_sales_order_percent, sales_orders.cancelled_sales_order_percent,
@@ -226,7 +226,7 @@
     height: 4
   - title: Agg %s
     name: Agg %s
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     type: looker_grid
     fields: [sales_orders_daily_agg.has_backorder_sales_order_percent, sales_orders_daily_agg.cancelled_sales_order_percent,
@@ -312,7 +312,7 @@
       type: advanced
       display: popover
       options: []
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders
     listens_to_filters: []
     field: sales_orders.ordered_date
@@ -325,7 +325,7 @@
     ui_config:
       type: button_toggles
       display: inline
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders
     listens_to_filters: []
     field: otc_common_parameters_xvw.parameter_use_test_or_demo_data
@@ -338,7 +338,7 @@
     ui_config:
       type: advanced
       display: popover
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders
     listens_to_filters: []
     field: sales_orders__lines.category_description

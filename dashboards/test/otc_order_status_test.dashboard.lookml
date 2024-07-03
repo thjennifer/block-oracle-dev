@@ -43,6 +43,7 @@
     col: 0
     width: 6
     height: 2
+    model: cortex-oracle-ebs-test
 
   - title: Return Orders
     name: Return Orders
@@ -66,6 +67,7 @@
     col: 0
     width: 6
     height: 2
+    model: cortex-oracle-ebs-test
 
   - title: One Touch Orders
     name: One Touch Orders
@@ -89,6 +91,7 @@
     col: 0
     width: 6
     height: 2
+    model: cortex-oracle-ebs-test
 
   - title: Blocked Orders
     name: Blocked Orders
@@ -113,6 +116,7 @@
     col: 0
     width: 6
     height: 2
+    model: cortex-oracle-ebs-test
 
   - title: Order Status
     name: Order Status donut
@@ -178,3 +182,4 @@
     col: 6
     width: 10
     height: 8
+    model: cortex-oracle-ebs-test

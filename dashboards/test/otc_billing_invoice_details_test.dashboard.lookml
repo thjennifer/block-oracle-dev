@@ -195,4 +195,4 @@
     col: 0
     width: 24
     height: 12
-    model: cortex-oracle-test
+    model: cortex-oracle-ebs-test

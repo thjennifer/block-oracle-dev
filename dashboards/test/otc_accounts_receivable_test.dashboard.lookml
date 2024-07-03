@@ -81,6 +81,7 @@
     col: 0
     width: 5
     height: 3
+    model: cortex-oracle-ebs-test
 
   - name: past_due_receivables
     title: Total Past Due Receivables
@@ -106,6 +107,7 @@
     col: 5
     width: 5
     height: 3
+    model: cortex-oracle-ebs-test
 
   - name: doubtful_receivables
     title: Total Doubtful Receivables
@@ -131,6 +133,7 @@
     col: 0
     width: 5
     height: 3
+    model: cortex-oracle-ebs-test
 
   - name: days_sales_outstanding
     title: Days Sales Outstanding
@@ -156,6 +159,7 @@
     col: 5
     width: 5
     height: 3
+    model: cortex-oracle-ebs-test
 
   - name: past_due_receivables_by_age
     title: Past Due Receivables by Age
@@ -232,6 +236,7 @@
     col: 11
     width: 14
     height: 6
+    model: cortex-oracle-ebs-test
 
   - name: customers_with_highest_receivables
     title: Customers with Highest Receivables
@@ -321,6 +326,7 @@
     col: 0
     width: 10
     height: 10
+    model: cortex-oracle-ebs-test
 
 
   # - name: companies_highest_receivables
@@ -383,6 +389,7 @@
   #   col: 0
   #   width: 10
   #   height: 10
+  #   model: cortex-oracle-ebs-test
 
   - name: customer_receivables_by_age
     title: Customers with Highest Past Due Receivables by Age
@@ -463,6 +470,7 @@
     col: 11
     width: 14
     height: 10
+    model: cortex-oracle-ebs-test
 
 
   # - name: customer_receivables_by_age
@@ -542,6 +550,7 @@
   #   col: 11
   #   width: 14
   #   height: 10
+  #   model: cortex-oracle-ebs-test
 
   # - name: Past Due Receivables by Aging Bucket
   #   title: Past Due Receivables by Aging Bucket
@@ -598,3 +607,4 @@
   #   col: 11
   #   width: 10
   #   height: 10
+  #   model: cortex-oracle-ebs-test

@@ -8,7 +8,7 @@
   elements:
   - title: Daily Agg unnesting Amounts
     name: Daily Agg unnesting Amounts
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     type: looker_grid
     fields: [sales_orders_daily_agg.ordered_year, sales_orders_daily_agg__lines__amounts.target_currency_code,
@@ -56,7 +56,7 @@
     height: 7
   - title: Sales Orders
     name: Sales Orders
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders
     type: looker_grid
     fields: [sales_orders.ordered_year, sales_orders__lines.currency_target, sales_orders__lines.total_sales_amount_target_currency,
@@ -130,7 +130,7 @@
     height: 7
   - title: Amount from SalesOrders
     name: Amount from SalesOrders
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders
     type: single_value
     fields: [sales_orders__lines.total_sales_amount_target_currency]
@@ -203,7 +203,7 @@
     height: 4
   - title: Amount from DailyAgg
     name: Amount from DailyAgg
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     type: single_value
     fields: [sales_orders_daily_agg__lines.total_sales_amount_target_currency]
@@ -253,7 +253,7 @@
     height: 4
   - title: Agg by Category
     name: Agg by Category
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     type: looker_grid
     fields: [sales_orders_daily_agg__lines.category_id, sales_orders_daily_agg__lines.category_description,
@@ -299,7 +299,7 @@
     height: 6
   - title: SalesOrder by Category
     name: SalesOrder by Category
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders
     type: looker_grid
     fields: [sales_orders__lines.category_id, sales_orders__lines.category_description,
@@ -369,7 +369,7 @@
     height: 6
   - title: Daily Agg using Lines only
     name: Daily Agg using Lines only
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     type: looker_grid
     fields: [sales_orders_daily_agg.ordered_year, sales_orders_daily_agg__lines.total_sales_amount_target_currency,
@@ -427,7 +427,7 @@
       type: advanced
       display: popover
       options: []
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     listens_to_filters: []
     field: sales_orders_daily_agg.ordered_year
@@ -440,7 +440,7 @@
     ui_config:
       type: button_toggles
       display: inline
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     listens_to_filters: []
     field: otc_common_parameters_xvw.parameter_use_test_or_demo_data
@@ -453,7 +453,7 @@
     ui_config:
       type: button_toggles
       display: inline
-    model: cortex-oracle
+    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     listens_to_filters: []
     field: otc_common_parameters_xvw.parameter_target_currency

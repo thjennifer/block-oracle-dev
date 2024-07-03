@@ -80,6 +80,7 @@
     col: 0
     width: 6
     height: 2
+    model: cortex-oracle-ebs-test
 
   - name: invoice_amount
     title: Total Invoice Amount
@@ -105,6 +106,7 @@
     col: 6
     width: 6
     height: 2
+    model: cortex-oracle-ebs-test
 
   - name: discount_amount
     title: Total Discount Amount
@@ -130,6 +132,7 @@
     col: 12
     width: 6
     height: 2
+    model: cortex-oracle-ebs-test
 
   - name: tax_amount
     title: Total Tax Amount
@@ -155,10 +158,10 @@
     col: 18
     width: 6
     height: 2
+    model: cortex-oracle-ebs-test
 
   - name: customer_discounts
     title: Customers with Highest Volume of Discounts
-    model: cortex-oracle
     explore: sales_invoices
     type: looker_line
     fields: [sales_invoices.bill_to_site_use_id, sales_invoices.bill_to_customer_name,
@@ -315,11 +318,10 @@
     col: 0
     width: 24
     height: 10
-    model: cortex-oracle-test
+    model: cortex-oracle-ebs-test
 
   # - name: customer_discounts
   #   title: Customers with Highest Volume of Discounts
-  #   model: cortex-oracle
   #   explore: sales_invoices
   #   type: looker_line
   #   fields: [sales_invoices.bill_to_site_use_id, sales_invoices.bill_to_customer_name,
@@ -476,3 +478,4 @@
   #   col: 0
   #   width: 24
   #   height: 10
+  #   model: cortex-oracle-ebs-test

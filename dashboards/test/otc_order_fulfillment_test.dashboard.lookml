@@ -60,6 +60,7 @@
     col: 0
     width: 4
     height: 3
+    model: cortex-oracle-ebs-test
 
   - title: OTIF %
     name: OTIF %
@@ -107,6 +108,7 @@
     col: 0
     width: 4
     height: 3
+    model: cortex-oracle-ebs-test
 
   - title: Delivery Performance by Month
     name: Delivery Performance by Month
@@ -151,6 +153,7 @@
     col: 4
     width: 10
     height: 9
+    model: cortex-oracle-ebs-test
 
   - title: Longest Average Order Cycle Time (Days)
     name: Longest Average Order Cycle Time
@@ -229,6 +232,7 @@
     col: 14
     width: 10
     height: 9
+    model: cortex-oracle-ebs-test
 
 
 
@@ -341,3 +345,4 @@
     col: 0
     width: 24
     height: 12
+    model: cortex-oracle-ebs-test
