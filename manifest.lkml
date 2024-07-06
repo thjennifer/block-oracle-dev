@@ -84,7 +84,7 @@ constant: get_category_set {
 constant: default_target_date {
   value:  "{% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
            {% assign td = '2024-03-28' %} {%else%}
-           {% assign td = now | date: '%Y-%m-%d' %}{%endif%}"
+           {% assign td = 'now' | date: '%Y-%m-%d' %}{%endif%}'{{td}}'"
   }
 
 constant: sample_target_date {
@@ -96,7 +96,7 @@ constant: default_target_date_test {
                {% if otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value == 'demo' %}
                       {% assign td = '2024-03-28' %} {%else%} {% assign td = '2010-10-12' %}
                {% endif %}
-          {%else%}{% assign td = now | date: '%Y-%m-%d' %}{%endif%}"
+          {%else%}{% assign td = now | date: '%Y-%m-%d' %}{%endif%}'{{td}}'"
 }
 
 constant: sample_target_date_test {

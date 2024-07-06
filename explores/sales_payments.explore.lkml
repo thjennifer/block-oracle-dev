@@ -3,6 +3,7 @@ include: "/views/core/currency_conversion_sdt.view"
 include: "/views/core/otc_common_parameters_xvw.view"
 include: "/views/core/otc_billing_dashboard_navigation_ext.view"
 include: "/views/core/sales_payments_dynamic_aging_bucket_sdt.view"
+include: "/views/core/dso_dynamic_days_sdt.view"
 
 
 explore: sales_payments {
@@ -34,6 +35,14 @@ explore: sales_payments {
   join: otc_billing_dashboard_navigation_ext {
     relationship: one_to_one
     sql:  ;;
+  }
+
+  join: dso_dynamic_days_sdt {
+    view_label: "Sales Payments"
+    type: left_outer
+    relationship: many_to_one
+    sql_on: ${sales_payments.transaction_date} between ${dso_dynamic_days_sdt.dso_start_date} and ${dso_dynamic_days_sdt.dso_end_date} ;;
+    # fields: [dso_dynamic_days_sdt.parameter_dso_number_of_days]
   }
 
 

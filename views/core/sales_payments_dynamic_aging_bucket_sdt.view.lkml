@@ -40,6 +40,7 @@ view: sales_payments_dynamic_aging_bucket_sdt {
 
   dimension: aging_bucket_number {
     hidden: no
+    group_label: "Aging Buckets"
     type: number
     primary_key: yes
     description: "Numerical order of aging bucket derived using Aging Bucket Size and Count parameters."
@@ -48,6 +49,7 @@ view: sales_payments_dynamic_aging_bucket_sdt {
 
   dimension: aging_bucket_name {
     hidden: no
+    group_label: "Aging Buckets"
     type: string
     description: "The aging bucket's name as derived by the 'Aging Bucket: Number of Days per Bucket' and 'Aging Bucket: Number of Ranges' parameters. For instance, if the aging bucket size is 30 days and the number of ranges is 3, the first bucket will be called '30 Days Past Due' and will include invoices that are between 1 and 30 days old. The following bucket will be called '60 Days Past Due' and will include invoices that are between 31 and 60 days old. And the third bucket will be called '61+ Days Past Due' and will include invoices greater than or equal to 61 days old. Note, a 'Current' bucket is always included and is not impacted by the Aging Bucket Count parameter."
     sql: ${TABLE}.aging_bucket_name ;;
@@ -55,11 +57,15 @@ view: sales_payments_dynamic_aging_bucket_sdt {
   }
 
   dimension: start_days {
+    hidden: no
+    group_label: "Aging Buckets"
     type: number
     sql: ${TABLE}.start_days ;;
   }
 
   dimension: end_days {
+    hidden: no
+    group_label: "Aging Buckets"
     type: number
     sql: ${TABLE}.end_days ;;
   }

@@ -4,7 +4,7 @@ connection: "cortex-oracle-dev"
 
 # include: "/explores/*.explore"
 include: "/components/named_value_formats.lkml"
-
+include: "/components/datagroups.lkml"
 
 
 # include: "/views/core/otc_common_parameters_xvw.view"
@@ -26,3 +26,7 @@ include: "/components/named_value_formats.lkml"
 include: "/explores/test/*.explore"
 
 include: "/dashboards/test/*.dashboard"
+
+include: "/explores/dso_days_sdt.explore"
+# include: "/views/core/dso_01_dso_days_sdt.view"
+# explore: dso_days_sdt {}

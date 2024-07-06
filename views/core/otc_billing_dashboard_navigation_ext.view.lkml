@@ -1,6 +1,8 @@
 include: "/views/base/navigation_template.view"
 view: otc_billing_dashboard_navigation_ext {
 
+    view_label: "@{view_label_for_filters}"
+
     extends: [navigation_template]
 
     dimension: dash_bindings {

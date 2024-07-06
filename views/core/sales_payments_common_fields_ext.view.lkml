@@ -98,6 +98,16 @@ view: sales_payments_common_fields_ext {
     # value_format_name: decimal_2
   }
 
+  measure: total_amount_original_target_currency {
+    hidden: no
+    type: sum
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Original Invoice Amount ({{currency}}){%else%}Total Original Invoice Amount (Target Currency){%endif%}"
+    sql: ${amount_due_original_target_currency} ;;
+    filters: [payment_class_code: "-PMT"]
+    value_format_name: format_large_numbers_d1
+    # value_format_name: decimal_2
+  }
+
   measure: total_overdue_receivables_target_currency {
     hidden: no
     type: sum

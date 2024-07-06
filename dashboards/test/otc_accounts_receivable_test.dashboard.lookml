@@ -51,6 +51,18 @@
     explore: sales_payments
     field: sales_payments_dynamic_aging_bucket_sdt.dummy_bucket_number
 
+  - name: dso_days
+    title: 'DSO: # Days for Calculation'
+    type: field_filter
+    default_value: '365'
+    allow_multiple_values: false
+    required: false
+    ui_config:
+      type: button_toggles
+      display: inline
+    explore: dso_days_sdt
+    field: dso_days_sdt.dso_days_string
+
   elements:
   - title: navigation
     name: navigation
@@ -137,9 +149,12 @@
 
   - name: days_sales_outstanding
     title: Days Sales Outstanding
-    explore: sales_payments
+    # explore: sales_payments
+    # explore: dso_payments_and_invoices_pdt
+    explore: sales_payments_dso_days_agg_pdt
     type: single_value
-    fields: [sales_payments.days_sales_outstanding]
+    # fields: [sales_payments.days_sales_outstanding]
+    fields: [sales_payments_dso_days_agg_pdt.days_sales_outstanding]
     # filters:
     #   sales_payments_daily_agg.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -147,14 +162,12 @@
     enable_conditional_formatting: false
     note_state: collapsed
     note_display: hover
-    note_text: "Under Construction"
-    # listen:
-    #   Date: sales_payments_daily_agg.transaction_date
-    #   Country: sales_payments_daily_agg.bill_to_customer_country
-    #   Customer: sales_payments_daily_agg.bill_to_customer_name
-    #   Business Unit: sales_payments_daily_agg.business_unit_name
-    #   Target Currency: otc_common_parameters_xvw.parameter_target_currency
-    #   Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+    # note_text: "Under Construction"
+    note_text: "Average time, in days, for which the receivables are outstanding. Calculated as (Ending Receivables Balance / Credit Sales) * N where N is number of days in period. User can choose 30, 90 or 365 days for the calculation with the dashboard parameter 'DSO: # Days for Calculation'."
+    listen:
+        dso_days: sales_payments_dso_days_agg_pdt.dso_days_string
+        target_currency: otc_common_parameters_xvw.parameter_target_currency
+        test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 4
     col: 5
     width: 5

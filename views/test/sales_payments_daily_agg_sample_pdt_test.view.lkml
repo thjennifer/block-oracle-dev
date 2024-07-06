@@ -111,11 +111,11 @@ view: +sales_payments_daily_agg_sample_pdt {
             SUM(
             IF
               --(IS_OPEN_AND_OVERDUE, AMOUNT_DUE_REMAINING, 0)) AS TOTAL_OVERDUE_REMAINING,
-              (DUE_DATE < DATE(@{sample_target_date_test}) AND AMOUNT_DUE_REMAINING > 0, AMOUNT_DUE_REMAINING, 0)) AS TOTAL_OVERDUE_REMAINING,
+              (DUE_DATE < DATE(@{default_target_date_test}) AND AMOUNT_DUE_REMAINING > 0, AMOUNT_DUE_REMAINING, 0)) AS TOTAL_OVERDUE_REMAINING,
             SUM(
             IF
               --(IS_DOUBTFUL, AMOUNT_DUE_REMAINING, 0)) AS TOTAL_DOUBTFUL_REMAINING,
-              (DUE_DATE < DATE(@{sample_target_date_test}) AND AMOUNT_DUE_REMAINING > 0 AND DATE_DIFF(DATE(@{sample_target_date_test}), DUE_DATE, DAY) > 90, AMOUNT_DUE_REMAINING, 0)) AS TOTAL_DOUBTFUL_REMAINING,
+              (DUE_DATE < DATE(@{default_target_date_test}) AND AMOUNT_DUE_REMAINING > 0 AND DATE_DIFF(DATE(@{default_target_date_test}), DUE_DATE, DAY) > 90, AMOUNT_DUE_REMAINING, 0)) AS TOTAL_DOUBTFUL_REMAINING,
             SUM(AMOUNT_DISCOUNTED) AS TOTAL_DISCOUNTED,
             SUM(AMOUNT_APPLIED) AS TOTAL_APPLIED,
             SUM(AMOUNT_CREDITED) AS TOTAL_CREDITED,

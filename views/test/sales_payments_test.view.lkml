@@ -10,15 +10,14 @@ view: +sales_payments {
 
   dimension: is_open_and_overdue {
     sql:  {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
-             @{default_target_date_test} ${due_raw} < DATE('{{td}}') AND ${is_open}
+             ${due_raw} < DATE(@{default_target_date_test}) AND ${is_open}
           {% else %}${TABLE}.IS_OPEN_AND_OVERDUE
           {% endif%};;
   }
 
   dimension: days_overdue {
     sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
-             @{default_target_date_test}
-              DATE_DIFF( DATE('{{td}}'), ${due_raw}, DAY)
+              DATE_DIFF(DATE(@{default_target_date_test}), ${due_raw}, DAY)
           {% else %}${TABLE}.DAYS_OVERDUE
           {% endif%} ;;
   }
@@ -58,7 +57,6 @@ view: +sales_payments {
   dimension: days_late_using_null_payment_close {
     view_label: "TEST STUFF"
     sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
-             @{default_target_date_test}
               DATE_DIFF( ${payment_close_with_null_raw}, ${due_raw}, DAY)
           {% else %}${TABLE}.DAYS_LATE
           {% endif%} ;;
@@ -67,7 +65,6 @@ view: +sales_payments {
   dimension: days_to_payment_using_null_payment_close {
     view_label: "TEST STUFF"
     sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
-             @{default_target_date_test}
               DATE_DIFF( ${payment_close_with_null_raw}, ${transaction_raw}, DAY)
           {% else %}${TABLE}.DAYS_LATE
           {% endif%} ;;
@@ -181,6 +178,103 @@ dimension: test_target_date  {
     view_label: "TEST STUFF"
     sql: MAX('COMING SOON') ;;
     html: 🚧 ;;
+  }
+
+
+  measure: dso_vision_365_payments {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: CASE WHEN ${transaction_date} between DATE('2009-10-11') and DATE('2010-10-11') THEN ${amount_due_remaining_target_currency} ELSE 0 END;;
+    filters: [payment_class_code: "-PMT"]
+  }
+
+  measure: dso_vision_365_invoices {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: CASE WHEN ${transaction_date} between DATE('2009-10-11') and DATE('2010-10-11') THEN ${amount_due_original_target_currency} ELSE 0 END;;
+    filters: [payment_class_code: "-PMT"]
+  }
+
+  measure: dso_vision_365 {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: number
+    sql: SAFE_DIVIDE(${dso_vision_365_payments},${dso_vision_365_invoices})*365 ;;
+    value_format_name: decimal_1
+  }
+
+  measure: dso_365_payments {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: CASE WHEN ${transaction_date} between DATE('2023-03-28') and DATE('2024-03-27') THEN ${amount_due_remaining_target_currency} ELSE 0 END;;
+    filters: [payment_class_code: "-PMT"]
+  }
+
+  measure: dso_365_invoices {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: CASE WHEN ${transaction_date} between DATE('2023-03-28') and DATE('2024-03-27') THEN ${amount_due_original_target_currency} ELSE 0 END;;
+    filters: [payment_class_code: "-PMT"]
+  }
+
+  measure: dso_365 {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: number
+    sql: SAFE_DIVIDE(${dso_365_payments},${dso_365_invoices})*365 ;;
+    value_format_name: decimal_1
+  }
+
+  measure: dso_30_payments {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: CASE WHEN ${transaction_date} between DATE('2024-02-26') and DATE('2024-03-27') THEN ${amount_due_remaining_target_currency} ELSE 0 END;;
+    filters: [payment_class_code: "-PMT"]
+  }
+
+  measure: dso_30_invoices {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: CASE WHEN ${transaction_date} between DATE('2024-02-26') and DATE('2024-03-27') THEN ${amount_due_original_target_currency} ELSE 0 END;;
+    filters: [payment_class_code: "-PMT"]
+  }
+
+  measure: dso_30 {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: number
+    sql: SAFE_DIVIDE(${dso_30_payments},${dso_30_invoices})*30 ;;
+    value_format_name: decimal_1
+  }
+
+  measure: dso_90_payments {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: CASE WHEN ${transaction_date} between DATE('2023-12-28') and DATE('2024-03-27') THEN ${amount_due_remaining_target_currency} ELSE 0 END;;
+    filters: [payment_class_code: "-PMT"]
+  }
+
+  measure: dso_90_invoices {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: CASE WHEN ${transaction_date} between DATE('2023-12-28') and DATE('2024-03-27') THEN ${amount_due_original_target_currency} ELSE 0 END;;
+    filters: [payment_class_code: "-PMT"]
+  }
+
+  measure: dso_90 {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: number
+    sql: SAFE_DIVIDE(${dso_90_payments},${dso_90_invoices})*90 ;;
+    value_format_name: decimal_1
   }
 
 

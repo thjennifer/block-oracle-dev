@@ -31,36 +31,14 @@ view: +sales_orders__lines {
 
 #########################################################
 # Parameters
-# parameter_language to select the display language for item descriptions
-# parameter_category_set_name to select category set to use for item categories
-# parameter_target_currency to choose the desired currency into which the order currency should be converted
+# parameter_display_product_level to show either Item or Categories in visualization
 #{
 
-  # parameter: parameter_language {
-  #   hidden: no
-  #   type: string
-  #   view_label: "🔍 Filters & 🛠 Tools"
-  #   label: "Language"
-  #   description: "Select language to display for item descriptions. Default is 'US'."
-  #   suggest_explore: item_md
-  #   suggest_dimension: item_md__item_descriptions.language
-  #   default_value: "US"
-  # }
-
-  # parameter: parameter_category_set_name {
-  #   hidden: no
-  #   type: string
-  #   view_label: "🔍 Filters & 🛠 Tools"
-  #   label: "Category Set Name"
-  #   suggest_explore: item_md
-  #   suggest_dimension: item_md__item_categories.category_set_name
-  #   default_value: "Purchasing"
-  # }
 
   parameter: parameter_display_product_level {
     hidden: no
     type: unquoted
-    view_label: "🔍 Filters & 🛠 Tools"
+    view_label: "@{view_label_for_filters}"
     label: "Display Categories or Items"
     description: "Select whether to display categories or items in report. Use with dimensions Selected Product Dimension ID and Selected Product Dimension Description."
     allowed_value: {label: "Category" value: "Category"}

@@ -2,6 +2,8 @@ include: "/views/core/otc_dashboard_navigation_ext.view"
 
 view: +otc_dashboard_navigation_ext {
 
+  label: "@{view_label_for_filters}"
+
   dimension: dash_bindings {
     hidden: yes
     type: string

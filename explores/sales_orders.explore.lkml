@@ -36,7 +36,7 @@ explore: sales_orders {
   #   relationship: many_to_one
   #   sql_on:  ${sales_orders.ordered_raw} = ${currency_rate_md.conversion_raw} AND
   #             ${sales_orders.currency_code} = ${currency_rate_md.from_currency} AND
-  #             ${currency_rate_md.to_currency} = {% parameter sales_orders_common_parameters.parameter_target_currency %} ;;
+  #             ${currency_rate_md.to_currency} = {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
   # }
 
 
@@ -46,7 +46,6 @@ explore: sales_orders {
   }
 
   join: otc_dashboard_navigation_ext {
-    view_label: "🔍 Filters & 🛠 Tools"
     relationship: one_to_one
     sql:  ;;
   }

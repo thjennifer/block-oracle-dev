@@ -13,7 +13,12 @@ view: +sales_payments_daily_agg__amounts {
     sql: CONCAT(${sales_payments_daily_agg.key},${target_currency_code},${is_incomplete_conversion}) ;;
   }
 
+  dimension: is_incomplete_conversion {
+    hidden: no
+  }
+
   dimension: payment_class_code {
+    hidden: yes
     type: string
     sql: ${sales_payments_daily_agg.payment_class_code} ;;
   }

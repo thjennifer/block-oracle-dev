@@ -2,6 +2,7 @@ include: "/views/core/sales_orders_daily_agg_rfn.view"
 include: "/views/core/sales_orders_daily_agg__lines_rfn.view"
 include: "/views/core/sales_orders_daily_agg__lines__amounts_rfn.view"
 include: "/views/core/otc_common_parameters_xvw.view"
+include: "/views/core/otc_dashboard_navigation_ext.view"
 
 explore: sales_orders_daily_agg {
   hidden: no
@@ -26,6 +27,11 @@ explore: sales_orders_daily_agg {
   }
 
   join: otc_common_parameters_xvw {
+    relationship: one_to_one
+    sql:  ;;
+  }
+
+  join: otc_dashboard_navigation_ext {
     relationship: one_to_one
     sql:  ;;
   }

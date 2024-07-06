@@ -20,18 +20,9 @@ view: +currency_rate_md {
     sql: ${conversion_raw} ;;
   }
 
-  # parameter: parameter_target_currency {
-  #   hidden: no
-  #   type: string
-  #   view_label: "🔍 Filters & 🛠 Tools"
-  #   label: "Target Currency"
-  #   suggest_dimension: to_currency
-  #   default_value: "USD"
-  #   full_suggestions: no
-  # }
-
   dimension: to_currency {
-    sql: COALESCE(${TABLE}.TO_CURRENCY,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+    # sql: COALESCE(${TABLE}.TO_CURRENCY,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+    sql: ${TABLE}.TO_CURRENCY;;
 
   }
 
