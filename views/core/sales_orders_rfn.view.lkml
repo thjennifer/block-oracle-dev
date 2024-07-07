@@ -1,10 +1,10 @@
 include: "/views/base/sales_orders.view"
 include: "/views/core/sales_orders_common_dimensions_ext.view"
-include: "/views/core/sales_orders_common_measures_ext.view"
+include: "/views/core/sales_orders_common_count_measures_ext.view"
 
 
 view: +sales_orders {
-  extends: [sales_orders_common_dimensions_ext,sales_orders_common_measures_ext]
+  extends: [sales_orders_common_dimensions_ext,sales_orders_common_count_measures_ext]
 
   fields_hidden_by_default: no
 
@@ -63,12 +63,6 @@ view: +sales_orders {
   dimension: order_number {
     hidden: no
     value_format_name: id
-  }
-
-  dimension: currency_code {
-    hidden: no
-    label: "Currency (Source)"
-    description: "Currency of the order."
   }
 
   dimension: ledger_id {
@@ -398,8 +392,16 @@ view: +sales_orders {
 # Total Order Amounts
 #{
 
+  dimension: currency_code {
+    hidden: no
+    group_label: "Order Amounts"
+    label: "Currency (Source)"
+    description: "Currency of the order."
+  }
+
   dimension: total_ordered_amount {
     hidden: no
+    group_label: "Order Amounts"
     label: "Total Order Amount (Source Currency)"
     description: "Total amount for an order in source currency."
     value_format_name: decimal_2
@@ -408,6 +410,7 @@ view: +sales_orders {
   dimension: total_ordered_amount_target_currency {
     hidden: no
     type: number
+    group_label: "Order Amounts"
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Order Amount ({{currency}}){%else%}Total Order Amount (Target Currency){%endif%}"
     description: "Total amount for an order in target currency."
     sql: COALESCE(${total_ordered_amount},0) * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
@@ -428,16 +431,16 @@ view: +sales_orders {
   measure: order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     drill_fields: [header_details*]
   }
 
   measure: sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [order_category_code: "-RETURN"]
     drill_fields: [header_details*]
   }
@@ -445,8 +448,8 @@ view: +sales_orders {
   measure: return_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [order_category_code: "RETURN"]
     drill_fields: [header_details*]
   }
@@ -478,8 +481,8 @@ view: +sales_orders {
   measure: has_backorder_sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [has_backorder: "Yes", order_category_code: "-RETURN"]
   }
 
@@ -495,24 +498,24 @@ view: +sales_orders {
   measure: blocked_sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [is_blocked: "Yes", order_category_code: "-RETURN"]
   }
 
   measure: cancelled_sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [is_cancelled: "Yes", order_category_code: "-RETURN"]
   }
 
   measure: has_return_sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [has_return_line: "Yes", order_category_code: "-RETURN"]
   }
 
@@ -527,32 +530,32 @@ view: +sales_orders {
   measure: fulfilled_sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [is_fulfilled: "Yes", order_category_code: "-RETURN"]
   }
 
   measure: fulfilled_by_request_date_sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [is_fulfilled_by_request_date : "Yes", order_category_code: "-RETURN"]
   }
 
   measure: fulfilled_by_promise_date_sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [is_fulfilled_by_promise_date : "Yes", order_category_code: "-RETURN"]
   }
 
   measure: no_holds_sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [has_hold: "No", order_category_code: "-RETURN"]
     drill_fields: [header_details*]
   }
@@ -560,8 +563,8 @@ view: +sales_orders {
   measure: non_cancelled_sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     filters: [is_cancelled: "No", order_category_code: "-RETURN"]
   }
 

@@ -58,8 +58,8 @@
     title: Top Products by Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.total_sales_amount_target_currency_format_large_numbers]
-    sorts: [sales_orders__lines.total_sales_amount_target_currency_format_large_numbers desc]
+    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.total_sales_amount_target_currency_formatted]
+    sorts: [sales_orders__lines.total_sales_amount_target_currency_formatted desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
 
     limit: 10
@@ -77,9 +77,9 @@
     x_axis_scale: auto
     y_axis_combined: true
     series_colors:
-      {sales_orders__lines.total_sales_amount_target_currency_format_large_numbers: "#74A09F"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.total_sales_amount_target_currency_format_large_numbers,
-            id: sales_orders__lines.total_sales_amount_target_currency_format_large_numbers
+      {sales_orders__lines.total_sales_amount_target_currency_formatted: "#74A09F"}
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.total_sales_amount_target_currency_formatted,
+            id: sales_orders__lines.total_sales_amount_target_currency_formatted
             }], showLabels: true, showValues: false,
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
@@ -104,7 +104,7 @@
       </font>
     row: 2
     col: 0
-    width: 10
+    width: 12
     height: 10
     model: cortex-oracle-ebs-test
 
@@ -157,8 +157,8 @@
       <font size="-2">Average Sales per Order (Target Currency).<br>Limited to 10 Products. To change this row limit, select "Explore from Here" option and adjust the row limit.
       </font>
     row: 2
-    col: 11
-    width: 10
+    col: 12
+    width: 12
     height: 10
     model: cortex-oracle-ebs-test
 
@@ -166,8 +166,8 @@
     title: Top Business Unit by Sales
     explore: sales_orders_daily_agg
     type: looker_bar
-    fields: [sales_orders_daily_agg.business_unit_id,sales_orders_daily_agg.business_unit_name,sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers]
-    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers desc]
+    fields: [sales_orders_daily_agg.business_unit_id,sales_orders_daily_agg.business_unit_name,sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted]
+    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted desc]
     hidden_fields: [sales_orders_daily_agg.business_unit_id]
     limit: 10
     x_axis_gridlines: false
@@ -184,9 +184,9 @@
     x_axis_scale: auto
     y_axis_combined: true
     series_colors:
-      {sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers: "#74A09F"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers,
-            id: sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numberst, name: Total
+      {sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted: "#74A09F"}
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
+            id: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted, name: Total
               Sales}], showLabels: true, showValues: false,
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
@@ -203,7 +203,7 @@
 
     row: 20
     col: 0
-    width: 10
+    width: 12
     height: 10
     model: cortex-oracle-ebs-test
 
@@ -253,8 +253,8 @@
       <font size="-2">Average Sales per Order (Target Currency).<br>Limited to 10 Sold to customers. To change this row limit, select "Explore from Here" option and adjust the row limit.
       </font>
     row: 20
-    col: 11
-    width: 10
+    col: 12
+    width: 12
     height: 10
     model: cortex-oracle-ebs-test
 
@@ -262,9 +262,9 @@
     title: Sales by Order Source
     explore: sales_orders_daily_agg
     type: looker_pie
-    fields: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers, sales_orders_daily_agg.order_source_id,
+    fields: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted, sales_orders_daily_agg.order_source_id,
       sales_orders_daily_agg.order_source_name]
-    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_format_large_numbers desc 0]
+    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted desc 0]
     hidden_fields: [sales_orders_daily_agg.order_source_id]
     limit: 50
     column_limit: 50
@@ -328,6 +328,6 @@
       Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 21
     col: 0
-    width: 10
+    width: 12
     height: 7
     model: cortex-oracle-ebs-test

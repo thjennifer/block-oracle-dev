@@ -27,7 +27,7 @@
 #   no_holds_sales_order_percent
 #########################################################}
 
-view: sales_orders_common_measures_ext {
+view: sales_orders_common_count_measures_ext {
   extension: required
 
   measure: order_count {

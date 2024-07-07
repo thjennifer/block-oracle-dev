@@ -2,13 +2,13 @@
   # value of yes means Looker queries the nest field as part of the full explore rather than a standalone table
 
 include: "/views/base/sales_orders_daily_agg__lines.view"
-include: "/views/core/sales_orders__lines_common_fields_ext.view"
+include: "/views/core/sales_orders_common_amount_measures_ext.view"
 include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
 
 view: +sales_orders_daily_agg__lines {
   fields_hidden_by_default: no
   label: "Sales Orders Daily Agg: Item Categories"
-  extends: [sales_orders__lines_common_fields_ext,otc_unnest_item_categories_common_fields_ext]
+  extends: [sales_orders_common_amount_measures_ext,otc_unnest_item_categories_common_fields_ext]
 
   dimension: key {
     hidden: yes
@@ -34,6 +34,14 @@ view: +sales_orders_daily_agg__lines {
   dimension: line_category_code {
     hidden: no
     sql:  COALESCE(${TABLE}.LINE_CATEGORY_CODE,IF(${sales_orders_daily_agg.order_category_code}='MIXED','Unknown',${sales_orders_daily_agg.order_category_code})) ;;
+  }
+
+  dimension: is_sales_order {
+    hidden: no
+    type: yesno
+    description: "Line Category Code equals Order (and is not a return)"
+    sql: ${line_category_code} = 'ORDER' ;;
+    full_suggestions: yes
   }
 
   # dimension: category_id {
@@ -69,6 +77,12 @@ view: +sales_orders_daily_agg__lines {
     hidden: no
     type: number
     sql: (select SUM(TOTAL_ORDERED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+  }
+
+  dimension: invoiced_amount_target_currency {
+    hidden: no
+    type: number
+    sql: (select SUM(TOTAL_INVOICED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
   }
 
   dimension: is_incomplete_conversion {
@@ -107,25 +121,33 @@ view: +sales_orders_daily_agg__lines {
     value_format_name: decimal_2
   }
 
-  measure: total_sales_amount_target_currency {
-    hidden: no
-    type: sum
-    #label defined in sales_orders__lines_common_fields_ext
-    #description defined in sales_orders__lines_common_fields_ext
-    sql: ${ordered_amount_target_currency} ;;
-    filters: [sales_orders_daily_agg.order_category_code: "-RETURN"]
-    #value format defined in sales_orders__lines_common_fields_ext
-  }
+  # measure: total_sales_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   #label defined in sales_orders__lines_common_fields_ext
+  #   #description defined in sales_orders__lines_common_fields_ext
+  #   sql: ${ordered_amount_target_currency} ;;
+  #   # filters: [line_category_code: "-RETURN"]
+  #   #value format defined in sales_orders__lines_common_fields_ext
+  # }
 
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
     type: number
-    #label defined in sales_orders__lines_common_fields_ext
-    #description defined in sales_orders__lines_common_fields_ext
+    #label defined in sales_orders_common_amount_measures_ext
+    #description defined in sales_orders_common_amount_measures_ext
     sql: SAFE_DIVIDE(${total_sales_amount_target_currency},(${sales_orders_daily_agg.non_cancelled_sales_order_count})) ;;
-    #value format defined in sales_orders__lines_common_fields_ext
+    #value format defined in sales_orders_common_amount_measures_ext
   }
 
-
+  # measure: total_invoiced_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   #label defined in sales_orders__lines_common_fields_ext
+  #   #description defined in sales_orders__lines_common_fields_ext
+  #   sql: ${invoiced_amount_target_currency} ;;
+  #   # filters: [line_category_code: "-RETURN"]
+  #   #value format defined in sales_orders__lines_common_fields_ext
+  # }
 
  }

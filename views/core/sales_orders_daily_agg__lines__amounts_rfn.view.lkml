@@ -1,15 +1,31 @@
 include: "/views/base/sales_orders_daily_agg__lines__amounts.view"
-include: "/views/core/sales_orders__lines_common_fields_ext.view"
+include: "/views/core/sales_orders_common_amount_measures_ext.view"
 
 view: +sales_orders_daily_agg__lines__amounts {
 
   fields_hidden_by_default: yes
-  extends: [sales_orders__lines_common_fields_ext]
+  extends: [sales_orders_common_amount_measures_ext]
 
   dimension: key {
     hidden: yes
     primary_key: yes
     sql: CONCAT(${sales_orders_daily_agg__lines.key},${target_currency_code},${is_incomplete_conversion}) ;;
+  }
+
+  dimension: ordered_amount_target_currency {
+    hidden: yes
+    sql: ${total_ordered} ;;
+  }
+
+  dimension: invoiced_amount_target_currency {
+    hidden: yes
+    sql: ${total_invoiced} ;;
+  }
+
+  dimension: is_sales_order {
+    hidden: yes
+    type: yesno
+    sql: ${sales_orders_daily_agg__lines.line_category_code} = 'ORDER' ;;
   }
 
   dimension: target_currency_code {
@@ -25,14 +41,14 @@ view: +sales_orders_daily_agg__lines__amounts {
     sql: COALESCE(${TABLE}.IS_INCOMPLETE_CONVERSION,FALSE) ;;
   }
 
-  measure: total_sales_amount_target_currency {
-    hidden: no
-    type: sum
-    # description: "Total sales amount in target currency."
-    sql: ${total_ordered} ;;
-    filters: [sales_orders_daily_agg.order_category_code: "-RETURN"]
-    # value_format_name: format_large_numbers_d1
-  }
+  # measure: total_sales_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   # description: "Total sales amount in target currency."
+  #   sql: ${total_ordered} ;;
+  #   filters: [sales_orders_daily_agg__lines.line_category_code: "-RETURN"]
+  #   # value_format_name: format_large_numbers_d1
+  # }
 
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
@@ -43,12 +59,12 @@ view: +sales_orders_daily_agg__lines__amounts {
     #value format defined in sales_orders__lines_common_fields_ext
   }
 
-  measure: total_invoiced_amount_target_currency {
-    hidden: no
-    type: sum
-    description: "Total sales amount in target currency."
-    sql: ${total_invoiced} ;;
-    value_format_name: format_large_numbers_d1
-  }
+  # measure: total_invoiced_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   description: "Total invoiced amount in target currency."
+  #   sql: ${total_invoiced} ;;
+  #   value_format_name: format_large_numbers_d1
+  # }
 
  }

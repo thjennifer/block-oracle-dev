@@ -17,7 +17,7 @@
 #########################################################}
 
 
-view: sales_orders__lines_common_fields_ext {
+view: rename_sales_orders__lines_common_fields_ext {
   extension: required
 
 

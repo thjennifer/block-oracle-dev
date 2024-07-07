@@ -1,13 +1,13 @@
 ## when column is duplicate of another in header (like is_open) then restate sql using ${TABLE}. reference
 include: "/views/base/sales_orders__lines.view"
-include: "/views/core/sales_orders__lines_common_fields_ext.view"
+include: "/views/core/sales_orders_common_amount_measures_ext.view"
 include: "/views/core/otc_derive_common_product_fields_ext.view"
 # include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
 
 view: +sales_orders__lines {
 
   fields_hidden_by_default: yes
-  extends: [sales_orders__lines_common_fields_ext,otc_derive_common_product_fields_ext]
+  extends: [sales_orders_common_amount_measures_ext,otc_derive_common_product_fields_ext]
   # extends: [sales_orders__lines_common_fields_ext,otc_unnest_item_categories_common_fields_ext]
   dimension: key {
     type: string
@@ -226,6 +226,13 @@ view: +sales_orders__lines {
     sql: ${TABLE}.HAS_RETURN ;;
   }
 
+  dimension: is_sales_order {
+    hidden: no
+    type: yesno
+    description: "Line Category Code equals Order (and is not a return)"
+    full_suggestions: yes
+    sql: ${line_category_code} = 'ORDER' ;;
+  }
 
   dimension: is_fulfilled {
     hidden: no
@@ -268,6 +275,21 @@ view: +sales_orders__lines {
          ELSE NULL END
         ;;
   }
+
+  dimension: is_shipped {
+    hidden: no
+    type: yesno
+    group_label: "Line Status"
+    sql: ${shipped_quantity} > 0 ;;
+  }
+
+  dimension: is_invoiced {
+    hidden: no
+    type: yesno
+    group_label: "Line Status"
+    sql: ${invoiced_quantity} > 0 ;;
+  }
+
 
 #} end  line status
 
@@ -389,8 +411,6 @@ view: +sales_orders__lines {
 # Item prices and cost
 #{
 
-
-
   dimension: unit_cost {
     hidden: no
     value_format_name: decimal_2
@@ -425,7 +445,14 @@ view: +sales_orders__lines {
     value_format_name: decimal_2
   }
 
-  dimension: currency_source {
+  dimension: invoiced_amount {
+    hidden: no
+    group_label: "Amounts"
+    label: "Invoiced Amount (Source Currency)"
+    value_format_name: decimal_2
+  }
+
+  dimension: currency_code {
     hidden: no
     type: string
     group_label: "Amounts"
@@ -434,7 +461,7 @@ view: +sales_orders__lines {
     sql: ${sales_orders.currency_code} ;;
   }
 
-  dimension: currency_target {
+  dimension: target_currency_code {
     hidden: no
     type: string
     group_label: "Amounts"
@@ -474,6 +501,15 @@ view: +sales_orders__lines {
     value_format_name: decimal_2
   }
 
+  dimension: invoiced_amount_target_currency {
+    hidden: yes
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Shipped Amount ({{currency}}){%else%}Shipped Amount (Target Currency){%endif%}"
+    sql: ${invoiced_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    value_format_name: decimal_2
+  }
+
 #} end amount dimensions
 
   measure: count_order_lines {
@@ -482,15 +518,7 @@ view: +sales_orders__lines {
     drill_fields: [order_line_details*]
   }
 
-  measure: total_sales_amount_by_source_currency {
-    hidden: no
-    type: sum
-    description: "Sum of sales for order lines in source currency. Currency Code is required field to avoid summing across multiple currencies."
-    required_fields: [sales_orders.currency_code]
 
-    sql: ${ordered_amount} ;;
-    value_format_name: decimal_0
-  }
 
   measure: total_ordered_quantity_by_item {
     hidden: no
@@ -552,20 +580,29 @@ view: +sales_orders__lines {
   }
 
 #########################################################
-# Amounts in Target Currency measures
+# Amounts measures
 #{
 
-
-
-  measure: total_sales_amount_target_currency {
+  measure: total_sales_amount_by_source_currency {
     hidden: no
     type: sum
-    #label defined in sales_orders__lines_common_fields_ext
-    #description defined in sales_orders__lines_common_fields_ext
-    sql: ${ordered_amount_target_currency} ;;
-    filters: [sales_orders.order_category_code: "-RETURN"]
-    # value_format defined in sales_orders__lines_common_fields_ext
+    description: "Sum of sales for order lines in source currency. Currency Code is required field to avoid summing across multiple currencies."
+    required_fields: [sales_orders.currency_code]
+    sql: ${ordered_amount} ;;
+    filters: [line_category_code: "-RETURN"]
+    value_format_name: decimal_0
   }
+
+
+  # measure: total_sales_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   #label defined in sales_orders__lines_common_fields_ext
+  #   #description defined in sales_orders__lines_common_fields_ext
+  #   sql: ${ordered_amount_target_currency} ;;
+  #   filters: [line_category_code: "-RETURN"]
+  #   # value_format defined in sales_orders__lines_common_fields_ext
+  # }
 
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
@@ -581,7 +618,7 @@ view: +sales_orders__lines {
     type: sum
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Fulfilled Amount ({{currency}}){%else%}Total Fulfilled Amount (Target Currency){%endif%}"
     sql: ${ordered_amount_target_currency} ;;
-    filters: [sales_orders__lines.is_fulfilled: "Yes", sales_orders.order_category_code: "-RETURN"]
+    filters: [sales_orders__lines.is_fulfilled: "Yes", line_category_code: "-RETURN"]
     value_format_name: format_large_numbers_d1
   }
 
@@ -590,9 +627,18 @@ view: +sales_orders__lines {
     type: sum
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Shipped Amount ({{currency}}){%else%}Total Shipped Amount (Target Currency){%endif%}"
     sql: ${shipped_amount_target_currency} ;;
-    filters: [sales_orders.order_category_code: "-RETURN"]
+    filters: [line_category_code: "-RETURN"]
     value_format_name: format_large_numbers_d1
   }
+
+  # measure: total_invoiced_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoiced Amount ({{currency}}){%else%}Total Invoiced Amount (Target Currency){%endif%}"
+  #   sql: ${invoiced_amount_target_currency} ;;
+  #   filters: [line_category_code: "-RETURN"]
+  #   value_format_name: format_large_numbers_d1
+  # }
 
 #} end target currency dimensions and measures
 

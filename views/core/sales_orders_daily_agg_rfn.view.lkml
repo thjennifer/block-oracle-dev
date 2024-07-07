@@ -36,12 +36,12 @@
 
 include: "/views/base/sales_orders_daily_agg.view"
 include: "/views/core/sales_orders_common_dimensions_ext.view"
-include: "/views/core/sales_orders_common_measures_ext.view"
+include: "/views/core/sales_orders_common_count_measures_ext.view"
 
 view: +sales_orders_daily_agg {
 
   fields_hidden_by_default: yes
-  extends: [sales_orders_common_dimensions_ext,sales_orders_common_measures_ext]
+  extends: [sales_orders_common_dimensions_ext,sales_orders_common_count_measures_ext]
 
   dimension: key {
     type: string
@@ -128,16 +128,16 @@ view: +sales_orders_daily_agg {
   measure: order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders}{%endif%} ;;
   }
 
   measure: sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders}{%endif%} ;;
     filters: [order_category_code: "-RETURN"]
   }
@@ -145,8 +145,8 @@ view: +sales_orders_daily_agg {
   measure: return_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders}{%endif%} ;;
     filters: [order_category_code: "RETURN"]
   }
@@ -154,8 +154,8 @@ view: +sales_orders_daily_agg {
   measure: has_backorder_sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_backordered_orders}{%endif%};;
     filters: [order_category_code: "-RETURN"]
   }
@@ -163,8 +163,8 @@ view: +sales_orders_daily_agg {
   measure: blocked_sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_blocked_orders}{%endif%};;
     filters: [order_category_code: "-RETURN"]
   }
@@ -172,8 +172,8 @@ view: +sales_orders_daily_agg {
   measure: cancelled_sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_cancelled_orders}{%endif%};;
     filters: [order_category_code: "-RETURN"]
   }
@@ -181,8 +181,8 @@ view: +sales_orders_daily_agg {
   measure: fillable_sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_fillable_orders}{%endif%} ;;
     filters: [order_category_code: "-RETURN"]
   }
@@ -191,8 +191,8 @@ view: +sales_orders_daily_agg {
   measure: fulfilled_sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_fulfilled_orders}{%endif%} ;;
     filters: [order_category_code: "-RETURN"]
   }
@@ -200,8 +200,8 @@ view: +sales_orders_daily_agg {
   measure: fulfilled_by_request_date_sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_fulfilled_by_request_date}{%endif%} ;;
     filters: [order_category_code: "-RETURN"]
   }
@@ -209,8 +209,8 @@ view: +sales_orders_daily_agg {
   measure: fulfilled_by_promise_date_sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_fulfilled_by_promise_date}{%endif%} ;;
     filters: [order_category_code: "-RETURN"]
   }
@@ -218,8 +218,8 @@ view: +sales_orders_daily_agg {
   measure: has_return_sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_with_returns}{%endif%};;
     filters: [order_category_code: "-RETURN"]
   }
@@ -227,8 +227,8 @@ view: +sales_orders_daily_agg {
   measure: no_holds_sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_with_no_holds}{%endif%} ;;
     filters: [order_category_code: "-RETURN"]
   }
@@ -236,16 +236,16 @@ view: +sales_orders_daily_agg {
   measure: non_cancelled_sales_order_count {
     hidden: no
     type: number
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: ${sales_order_count} - ${cancelled_sales_order_count};;
   }
 
   measure: open_sales_order_count {
     hidden: no
     type: sum
-    #label defined in sales_orders_common_measures_ext
-    #description defined in sales_orders_common_measures_ext
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_open_orders}{%endif%} ;;
     filters: [order_category_code: "-RETURN"]
   }
