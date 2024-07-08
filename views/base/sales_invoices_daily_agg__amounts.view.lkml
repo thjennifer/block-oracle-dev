@@ -29,6 +29,10 @@ view: sales_invoices_daily_agg__amounts {
     type: number
     sql: TOTAL_LIST ;;
   }
+  dimension: total_revenue {
+    type: number
+    sql: TOTAL_REVENUE ;;
+  }
   dimension: total_selling {
     type: number
     sql: TOTAL_SELLING ;;

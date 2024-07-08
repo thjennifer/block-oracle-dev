@@ -1,8 +1,10 @@
 include: "/views/base/sales_invoices_daily_agg__amounts.view"
+include: "/views/core/sales_invoices_common_amount_measures_ext.view"
 
 view: +sales_invoices_daily_agg__amounts {
 
   fields_hidden_by_default: yes
+  extends: [sales_invoices_common_amount_measures_ext]
 
   dimension: key {
     hidden: yes
@@ -25,15 +27,15 @@ view: +sales_invoices_daily_agg__amounts {
     group_label: "Amounts"
   }
 
-  # dimension: revenue_amount_target_currency {
-  #   hidden: no
-  #   type: number
-  #   group_label: "Amounts"
-  #   label: "{% if _field._is_selected %}@{derive_currency_label}Net Revenue Amount ({{currency}}){%else%}Net Revenue Amount (Target Currency){%endif%}"
-  #   description: "Amount in target currency recognized as revenue for accounting purposes."
-  #   sql:  ;;
-  #   value_format_name: decimal_2
-  # }
+  dimension: revenue_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Net Revenue Amount ({{currency}}){%else%}Net Revenue Amount (Target Currency){%endif%}"
+    description: "Amount in target currency recognized as revenue for accounting purposes."
+    sql: ${total_revenue} ;;
+    value_format_name: decimal_2
+  }
 
   # dimension: gross_revenue_amount_target_currency {
   #   hidden: no
@@ -73,12 +75,6 @@ view: +sales_invoices_daily_agg__amounts {
     value_format_name: decimal_2
   }
 
-  measure: total_transaction_amount_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Net Revenue Amount ({{currency}}){%else%}Total Net Revenue Amount (Target Currency){%endif%}"
-    sql: ${transaction_amount_target_currency} ;;
-    value_format_name: decimal_0
-  }
 
-   }
+
+}

@@ -150,6 +150,10 @@
     note_display: hover
     # note_text: "Under Construction"
     listen:
+      customer_country: sales_payments.bill_to_customer_country
+      customer_name: sales_payments.bill_to_customer_name
+      business_unit: sales_payments.business_unit_name
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
       dso_days: dso_dynamic_days_sdt.parameter_dso_number_of_days
       test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 4

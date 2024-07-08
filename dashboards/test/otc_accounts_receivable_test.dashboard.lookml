@@ -165,8 +165,11 @@
     # note_text: "Under Construction"
     note_text: "Average time, in days, for which the receivables are outstanding. Calculated as (Ending Receivables Balance / Credit Sales) * N where N is number of days in period. User can choose 30, 90 or 365 days for the calculation with the dashboard parameter 'DSO: # Days for Calculation'."
     listen:
-        dso_days: sales_payments_dso_days_agg_pdt.dso_days_string
+        customer_country: sales_payments_dso_days_agg_pdt.bill_to_customer_country
+        customer_name: sales_payments_dso_days_agg_pdt.bill_to_customer_name
+        business_unit: sales_payments_dso_days_agg_pdt.business_unit_name
         target_currency: otc_common_parameters_xvw.parameter_target_currency
+        dso_days: sales_payments_dso_days_agg_pdt.dso_days_string
         test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 4
     col: 5
