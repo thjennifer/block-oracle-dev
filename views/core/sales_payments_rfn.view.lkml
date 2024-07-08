@@ -233,7 +233,7 @@ view: +sales_payments {
     description: "Currency of the payment transaction."
   }
 
-  dimension: currency_target {
+  dimension: target_currency_code {
     hidden: no
     type: string
     group_label: "Amounts"

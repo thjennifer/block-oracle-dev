@@ -318,4 +318,56 @@ view: navigation_template {
   }
 
 
+  dimension: test_navigation_html_link {
+    required_fields: [item_delimiter,value_delimiter]
+    sql:  'Test' ;;
+
+    html: <div>
+    @{link_generate_variable_defaults}
+    {% assign link = link_generator._link %}
+    {% assign filters_mapping = 'sales_orders_daily_agg.invoice_date|date||sales_orders_daily_agg.business_unit_name|business_unit' %}
+    {% assign target_dashboard = _model._name | append: '::otc2_order_fulfillment_test' %}
+    @{link_generate_dashboard_variable}
+    <a href="{{dashboard_url}}"
+    style="@{link_unselected_button_style}}">Order Fulfillment</a>
+    @{link_generate_variable_defaults}
+    {% assign link = link_generator._link %}
+    {% assign filters_mapping = 'sales_orders_daily_agg.invoice_date|date||sales_orders_daily_agg.business_unit_name|business_unit' %}
+    {% assign target_dashboard = _model._name | append: '::otc2_order_status_test' %}
+    @{link_generate_dashboard_variable}
+    <a href="{{dashboard_url}}"
+    style="@{link_unselected_button_style}}">Order Status</a>
+    </div>;;
+
+    # html: <div>
+    #       @{link_generate_variable_defaults}
+    #       {% assign link = link_generator._link %}
+    #       {{link}}
+    #       </div>;;
+    # html: @{link_generate_variable_defaults}
+    #   {% assign link = link_generator._link %}
+    #   {% assign filters_mapping = 'sales_orders_daily_agg.ordered_date|date||sales_orders_daily_agg.business_unit_name|business_unit'  %}
+
+    #   {% assign model = _model._name %}
+    #   {% assign target_dashboard = _model._name | append: '::otc2_order_fulfillment_test' %}
+    #   {% assign default_filters_override = false %}
+    #   @{link_generate_dashboard_url};;
+
+    # html: @{link_generate_variable_defaults}
+    # {% assign link = link_generator._link %}
+    # {% assign filters_mapping = 'sales_orders_daily_agg.invoice_date|date||sales_orders_daily_agg.business_unit_name|business_unit' %}
+    # {% assign different_explore = true %}
+    # {% assign target_model = _model._name %}
+    # {% assign target_explore = 'sales_orders_daily_agg' %}
+    # @{link_generate_explore_link} --if you drop the auto-printing from the function
+    # <a href="{{explore_link}}">Sample</a>;;
+    }
+
+  measure: link_generator {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [link_generator]
+  }
+
 }
