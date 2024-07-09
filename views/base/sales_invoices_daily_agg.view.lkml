@@ -60,6 +60,10 @@ view: sales_invoices_daily_agg {
     type: number
     sql: ${TABLE}.INVOICE_YEAR_NUM ;;
   }
+  dimension: item_category_description {
+    type: string
+    sql: ${TABLE}.ITEM_CATEGORY_DESCRIPTION ;;
+  }
   dimension: item_category_id {
     type: number
     sql: ${TABLE}.ITEM_CATEGORY_ID ;;
@@ -75,6 +79,14 @@ view: sales_invoices_daily_agg {
   dimension: item_category_set_name {
     type: string
     sql: ${TABLE}.ITEM_CATEGORY_SET_NAME ;;
+  }
+  dimension: item_organization_id {
+    type: number
+    sql: ${TABLE}.ITEM_ORGANIZATION_ID ;;
+  }
+  dimension: item_organization_name {
+    type: string
+    sql: ${TABLE}.ITEM_ORGANIZATION_NAME ;;
   }
   dimension: order_source_id {
     type: number
@@ -92,13 +104,14 @@ view: sales_invoices_daily_agg {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-  item_category_name,
-  invoice_type_name,
-  item_category_set_name,
-  business_unit_name,
-  bill_to_customer_name,
-  order_source_name
-  ]
+      item_category_name,
+      invoice_type_name,
+      item_category_set_name,
+      business_unit_name,
+      item_organization_name,
+      bill_to_customer_name,
+      order_source_name
+    ]
   }
 
 }
@@ -133,6 +146,10 @@ view: sales_invoices_daily_agg {
 #   dimension: total_list {
 #     type: number
 #     sql: TOTAL_LIST ;;
+#   }
+#   dimension: total_revenue {
+#     type: number
+#     sql: TOTAL_REVENUE ;;
 #   }
 #   dimension: total_selling {
 #     type: number

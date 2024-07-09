@@ -125,6 +125,25 @@ view: +sales_invoices {
     description: "Currency code of the invoice transaction."
   }
 
+  dimension: target_currency_code {
+    type: string
+    group_label: "Amounts"
+    label: "Currency Code (Target)"
+    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
+  }
+
+  dimension: currency_conversion_rate {
+    type: number
+    group_label: "Amounts"
+    sql: IF(${currency_code} = ${target_currency_code}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+  }
+
+  dimension: is_incomplete_conversion {
+    type: yesno
+    group_label: "Amounts"
+    sql: ${currency_code} <> ${target_currency_code} AND ${currency_conversion_sdt.from_currency} is NULL ;;
+  }
+
   dimension: total_revenue_amount {
     group_label: "Amounts"
     label: "Invoice Revenue Amount (Source Currency)"
@@ -144,7 +163,7 @@ view: +sales_invoices {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Revenue Amount ({{currency}}){%else%}Invoice Revenue Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Net Revenue Amount ({{currency}}){%else%}Invoice Net Revenue Amount (Target Currency){%endif%}"
     description: "Total amount recognized as revenue for accounting purposes for the entire invoice (in target currency)."
     sql: ${total_revenue_amount} * IF(${currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
     value_format_name: decimal_2
@@ -154,7 +173,7 @@ view: +sales_invoices {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Transaction Amount ({{currency}}){%else%}Invoice Transactions Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Transaction Amount ({{currency}}){%else%}Invoice Transaction Amount (Target Currency){%endif%}"
     description: "Total transaction amount of invoice in target currency."
     sql: ${total_transaction_amount} * IF(${currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
     value_format_name: decimal_2
@@ -197,9 +216,9 @@ view: +sales_invoices {
 
 #} end measures
 
-set: invoice_header_details {
-  fields: [invoice_id,invoice_number,invoice_date,invoice_type_name, total_revenue_amount_target_currency, total_tax_amount_target_currency]
+  set: invoice_header_details {
+    fields: [invoice_id,invoice_number,invoice_date,invoice_type_name, total_revenue_amount_target_currency, total_tax_amount_target_currency]
+  }
+
+
 }
-
-
- }
