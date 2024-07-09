@@ -51,13 +51,15 @@
 
   - name: navigation_testing
     explore: sales_orders_daily_agg
-    type: single_value
-    fields: [otc_dashboard_navigation_sales_ext.test_navigation_html_link]
-    sorts: [otc_dashboard_navigation_sales_ext.test_navigation_html_link]
+    # type: single_value
+    type: looker_grid
+    fields: [otc_dashboard_navigation_sales_ext.test_navigation_link_parts]
+    # sorts: [otc_dashboard_navigation_sales_ext.test_navigation_html_link]
     row: 2
     col: 0
     width: 22
-    height: 4
+    height: 8
+    truncate_text: no
     model: cortex-oracle-ebs-test
     listen:
       date: otc_dashboard_navigation_sales_ext.filter1
@@ -68,7 +70,7 @@
       target_currency: otc_dashboard_navigation_sales_ext.filter6
       order_source: otc_dashboard_navigation_sales_ext.filter7
       item_category: otc_dashboard_navigation_sales_ext.filter8
-      # item_language: otc_dashboard_navigation_sales_ext.filter9
+      item_language: otc_dashboard_navigation_sales_ext.filter9
       test_or_demo: otc_dashboard_navigation_sales_ext.filter10
 
 
