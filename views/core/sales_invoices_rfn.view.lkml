@@ -165,7 +165,7 @@ view: +sales_invoices {
     group_label: "Amounts"
     label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Net Revenue Amount ({{currency}}){%else%}Invoice Net Revenue Amount (Target Currency){%endif%}"
     description: "Total amount recognized as revenue for accounting purposes for the entire invoice (in target currency)."
-    sql: ${total_revenue_amount} * IF(${currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    sql: ${total_revenue_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
@@ -175,7 +175,7 @@ view: +sales_invoices {
     group_label: "Amounts"
     label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Transaction Amount ({{currency}}){%else%}Invoice Transaction Amount (Target Currency){%endif%}"
     description: "Total transaction amount of invoice in target currency."
-    sql: ${total_transaction_amount} * IF(${currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    sql: ${total_transaction_amount} * ${currency_conversion_rate}   ;;
     value_format_name: decimal_2
   }
 
@@ -185,7 +185,7 @@ view: +sales_invoices {
     group_label: "Amounts"
     label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Tax Amount ({{currency}}){%else%}Invoice Tax Amount (Target Currency){%endif%}"
     description: "Total tax amount of invoice in target currency."
-    sql: ${total_tax_amount} * IF(${currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    sql: ${total_tax_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
@@ -207,6 +207,30 @@ view: +sales_invoices {
     drill_fields: [invoice_header_details*]
   }
 
+  measure: invoice_count_formatted {
+    hidden: yes
+    type: count
+    group_label: "Formatted for Large Numbers"
+    value_format_name: format_large_numbers_d1
+    drill_fields: [invoice_header_details*]
+    link: {
+      label: "Open Invoice Details Dashboard"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
+
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
+  }
+
+  # dummy field used for dynamic drill links
   measure: link_generator {
     hidden: yes
     type: number
@@ -214,10 +238,17 @@ view: +sales_invoices {
     drill_fields: [link_generator]
   }
 
+
+
 #} end measures
 
   set: invoice_header_details {
-    fields: [invoice_id,invoice_number,invoice_date,invoice_type_name, total_revenue_amount_target_currency, total_tax_amount_target_currency]
+    fields: [ invoice_id,
+              invoice_number,
+              invoice_date,
+              invoice_type_name,
+              total_transaction_amount_target_currency,
+              total_tax_amount_target_currency]
   }
 
 
