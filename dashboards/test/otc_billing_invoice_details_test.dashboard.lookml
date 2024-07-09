@@ -123,14 +123,14 @@
     explore: sales_invoices
     type: looker_grid
     fields: [sales_invoices.invoice_number, sales_invoices.invoice_type_name, sales_invoices.invoice_date,
-      sales_invoices.total_revenue_amount_target_currency, sales_invoices.total_tax_amount_target_currency,
+      sales_invoices.total_transaction_amount_target_currency, sales_invoices.total_tax_amount_target_currency,
       sales_invoices.is_complete,sales_invoices.bill_to_customer_name,
       sales_invoices__lines.order_source_name, sales_invoices__lines.line_number,
       sales_invoices__lines.item_part_number, sales_invoices__lines.item_description,
       sales_invoices__lines.category_description, sales_invoices__lines.invoiced_or_credited_quantity,
       sales_invoices__lines.quantity_uom, sales_invoices__lines.unit_list_price_target_currency,
       sales_invoices__lines.unit_selling_price_target_currency, sales_invoices__lines.percent_discount,
-      sales_invoices__lines.revenue_amount_target_currency, sales_invoices__lines.discount_amount_target_currency,
+      sales_invoices__lines.transaction_amount_target_currency, sales_invoices__lines.discount_amount_target_currency,
       sales_invoices__lines.tax_amount_target_currency]
     sorts: [sales_invoices.invoice_number, sales_invoices__lines.line_number]
     limit: 500

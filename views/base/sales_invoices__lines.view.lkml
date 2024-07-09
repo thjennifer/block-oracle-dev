@@ -39,6 +39,10 @@ view: sales_invoices__lines {
     type: string
     sql: FISCAL_PERIOD_TYPE ;;
   }
+  dimension: gross_unit_selling_price {
+    type: number
+    sql: GROSS_UNIT_SELLING_PRICE ;;
+  }
   dimension: inventory_item_id {
     type: number
     sql: INVENTORY_ITEM_ID ;;
@@ -58,6 +62,14 @@ view: sales_invoices__lines {
   dimension: item_descriptions {
     hidden: yes
     sql: ITEM_DESCRIPTIONS ;;
+  }
+  dimension: item_organization_id {
+    type: number
+    sql: ITEM_ORGANIZATION_ID ;;
+  }
+  dimension: item_organization_name {
+    type: string
+    sql: ITEM_ORGANIZATION_NAME ;;
   }
   dimension: item_part_number {
     type: string
