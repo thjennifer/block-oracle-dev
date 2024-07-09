@@ -22,6 +22,11 @@ view: +sales_orders_daily_agg__lines__amounts {
     sql: ${total_invoiced} ;;
   }
 
+  # dimension: fulfilled_amount_target_currency {
+  #   hidden: yes
+  #   sql: ${total_fulfilled} ;;
+  # }
+
   dimension: is_sales_order {
     hidden: yes
     type: yesno

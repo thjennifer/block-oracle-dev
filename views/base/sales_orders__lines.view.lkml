@@ -13,6 +13,14 @@ view: sales_orders__lines {
     datatype: date
     sql: ACTUAL_SHIP_DATE ;;
   }
+  dimension: backlog_amount {
+    type: number
+    sql: BACKLOG_AMOUNT ;;
+  }
+  dimension: backlog_quantity {
+    type: number
+    sql: BACKLOG_QUANTITY ;;
+  }
   dimension: cancel_reason {
     hidden: yes
     sql: CANCEL_REASON ;;
@@ -29,6 +37,10 @@ view: sales_orders__lines {
   dimension: cycle_time_days {
     type: number
     sql: CYCLE_TIME_DAYS ;;
+  }
+  dimension: fulfilled_amount {
+    type: number
+    sql: FULFILLED_AMOUNT ;;
   }
   dimension: fulfilled_quantity {
     type: number

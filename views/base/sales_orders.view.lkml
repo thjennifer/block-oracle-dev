@@ -51,13 +51,13 @@ view: sales_orders {
     type: string
     sql: ${TABLE}.CURRENCY_CODE ;;
   }
-  dimension: fiscal_period_num {
-    type: number
-    sql: ${TABLE}.FISCAL_PERIOD_NUM ;;
-  }
   dimension: fiscal_period_name {
     type: string
     sql: ${TABLE}.FISCAL_PERIOD_NAME ;;
+  }
+  dimension: fiscal_period_num {
+    type: number
+    sql: ${TABLE}.FISCAL_PERIOD_NUM ;;
   }
   dimension: fiscal_period_set_name {
     type: string
@@ -237,9 +237,25 @@ view: sales_orders {
     type: number
     sql: ${TABLE}.SOLD_TO_SITE_USE_ID ;;
   }
+  dimension: total_backlog_amount {
+    type: number
+    sql: ${TABLE}.TOTAL_BACKLOG_AMOUNT ;;
+  }
+  dimension: total_fulfilled_amount {
+    type: number
+    sql: ${TABLE}.TOTAL_FULFILLED_AMOUNT ;;
+  }
+  dimension: total_invoiced_amount {
+    type: number
+    sql: ${TABLE}.TOTAL_INVOICED_AMOUNT ;;
+  }
   dimension: total_ordered_amount {
     type: number
     sql: ${TABLE}.TOTAL_ORDERED_AMOUNT ;;
+  }
+  dimension: total_shipped_amount {
+    type: number
+    sql: ${TABLE}.TOTAL_SHIPPED_AMOUNT ;;
   }
   measure: count {
     type: count
@@ -277,6 +293,14 @@ view: sales_orders {
 #     datatype: date
 #     sql: ACTUAL_SHIP_DATE ;;
 #   }
+#   dimension: backlog_amount {
+#     type: number
+#     sql: BACKLOG_AMOUNT ;;
+#   }
+#   dimension: backlog_quantity {
+#     type: number
+#     sql: BACKLOG_QUANTITY ;;
+#   }
 #   dimension: cancel_reason {
 #     hidden: yes
 #     sql: CANCEL_REASON ;;
@@ -293,6 +317,10 @@ view: sales_orders {
 #   dimension: cycle_time_days {
 #     type: number
 #     sql: CYCLE_TIME_DAYS ;;
+#   }
+#   dimension: fulfilled_amount {
+#     type: number
+#     sql: FULFILLED_AMOUNT ;;
 #   }
 #   dimension: fulfilled_quantity {
 #     type: number
