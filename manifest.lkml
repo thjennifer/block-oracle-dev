@@ -317,3 +317,59 @@ constant: link_generate_dashboard_url {
   {{ link_host | append:content | append:target_dashboard | append: '?' | append: target_content_filters }}
   "
 }
+
+constant: link_generate_dashboard_variable {
+  value: "
+  {% assign content = '/dashboards-next/' %}
+  {% assign link_query = link | split: '?' | last %}
+  {% assign link_query_parameters = link_query | split: '&' %}
+  {% assign target_content_filters = '' %}
+  {% assign host = '' %}
+
+  {% if new_page %}
+  @{link_host}
+  {% endif %}
+
+  @{link_extract_context}
+  @{link_match_filters_to_destination}
+  @{link_build_filter_string}
+
+  {% if default_filters != '' %}
+  @{link_build_default_filter_string}
+  {% endif %}
+
+  {% if default_filters_override == true and default_filters != '' %}
+  {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string %}
+  {% elsif default_filters_override == false and default_filters != '' %}
+  {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string %}
+  {% else %}
+  {% assign target_content_filters = filter_string %}
+  {% endif %}
+
+  {% comment %} Builds final link to be presented in frontend {% endcomment %}
+  {% assign dashboard_url = host | append:content | append:target_dashboard | append: '?' | append: target_content_filters %}
+  "
+}
+
+constant: link_unselected_button_style {
+  value: "
+  display: block;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  margin-left: 0px;
+  margin-bottom: 5px;
+  padding: 6px 10px;
+  line-height: 1.5;
+  user-select: none;
+  background-color: #878ca0;
+  color: white;
+  font-size: 12px;
+  font-style: tahoma;
+  font-weight: normal;
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 0px;
+  white-space: normal;"
+}

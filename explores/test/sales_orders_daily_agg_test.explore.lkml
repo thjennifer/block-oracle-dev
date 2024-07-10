@@ -6,7 +6,7 @@ include: "/views/test/otc_common_parameters_xvw_test.view"
 include: "/views/core/sales_orders_daily_agg__lines_rfn.view"
 include: "/views/core/sales_orders_daily_agg__lines__amounts_rfn.view"
 
-
+include: "/views/test/otc_dashboard_navigation_sales_ext_test.view"
 
 
 
@@ -19,4 +19,9 @@ explore: +sales_orders_daily_agg {
     sql_where: ${sales_orders_daily_agg__lines__amounts.target_currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
     relationship: one_to_many
   }
+
+  join: otc_dashboard_navigation_sales_ext {
+    relationship: one_to_one
+    sql:  ;;
+}
 }
