@@ -12,26 +12,9 @@ view: +sales_orders_daily_agg__lines__amounts {
     sql: CONCAT(${sales_orders_daily_agg__lines.key},${target_currency_code},${is_incomplete_conversion}) ;;
   }
 
-  dimension: ordered_amount_target_currency {
-    hidden: yes
-    sql: ${total_ordered} ;;
-  }
-
-  dimension: invoiced_amount_target_currency {
-    hidden: yes
-    sql: ${total_invoiced} ;;
-  }
-
-  # dimension: fulfilled_amount_target_currency {
-  #   hidden: yes
-  #   sql: ${total_fulfilled} ;;
-  # }
-
-  dimension: is_sales_order {
-    hidden: yes
-    type: yesno
-    sql: ${sales_orders_daily_agg__lines.line_category_code} = 'ORDER' ;;
-  }
+#########################################################
+# Amounts as dimensions
+#{
 
   dimension: target_currency_code {
     hidden: no
@@ -39,6 +22,54 @@ view: +sales_orders_daily_agg__lines__amounts {
     full_suggestions: yes
     sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
   }
+
+  dimension: ordered_amount_target_currency {
+    hidden: no
+    sql: ${total_ordered} ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: booking_amount_target_currency {
+    hidden: no
+    sql: ${total_booking} ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: backlog_amount_target_currency {
+    hidden: no
+    sql: ${total_backlog} ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: fulfilled_amount_target_currency {
+    hidden: no
+    sql: ${total_fulfilled} ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: shipped_amount_target_currency {
+    hidden: no
+    sql: ${total_shipped} ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: invoiced_amount_target_currency {
+    hidden: no
+    sql: ${total_invoiced} ;;
+    value_format_name: decimal_2
+  }
+
+
+
+#} end amounts as dimensions
+
+  dimension: is_sales_order {
+    hidden: yes
+    type: yesno
+    sql: ${sales_orders_daily_agg__lines.line_category_code} = 'ORDER' ;;
+  }
+
+
 
   dimension: is_incomplete_conversion {
     hidden: no

@@ -164,5 +164,21 @@ view: +sales_orders {
     sql: ${TABLE}.LEDGER_ID IS NULL ;;
   }
 
+  measure: sum_total_ordered_amount_target_currency {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: ${total_ordered_amount_target_currency} ;;
+    value_format_name: decimal_0
+  }
+
+  measure: sum_total_sales_ordered_amount_target_currency {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: ${total_sales_ordered_amount_target_currency} ;;
+    value_format_name: decimal_0
+  }
+
 #} end test stuff
 }

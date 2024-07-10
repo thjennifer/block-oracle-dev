@@ -18,6 +18,7 @@ view: +sales_orders__lines {
   dimension: line_id {
     hidden: no
     sql: COALESCE(${TABLE}.LINE_ID,-1) ;;
+    value_format_name: id
   }
 
   dimension: line_number {
@@ -63,15 +64,16 @@ view: +sales_orders__lines {
   }
 
   dimension: item_organization_id {
-    hidden:no
+    hidden: no
+    group_label: "Item Attributes"
+    value_format_name: id
   }
 
   dimension: item_organization_name {
     hidden: no
+    group_label: "Item Attributes"
     sql: COALESCE(${TABLE}.ITEM_ORGANIZATION_NAME,CAST(${item_organization_id} AS STRING)) ;;
   }
-
-
 
   dimension: selected_product_dimension_description {
     hidden: no
@@ -205,12 +207,6 @@ view: +sales_orders__lines {
     sql: ${TABLE}.IS_CANCELLED ;;
   }
 
-  # dimension: cancel_reason {
-  #   hidden: no
-  #   group_label: "Line Status"
-  #   full_suggestions: yes
-  # }
-
   dimension: is_open {
     hidden: no
     type: yesno
@@ -227,10 +223,9 @@ view: +sales_orders__lines {
   }
 
   dimension: is_sales_order {
-    hidden: no
+    hidden: yes
     type: yesno
     description: "Line Category Code equals Order (and is not a return)"
-    full_suggestions: yes
     sql: ${line_category_code} = 'ORDER' ;;
   }
 
@@ -287,16 +282,19 @@ view: +sales_orders__lines {
     hidden: no
     type: yesno
     group_label: "Line Status"
-    sql: ${invoiced_quantity} > 0 ;;
+    sql: ${invoiced_quantity} <> 0 ;;
   }
 
 
 #} end  line status
 
+#########################################################
+# Cancel Reasons
+#{
   dimension: cancel_reason_code {
     hidden: no
     type: string
-    group_label: "Cancel Reason"
+    group_label: "Cancel Reasons"
     sql: (SELECT d.CODE FROM UNNEST(CANCEL_REASON) AS d WHERE d.language = {% parameter otc_common_parameters_xvw.parameter_language %} ) ;;
     full_suggestions: yes
   }
@@ -304,7 +302,7 @@ view: +sales_orders__lines {
   dimension: cancel_reason_description {
     hidden: no
     type: string
-    group_label: "Cancel Reason"
+    group_label: "Cancel Reasons"
     label: "Cancel Reason"
     sql: (SELECT d.MEANING FROM UNNEST(CANCEL_REASON) AS d WHERE d.language = {% parameter otc_common_parameters_xvw.parameter_language %} ) ;;
     full_suggestions: yes
@@ -312,11 +310,12 @@ view: +sales_orders__lines {
 
   dimension: language_code {
     hidden: no
-    group_label: "Cancel Reason"
+    group_label: "Cancel Reasons"
     description: "Language in which to display cancel reasons."
     sql: (SELECT d.LANGUAGE FROM UNNEST(CANCEL_REASON) AS d WHERE d.LANGUAGE = {% parameter otc_common_parameters_xvw.parameter_language %} ) ;;
     full_suggestions: yes
   }
+#} end cancel reasons
 
 #########################################################
 # Fulfillment Cycle Days Dimensions
@@ -358,6 +357,16 @@ view: +sales_orders__lines {
   }
 
   dimension: ordered_quantity {
+    hidden: no
+    group_label: "Quantities"
+  }
+
+  dimension: booking_quantity {
+    hidden: no
+    group_label: "Quantities"
+  }
+
+  dimension: backlog_quantity {
     hidden: no
     group_label: "Quantities"
   }
@@ -413,16 +422,19 @@ view: +sales_orders__lines {
 
   dimension: unit_cost {
     hidden: no
+    group_label: "Item Attributes"
     value_format_name: decimal_2
   }
 
   dimension: unit_list_price {
     hidden: no
+    group_label: "Item Attributes"
     value_format_name: decimal_2
   }
 
   dimension: unit_selling_price {
     hidden: no
+    group_label: "Item Attributes"
     value_format_name: decimal_2
   }
 
@@ -435,6 +447,20 @@ view: +sales_orders__lines {
     hidden: no
     group_label: "Amounts"
     label: "Ordered Amount (Source Currency)"
+    value_format_name: decimal_2
+  }
+
+  dimension: booking_amount {
+    hidden: no
+    group_label: "Amounts"
+    label: "Booking Amount (Source Currency)"
+    value_format_name: decimal_2
+  }
+
+  dimension: backlog_amount {
+    hidden: no
+    group_label: "Amounts"
+    label: "Backlog Amount (Source Currency)"
     value_format_name: decimal_2
   }
 
@@ -459,20 +485,7 @@ view: +sales_orders__lines {
     value_format_name: decimal_2
   }
 
-  dimension: backlog_amount {
-    hidden: no
-    group_label: "Amounts"
-    label: "Backlog Amount (Source Currency)"
-    value_format_name: decimal_2
-  }
 
-  dimension: booking_amount {
-    hidden: no
-    group_label: "Amounts"
-    label: "Booking Amount (Source Currency)"
-    sql: IF(${is_booking},${ordered_amount},0) ;;
-    value_format_name: decimal_2
-  }
 
   dimension: currency_code {
     hidden: no
@@ -502,7 +515,7 @@ view: +sales_orders__lines {
     hidden: no
     type: yesno
     group_label: "Amounts"
-    sql: ${sales_orders.currency_code} <> {% parameter otc_common_parameters_xvw.parameter_target_currency %} AND ${currency_conversion_sdt.from_currency} is NULL ;;
+    sql: ${currency_code} <> ${target_currency_code} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 
   dimension: ordered_amount_target_currency {
@@ -510,52 +523,52 @@ view: +sales_orders__lines {
     type: number
     group_label: "Amounts"
     label: "{% if _field._is_selected %}@{derive_currency_label}Ordered Amount ({{currency}}){%else%}Ordered Amount (Target Currency){%endif%}"
-    sql: ${ordered_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
-    value_format_name: decimal_2
-  }
-
-  dimension: shipped_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Shipped Amount ({{currency}}){%else%}Shipped Amount (Target Currency){%endif%}"
-    sql: ${shipped_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
-    value_format_name: decimal_2
-  }
-
-  dimension: invoiced_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Shipped Amount ({{currency}}){%else%}Shipped Amount (Target Currency){%endif%}"
-    sql: ${invoiced_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
-    value_format_name: decimal_2
-  }
-
-  dimension: fulfilled_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Fulfilled Amount ({{currency}}){%else%}Fulfilled Amount (Target Currency){%endif%}"
-    sql: ${fulfilled_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
-    value_format_name: decimal_2
-  }
-
-  dimension: backlog_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Backlog Amount ({{currency}}){%else%}Backlog Amount (Target Currency){%endif%}"
-    sql: ${backlog_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    sql: ${ordered_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
   dimension: booking_amount_target_currency {
-    hidden: yes
+    hidden: no
     type: number
     group_label: "Amounts"
     label: "{% if _field._is_selected %}@{derive_currency_label}Booking Amount ({{currency}}){%else%}Booking Amount (Target Currency){%endif%}"
-    sql: ${booking_amount} * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
+    sql: ${booking_amount} * ${currency_conversion_rate}  ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: backlog_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Backlog Amount ({{currency}}){%else%}Backlog Amount (Target Currency){%endif%}"
+    sql: ${backlog_amount} * ${currency_conversion_rate}  ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: fulfilled_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Fulfilled Amount ({{currency}}){%else%}Fulfilled Amount (Target Currency){%endif%}"
+    sql: ${fulfilled_amount} * ${currency_conversion_rate}  ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: shipped_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Shipped Amount ({{currency}}){%else%}Shipped Amount (Target Currency){%endif%}"
+    sql: ${shipped_amount} * ${currency_conversion_rate} ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: invoiced_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Invoiced Amount ({{currency}}){%else%}Invoiced Amount (Target Currency){%endif%}"
+    sql: ${invoiced_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
@@ -635,6 +648,7 @@ view: +sales_orders__lines {
   measure: total_sales_amount_by_source_currency {
     hidden: no
     type: sum
+    group_label: "Amounts"
     description: "Sum of sales for order lines in source currency. Currency Code is required field to avoid summing across multiple currencies."
     required_fields: [sales_orders.currency_code]
     sql: ${ordered_amount} ;;
@@ -656,57 +670,42 @@ view: +sales_orders__lines {
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
     type: number
-    #label defined in sales_orders__lines_common_fields_ext
-    #description defined in sales_orders__lines_common_fields_ext
+    #group label defined in sales_orders_common_amount_measures_ext
+    #label defined in sales_orders_common_amount_measures_ext
+    #description defined in sales_orders_common_amount_measures_ext
     sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_sales_order_count})  ;;
-    # value_format defined in sales_orders__lines_common_fields_ext
+    # value_format defined in sales_orders_common_amount_measures_ext
   }
 
-  measure: total2_fulfilled_amount_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total2 Fulfilled Amount ({{currency}}){%else%}Total2 Fulfilled Amount (Target Currency){%endif%}"
-    sql: ${ordered_amount_target_currency} ;;
-    filters: [sales_orders__lines.is_fulfilled: "Yes", line_category_code: "-RETURN"]
-    value_format_name: decimal_0
-  }
 
-  measure: total2_shipped_amount_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total2 Shipped Amount ({{currency}}){%else%}Total2 Shipped Amount (Target Currency){%endif%}"
-    sql: ${shipped_amount_target_currency} ;;
-    filters: [line_category_code: "-RETURN"]
-    value_format_name: decimal_0
-  }
 
-  measure: total_shipped_amount_target_currency {
-    hidden: no
-    type: sum
-    sql: ${shipped_amount_target_currency} ;;
-    value_format_name: decimal_0
-  }
+  # measure: total_shipped_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   sql: ${shipped_amount_target_currency} ;;
+  #   value_format_name: decimal_0
+  # }
 
-  measure: total_backlog_amount_target_currency {
-    hidden: no
-    type: sum
-    sql: ${backlog_amount_target_currency} ;;
-    value_format_name: decimal_0
-  }
+  # measure: total_backlog_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   sql: ${backlog_amount_target_currency} ;;
+  #   value_format_name: decimal_0
+  # }
 
-  measure: total_booking_amount_target_currency {
-    hidden: no
-    type: sum
-    sql: ${booking_amount_target_currency} ;;
-    value_format_name: decimal_0
-  }
+  # measure: total_booking_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   sql: ${booking_amount_target_currency} ;;
+  #   value_format_name: decimal_0
+  # }
 
-  measure: total_fulfilled_amount_target_currency {
-    hidden: no
-    type: sum
-    sql: ${fulfilled_amount_target_currency} ;;
-    value_format_name: decimal_0
-  }
+  # measure: total_fulfilled_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   sql: ${fulfilled_amount_target_currency} ;;
+  #   value_format_name: decimal_0
+  # }
 
 
   # measure: total_invoiced_amount_target_currency {

@@ -122,6 +122,22 @@ view: +sales_orders__lines {
     sql: COALESCE(${item_part_number},'Unknown') ;;
   }
 
+  dimension: booking2_amount {
+    hidden: no
+    view_label: "TEST STUFF"
+    group_label: "Amounts"
+    label: "Booking2 Amount (Source Currency)"
+    sql: IF(${is_booking},${ordered_amount},0) ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: is_diff_booking_amounts {
+    hidden: no
+    type: yesno
+    view_label: "TEST STUFF"
+    sql: ${booking_amount}<>${booking2_amount} ;;
+  }
+
 
   dimension: liquid_view_name2 {
     hidden: no
@@ -134,5 +150,65 @@ view: +sales_orders__lines {
       {%endif%} --vn {{v}}
       '{{f}}';;
   }
+
+  measure: total_ordered_quantity {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: ${ordered_quantity} ;;
+  }
+
+  measure: total_booking_quantity {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: ${booking_quantity} ;;
+  }
+
+  measure: total_backlog_quantity {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: ${backlog_quantity} ;;
+  }
+
+  measure: total_fulfilled_quantity {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: ${fulfilled_quantity} ;;
+  }
+
+  measure: total_shipped_quantity {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: ${shipped_quantity} ;;
+  }
+
+  measure: total_invoiced_quantity {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: ${invoiced_quantity} ;;
+  }
+
+  # measure: total2_fulfilled_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total2 Fulfilled Amount ({{currency}}){%else%}Total2 Fulfilled Amount (Target Currency){%endif%}"
+  #   sql: ${ordered_amount_target_currency} ;;
+  #   filters: [sales_orders__lines.is_fulfilled: "Yes", line_category_code: "-RETURN"]
+  #   value_format_name: decimal_0
+  # }
+
+  # measure: total2_shipped_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total2 Shipped Amount ({{currency}}){%else%}Total2 Shipped Amount (Target Currency){%endif%}"
+  #   sql: ${shipped_amount_target_currency} ;;
+  #   filters: [line_category_code: "-RETURN"]
+  #   value_format_name: decimal_0
+  # }
 
    }

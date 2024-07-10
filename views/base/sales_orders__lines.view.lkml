@@ -21,6 +21,14 @@ view: sales_orders__lines {
     type: number
     sql: BACKLOG_QUANTITY ;;
   }
+  dimension: booking_amount {
+    type: number
+    sql: BOOKING_AMOUNT ;;
+  }
+  dimension: booking_quantity {
+    type: number
+    sql: BOOKING_QUANTITY ;;
+  }
   dimension: cancel_reason {
     hidden: yes
     sql: CANCEL_REASON ;;

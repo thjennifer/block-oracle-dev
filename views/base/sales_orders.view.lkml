@@ -237,25 +237,13 @@ view: sales_orders {
     type: number
     sql: ${TABLE}.SOLD_TO_SITE_USE_ID ;;
   }
-  dimension: total_backlog_amount {
-    type: number
-    sql: ${TABLE}.TOTAL_BACKLOG_AMOUNT ;;
-  }
-  dimension: total_fulfilled_amount {
-    type: number
-    sql: ${TABLE}.TOTAL_FULFILLED_AMOUNT ;;
-  }
-  dimension: total_invoiced_amount {
-    type: number
-    sql: ${TABLE}.TOTAL_INVOICED_AMOUNT ;;
-  }
   dimension: total_ordered_amount {
     type: number
     sql: ${TABLE}.TOTAL_ORDERED_AMOUNT ;;
   }
-  dimension: total_shipped_amount {
+  dimension: total_sales_ordered_amount {
     type: number
-    sql: ${TABLE}.TOTAL_SHIPPED_AMOUNT ;;
+    sql: ${TABLE}.TOTAL_SALES_ORDERED_AMOUNT ;;
   }
   measure: count {
     type: count
@@ -300,6 +288,14 @@ view: sales_orders {
 #   dimension: backlog_quantity {
 #     type: number
 #     sql: BACKLOG_QUANTITY ;;
+#   }
+#   dimension: booking_amount {
+#     type: number
+#     sql: BOOKING_AMOUNT ;;
+#   }
+#   dimension: booking_quantity {
+#     type: number
+#     sql: BOOKING_QUANTITY ;;
 #   }
 #   dimension: cancel_reason {
 #     hidden: yes

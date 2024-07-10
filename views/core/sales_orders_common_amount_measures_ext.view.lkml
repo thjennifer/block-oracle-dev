@@ -32,9 +32,71 @@ view: sales_orders_common_amount_measures_ext {
   measure: total_ordered_amount_target_currency {
     hidden: no
     type: sum
+    group_label: "Amounts"
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Ordered Amount ({{currency}}){%else%}Total Ordered Amount (Target Currency){%endif%}"
     description: "@{derive_currency_label}Sum of ordered amount in target currency {{currency}}"
     sql: ${ordered_amount_target_currency} ;;
+    value_format_name: decimal_0
+  }
+
+  measure: total_sales_amount_target_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Sales Amount ({{currency}}){%else%}Total Sales Amount (Target Currency){%endif%}"
+    description: "@{derive_currency_label}Sum of sales in target currency {{currency}}"
+    sql: ${ordered_amount_target_currency} ;;
+    filters: [is_sales_order: "Yes"]
+    value_format_name: decimal_0
+  }
+
+  measure: total_booking_amount_target_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Booking Amount ({{currency}}){%else%}Total Booking Amount (Target Currency){%endif%}"
+    description: "@{derive_currency_label}Sum of booking amount in target currency {{currency}}"
+    sql: ${booking_amount_target_currency} ;;
+    value_format_name: decimal_0
+  }
+
+  measure: total_backlog_amount_target_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Backlog Amount ({{currency}}){%else%}Total Backlog Amount (Target Currency){%endif%}"
+    description: "@{derive_currency_label}Sum of backlog amount in target currency {{currency}}"
+    sql: ${backlog_amount_target_currency} ;;
+    value_format_name: decimal_0
+  }
+
+  measure: total_fulfilled_amount_target_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Fulfilled Amount ({{currency}}){%else%}Total Fulfilled Amount (Target Currency){%endif%}"
+    description: "@{derive_currency_label}Sum of fulfilled amount in target currency {{currency}}"
+    sql: ${fulfilled_amount_target_currency} ;;
+    value_format_name: decimal_0
+  }
+
+  measure: total_shipped_amount_target_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Shipped Amount ({{currency}}){%else%}Total Shipped Amount (Target Currency){%endif%}"
+    description: "@{derive_currency_label}Sum of shipped amount in target currency {{currency}}"
+    sql: ${shipped_amount_target_currency} ;;
+    value_format_name: decimal_0
+  }
+
+  measure: total_invoiced_amount_target_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Billed Amount ({{currency}}){%else%}Total Billed Amount (Target Currency){%endif%}"
+    description: "@{derive_currency_label}Sum of billed or invoiced amount in target currency {{currency}}"
+    sql: ${invoiced_amount_target_currency} ;;
     value_format_name: decimal_0
   }
 
@@ -44,18 +106,8 @@ view: sales_orders_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Ordered Amount ({{currency}}){%else%}Total Ordered Amount (Target Currency) Formatted {%endif%}"
     description: "@{derive_currency_label}Sum of ordered amount in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
-    sql: ${total_sales_amount_target_currency} ;;
+    sql: ${total_ordered_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
-  }
-
-  measure: total_sales_amount_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Sales Amount ({{currency}}){%else%}Total Sales Amount (Target Currency){%endif%}"
-    description: "@{derive_currency_label}Sum of sales in target currency {{currency}}"
-    sql: ${ordered_amount_target_currency} ;;
-    filters: [is_sales_order: "Yes"]
-    value_format_name: decimal_0
   }
 
   measure: total_sales_amount_target_currency_formatted {
@@ -68,46 +120,78 @@ view: sales_orders_common_amount_measures_ext {
     value_format_name: format_large_numbers_d1
   }
 
-  measure: total_invoiced_amount_target_currency {
+  measure: total_booking_amount_target_currency_formatted {
     hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoiced Amount ({{currency}}){%else%}Total Invoiced Amount (Target Currency){%endif%}"
-    description: "@{derive_currency_label}Sum of invoiced amount in target currency {{currency}}"
-    sql: ${invoiced_amount_target_currency} ;;
-    value_format_name: decimal_0
+    type: number
+    group_label: "Amounts with Large Number Format"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Booking Amount ({{currency}}){%else%}Total Booking Amount (Target Currency) Formatted {%endif%}"
+    description: "@{derive_currency_label}Sum of booking amount in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
+    sql: ${total_booking_amount_target_currency} ;;
+    value_format_name: format_large_numbers_d1
+  }
+
+  measure: total_backlog_amount_target_currency_formatted {
+    hidden: no
+    type: number
+    group_label: "Amounts with Large Number Format"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Backlog Amount ({{currency}}){%else%}Total Backlog Amount (Target Currency) Formatted {%endif%}"
+    description: "@{derive_currency_label}Sum of backlog amount in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
+    sql: ${total_backlog_amount_target_currency} ;;
+    value_format_name: format_large_numbers_d1
+  }
+
+  measure: total_fulfilled_amount_target_currency_formatted {
+    hidden: no
+    type: number
+    group_label: "Amounts with Large Number Format"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Fulfilled Amount ({{currency}}){%else%}Total Fulfilled Amount (Target Currency) Formatted {%endif%}"
+    description: "@{derive_currency_label}Sum of fulfilled amount in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
+    sql: ${total_fulfilled_amount_target_currency} ;;
+    value_format_name: format_large_numbers_d1
+  }
+
+  measure: total_shipped_amount_target_currency_formatted {
+    hidden: no
+    type: number
+    group_label: "Amounts with Large Number Format"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Shipped Amount ({{currency}}){%else%}Total Shipped Amount (Target Currency) Formatted {%endif%}"
+    description: "@{derive_currency_label}Sum of shipped amount in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
+    sql: ${total_shipped_amount_target_currency} ;;
+    value_format_name: format_large_numbers_d1
   }
 
   measure: total_invoiced_amount_target_currency_formatted {
     hidden: no
     type: number
     group_label: "Amounts with Large Number Format"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoiced Amount ({{currency}}){%else%}Total Invoiced Amount (Target Currency) Formatted {%endif%}"
-    description: "@{derive_currency_label}Sum of invoiced amount in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Billed Amount ({{currency}}){%else%}Total Billed Amount (Target Currency) Formatted {%endif%}"
+    description: "@{derive_currency_label}Sum of billed or invoiced amount in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_invoiced_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
   }
 
-  measure: total_invoiced_sales_amount_target_currency {
-    hidden: no
-    type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoiced Amount of Sales Orders ({{currency}}){%else%}Total Invoiced Amount of Sales Orders (Target Currency){%endif%}"
-    description: "@{derive_currency_label}Sum of invoiced amount of sales orders in target currency {{currency}}"
-    sql: ${invoiced_amount_target_currency} ;;
-    filters: [is_sales_order: "Yes"]
-    value_format_name: decimal_0
-  }
+  # measure: total_invoiced_sales_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoiced Amount of Sales Orders ({{currency}}){%else%}Total Invoiced Amount of Sales Orders (Target Currency){%endif%}"
+  #   description: "@{derive_currency_label}Sum of invoiced amount of sales orders in target currency {{currency}}"
+  #   sql: ${invoiced_amount_target_currency} ;;
+  #   filters: [is_sales_order: "Yes"]
+  #   value_format_name: decimal_0
+  # }
 
-  measure: total_invoiced_sales_amount_target_currency_formatted {
-    hidden: no
-    type: number
-    group_label: "Amounts with Large Number Format"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoiced Amount of Sales Orders ({{currency}}){%else%}Total Invoiced Amount of Sales Orders (Target Currency) Formatted {%endif%}"
-    description: "@{derive_currency_label}Sum of invoiced amount of sales orders in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
-    sql: ${total_invoiced_amount_target_currency} ;;
-    value_format_name: format_large_numbers_d1
-  }
+  # measure: total_invoiced_sales_amount_target_currency_formatted {
+  #   hidden: no
+  #   type: number
+  #   group_label: "Amounts with Large Number Format"
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoiced Amount of Sales Orders ({{currency}}){%else%}Total Invoiced Amount of Sales Orders (Target Currency) Formatted {%endif%}"
+  #   description: "@{derive_currency_label}Sum of invoiced amount of sales orders in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
+  #   sql: ${total_invoiced_amount_target_currency} ;;
+  #   value_format_name: format_large_numbers_d1
+  # }
 
   measure: average_sales_amount_per_order_target_currency {
+    group_label: "Amounts"
     label: "{% if _field._is_selected %}@{derive_currency_label}Average Sales Amount per Order ({{currency}}){%else%}Average Sales Amount per Order (Target Currency){%endif%}"
     value_format_name: decimal_0
   }

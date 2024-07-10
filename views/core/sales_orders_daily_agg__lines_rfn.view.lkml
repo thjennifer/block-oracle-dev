@@ -6,7 +6,7 @@ include: "/views/core/sales_orders_common_amount_measures_ext.view"
 include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
 
 view: +sales_orders_daily_agg__lines {
-  fields_hidden_by_default: no
+  fields_hidden_by_default: yes
   label: "Sales Orders Daily Agg: Item Categories"
   extends: [sales_orders_common_amount_measures_ext,otc_unnest_item_categories_common_fields_ext]
 
@@ -37,30 +37,12 @@ view: +sales_orders_daily_agg__lines {
   }
 
   dimension: is_sales_order {
-    hidden: no
+    hidden: yes
     type: yesno
     description: "Line Category Code equals Order (and is not a return)"
     sql: ${line_category_code} = 'ORDER' ;;
     full_suggestions: yes
   }
-
-  # dimension: category_id {
-  #   hidden: no
-  #   sql: COALESCE(${TABLE}.ITEM_CATEGORY_ID,-1) ;;
-  #   full_suggestions: yes
-  # }
-
-  # dimension: category_name_code {
-  #   hidden: no
-  #   sql: COALESCE(${TABLE}.ITEM_CATEGORY_NAME,"Unknown") ;;
-  #   full_suggestions: yes
-  # }
-
-  # dimension: category_description {
-  #   hidden: no
-  #   sql: COALESCE(${TABLE}.category_description,COALESCE(CAST(NULLIF(${item_category_id},-1) AS STRING),"Unknown")) ;;
-  #   full_suggestions: yes
-  # }
 
   dimension: item_organization_id {
     hidden:no
@@ -73,22 +55,74 @@ view: +sales_orders_daily_agg__lines {
     full_suggestions: yes
   }
 
+#########################################################
+# Amounts as dimensions
+#{
+
+  dimension: target_currency_code {
+    hidden: no
+    type: string
+    group_label: "Amounts"
+    label: "Currency (Target)"
+    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
+  }
+
   dimension: ordered_amount_target_currency {
     hidden: no
     type: number
-    sql: (select SUM(TOTAL_ORDERED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+    group_label: "Amounts"
+    sql: (select SUM(TOTAL_ORDERED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: booking_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    sql: (select SUM(TOTAL_BOOKING) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: backlog_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    sql: (select SUM(TOTAL_BACKLOG) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: fulfilled_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    sql: (select SUM(TOTAL_FULFILLED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: shipped_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    sql: (select SUM(TOTAL_SHIPPED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
+    value_format_name: decimal_2
   }
 
   dimension: invoiced_amount_target_currency {
     hidden: no
     type: number
-    sql: (select SUM(TOTAL_INVOICED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+    group_label: "Amounts"
+    sql: (select SUM(TOTAL_INVOICED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code} ) ;;
+    value_format_name: decimal_2
   }
 
   dimension: is_incomplete_conversion {
+    hidden: no
     type: yesno
-    sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+    group_label: "Amounts"
+    sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
   }
+
+#} end amounts as dimensions
 
   measure: total_num_order_lines {
     hidden: yes
@@ -134,6 +168,7 @@ view: +sales_orders_daily_agg__lines {
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
     type: number
+    #group label defined in sales_orders_common_amount_measures_ext
     #label defined in sales_orders_common_amount_measures_ext
     #description defined in sales_orders_common_amount_measures_ext
     sql: SAFE_DIVIDE(${total_sales_amount_target_currency},(${sales_orders_daily_agg.non_cancelled_sales_order_count})) ;;

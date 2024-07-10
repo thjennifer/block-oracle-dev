@@ -88,7 +88,10 @@ view: +sales_orders {
 # Business Unit / Order Source / Customer Dimensions
 #{
 
-  dimension: business_unit_id {hidden: no}
+  dimension: business_unit_id {
+    hidden: no
+    value_format_name: id
+  }
 
   dimension: business_unit_name {
     hidden: no
@@ -407,6 +410,14 @@ view: +sales_orders {
     value_format_name: decimal_2
   }
 
+  dimension: total_sales_ordered_amount {
+    hidden: no
+    group_label: "Order Amounts"
+    label: "Total Sales Amount (Source Currency)"
+    description: "Total sales amount for an order in source currency. Includes only lines with line category code of 'ORDER'."
+    value_format_name: decimal_2
+    }
+
   dimension: total_ordered_amount_target_currency {
     hidden: no
     type: number
@@ -414,6 +425,16 @@ view: +sales_orders {
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Order Amount ({{currency}}){%else%}Total Order Amount (Target Currency){%endif%}"
     description: "Total amount for an order in target currency."
     sql: COALESCE(${total_ordered_amount},0) * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: total_sales_ordered_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Order Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Sales Amount ({{currency}}){%else%}Total Sales Amount (Target Currency){%endif%}"
+    description: "Total sales amount for an order in target currency. Includes only lines with line category code of 'ORDER'"
+    sql: COALESCE(${total_sales_ordered_amount},0) * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
     value_format_name: decimal_2
   }
 
@@ -608,7 +629,7 @@ view: +sales_orders {
 
 #} end measures
   set: header_details {
-    fields: [header_id,order_number,header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_ordered_amount_target_currency]
+    fields: [header_id,order_number,header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_sales_ordered_amount_target_currency]
   }
 
 }
