@@ -39,7 +39,7 @@
       fields: [otc_dashboard_navigation_sales_ext.navigation]
       filters:
         otc_dashboard_navigation_sales_ext.navigation_focus_page: '1'
-        otc_dashboard_navigation_sales_ext.navigation_style: 'tabs'
+        otc_dashboard_navigation_sales_ext.navigation_style: 'buttons'
       show_single_value_title: false
       show_comparison: false
       listen:
@@ -69,7 +69,7 @@
       # sorts: [otc_dashboard_navigation_sales_ext.test_navigation_html_link]
       filters:
         otc_dashboard_navigation_sales_ext.navigation_focus_page: '1'
-        otc_dashboard_navigation_sales_ext.navigation_style: 'tabs'
+        otc_dashboard_navigation_sales_ext.navigation_style: 'buttons'
       row: 2
       col: 0
       width: 22

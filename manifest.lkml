@@ -477,9 +477,66 @@ constant: link_generate_explore_url {
   {{explore_link}}
   "
 }
-# background-color: #878ca0;
-# color: #808080;
-# background-color: #F0F8FF;
+
+constant: link_build_mappings_from_dash_bindings {
+  value: "{% assign model_name = _model._name %}
+    {% assign view_name = _view._name %}
+    {% assign nav_items = dash_bindings._value | split: '||' %}
+    {% assign dash_map = map_filter_numbers_to_dashboard_filter_names._value | split: '||' %}
+      {% for nav_item in nav_items %}
+        {% assign nav_parts = nav_item | split: '|' %}
+         {% assign dash_label = nav_parts[1] %}
+  <!-- derive target_dashboard ID -->
+        {% assign target_dashboard = nav_parts[0] %}
+        <!-- check if target_dashboard is numeric for UDD ids or string for LookML dashboards -->
+        {% assign check_target_type = target_dashboard | plus: 0 %}
+        <!-- if LookML Dashboard then append model name if not provided -->
+        <!-- if check_target_type equals 0 then string else numeric-->
+            {% if check_target_type == 0 %}
+            <!-- if target_dashboard contains '::' then model_name is already provided-->
+              {% if target_dashboard contains '::' %}{% else %}
+                {% assign target_dashboard = model_name | append: '::' | append: target_dashboard %}
+              {% endif %}
+            {% endif %}
+      <!-- derive target filters_mapping -->
+          {% assign dash_filter_set = nav_parts[2] | split: ',' %}
+          {% for dash_filter in dash_filter_set %}
+              {% for map_item in dash_map %}
+                  {% assign map_item_key = map_item | split:'|' | first %}
+                  {% if dash_filter == map_item_key %}
+                    {% assign map_item_value = map_item | split:'|' | last %}
+                    {% assign filter_full_name = view_name | append: '.filter' | append: dash_filter | append: '|' | append: map_item_value %}
+                    {% assign filters_mapping = filters_mapping | append: filter_full_name | append: '||' %}
+                  {% endif %}
+
+      {% endfor %}
+      {% endfor %}"
+}
+
+constant: link_derive_dashboard_nav_style {
+  value: "{% assign nav_style = navigation_style._parameter_value %}
+          {% case nav_style %}
+              {% when 'buttons' %}
+                  {% assign shared_style = 'display: block; border-spacing: 0; border-collapse: separate; border-radius: 6px; border: 1px solid #dcdcdc; margin-left: 0px; margin-bottom: 5px; padding: 6px 10px; line-height: 1.5; user-select: none; font-size: 12px; font-style: tahoma; text-align: center; text-decoration: none; letter-spacing: 0px; white-space: normal; float: left;' %}
+                  {% assign non_focus_page_style = shared_style | append: 'background-color: #ffffff; color: #000000; font-weight: normal;' %}
+                  {% assign focus_page_style = shared_style | append: 'background-color: #dbe8fb; color: #000000; font-weight: medium;' %}
+                  {% assign div_style = 'text-align: center; display: inline-block; height: 40px;' %}
+                  {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 40px;' %}
+
+              {% when 'tabs' %}
+                {% assign shared_style = 'font-color: #4285F4; padding: 5px 15px; border-style: solid; border-radius: 5px 5px 0 0; float: left; line-height: 20px; letter-spacing: 0.5px'%}
+                {% assign non_focus_page_style = shared_style | append: 'border-width: 1px; border-color: #D3D3D3;' %}
+                {% assign focus_page_style = shared_style | append: 'border-width: 2px; border-color: #808080 #808080 #F5F5F5 #808080; font-weight: bold; background-color: #F5F5F5;' %}
+                {% assign div_style = 'border-bottom: solid 2px #808080; padding: 6px 10px 5px 10px; height: 40px;' %}
+                {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 40px;' %}
+
+            {% when 'small' %}
+              {% assign non_focus_page_style = 'color: #0059D6; padding: 5px 15px; float: left; line-height: 40px;' %}
+              {% assign focus_page_style = linkStyle | append: 'font-weight:bold;font-size: 12px;' %}
+              {% assign div_style = 'float: left;' %}
+              {% assign span_style = 'font-size: 10px; display: table; margin:0 auto;' %}
+            {% endcase %}"
+}
 
 constant: link_selected_button_style {
   value: "

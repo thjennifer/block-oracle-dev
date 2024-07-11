@@ -4,6 +4,10 @@ view: +otc_dashboard_navigation_sales_ext {
 
   label: "TEST Dashboard Navigation"
 
+  parameter: navigation_style {
+    allowed_value: {label: "Buttons" value: "buttons"}
+  }
+
   dimension: dash_bindings {
     hidden: yes
     type: string
@@ -43,12 +47,66 @@ view: +otc_dashboard_navigation_sales_ext {
     # required_fields: [item_delimiter,value_delimiter]
     sql:  '' ;;
     html:
+     @{link_derive_dashboard_nav_style}
+    <div style="{{ div_style }}">
+    <span style = "{{ span_style }}">
+    <!-- initialize variables -->
+    @{link_generate_variable_defaults}
+
+      {% assign link = link_generator._link %}
+      {% assign counter = 1 %}
+
+
+
+      @{link_build_mappings_from_dash_bindings}
+
+
+
+      @{link_generate_dashboard_variable}
+
+      {% assign focus_page = navigation_focus_page._parameter_value | times: 1 %}
+
+      {% if navigation_focus_page._in_query and counter == focus_page %}
+        <span style="{{ focus_page_style }}">{{ dash_label }}</span>
+        {% elsif _explore._dashboard_url == dashboard_url %}
+        <span style="{{ focus_page_style }}">{{ dash_label }}</span>
+        {% else %}
+        <a style="{{ non_focus_page_style }}" href="{{ dashboard_url }}">{{ dash_label }}</a>
+      {% endif %}
+      <!-- increment counter by 1 -->
+      {% assign counter = counter | plus: 1 %}
+      {% endfor %}
+      </span>
+      </div>;;
+
+  }
+
+
+
+
+# <a href="{{dashboard_url}}"
+#       {% if focus_page == counter %}
+#       style="@{link_selected_button_style}">{{dash_label}}</a>
+#       {% else %}
+#       style="@{link_unselected_button_style}">{{dash_label}}</a>
+#       {%endif%}
+
+
+  dimension: new_navigation_links_this_works {
+    type: string
+    hidden: no
+    label: "Dashboard Navigation Links"
+    description: "Add to Single Value Visualization. Defined HTML styling will be shown."
+    # required_fields: [item_delimiter,value_delimiter]
+    sql:  '' ;;
+    html:
     <div>
     <!-- initialize variables -->
     @{link_generate_variable_defaults}
 
     {% assign link = link_generator._link %}
     {% assign counter = 1 %}
+
     {% assign nav_style = navigation_style._parameter_value %}
 
     {% assign model_name = _model._name %}
@@ -72,7 +130,7 @@ view: +otc_dashboard_navigation_sales_ext {
             {% endif %}
 
 
-      <!-- derive target_filter_mapping -->
+      <!-- derive target filters_mapping -->
           {% assign dash_filter_set = nav_parts[2] | split: ',' %}
           {% for dash_filter in dash_filter_set %}
               {% for map_item in dash_map %}
@@ -681,154 +739,162 @@ view: +otc_dashboard_navigation_sales_ext {
     drill_fields: [link_generator]
   }
 
-  # dimension: navigation {
-  #   type: string
-  #   hidden: no
-  #   label: "Dashboard Navigation Links"
-  #   description: "Add to Single Value Visualization. Defined HTML styling will be shown."
-  #   required_fields: [item_delimiter,value_delimiter]
-  #   sql:  '' ;;
-  #   html:
-  #   <!-- initial splits -->
-  #     {% assign navItems = dash_bindings._value | split: item_delimiter._value %}
-  #     {% assign filterItems = filter_bindings._value | split: item_delimiter._value %}
+  dimension: navigation {
+    type: string
+    hidden: no
+    label: "Dashboard Navigation Links"
+    description: "Add to Single Value Visualization. Defined HTML styling will be shown."
+    required_fields: [item_delimiter,value_delimiter]
+    sql:  '' ;;
+    html:
+    <!-- initial splits -->
+      {% assign navItems = dash_bindings._value | split: item_delimiter._value %}
+      {% assign filterItems = filter_bindings._value | split: item_delimiter._value %}
 
-  #     <!-- initialize variables -->
-  #     {% assign counter = 1 %}
-  #     {% assign navStyle = navigation_style._parameter_value %}
-  #     {% assign focus = navigation_focus_page._parameter_value | times: 1 %}
-  #     {% assign queryString = "" %}
-  #     {% assign modelName = _model._name %}
+      <!-- initialize variables -->
+      {% assign counter = 1 %}
+      {% assign navStyle = navigation_style._parameter_value %}
+      {% assign focus = navigation_focus_page._parameter_value | times: 1 %}
+      {% assign queryString = "" %}
+      {% assign modelName = _model._name %}
 
-  #     <!--Define Styles-->
-  #     <!-- establish link, div and span styles based on navigation_style parameter -->
-  #     {% case navStyle %}
-  #     {% when "bar" %}
-  #     {% assign linkStyle = "color: #0059D6; padding: 5px 15px; float: left; line-height: 40px;" %}
-  #     {% assign currentPageLinkStyle = linkStyle | append: "font-weight:bold;font-size: 20px;" %}
-  #     {% assign divStyle = "border-radius: 5px; padding-top: 6px; padding-bottom: 20px; height: 60px; background: #F5F5F5;" %}
-  #     {% assign spanStyle = "font-size: 18px; display: table; margin:0 auto;" %}
-  #     {% assign imgStyle = "float: left; vertical-align: middle; height: 45px;" %}
-  #     {% assign imgSrc = "@{image_dashboard_navigation}" %}
-  #     {% when "tabs" %}
-  #     {% assign sharedStyle = "font-color: #4285F4; padding: 5px 15px; border-style: solid; border-radius: 5px 5px 0 0; float: left; line-height: 20px; "%}
-  #     {% assign linkStyle = sharedStyle | append: "border-width: 1px; border-color: #D3D3D3;" %}
-  #     {% assign currentPageLinkStyle = sharedStyle | append: "border-width: 2px; border-color: #808080 #808080 #F5F5F5 #808080; font-weight: bold; background-color: #F5F5F5;" %}
-  #     {% assign divStyle = "border-bottom: solid 2px #808080; padding: 6px 10px 5px 10px; height: 40px;" %}
-  #     {% assign spanStyle = "font-size: 16px; padding: 6px 10px 0 10px; height: 40px;" %}
-  #     {% assign imgStyle = "float: left; vertical-align: middle; height: 39px;" %}
-  #     {% assign imgSrc = "@{image_dashboard_navigation}" %}
-  #     {% when "small" %}
-  #     {% assign linkStyle = "color: #0059D6; padding: 5px 15px; float: left; line-height: 40px;" %}
-  #     {% assign currentPageLinkStyle = linkStyle | append: "font-weight:bold;font-size: 12px;" %}
-  #     {% assign divStyle = "float: left;" %}
-  #     {% assign spanStyle = "font-size: 10px; display: table; margin:0 auto;" %}
-  #     {% assign imgStyle = "" %}
-  #     {% assign imgSrc = "" %}
-  #     {% endcase %}
-
-
-  #     <!-- loop through filterItems defined in filterBindings dimension to create queryString used in dashboard url-->
-  #     {% for filterItem in filterItems %}
-  #     <!-- split filter into parts -->
-  #     {% assign filterParts = filterItem | split: value_delimiter._value %}
-  #     {% assign filterField = filterParts[0] %} <!-- for readability -->
-  #     {% assign filterName = filterParts[1] %} <!-- for readability -->
-
-  #     <!-- Define Filters -->
-  #     <!-- case on filter, because we can't mix value interpolation into logic evaluation -->
-  #     <!-- for example, this will not work: {% assign filterValue = _filters['{{ filter }}'] %} -->
-  #     <!-- Add more cases for more filters ** -->
-  #     {% case filterField %}
-  #     {% when "filter1" %}
-  #     {% assign filterValue = _filters['filter1'] | url_encode %}
-  #     {% when "filter2" %}
-  #     {% assign filterValue = _filters['filter2'] | url_encode %}
-  #     {% when "filter3" %}
-  #     {% assign filterValue = _filters['filter3'] | url_encode %}
-  #     {% when "filter4" %}
-  #     {% assign filterValue = _filters['filter4'] | url_encode %}
-  #     {% when "filter5" %}
-  #     {% assign filterValue = _filters['filter5'] | url_encode %}
-  #     {% when "filter6" %}
-  #     {% assign filterValue = _filters['filter6'] | url_encode %}
-  #     {% when "filter7" %}
-  #     {% assign filterValue = _filters['filter7'] | url_encode %}
-  #     {% when "filter8" %}
-  #     {% assign filterValue = _filters['filter8'] | url_encode %}
-  #     {% when "filter9" %}
-  #     {% assign filterValue = _filters['filter9'] | url_encode %}
-  #     {% when "filter10" %}
-  #     {% assign filterValue = _filters['filter10'] | url_encode %}
-  #     {% else %}
-  #     {% assign filterValue = "out of range filter" %}
-  #     <!-- if you see this value, you've added more filters than supported in filterBindings -->
-  #     {% endcase %}
-
-  #     <!-- create individual filterString -->
-  #     {% assign filterString = filterName | append: "=" | append: filterValue %}
-
-  #     <!-- tack individual filterString onto end of queryString -->
-  #     {% assign queryString = queryString | append: filterString | append: '&' %}
-
-  #     {% endfor %}
+      <!--Define Styles-->
+      <!-- establish link, div and span styles based on navigation_style parameter -->
+      {% case navStyle %}
+      {% when "buttons" %}
+      {% assign sharedStyle = "display: block; border-spacing: 0; border-collapse: separate; border-radius: 6px; border: 1px solid #dcdcdc; margin-left: 0px; margin-bottom: 5px; padding: 6px 10px; line-height: 1.5; line-height: 1.5; user-select: none; font-size: 12px; font-style: tahoma; text-align: center; text-decoration: none; letter-spacing: 0px; white-space: normal; float: left;" %}
+      {% assign linkStyle = sharedStyle | append: "background-color: #ffffff; color: #000000; font-weight: normal;" %}
+      {% assign currentPageLinkStyle = sharedStyle | append: "background-color: #dbe8fb; color: #000000; font-weight: medium;" %}
+      {% assign divStyle = "text-align: center; display: inline-block;" %}
+      {% assign spanStyle = "" %}
+      {% assign imgStyle = "" %}
+      {% assign imgSrc = "" %}
+      {% when "bar" %}
+      {% assign linkStyle = "color: #0059D6; padding: 5px 15px; float: left; line-height: 40px;" %}
+      {% assign currentPageLinkStyle = linkStyle | append: "font-weight:bold;font-size: 20px;" %}
+      {% assign divStyle = "border-radius: 5px; padding-top: 6px; padding-bottom: 20px; height: 60px; background: #F5F5F5;" %}
+      {% assign spanStyle = "font-size: 18px; display: table; margin:0 auto;" %}
+      {% assign imgStyle = "float: left; vertical-align: middle; height: 45px;" %}
+      {% assign imgSrc = "@{image_dashboard_navigation}" %}
+      {% when "tabs" %}
+      {% assign sharedStyle = "font-color: #4285F4; padding: 5px 15px; border-style: solid; border-radius: 5px 5px 0 0; float: left; line-height: 20px; "%}
+      {% assign linkStyle = sharedStyle | append: "border-width: 1px; border-color: #D3D3D3;" %}
+      {% assign currentPageLinkStyle = sharedStyle | append: "border-width: 2px; border-color: #808080 #808080 #F5F5F5 #808080; font-weight: bold; background-color: #F5F5F5;" %}
+      {% assign divStyle = "border-bottom: solid 2px #808080; padding: 6px 10px 5px 10px; height: 40px;" %}
+      {% assign spanStyle = "font-size: 16px; padding: 6px 10px 0 10px; height: 40px;" %}
+      {% assign imgStyle = "float: left; vertical-align: middle; height: 39px;" %}
+      {% assign imgSrc = "@{image_dashboard_navigation}" %}
+      {% when "small" %}
+      {% assign linkStyle = "color: #0059D6; padding: 5px 15px; float: left; line-height: 40px;" %}
+      {% assign currentPageLinkStyle = linkStyle | append: "font-weight:bold;font-size: 12px;" %}
+      {% assign divStyle = "float: left;" %}
+      {% assign spanStyle = "font-size: 10px; display: table; margin:0 auto;" %}
+      {% assign imgStyle = "" %}
+      {% assign imgSrc = "" %}
+      {% endcase %}
 
 
-  #     <!-- begin HTML -edit styles as needed -->
-  #     <center>
-  #     <div style="{{ divStyle }}">
-  #     <span style="{{ spanStyle }}">
-  #     <img style="{{ imgStyle }}" src="{{ imgSrc }}"/>
+      <!-- loop through filterItems defined in filterBindings dimension to create queryString used in dashboard url-->
+      {% for filterItem in filterItems %}
+      <!-- split filter into parts -->
+      {% assign filterParts = filterItem | split: value_delimiter._value %}
+      {% assign filterField = filterParts[0] %} <!-- for readability -->
+      {% assign filterName = filterParts[1] %} <!-- for readability -->
 
-  #     <!-- Loop through navigation items as defined in dashBindings dimension-->
-  #     {% for navItem in navItems %}
-  #     {% assign navParts = navItem | split: value_delimiter._value %}
-  #     {% assign dashName = navParts[1] %}
-  #     {% assign dashID = navParts[0] %}
-  #     {% assign dashIDcheckType = dashID | plus: 0 %}
+      <!-- Define Filters -->
+      <!-- case on filter, because we can't mix value interpolation into logic evaluation -->
+      <!-- for example, this will not work: {% assign filterValue = _filters['{{ filter }}'] %} -->
+      <!-- Add more cases for more filters ** -->
+      {% case filterField %}
+      {% when "filter1" %}
+      {% assign filterValue = _filters['filter1'] | url_encode %}
+      {% when "filter2" %}
+      {% assign filterValue = _filters['filter2'] | url_encode %}
+      {% when "filter3" %}
+      {% assign filterValue = _filters['filter3'] | url_encode %}
+      {% when "filter4" %}
+      {% assign filterValue = _filters['filter4'] | url_encode %}
+      {% when "filter5" %}
+      {% assign filterValue = _filters['filter5'] | url_encode %}
+      {% when "filter6" %}
+      {% assign filterValue = _filters['filter6'] | url_encode %}
+      {% when "filter7" %}
+      {% assign filterValue = _filters['filter7'] | url_encode %}
+      {% when "filter8" %}
+      {% assign filterValue = _filters['filter8'] | url_encode %}
+      {% when "filter9" %}
+      {% assign filterValue = _filters['filter9'] | url_encode %}
+      {% when "filter10" %}
+      {% assign filterValue = _filters['filter10'] | url_encode %}
+      {% else %}
+      {% assign filterValue = "out of range filter" %}
+      <!-- if you see this value, you've added more filters than supported in filterBindings -->
+      {% endcase %}
 
-  #     <!-- check if id is numeric for UDD ids or string for LookML dashboards -->
-  #     <!-- if LookML Dashboard then append model name if not provided -->
+      <!-- create individual filterString -->
+      {% assign filterString = filterName | append: "=" | append: filterValue %}
 
-  #     <!-- if dashIDcheckType equals 0 then string else numeric-->
-  #     {% if dashIDcheckType == 0 %}
-  #     <!-- if dashID contains '::' then model_name is already provided-->
-  #     {% if dashID contains '::' %}
-  #     {% else %}
-  #     {% assign dashID = modelName | append: '::' | append: dashID %}
-  #     {% endif %}
-  #     {% endif %}
+      <!-- tack individual filterString onto end of queryString -->
+      {% assign queryString = queryString | append: filterString | append: '&' %}
+
+      {% endfor %}
 
 
-  #     {% assign dashUrl = "/dashboards/" | append: dashID %}
+      <!-- begin HTML -edit styles as needed -->
+      <center>
+      <div style="{{ divStyle }}">
+      <span style="{{ spanStyle }}">
+      <img style="{{ imgStyle }}" src="{{ imgSrc }}"/>
+
+      <!-- Loop through navigation items as defined in dashBindings dimension-->
+      {% for navItem in navItems %}
+      {% assign navParts = navItem | split: value_delimiter._value %}
+      {% assign dashName = navParts[1] %}
+      {% assign dashID = navParts[0] %}
+      {% assign dashIDcheckType = dashID | plus: 0 %}
+
+      <!-- check if id is numeric for UDD ids or string for LookML dashboards -->
+      <!-- if LookML Dashboard then append model name if not provided -->
+
+      <!-- if dashIDcheckType equals 0 then string else numeric-->
+      {% if dashIDcheckType == 0 %}
+      <!-- if dashID contains '::' then model_name is already provided-->
+      {% if dashID contains '::' %}
+      {% else %}
+      {% assign dashID = modelName | append: '::' | append: dashID %}
+      {% endif %}
+      {% endif %}
 
 
-  #     <!-- build links -->
-  #     {% if navigation_focus_page._in_query and counter == focus %}
-  #     <span style="{{ currentPageLinkStyle }}">{{ dashName }}</span>
-  #     {% elsif _explore._dashboard_url == dashUrl %}
-  #     <span style="{{ currentPageLinkStyle }}">{{ dashName }}</span>
-  #     {% else %}
-  #     <a style="{{ linkStyle }}" href="{{ dashUrl }}?{{ queryString }}">{{ dashName }}</a>
-  #     {% endif %}
+      {% assign dashUrl = "/dashboards/" | append: dashID %}
 
-  #     <!-- increment counter by 1 -->
-  #     {% assign counter = counter | plus: 1 %}
-  #     {% endfor %}
 
-  #     </span>
-  #     </div>
+      <!-- build links -->
+      {% if navigation_focus_page._in_query and counter == focus %}
+      <span style="{{ currentPageLinkStyle }}">{{ dashName }}</span>
+      {% elsif _explore._dashboard_url == dashUrl %}
+      <span style="{{ currentPageLinkStyle }}">{{ dashName }}</span>
+      {% else %}
+      <a style="{{ linkStyle }}" href="{{ dashUrl }}?{{ queryString }}">{{ dashName }}</a>
+      {% endif %}
 
-  #     <!-- NOTE: There's a bug in _explore._dashboard_url liquid implementation -->
-  #     <!-- until fixed use paramter navigation_focus_page or advise users to clear cache & refresh-->
-  #     {% if navigation_focus_page._in_query == false %}
-  #     <div>
-  #     <span style="font-size: 10px;">{{ _explore._dashboard_url }} - clear cache & refresh to see active page</span>
-  #     </div>
-  #     {% endif %}
-  #     </center>
+      <!-- increment counter by 1 -->
+      {% assign counter = counter | plus: 1 %}
+      {% endfor %}
 
-  #     ;;
-  # }
+      </span>
+      </div>
+
+      <!-- NOTE: There's a bug in _explore._dashboard_url liquid implementation -->
+      <!-- until fixed use paramter navigation_focus_page or advise users to clear cache & refresh-->
+      {% if navigation_focus_page._in_query == false %}
+      <div>
+      <span style="font-size: 10px;">{{ _explore._dashboard_url }} - clear cache & refresh to see active page</span>
+      </div>
+      {% endif %}
+      </center>
+
+      ;;
+  }
 
 }

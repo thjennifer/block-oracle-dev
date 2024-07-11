@@ -20,6 +20,7 @@
     name: navigation
     filters:
       otc_dashboard_navigation_sales_ext.navigation_focus_page: '1'
+
     listen:
       date: otc_dashboard_navigation_sales_ext.filter1
       business_unit: otc_dashboard_navigation_sales_ext.filter2

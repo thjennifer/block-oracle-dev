@@ -37,6 +37,7 @@
   - name: navigation
     filters:
       otc_dashboard_navigation_sales_ext.navigation_focus_page: '3'
+
     listen:
       date: otc_dashboard_navigation_sales_ext.filter1
       business_unit: otc_dashboard_navigation_sales_ext.filter2
@@ -54,6 +55,7 @@
     explore: sales_orders_daily_agg
     filters:
       otc_dashboard_navigation_sales_ext.navigation_focus_page: '3'
+      # otc_dashboard_navigation_sales_ext.navigation_style: 'tabs'
     type: single_value
     # type: looker_grid
     # fields: [otc_dashboard_navigation_sales_ext.test_navigation_html_link]
