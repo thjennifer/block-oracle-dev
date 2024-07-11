@@ -38,6 +38,7 @@ view: +otc_dashboard_navigation_sales_ext {
     group_label: "Dashboard Navigation"
     label: "test_or_demo"
   }
+  # @{link_build_mappings_from_dash_bindings}
 
   dimension: new_navigation_links {
     type: string
@@ -55,10 +56,11 @@ view: +otc_dashboard_navigation_sales_ext {
 
       {% assign link = link_generator._link %}
       {% assign counter = 1 %}
-
-
+      {% assign qualify_filter_names = false %}
 
       @{link_build_mappings_from_dash_bindings}
+
+
 
 
 
@@ -585,16 +587,16 @@ view: +otc_dashboard_navigation_sales_ext {
     # @{link_generate_explore_link} --if you drop the auto-printing from the function
     # <a href="{{explore_link}}">Sample</a>;;
   }
-
+# {% assign filters_mapping = 'otc_dashboard_navigation_sales_ext.filter1|date||otc_dashboard_navigation_sales_ext.filter2|business_unit||otc_dashboard_navigation_sales_ext.filter3|customer_type||otc_dashboard_navigation_sales_ext.filter4|customer_country||otc_dashboard_navigation_sales_ext.filter5|customer_name||otc_dashboard_navigation_sales_ext.filter6|target_currency||otc_dashboard_navigation_sales_ext.filter7|order_source||otc_dashboard_navigation_sales_ext.filter8|item_category||otc_dashboard_navigation_sales_ext.filter10|test_or_demo' %}
   dimension: test_navigation_link_parts {
     type: string
     sql: 'something' ;;
     # filter1|date||filter2|business_unit||filter3|customer_type||filter4|customer_country||filter5|customer_name||filter6|target_currency||filter7|order_source||filter8|item_category||filter9|item_language
     html:  <div>
             @{link_generate_variable_defaults}
-
+      {% assign qualified_filter_names = false %}
       {% assign link = link_generator._link %}
-      {% assign filters_mapping = 'otc_dashboard_navigation_sales_ext.filter1|date||otc_dashboard_navigation_sales_ext.filter2|business_unit||otc_dashboard_navigation_sales_ext.filter3|customer_type||otc_dashboard_navigation_sales_ext.filter4|customer_country||otc_dashboard_navigation_sales_ext.filter5|customer_name||otc_dashboard_navigation_sales_ext.filter6|target_currency||otc_dashboard_navigation_sales_ext.filter7|order_source||otc_dashboard_navigation_sales_ext.filter8|item_category||otc_dashboard_navigation_sales_ext.filter10|test_or_demo' %}
+      {% assign filters_mapping = 'filter1|date||filter2|business_unit||filter3|customer_type||filter4|customer_country||filter5|customer_name||filter6|target_currency||filter7|order_source||filter8|item_category||filter10|test_or_demo' %}
       {% assign target_dashboard = _model._name | append: '::otc2_order_status_test' %}
 
       <b>Target Dashboard: </b>{{target_dashboard}}
@@ -647,6 +649,7 @@ view: +otc_dashboard_navigation_sales_ext {
 
       {% for source_filter in filters_array %}
       {% assign source_filter_key = source_filter | split:'|' | first %}
+        {% if qualified_filter_names == false %}{% assign source_filter_key = source_filter_key | split:'.' | last %}{% endif %}
       {% assign source_filter_value = source_filter | split:'|' | last %}
               <br><b>source_filter_key: </b>{{source_filter_key}}
       {% for destination_filter in filters_mapping %}

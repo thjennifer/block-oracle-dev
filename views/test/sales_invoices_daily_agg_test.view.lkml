@@ -9,8 +9,31 @@ view:
 # TEST STUFF
 #
 #{
+    measure: total2_transaction_amount_target_currency_formatted {
+      hidden: no
+      type: sum
+      view_label: "TEST STUFF"
+      group_label: "Formatted as Large Numbers"
+      label: "{% if _field._is_selected %}@{derive_currency_label}Total Transaction Amount ({{currency}}){%else%}Total Transaction Amount (Target Currency){%endif%}"
+      sql: ${transaction_amount_target_currency} ;;
+      value_format_name: format_large_numbers_d1
+      link: {
+        label: "Open Invoice Details Dashboard"
+        icon_url: "/favicon.ico"
+        url: "
+        @{link_generate_variable_defaults}
+        {% assign link = link_generator._link %}
+        {% assign qualify_filter_names = false %}
+        {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}'%}
 
+        {% assign model = _model._name %}
+        {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+
+        {% assign default_filters_override = false %}
+        @{link_generate_dashboard_url}
+        "
+      }
+}
 
 #}
-
- }
+}

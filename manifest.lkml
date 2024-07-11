@@ -115,6 +115,10 @@ constant: link_sales_invoices_daily_agg_source_to_target_dashboard_filters {
   value: "sales_invoices_daily_agg.invoice_date|date||sales_invoices_daily_agg.business_unit_name|business_unit||sales_invoices_daily_agg.bill_to_customer_country|customer_country||sales_invoices_daily_agg.bill_to_customer_name|customer_name||sales_invoices_daily_agg.order_source_name|order_source||sales_invoices_daily_agg.category_description|item_category||otc_common_parameters_xvw.parameter_target_currency|target_currency||otc_common_parameters_xvw.parameter_use_demo_or_test_data|test_or_demo"
 }
 
+constant: link_sales_invoices_to_target_dashboard {
+  value: "invoice_date|date||business_unit_name|business_unit||bill_to_customer_country|customer_country||bill_to_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_use_demo_or_test_data|test_or_demo"
+}
+
 # test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
 
 constant: link_vis_table {
@@ -165,6 +169,7 @@ constant: link_generate_variable_defaults {
   {% assign row_total = '' %}
   {% assign query_timezone = '' %}
   {% assign dynamic_fields = '' %}
+  {% assign qualify_filter_name = true %}
 
   {% comment %} Default Visualizations Parameters {% endcomment %}
   @{link_vis_table}
@@ -225,8 +230,10 @@ constant: link_match_filters_to_destination {
   {% assign filters_array = filters_array | split: ',' %}
   {% assign filters_array_destination = '' %}
 
+
   {% for source_filter in filters_array %}
     {% assign source_filter_key = source_filter | split:'|' | first %}
+    {% if qualify_filter_names == false %} {% assign source_filter_key = source_filter_key | split:'.' | last %}{% endif %}
     {% assign source_filter_value = source_filter | split:'|' | last %}
 
     {% for destination_filter in filters_mapping %}
@@ -480,7 +487,7 @@ constant: link_generate_explore_url {
 
 constant: link_build_mappings_from_dash_bindings {
   value: "{% assign model_name = _model._name %}
-    {% assign view_name = _view._name %}
+    {% if qualify_filter_name == true %}{% assign view_name = _view._name %}{%else%}{% assign view_name = '' %}{%endif%}
     {% assign nav_items = dash_bindings._value | split: '||' %}
     {% assign dash_map = map_filter_numbers_to_dashboard_filter_names._value | split: '||' %}
       {% for nav_item in nav_items %}
@@ -505,8 +512,8 @@ constant: link_build_mappings_from_dash_bindings {
                   {% assign map_item_key = map_item | split:'|' | first %}
                   {% if dash_filter == map_item_key %}
                     {% assign map_item_value = map_item | split:'|' | last %}
-                    {% assign filter_full_name = view_name | append: '.filter' | append: dash_filter | append: '|' | append: map_item_value %}
-                    {% assign filters_mapping = filters_mapping | append: filter_full_name | append: '||' %}
+                    {% assign filter_name = view_name | append: '.filter' | append: dash_filter | append: '|' | append: map_item_value %}
+                    {% assign filters_mapping = filters_mapping | append: filter_name | append: '||' %}
                   {% endif %}
 
       {% endfor %}

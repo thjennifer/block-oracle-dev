@@ -92,7 +92,7 @@
       explore: sales_orders_daily_agg
       # type: single_value
       type: looker_grid
-      fields: [otc_dashboard_navigation_sales_ext.new_navigation_links]
+      fields: [otc_dashboard_navigation_sales_ext.test_navigation_link_parts]
       # sorts: [otc_dashboard_navigation_sales_ext.test_navigation_html_link]
       filters:
         otc_dashboard_navigation_sales_ext.navigation_focus_page: '1'

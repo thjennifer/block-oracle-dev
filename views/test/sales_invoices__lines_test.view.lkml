@@ -183,7 +183,8 @@ view: +sales_invoices__lines {
       url: "
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}'  | append: '||is_discount_selling_price|is_discounted||is_intercompany|is_intercompany' %}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
