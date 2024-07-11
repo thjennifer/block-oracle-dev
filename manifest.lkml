@@ -154,7 +154,6 @@ constant: link_vis_single {
 constant: link_generate_variable_defaults {
   value: "
   {% comment %} Variables to default if not created {% endcomment %}
-
   {% comment %} User Customizable Parameters {% endcomment %}
   {% assign drill_fields = '' %}
   {% assign pivots = '' %}
@@ -195,25 +194,27 @@ constant: link_extract_context {
   value: "
   {% assign filters_array = '' %}
   {% for parameter in link_query_parameters %}
-  {% assign parameter_key = parameter | split:'=' | first %}
-  {% assign parameter_value = parameter | split:'=' | last %}
-  {% assign parameter_test = parameter_key | slice: 0,2 %}
-  {% if parameter_test == 'f[' %} {% comment %} Link contains multiple parameters, need to test if filter {% endcomment %}
-  {% if parameter_key != parameter_value %} {% comment %} Tests if the filter value is is filled in, if not it skips  {% endcomment %}
-  {% assign parameter_key_size = parameter_key | size %}
-  {% assign slice_start = 2 %}
-  {% assign slice_end = parameter_key_size | minus: slice_start | minus: 1 %}
-  {% assign parameter_key = parameter_key | slice: slice_start, slice_end %}
-  {% assign parameter_clean = parameter_key | append:'|' |append: parameter_value %}
-  {% assign filters_array =  filters_array | append: parameter_clean | append: ',' %}
-  {% endif %}
-  {% elsif parameter_key == 'dynamic_fields' %}
-  {% assign dynamic_fields = parameter_value %}
-  {% elsif parameter_key == 'query_timezone' %}
-  {% assign query_timezone = parameter_value %}
-  {% endif %}
+    {% assign parameter_key = parameter | split:'=' | first %}
+    {% assign parameter_value = parameter | split:'=' | last %}
+    {% assign parameter_test = parameter_key | slice: 0,2 %}
+    {% if parameter_test == 'f[' %}
+        {% comment %} Link contains multiple parameters, need to test if filter {% endcomment %}
+        {% if parameter_key != parameter_value %}
+          {% comment %} Tests if the filter value is is filled in, if not it skips  {% endcomment %}
+          {% assign parameter_key_size = parameter_key | size %}
+          {% assign slice_start = 2 %}
+          {% assign slice_end = parameter_key_size | minus: slice_start | minus: 1 %}
+          {% assign parameter_key = parameter_key | slice: slice_start, slice_end %}
+          {% assign parameter_clean = parameter_key | append:'|' |append: parameter_value %}
+          {% assign filters_array =  filters_array | append: parameter_clean | append: ',' %}
+        {% endif %}
+    {% elsif parameter_key == 'dynamic_fields' %}
+      {% assign dynamic_fields = parameter_value %}
+    {% elsif parameter_key == 'query_timezone' %}
+      {% assign query_timezone = parameter_value %}
+    {% endif %}
   {% endfor %}
-  {% assign size = filters_array | size | minus: 1 %}
+  {% assign size = filters_array | size | minus: 1 | at_least: 0 %}
   {% assign filters_array = filters_array | slice: 0, size %}
   "
 }
@@ -225,17 +226,18 @@ constant: link_match_filters_to_destination {
   {% assign filters_array_destination = '' %}
 
   {% for source_filter in filters_array %}
-  {% assign source_filter_key = source_filter | split:'|' | first %}
-  {% assign source_filter_value = source_filter | split:'|' | last %}
+    {% assign source_filter_key = source_filter | split:'|' | first %}
+    {% assign source_filter_value = source_filter | split:'|' | last %}
 
-  {% for destination_filter in filters_mapping %} {% comment %} This will loop through the value pairs to determine if there is a match to the destination {% endcomment %}
-  {% assign destination_filter_key = destination_filter | split:'|' | first %}
-  {% assign destination_filter_value = destination_filter | split:'|' | last %}
-  {% if source_filter_key == destination_filter_key %}
-  {% assign parameter_clean = destination_filter_value | append:'|' | append: source_filter_value %}
-  {% assign filters_array_destination =  filters_array_destination | append: parameter_clean | append:',' %}
-  {% endif %}
-  {% endfor %}
+    {% for destination_filter in filters_mapping %}
+      {% comment %} This will loop through the value pairs to determine if there is a match to the destination {% endcomment %}
+        {% assign destination_filter_key = destination_filter | split:'|' | first %}
+        {% assign destination_filter_value = destination_filter | split:'|' | last %}
+        {% if source_filter_key == destination_filter_key %}
+          {% assign parameter_clean = destination_filter_value | append:'|' | append: source_filter_value %}
+          {% assign filters_array_destination =  filters_array_destination | append: parameter_clean | append:',' %}
+        {% endif %}
+    {% endfor %}
   {% endfor %}
   {% assign size = filters_array_destination | size | minus: 1 | at_least: 0 %}
   {% assign filters_array_destination = filters_array_destination | slice: 0, size %}
@@ -247,20 +249,24 @@ constant: link_build_filter_string {
   {% assign filter_string = '' %}
   {% assign filters_array_destination = filters_array_destination | split: ',' %}
   {% for filter in filters_array_destination %}
-  {% assign filter_key = filter | split:'|' | first %}
-  {% assign filter_value = filter | split:'|' | last %}
-
-  {% if content == '/explore/' %}
-  {% assign filter_compile = 'f[' | append: filter_key | append:']=' | append: filter_value %}
-  {% else %}
-  {% assign filter_value = filter_value | encode_url %}
-  {% assign filter_compile = filter_key | append:'=' | append: filter_value %}
-  {% endif %}
-
-  {% assign filter_string = filter_string | append: filter_compile | append:'&' %}
+    {% if filter != blank %}
+      {% assign filter_key = filter | split:'|' | first %}
+      {% assign filter_value = filter | split:'|' | last %}
+      {% if content == '/explore/' %}
+        {% assign filter_compile = 'f[' | append: filter_key | append:']=' | append: filter_value %}
+      {% else %}
+        {% assign filter_value = filter_value | encode_url %}
+        {% assign filter_compile = filter_key | append:'=' | append: filter_value %}
+      {% endif %}
+      {% assign filter_string = filter_string | append: filter_compile | append:'&' %}
+    {% endif %}
   {% endfor %}
-  {% assign size = filter_string | size | minus: 1 | at_least: 0 %}
-  {% assign filter_string = filter_string | slice: 0, size %}
+  {% assign size = filter_string | size | minus: 1 %}
+  {% if size > 0 %}
+    {% assign filter_string = filter_string | slice: 0, size %}
+  {% else %}
+    {% assign filter_string = '' %}
+  {% endif %}
   "
 }
 
@@ -269,21 +275,22 @@ constant: link_build_default_filter_string {
   {% assign default_filter_string = '' %}
   {% assign default_filters = default_filters | split: ',' %}
   {% for filter in default_filters %}
-  {% assign filter_key = filter | split:'=' | first %}
-  {% assign filter_value = filter | split:'=' | last %}
-  {% if content == '/explore/' %}
-  {% assign filter_compile = 'f[' | append: filter_key | append:']=' | append: filter_value %}
-  {% else %}
-  {% assign filter_value = filter_value | encode_url %}
-  {% assign filter_compile = filter_key | append:'=' | append: filter_value %}
-  {% endif %}
-  {% assign default_filter_string = default_filter_string | append: filter_compile | append:'&' %}
+    {% assign filter_key = filter | split:'=' | first %}
+    {% assign filter_value = filter | split:'=' | last %}
+    {% if content == '/explore/' %}
+      {% assign filter_compile = 'f[' | append: filter_key | append:']=' | append: filter_value %}
+    {% else %}
+      {% assign filter_value = filter_value | encode_url %}
+      {% assign filter_compile = filter_key | append:'=' | append: filter_value %}
+    {% endif %}
+    {% assign default_filter_string = default_filter_string | append: filter_compile | append:'&' %}
   {% endfor %}
-  {% assign size = default_filter_string | size | minus: 1 | at_least: 0 %}
+  {% assign size = default_filter_string | size | minus: 1 %}
+  {% if size > 0 %}
   {% assign default_filter_string = default_filter_string | slice: 0, size %}
+  {% endif %}
   "
 }
-
 
 constant: link_generate_dashboard_url {
   value: "
@@ -318,6 +325,7 @@ constant: link_generate_dashboard_url {
   "
 }
 
+# {% assign content = '/dashboards-next/' %}
 constant: link_generate_dashboard_variable {
   value: "
   {% assign content = '/dashboards-next/' %}
@@ -351,6 +359,152 @@ constant: link_generate_dashboard_variable {
   "
 }
 
+
+
+constant: link_build_explore {
+  value: "
+  {% assign explore_link = '' %}
+  {% if link_host != '' %}
+    {% assign explore_link = explore_link | append: host %}
+  {% endif %}
+  {% if content != '' %}
+    {% assign explore_link = explore_link | append: content %}
+  {% endif %}
+  {% if target_model != '' %}
+    {% assign explore_link = explore_link | append: target_model | append: '/' %}
+  {% endif %}
+  {% if target_explore != '' %}
+    {% assign explore_link = explore_link | append: target_explore | append: '?'  %}
+  {% endif %}
+  {% if drill_fields != '' %}
+    {% assign explore_link = explore_link | append: drill_fields %}
+  {% endif %}
+  {% if target_content_filters != '' %}
+    {% assign explore_link = explore_link | append: target_content_filters %}
+  {% endif %}
+  {% if vis_config != '' %}
+    {% assign explore_link = explore_link | append: vis_config %}
+  {% endif %}
+  {% if pivots != '' %}
+    {% assign pivots = '&pivots=' |append: pivots %}
+    {% assign explore_link = explore_link | append: pivots %}
+  {% endif %}
+
+  {% if subtotals != '' %}
+    {% assign subtotals = '&subtotals=' |append: subtotals %}
+    {% assign explore_link = explore_link | append: subtotals %}
+  {% endif %}
+
+  {% if sorts != '' %}
+    {% assign sorts = '&sorts=' |append: sorts %}
+    {% assign explore_link = explore_link | append: sorts %}
+  {% endif %}
+
+  {% if limit != '' %}
+    {% assign limit = '&limit=' |append: limit %}
+    {% assign explore_link = explore_link | append: limit %}
+  {% endif %}
+
+  {% if column_limit != '' %}
+    {% assign column_limit = '&column_limit=' |append: column_limit %}
+    {% assign explore_link = explore_link | append: column_limit %}
+  {% endif %}
+
+  {% if total != '' %}
+    {% assign total = '&assign=' |append: total %}
+    {% assign explore_link = explore_link | append: total %}
+  {% endif %}
+
+  {% if row_total != '' %}
+    {% assign row_total = '&row_total=' |append: row_total %}
+    {% assign explore_link = explore_link | append: row_total %}
+  {% endif %}
+
+  {% if query_timezone != '' %}
+    {% assign query_timezone = '&query_timezone=' |append: query_timezone %}
+    {% assign explore_link = explore_link | append: query_timezone %}
+  {% endif %}
+
+  {% if dynamic_fields != '' %}
+    {% assign dynamic_fields = '&dynamic_fields=' |append: dynamic_fields %}
+    {% assign explore_link = explore_link | append: dynamic_fields %}
+  {% endif %}
+  "
+}
+
+constant: link_generate_explore_url {
+  value: "
+  {% assign content = '/explore/' %}
+  {% assign link_path =  link | split: '?' | first %}
+  {% assign link_path =  link_path | split: '/'  %}
+  {% assign link_query = link | split: '?' | last %}
+  {% assign link_query_parameters = link_query | split: '&' %}
+  {% assign drill_fields = drill_fields | prepend:'fields='%}
+
+  {% if different_explore == false %}
+    {% assign target_model = link_path[1] %}
+    {% assign target_explore = link_path[2] %}
+  {% endif %}
+
+  {% if new_page %}
+  @{link_host}
+  {% endif %}
+
+  @{link_extract_context}
+
+  {% if different_explore %}
+    @{link_match_filters_to_destination}
+  {% else %}
+    {% assign filters_array_destination = filters_array %}
+  {% endif %}
+
+  @{link_build_filter_string}
+
+  {% if default_filters != '' %}
+    @{link_build_default_filter_string}
+  {% endif %}
+
+  {% if default_filters_override == true and default_filters != '' %}
+    {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string | prepend:'&' %}
+  {% elsif default_filters_override == false and default_filters != '' %}
+   {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string | prepend:'&' %}
+  {% else %}
+    {% assign target_content_filters = filter_string | prepend:'&' %}
+  {% endif %}
+
+  {% comment %} Builds final link to be presented in frontend {% endcomment %}
+  @{link_build_explore}
+  {{explore_link}}
+  "
+}
+# background-color: #878ca0;
+# color: #808080;
+# background-color: #F0F8FF;
+
+constant: link_selected_button_style {
+  value: "
+  display: block;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  margin-left: 0px;
+  margin-bottom: 5px;
+  padding: 6px 10px;
+  line-height: 1.5;
+  user-select: none
+  font-size: 12px;
+  font-style: tahoma;
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 0px;
+  white-space: normal;
+  float: left;
+  background-color: #dbe8fb;
+  color: #000000;
+  font-weight: medium;"
+}
+
 constant: link_unselected_button_style {
   value: "
   display: block;
@@ -363,13 +517,14 @@ constant: link_unselected_button_style {
   padding: 6px 10px;
   line-height: 1.5;
   user-select: none;
-  background-color: #878ca0;
-  color: white;
   font-size: 12px;
   font-style: tahoma;
-  font-weight: normal;
   text-align: center;
   text-decoration: none;
   letter-spacing: 0px;
-  white-space: normal;"
+  white-space: normal;
+  float: left;
+  background-color: #ffffff;
+  color: #000000;
+  font-weight: normal;"
 }

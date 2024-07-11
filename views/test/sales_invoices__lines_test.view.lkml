@@ -177,29 +177,29 @@ view: +sales_invoices__lines {
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Transaction Amount ({{currency}}){%else%}Total Transaction Amount (Target Currency){%endif%}"
     sql: ${transaction_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    # link: {
-    #   label: "Open Invoice Details Dashboard"
-    #   icon_url: "/favicon.ico"
-    #   url: "
-    #   @{link_generate_variable_defaults}
-    #   {% assign link = link_generator._link %}
-    #   {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
+    link: {
+      label: "Open Invoice Details Dashboard"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
-    #   {% assign model = _model._name %}
-    #   {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
 
-    #   {% assign default_filters_override = false %}
-    #   @{link_generate_dashboard_variable}
-    #   "
-    # }
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
 
-    html: <div>
-    @{link_generate_variable_defaults}
-    {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' %}
-    {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
-    <b>Filters Mapping: </b> {{filters_mapping}}
-    <br><br><b>Target Dashboard: </b>{{target_dashboard}}
-    </div>;;
+    # html: <div>
+    # @{link_generate_variable_defaults}
+    # {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' %}
+    # {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+    # <b>Filters Mapping: </b> {{filters_mapping}}
+    # <br><br><b>Target Dashboard: </b>{{target_dashboard}}
+    # </div>;;
 
     # html: html:  <div>
     # @{link_generate_variable_defaults}
