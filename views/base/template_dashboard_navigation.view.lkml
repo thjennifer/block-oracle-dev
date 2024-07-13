@@ -29,9 +29,9 @@
 #
 # STEPS TO EXTEND THIS TEMPLATE {
 # When extending this template, make the REQUIRED customizations by following these steps:
-# 1. create new view
-# 2. add "extend: template_dashboard_navigation" parameter (use name of this view)
-# 3. edit map_filter_numbers_to_dashboard_filter_names dimension.
+# 1. Create new view
+# 2. Add "extend: template_dashboard_navigation" parameter (use name of this view)
+# 3. Edit map_filter_numbers_to_dashboard_filter_names dimension.
 #     - Update the "sql" property with the mapping of filter numbers to dashboard filter names.
 #     - For each filter that needs to be passed between dashboards, assign a generic filter number 1 to N.
 #     - This can be a broad list of filters that do not need to appear on every dashboard but should appear on at least 2 dashboards.
@@ -43,7 +43,7 @@
 #     - For example:
 #           sql: '1|date||2|business_unit||3|customer_type||4|customer_country' ;;
 #
-# 4. edit dash_bindings dimension
+# 4. Edit dash_bindings dimension
 #    - Update the "sql" property with properties of each dashboard:
 #       ID - For UDD dashboards use numeric id. For LookML dashboards use dashboard name with or without model name.
 #           131
@@ -62,10 +62,13 @@
 #       sql: 'dashboard_name1|Dashboard 1|1,2||dashboard_name2|Dashboard 2|1,2,3,4';;
 #       sql: 'model_name::dashboard_name1|Dashboard 1|1,2||model_name::dashboard_name2|Dashboard 2|1,2,3,4';;
 #
-# 5. update parameter_tab_focus with the extra allowed values needed to match the number of dashboards.
+# 5. Update parameter_tab_focus with the extra allowed values needed to match the number of dashboards.
 #    Note, when extending, allowed values are additive, so only add values beyond 2.
 #
-# 6. edit filter1 to filterN (up to 20) dimensions to unhide and label. Note if only using in LookML dashboards, dimension can remain hidden.
+# 6. Edit filter1 to filterN (up to 20) dimensions to set the type, unhide and label.
+#    Make sure filter dimension's type matches the field it is mapped to. For example, if filter1 is linked to a date field,
+#    change the type to date. The filter dimensions are string by default.
+#    Note if only using in LookML dashboards, the filter dimensions can remain hidden.
 #
 #}
 #
@@ -216,9 +219,6 @@ view: template_dashboard_navigation {
       <!-- generate dashboard_url liquid variable used below-->
         @{link_generate_dashboard_variable}
 
-
-
-
       {% assign focus_page = parameter_navigation_focus_page._parameter_value | times: 1 %}
 
       {% if parameter_navigation_focus_page._in_query and counter == focus_page %}
@@ -245,4 +245,85 @@ view: template_dashboard_navigation {
   }
 
 #} derive navigation_links
+
+
+# dimension: test_navigation_parts {
+#   type: string
+#   hidden: no
+#   label: "Test Navigation Parts"
+#   description: "Add to Single Value Visualization. Defined HTML styling will be shown."
+#   sql:  '' ;;
+#   html:
+
+# <div>
+#           <!-- initialize variables used in following steps-->
+#             @{link_generate_variable_defaults}
+#             @{link_generate_dashboard_nav_style}
+
+#     <!-- capture the full url of the dashboard including filters -->
+#     {% assign link = link_generator._link %}.
+#     {% assign qualify_filter_names = false %}
+
+
+#     {% assign focus_page = parameter_navigation_focus_page._parameter_value | times: 1 %}
+
+#     {% assign model_name = _model._name %}
+#     {% if qualify_filter_names == true %}{% assign view_name = _view._name | append: "." %}
+#     {% else %}{% assign view_name = ''%}
+#     {%endif%}
+#     {% assign nav_items = dash_bindings._value | split: '||' %}
+#     {% assign dash_map = map_filter_numbers_to_dashboard_filter_names._value | split: '||' %}
+
+#     {% for nav_item in nav_items %}
+
+#     {% assign nav_parts = nav_item | split: '|' %}
+
+#     {% assign dash_label = nav_parts[1] %}
+#     <!-- derive target_dashboard ID -->
+#     {% assign target_dashboard = nav_parts[0] %}
+#     <!-- check if target_dashboard is numeric for UDD ids or string for LookML dashboards -->
+#     {% assign check_target_type = target_dashboard | plus: 0 %}
+#     <!-- if LookML Dashboard then append model name if not provided -->
+#     <!-- if check_target_type equals 0 then string else numeric-->
+#     {% if check_target_type == 0 %}
+#     <!-- if target_dashboard contains '::' then model_name is already provided-->
+#     {% if target_dashboard contains '::' %}{% else %}
+#     {% assign target_dashboard = model_name | append: '::' | append: target_dashboard %}
+#     {% endif %}
+#     {% endif %}
+
+#     <br>{{target_dashboard}}<br>
+
+#     <!-- derive target filters_mapping -->
+#     {% assign dash_filter_set = nav_parts[2] | split: ',' %}
+#     {% for dash_filter in dash_filter_set %}
+#     {{dash_filter| append: ", "}}
+#     {% for map_item in dash_map %}
+#     {% assign map_item_key = map_item | split:'|' | first %}
+#     {% if dash_filter == map_item_key %}
+#     dash_filter {{dash_filter}} = map_item_key {{map_item_key}}
+#     {% assign map_item_value = map_item | split:'|' | last %}
+#     map_item_value: {{map_item_value}}<br>
+
+#     {% assign filter_name = view_name | append: 'filter' | append: dash_filter | append: '|' | append: map_item_value %}
+#     {% assign filters_mapping = filters_mapping | append: filter_name | append: '||' %}
+
+#     {%endif%}
+#     {% endfor %}
+#     {% endfor %}
+#     <br> filters_mapping: {{filters_mapping}}
+#     @{link_generate_dashboard_variable}
+#     <br> final url: {{dashboard_url}}
+
+
+#     {% endfor %}
+
+#     </div>
+
+#     ;;
+# }
+
+
+
+
 }

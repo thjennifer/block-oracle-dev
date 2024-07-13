@@ -56,6 +56,18 @@
       item_category: otc_dashboard_navigation_ext.filter8
       item_language: otc_dashboard_navigation_ext.filter9
 
+  # - name: dashboard_navigation_parts
+  #   listen:
+  #     date: otc_dashboard_navigation_ext.filter1
+  #     business_unit: otc_dashboard_navigation_ext.filter2
+  #     customer_type: otc_dashboard_navigation_ext.filter3
+  #     customer_country: otc_dashboard_navigation_ext.filter4
+  #     customer_name: otc_dashboard_navigation_ext.filter5
+  #     target_currency: otc_dashboard_navigation_ext.filter6
+  #     order_source: otc_dashboard_navigation_ext.filter7
+  #     item_category: otc_dashboard_navigation_ext.filter8
+  #     item_language: otc_dashboard_navigation_ext.filter9
+
   - name: top_products_by_sales
     title: Top Products by Sales
     explore: sales_orders

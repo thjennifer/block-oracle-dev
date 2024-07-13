@@ -491,37 +491,34 @@ constant: link_generate_explore_url {
 
 constant: link_build_mappings_from_dash_bindings {
   value: "{% assign model_name = _model._name %}
-    {% if qualify_filter_name == true %}{% assign view_name = _view._name %}{%else%}{% assign view_name = '' %}{%endif%}
+    {% if qualify_filter_names == true %}{% assign view_name = _view._name | append: '.' %}{%else%}{% assign view_name = '' %}{%endif%}
     {% assign nav_items = dash_bindings._value | split: '||' %}
     {% assign dash_map = map_filter_numbers_to_dashboard_filter_names._value | split: '||' %}
+    {% assign filters_mapping = ''%}
       {% for nav_item in nav_items %}
         {% assign nav_parts = nav_item | split: '|' %}
          {% assign dash_label = nav_parts[1] %}
-  <!-- derive target_dashboard ID -->
+
         {% assign target_dashboard = nav_parts[0] %}
-        <!-- check if target_dashboard is numeric for UDD ids or string for LookML dashboards -->
         {% assign check_target_type = target_dashboard | plus: 0 %}
-        <!-- if LookML Dashboard then append model name if not provided -->
-        <!-- if check_target_type equals 0 then string else numeric-->
+
             {% if check_target_type == 0 %}
-            <!-- if target_dashboard contains '::' then model_name is already provided-->
               {% if target_dashboard contains '::' %}{% else %}
                 {% assign target_dashboard = model_name | append: '::' | append: target_dashboard %}
               {% endif %}
             {% endif %}
-      <!-- derive target filters_mapping -->
+
           {% assign dash_filter_set = nav_parts[2] | split: ',' %}
           {% for dash_filter in dash_filter_set %}
               {% for map_item in dash_map %}
                   {% assign map_item_key = map_item | split:'|' | first %}
                   {% if dash_filter == map_item_key %}
                     {% assign map_item_value = map_item | split:'|' | last %}
-                    {% assign filter_name = view_name | append: '.filter' | append: dash_filter | append: '|' | append: map_item_value %}
-                    {% assign filters_mapping = filters_mapping | append: filter_name | append: '||' %}
+                    {% assign filter_name = view_name | append: 'filter' | append: dash_filter | append: '|' | append: map_item_value | append: '||' %}
+                    {% assign filters_mapping = filters_mapping | append: filter_name  %}
                   {% endif %}
-
-      {% endfor %}
-      {% endfor %}"
+              {% endfor %}
+          {% endfor %}"
 }
 
 
