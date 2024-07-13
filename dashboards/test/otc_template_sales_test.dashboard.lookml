@@ -114,3 +114,14 @@
         item_category: otc_dashboard_navigation_sales_ext.filter8
         # item_language: otc_dashboard_navigation_sales_ext.filter9
         test_or_demo: otc_dashboard_navigation_sales_ext.filter10
+
+    - name: navigation_focus_dash
+      explore: sales_orders_daily_agg
+      type: looker_grid
+      fields: [otc_dashboard_navigation_sales_ext.test_focus_dashboard_url]
+      row: 3
+      col: 0
+      width: 22
+      height: 8
+      truncate_text: no
+      model: cortex-oracle-ebs-test

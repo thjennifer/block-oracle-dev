@@ -132,22 +132,22 @@
       name: navigation
       explore: sales_orders
       type: single_value
-      fields: [otc_dashboard_navigation_ext.navigation]
+      fields: [otc_orders_dashboard_navigation_ext.navigation]
       filters:
-        otc_dashboard_navigation_ext.navigation_focus_page: '1'
-        otc_dashboard_navigation_ext.navigation_style: 'tabs'
+        otc_orders_dashboard_navigation_ext.navigation_focus_page: '1'
+        otc_orders_dashboard_navigation_ext.navigation_style: 'tabs'
       show_single_value_title: false
       show_comparison: false
       listen:
-        Date: otc_dashboard_navigation_ext.filter1
-        Business Unit: otc_dashboard_navigation_ext.filter2
-        Customer Type: otc_dashboard_navigation_ext.filter3
-        Country: otc_dashboard_navigation_ext.filter4
-        Customer: otc_dashboard_navigation_ext.filter5
-        Order Source: otc_dashboard_navigation_ext.filter6
-        Item Category: otc_dashboard_navigation_ext.filter7
-        Target Currency: otc_dashboard_navigation_ext.filter8
-        Test or Demo: otc_dashboard_navigation_ext.filter9
+        Date: otc_orders_dashboard_navigation_ext.filter1
+        Business Unit: otc_orders_dashboard_navigation_ext.filter2
+        Customer Type: otc_orders_dashboard_navigation_ext.filter3
+        Country: otc_orders_dashboard_navigation_ext.filter4
+        Customer: otc_orders_dashboard_navigation_ext.filter5
+        Order Source: otc_orders_dashboard_navigation_ext.filter6
+        Item Category: otc_orders_dashboard_navigation_ext.filter7
+        Target Currency: otc_orders_dashboard_navigation_ext.filter8
+        Test or Demo: otc_orders_dashboard_navigation_ext.filter9
       row: 0
       col: 0
       width: 24

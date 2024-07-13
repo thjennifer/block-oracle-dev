@@ -51,7 +51,7 @@
   - title: navigation
     name: navigation
     filters:
-      otc_dashboard_navigation_ext.navigation_focus_page: '2'
+      otc_orders_dashboard_navigation_ext.navigation_focus_page: '2'
 
 
   - name: Top Products by Sales

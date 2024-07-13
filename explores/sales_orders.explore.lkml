@@ -46,6 +46,7 @@ explore: sales_orders {
   }
 
   join: otc_dashboard_navigation_ext {
+    view_label: "🛠 Dashboard Navigation"
     relationship: one_to_one
     sql:  ;;
   }

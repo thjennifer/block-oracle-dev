@@ -37,7 +37,7 @@
   - title: navigation
     name: navigation
     filters:
-      otc_dashboard_navigation_ext.navigation_focus_page: '3'
+      otc_orders_dashboard_navigation_ext.navigation_focus_page: '3'
 
   - title: In Full %
     name: In Full %

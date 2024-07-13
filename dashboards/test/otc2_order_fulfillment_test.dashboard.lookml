@@ -37,6 +37,8 @@
   - name: navigation
     filters:
       otc_dashboard_navigation_sales_ext.navigation_focus_page: '3'
+      otc_dashboard_navigation_sales_ext.navigation_style: 'tabs'
+
 
     listen:
       date: otc_dashboard_navigation_sales_ext.filter1
@@ -55,15 +57,17 @@
     explore: sales_orders_daily_agg
     filters:
       otc_dashboard_navigation_sales_ext.navigation_focus_page: '3'
-      # otc_dashboard_navigation_sales_ext.navigation_style: 'tabs'
+      otc_dashboard_navigation_sales_ext.navigation_style: 'tabs'
     type: single_value
+    show_single_value_title: false
+    show_comparison: false
     # type: looker_grid
     # fields: [otc_dashboard_navigation_sales_ext.test_navigation_html_link]
     # sorts: [otc_dashboard_navigation_sales_ext.test_navigation_html_link]
     row: 2
     col: 0
-    width: 22
-    height: 8
+    width: 24
+    height: 1
     truncate_text: no
     model: cortex-oracle-ebs-test
     listen:

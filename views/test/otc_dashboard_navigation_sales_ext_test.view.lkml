@@ -8,6 +8,31 @@ view: +otc_dashboard_navigation_sales_ext {
     allowed_value: {label: "Buttons" value: "buttons"}
   }
 
+  parameter: dashboard_subject_area {
+    allowed_value: {value: "none"}
+    allowed_value: {value: "orders"}
+    allowed_value: {value: "invoices"}
+    default_value: "orders"
+  }
+
+  parameter: parameter_navigation_focus_page {
+    allowed_value: {value: "1"}
+    allowed_value: {value: "2"}
+    allowed_value: {value: "3"}
+    allowed_value: {value: "4"}
+  }
+
+  parameter: parameter_navigation_style {
+    hidden: no
+    type: unquoted
+    label: "Navigation Style"
+    description: "Select dashboard navigation style (e.g., Buttons, Tabs, Plain Hyperlinks)"
+    allowed_value: {label: "Buttons" value: "buttons"}
+    allowed_value: {label: "Tabs" value: "tabs"}
+    allowed_value: {label: "Plain Hyperlinks" value: "plain"}
+    default_value: "tabs"
+  }
+
   dimension: dash_bindings {
     hidden: yes
     type: string
@@ -40,6 +65,11 @@ view: +otc_dashboard_navigation_sales_ext {
   }
   # @{link_build_mappings_from_dash_bindings}
 
+  dimension: test_focus_dashboard_url {
+    type: string
+    sql: {% assign d = _explore._dashboard_url %}'{{d}}' ;;
+  }
+
   dimension: new_navigation_links {
     type: string
     hidden: no
@@ -70,7 +100,7 @@ view: +otc_dashboard_navigation_sales_ext {
 
       {% if navigation_focus_page._in_query and counter == focus_page %}
         <span style="{{ focus_page_style }}">{{ dash_label }}</span>
-        {% elsif _explore._dashboard_url == dashboard_url %}
+        {% elsif _explore._dashboard_url == target_dashboard %}
         <span style="{{ focus_page_style }}">{{ dash_label }}</span>
         {% else %}
         <a style="{{ non_focus_page_style }}" href="{{ dashboard_url }}">{{ dash_label }}</a>

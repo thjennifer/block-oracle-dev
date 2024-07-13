@@ -19,7 +19,7 @@
   - title: navigation
     name: navigation
     filters:
-      otc_dashboard_navigation_ext.navigation_focus_page: '1'
+      otc_orders_dashboard_navigation_ext.navigation_focus_page: '1'
 
   - title: Total Sales Orders
     name: Total Orders
