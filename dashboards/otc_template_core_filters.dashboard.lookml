@@ -5,6 +5,11 @@
 ######################
 
 - dashboard: otc_template_core_filters
+  layout: newspaper
+  preferred_viewer: dashboards-next
+  crossfilter_enabled: false
+  filters_location_top: false
+
   extension: required
 
   filters:
@@ -57,7 +62,7 @@
       display: popover
     explore: sales_orders_daily_agg
     field: sales_orders_daily_agg.selected_customer_country
-    listens_to_filters: [business_unit]
+    listens_to_filters: [business_unit,customer_type]
 
   - name: customer_name
     title: 'Customer: Name'
@@ -70,7 +75,7 @@
       display: popover
     explore: sales_orders_daily_agg
     field: sales_orders_daily_agg.selected_customer_name
-    listens_to_filters: [customer_country]
+    listens_to_filters: [business_unit,customer_type]
 
   - name: target_currency
     title: Target Currency
@@ -83,30 +88,6 @@
       display: inline
     explore: currency_rate_md
     field: currency_rate_md.to_currency
-
-  # - name: order_source
-  #   title: Order Source
-  #   type: field_filter
-  #   default_value: ''
-  #   allow_multiple_values: true
-  #   required: false
-  #   ui_config:
-  #     type: checkboxes
-  #     display: popover
-  #   explore: sales_orders_daily_agg
-  #   field: sales_orders_daily_agg.order_source_name
-
-  # - name: item_category
-  #   title: Item Category
-  #   type: field_filter
-  #   default_value: ''
-  #   allow_multiple_values: true
-  #   required: false
-  #   ui_config:
-  #     type: checkboxes
-  #     display: popover
-  #   explore: sales_orders_daily_agg
-  #   field: sales_orders_daily_agg__lines.category_description
 
   elements:
   - name: dashboard_navigation

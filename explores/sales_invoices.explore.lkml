@@ -4,7 +4,7 @@ include: "/views/core/sales_invoices__lines__item_categories_rfn.view"
 include: "/views/core/sales_invoices__lines__item_descriptions_rfn.view"
 include: "/views/core/currency_conversion_sdt.view"
 include: "/views/core/otc_common_parameters_xvw.view"
-include: "/views/core/otc_billing_dashboard_navigation_ext.view"
+include: "/views/core/otc_dashboard_navigation_ext.view"
 
 
 explore: sales_invoices {
@@ -44,7 +44,7 @@ explore: sales_invoices {
     sql:  ;;
   }
 
-  join: otc_billing_dashboard_navigation_ext {
+  join: otc_dashboard_navigation_ext {
     relationship: one_to_one
     sql:  ;;
 }

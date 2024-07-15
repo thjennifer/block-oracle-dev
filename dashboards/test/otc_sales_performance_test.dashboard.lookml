@@ -1,20 +1,13 @@
 - dashboard: otc_sales_performance_test
   title: Sales Performance TEST
-  layout: newspaper
-  preferred_viewer: dashboards-next
-  crossfilter_enabled: false
-  filters_location_top: false
   description: ''
 
   # pull navigation bar and filters from template
   # if using navigation_focus_page parameter for active dashboard update navigation tile to use the correct filter
-  extends: [otc_template_test]
+  extends: [otc_template_orders_test]
 
   filters:
-  - name: Date
-    title: Ordered Date
-
-  - name: Product Level
+  - name: product_level
     title: Product Level to Display
     type: field_filter
     default_value: "Category"
@@ -26,7 +19,7 @@
     explore: sales_orders
     field: sales_orders__lines.parameter_display_product_level
 
-  - name: Language
+  - name: item_language
     title: Language of Item Description
     type: field_filter
     default_value: "{{ _user_attributes['cortex_oracle_ebs_default_language'] }}"
@@ -41,17 +34,27 @@
     # field: item_md__item_descriptions.language
     explore: language_codes_sdt
     field: language_codes_sdt.language_code
-    listens_to_filters: [Test or Demo]
+    listens_to_filters: [test_or_demo]
 
 
 
 
   elements:
 
-  - title: navigation
-    name: navigation
+  - name: dashboard_navigation
     filters:
-      otc_orders_dashboard_navigation_ext.navigation_focus_page: '2'
+      otc_dashboard_navigation_ext.parameter_navigation_focus_page: '2'
+    listen:
+      date: otc_dashboard_navigation_ext.filter1
+      business_unit: otc_dashboard_navigation_ext.filter2
+      customer_type: otc_dashboard_navigation_ext.filter3
+      customer_country: otc_dashboard_navigation_ext.filter4
+      customer_name: otc_dashboard_navigation_ext.filter5
+      target_currency: otc_dashboard_navigation_ext.filter6
+      order_source: otc_dashboard_navigation_ext.filter7
+      item_category: otc_dashboard_navigation_ext.filter8
+      item_language: otc_dashboard_navigation_ext.filter9
+      test_or_demo: otc_dashboard_navigation_ext.filter10
 
 
   - name: Top Products by Sales
@@ -86,16 +89,16 @@
     y_axis_zoom: true
 
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-      Product Level: sales_orders__lines.parameter_display_product_level
-      Language: otc_common_parameters_xvw.parameter_language
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      product_level: sales_orders__lines.parameter_display_product_level
+      item_language: otc_common_parameters_xvw.parameter_language
 
     # note_state: expanded
     note_display: hover
@@ -141,16 +144,16 @@
     x_axis_zoom: true
     y_axis_zoom: true
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-      Product Level: sales_orders__lines.parameter_display_product_level
-      Language: otc_common_parameters_xvw.parameter_language
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      product_level: sales_orders__lines.parameter_display_product_level
+      item_language: otc_common_parameters_xvw.parameter_language
     # note_state: expanded
     note_display: hover
     note_text: |-
@@ -192,14 +195,14 @@
     x_axis_zoom: true
     y_axis_zoom: true
     listen:
-      Date: sales_orders_daily_agg.ordered_date
-      Country: sales_orders_daily_agg.selected_customer_country
-      Customer: sales_orders_daily_agg.selected_customer_name
-      Business Unit: sales_orders_daily_agg.business_unit_name
-      Order Source: sales_orders_daily_agg.order_source_name
-      Item Category: sales_orders_daily_agg__lines.category_description
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders_daily_agg.ordered_date
+      customer_country: sales_orders_daily_agg.selected_customer_country
+      customer_name: sales_orders_daily_agg.selected_customer_name
+      business_unit: sales_orders_daily_agg.business_unit_name
+      order_source: sales_orders_daily_agg.order_source_name
+      item_category: sales_orders_daily_agg__lines.category_description
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
 
     row: 20
     col: 0
@@ -239,14 +242,14 @@
     x_axis_zoom: true
     y_axis_zoom: true
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     # note_state: expanded
     note_display: hover
     note_text: |-
@@ -295,8 +298,8 @@
           text: 'Order<br>Source',
           verticalAlign: 'middle',
           align: 'center',
-          y: 10,
-          x: -5,
+          y: -7,
+          x: 0,
           style: {
                 fontSize: '120%',
                 fontWeight: 'bold',
@@ -318,14 +321,14 @@
     hidden_pivots: {}
     title_hidden: true
     listen:
-      Date: sales_orders_daily_agg.ordered_date
-      Country: sales_orders_daily_agg.selected_customer_country
-      Customer: sales_orders_daily_agg.selected_customer_name
-      Business Unit: sales_orders_daily_agg.business_unit_name
-      Order Source: sales_orders_daily_agg.order_source_name
-      Item Category: sales_orders_daily_agg__lines.category_description
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders_daily_agg.ordered_date
+      customer_country: sales_orders_daily_agg.selected_customer_country
+      customer_name: sales_orders_daily_agg.selected_customer_name
+      business_unit: sales_orders_daily_agg.business_unit_name
+      order_source: sales_orders_daily_agg.order_source_name
+      item_category: sales_orders_daily_agg__lines.category_description
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 21
     col: 0
     width: 12

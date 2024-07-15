@@ -17,7 +17,7 @@ view: otc_dashboard_navigation_ext {
             {% when "orders" %}
             "otc_order_status|Order Status|1,2,3,4,5,6,7,8||otc_sales_performance|Sales Performance|1,2,3,4,5,6,7,8,9||otc_order_fulfillment|Order Fulfillment|1,2,3,4,5,6,7,8,9"
           {% when "billing" %}
-            "otc_billing|Billing & Invoicing|1,2,3,4,5,6,7,8||otc_accounts_receivable|Accounts Receivable|1,2,3,4,5,6||otc_billing_invoice_details|Invoice Details|1,2,3,4,5,6,7,8"
+            "otc_billing_and_invoicing|Billing & Invoicing|1,2,3,4,5,6,7,8||otc_billing_accounts_receivable|Accounts Receivable|1,2,3,4,5,6||otc_billing_invoice_details|Invoice Details|1,2,3,4,5,6,7,8"
           {% endcase %}
           ;;
     # sql: "otc_order_status|Order Status|1,2,3,4||otc_sales_performance|Sales Performance|1,2,3,4" ;;
@@ -45,7 +45,9 @@ view: otc_dashboard_navigation_ext {
   parameter: parameter_navigation_subject {
     hidden: no
     type: unquoted
-    allowed_value: {value: "orders" label: "Orders"}
+    label: "Navigation Subject Area"
+    description: "Which set of dashboards to display? Select either Sales Orders or Billing."
+    allowed_value: {value: "orders" label: "Sales Orders"}
     allowed_value: {value: "billing" label: "Billing"}
     default_value: "orders"
   }

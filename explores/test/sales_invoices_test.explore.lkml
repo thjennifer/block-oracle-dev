@@ -4,7 +4,7 @@ include: "/views/test/sales_invoices_test.view"
 include: "/views/test/sales_invoices__lines_test.view"
 include: "/views/test/currency_conversion_sdt_test.view"
 include: "/views/test/otc_common_parameters_xvw_test.view"
-include: "/views/test/otc_billing_dashboard_navigation_ext_test.view"
+include: "/views/test/otc_dashboard_navigation_ext_test.view"
 
 include: "/views/core/sales_invoices__lines__item_categories_rfn.view"
 include: "/views/core/sales_invoices__lines__item_descriptions_rfn.view"

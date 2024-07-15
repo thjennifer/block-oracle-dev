@@ -1,7 +1,7 @@
 include: "/views/core/sales_payments_daily_agg_rfn.view"
 include: "/views/core/sales_payments_daily_agg__amounts_rfn.view"
 include: "/views/core/otc_common_parameters_xvw.view"
-include: "/views/core/otc_billing_dashboard_navigation_ext.view"
+include: "/views/core/otc_dashboard_navigation_ext.view"
 
 
 
@@ -21,7 +21,7 @@ explore: sales_payments_daily_agg {
     sql:  ;;
   }
 
-  join: otc_billing_dashboard_navigation_ext {
+  join: otc_dashboard_navigation_ext {
     relationship: one_to_one
     sql:  ;;
   }

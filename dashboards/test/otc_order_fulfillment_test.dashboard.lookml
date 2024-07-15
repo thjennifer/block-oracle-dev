@@ -1,20 +1,13 @@
 - dashboard: otc_order_fulfillment_test
   title: Order Fulfillment TEST
-  layout: newspaper
-  preferred_viewer: dashboards-next
-  crossfilter_enabled: false
-  filters_location_top: false
   description: ''
 
-  # pull navigation bar and filters from template
-  # if using navigation_focus_page parameter for active dashboard update navigation tile to use the correct filter
-  extends: otc_template_test
+  # # pull navigation bar and filters from template
+  # # if using navigation_focus_page parameter for active dashboard update navigation tile to use the correct filter
+  extends: otc_template_orders_test
 
   filters:
-  - name: Date
-    title: Ordered Date
-
-  - name: Language
+  - name: item_language
     title: Language of Item Description
     type: field_filter
     default_value: "{{ _user_attributes['cortex_oracle_ebs_default_language'] }}"
@@ -29,15 +22,25 @@
     # field: item_md__item_descriptions.language
     explore: language_codes_sdt
     field: language_codes_sdt.language_code
-    listens_to_filters: [Test or Demo]
+    listens_to_filters: [test_or_demo]
 
 
   elements:
 
-  - title: navigation
-    name: navigation
+  - name: dashboard_navigation
     filters:
-      otc_orders_dashboard_navigation_ext.navigation_focus_page: '3'
+      otc_dashboard_navigation_ext.parameter_navigation_focus_page: '3'
+    listen:
+      date: otc_dashboard_navigation_ext.filter1
+      business_unit: otc_dashboard_navigation_ext.filter2
+      customer_type: otc_dashboard_navigation_ext.filter3
+      customer_country: otc_dashboard_navigation_ext.filter4
+      customer_name: otc_dashboard_navigation_ext.filter5
+      target_currency: otc_dashboard_navigation_ext.filter6
+      order_source: otc_dashboard_navigation_ext.filter7
+      item_category: otc_dashboard_navigation_ext.filter8
+      item_language: otc_dashboard_navigation_ext.filter9
+      test_or_demo: otc_dashboard_navigation_ext.filter10
 
   - title: In Full %
     name: In Full %
@@ -46,13 +49,13 @@
     fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     hidden_fields: [sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
@@ -69,13 +72,13 @@
     fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     hidden_fields: [sales_orders.fulfilled_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders fulfilled completely (for all line items) by the requested delivery date."
@@ -94,13 +97,13 @@
     # conditional_formatting: [{type: greater than, value: 0.05, background_color: '',
     #     font_color: "#DB4C40", bold: false, italic: false, strikethrough: false, fields: !!null ''}]
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders with at least one item on backorder."
@@ -142,13 +145,13 @@
     x_axis_datetime_label: "%B %y"
     defaults_version: 1
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 2
     col: 4
     width: 10
@@ -216,14 +219,14 @@
         \          verticalAlign: 'bottom',\n          x: 0,\n          y: -1,\n   \
         \     },\n        \n      },\n    ],\n    \n\n  }, ],\n}"
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-      Language: otc_common_parameters_xvw.parameter_language
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      item_language: otc_common_parameters_xvw.parameter_language
       # Product Level to Display: sales_orders__lines.parameter_display_product_level
     note_state: collapsed
     note_display: hover
@@ -333,14 +336,14 @@
     note_display: above
     note_text: Top 10 Items with Largest Difference between Quantity Ordered and Fulfilled
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-      Language: otc_common_parameters_xvw.parameter_language
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      item_language: otc_common_parameters_xvw.parameter_language
     row: 10
     col: 0
     width: 24

@@ -6,7 +6,7 @@
   filters_location_top: false
 
   # pull navigation bar and filters from template
-  # if using navigation_focus_page parameter for active dashboard update navigation tile to use the correct filter
+  # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value
   extends: otc_template_orders
 
   elements:

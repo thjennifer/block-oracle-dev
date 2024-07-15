@@ -5,6 +5,12 @@
 ######################
 
 - dashboard: otc_template_core_filters_test
+  title: OTC Template Core Filters TEST
+  layout: newspaper
+  preferred_viewer: dashboards-next
+  crossfilter_enabled: false
+  filters_location_top: false
+
   extension: required
 
   filters:
@@ -29,8 +35,8 @@
       type: checkboxes
       display: popover
     explore: sales_orders_daily_agg
-    listens_to_filters: [test_or_demo]
     field: sales_orders_daily_agg.business_unit_name
+    listens_to_filters: [test_or_demo]
 
   - name: customer_type
     title: 'Customer: Type'
@@ -58,7 +64,7 @@
       display: popover
     explore: sales_orders_daily_agg
     field: sales_orders_daily_agg.selected_customer_country
-    listens_to_filters: [business_unit, test_or_demo]
+    listens_to_filters: [business_unit,customer_type,test_or_demo]
 
   - name: customer_name
     title: 'Customer: Name'
@@ -71,53 +77,24 @@
       display: popover
     explore: sales_orders_daily_agg
     field: sales_orders_daily_agg.selected_customer_name
-    listens_to_filters: [customer_country, test_or_demo]
+    listens_to_filters: [business_unit,customer_type,customer_country, test_or_demo]
 
   - name: target_currency
     title: Target Currency
     type: field_filter
     default_value: "{{ _user_attributes['cortex_oracle_ebs_default_currency'] }}"
-    # default_value: 'USD'
     allow_multiple_values: false
     required: false
     ui_config:
       type: dropdown_menu
       display: inline
-      options: []
     explore: currency_rate_md
-    listens_to_filters: [test_or_demo]
     field: currency_rate_md.to_currency
 
-  # - name: order_source
-  #   title: Order Source
-  #   type: field_filter
-  #   default_value: ''
-  #   allow_multiple_values: true
-  #   required: false
-  #   ui_config:
-  #     type: checkboxes
-  #     display: popover
-  #   explore: sales_invoices_daily_agg
-  #   listens_to_filters: [test_or_demo]
-  #   field: sales_invoices_daily_agg.order_source_name
-
-  # - name: item_category
-  #   title: Item Category
-  #   type: field_filter
-  #   default_value: ''
-  #   allow_multiple_values: true
-  #   required: false
-  #   ui_config:
-  #     type: checkboxes
-  #     display: popover
-  #   explore: sales_invoices
-  #   field: sales_invoices__lines.category_description
-  #   listens_to_filters: [test_or_demo]
-
   - name: test_or_demo
-    title: Test or Demo Data
+    title: 'Test or Demo'
     type: field_filter
-    default_value: "demo"
+    default_value: 'demo'
     allow_multiple_values: false
     required: false
     ui_config:
@@ -126,30 +103,26 @@
     explore: sales_orders_daily_agg
     field: otc_common_parameters_xvw.parameter_use_demo_or_test_data
 
-
-  # elements:
-  #   - title: navigation
-  #     name: navigation
-  #     explore: sales_invoices_daily_agg
-  #     type: single_value
-  #     fields: [otc_billing_dashboard_navigation_ext.navigation]
-  #     filters:
-  #       otc_billing_dashboard_navigation_ext.navigation_focus_page: '1'
-  #       otc_billing_dashboard_navigation_ext.navigation_style: 'tabs'
-  #     show_single_value_title: false
-  #     show_comparison: false
-  #     listen:
-  #       date: otc_billing_dashboard_navigation_ext.filter1
-  #       business_unit: otc_billing_dashboard_navigation_ext.filter2
-  #       #customer_type: otc_billing_dashboard_navigation_ext.filter3
-  #       customer_country: otc_billing_dashboard_navigation_ext.filter4
-  #       customer_name: otc_billing_dashboard_navigation_ext.filter5
-  #       target_currency: otc_billing_dashboard_navigation_ext.filter6
-  #       # order_source: otc_billing_dashboard_navigation_ext.filter7
-  #       # item_category: otc_billing_dashboard_navigation_ext.filter8
-  #       test_or_demo: otc_billing_dashboard_navigation_ext.filter9
-  #     row: 0
-  #     col: 0
-  #     width: 24
-  #     height: 1
-  #     model: cortex-oracle-ebs-test
+  elements:
+  - name: dashboard_navigation
+    type: single_value
+    explore: sales_orders
+    fields: [otc_dashboard_navigation_ext.navigation_links]
+    filters:
+        otc_dashboard_navigation_ext.parameter_navigation_focus_page: '1'
+        otc_dashboard_navigation_ext.parameter_navigation_style: 'buttons'
+        otc_dashboard_navigation_ext.parameter_navigation_subject: 'orders'
+    show_single_value_title: false
+    listen:
+      date: otc_dashboard_navigation_ext.filter1
+      business_unit: otc_dashboard_navigation_ext.filter2
+      customer_type: otc_dashboard_navigation_ext.filter3
+      customer_country: otc_dashboard_navigation_ext.filter4
+      customer_name: otc_dashboard_navigation_ext.filter5
+      target_currency: otc_dashboard_navigation_ext.filter6
+      test_or_demo: otc_dashboard_navigation_ext.filter10
+    row: 0
+    col: 0
+    width: 24
+    height: 1
+    model: cortex-oracle-ebs-test

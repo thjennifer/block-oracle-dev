@@ -1,25 +1,18 @@
 - dashboard: otc_order_status_test
   title: Order Status TEST
-  layout: newspaper
-  preferred_viewer: dashboards-next
-  crossfilter_enabled: false
-  filters_location_top: false
-  description: ''
+
 
   # pull navigation bar and filters from template
   # if using navigation_focus_page parameter for active dashboard update navigation tile to use the correct filter
-  extends: otc_template_test
+  extends: otc_template_orders_test
 
-  filters:
-    - name: Date
-      title: Ordered Date
+
 
   elements:
 
-  - title: navigation
-    name: navigation
+  - name: dashboard_navigation
     filters:
-      otc_orders_dashboard_navigation_ext.navigation_focus_page: '1'
+      otc_dashboard_navigation_ext.parameter_navigation_focus_page: '1'
 
   - title: Total Sales Orders
     name: Total Orders
@@ -28,14 +21,14 @@
     fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     note_state: collapsed
     note_display: hover
     note_text: "The number of sales orders."
@@ -53,13 +46,13 @@
     fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     hidden_fields: [sales_orders.order_count,sales_orders.no_holds_sales_order_percent]
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders with a product return."
@@ -77,13 +70,13 @@
     fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
     hidden_fields: [sales_orders.order_count,sales_orders.has_return_sales_order_percent]
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     note_state: collapsed
     note_display: hover
     note_text: "The percentage of sales orders processed without any holds."
@@ -101,14 +94,14 @@
     filters:
       sales_orders.is_blocked: 'Yes'
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     note_state: collapsed
     note_display: hover
     note_text: "The number of sales orders blocked (has hold or backorder)."
@@ -171,13 +164,13 @@
     show_totals_labels: false
     title_hidden: true
     listen:
-      Date: sales_orders.ordered_date
-      Country: sales_orders.selected_customer_country
-      Customer: sales_orders.selected_customer_name
-      Business Unit: sales_orders.business_unit_name
-      Order Source: sales_orders.order_source_name
-      Item Category: sales_orders__lines.category_description
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders.ordered_date
+      customer_country: sales_orders.selected_customer_country
+      customer_name: sales_orders.selected_customer_name
+      business_unit: sales_orders.business_unit_name
+      order_source: sales_orders.order_source_name
+      item_category: sales_orders__lines.category_description
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 4
     col: 12
     width: 12
@@ -235,13 +228,13 @@
     show_y_axis_ticks: true
     y_axis_gridlines: true
     listen:
-      Date: sales_orders_daily_agg.ordered_date
-      Country: sales_orders_daily_agg.selected_customer_country
-      Customer: sales_orders_daily_agg.selected_customer_name
-      Business Unit: sales_orders_daily_agg.business_unit_name
-      Order Source: sales_orders_daily_agg.order_source_name
-      Item Category: sales_orders_daily_agg__lines.category_description
-      Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+      date: sales_orders_daily_agg.ordered_date
+      customer_country: sales_orders_daily_agg.selected_customer_country
+      customer_name: sales_orders_daily_agg.selected_customer_name
+      business_unit: sales_orders_daily_agg.business_unit_name
+      order_source: sales_orders_daily_agg.order_source_name
+      item_category: sales_orders_daily_agg__lines.category_description
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 4
     col: 0
     width: 12
@@ -284,164 +277,164 @@
     # series_labels: {}
 
 
-  # - name: Booking
-  #   title: Booking Amount
-  #   explore: sales_orders_daily_agg
-  #   type: single_value
-  #   fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_ordered_amount_target_currency_formatted]
-  #   hidden_fields: [sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
-  #   sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
-  #   sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted]
-  #   filters:
-  #     sales_orders_daily_agg__lines.line_category_code: "-RETURN"
-  #     sales_orders_daily_agg.order_category_code: "-RETURN"
-  #   custom_color_enabled: true
-  #   show_single_value_title: true
-  #   show_comparison: true
-  #   comparison_type: progress_percentage
-  #   comparison_reverse_colors: false
-  #   show_comparison_label: false
-  #   enable_conditional_formatting: false
-  #   conditional_formatting_include_totals: false
-  #   conditional_formatting_include_nulls: false
-  #   # single_value_title: Booking Amount
-  #   hidden_pivots: {}
-  #   listen:
-  #     Date: sales_orders.ordered_date
-  #     Country: sales_orders.selected_customer_country
-  #     Customer: sales_orders.selected_customer_name
-  #     Business Unit: sales_orders.business_unit_name
-  #     Order Source: sales_orders.order_source_name
-  #     Item Category: sales_orders__lines.category_description
-  #     Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-  #   row: 2
-  #   col: 16
-  #   width: 8
-  #   height: 3
-  #   model: cortex-oracle-ebs-test
+  # # - name: Booking
+  # #   title: Booking Amount
+  # #   explore: sales_orders_daily_agg
+  # #   type: single_value
+  # #   fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_ordered_amount_target_currency_formatted]
+  # #   hidden_fields: [sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
+  # #   sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
+  # #   sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted]
+  # #   filters:
+  # #     sales_orders_daily_agg__lines.line_category_code: "-RETURN"
+  # #     sales_orders_daily_agg.order_category_code: "-RETURN"
+  # #   custom_color_enabled: true
+  # #   show_single_value_title: true
+  # #   show_comparison: true
+  # #   comparison_type: progress_percentage
+  # #   comparison_reverse_colors: false
+  # #   show_comparison_label: false
+  # #   enable_conditional_formatting: false
+  # #   conditional_formatting_include_totals: false
+  # #   conditional_formatting_include_nulls: false
+  # #   # single_value_title: Booking Amount
+  # #   hidden_pivots: {}
+  # #   listen:
+  # #     date: sales_orders.ordered_date
+  # #     customer_country: sales_orders.selected_customer_country
+  # #     customer_name: sales_orders.selected_customer_name
+  # #     business_unit: sales_orders.business_unit_name
+  # #     order_source: sales_orders.order_source_name
+  # #     item_category: sales_orders__lines.category_description
+  # #     test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+  # #   row: 2
+  # #   col: 16
+  # #   width: 8
+  # #   height: 3
+  # #   model: cortex-oracle-ebs-test
 
-  # - name: Backlog
-  #   title: Backlog Amount
-  #   explore: sales_orders_daily_agg
-  #   type: single_value
-  #   fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_ordered_amount_target_currency_formatted]
-  #   hidden_fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
-  #   sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
-  #   sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted]
-  #   filters:
-  #     sales_orders_daily_agg__lines.line_category_code: "-RETURN"
-  #     sales_orders_daily_agg.order_category_code: "-RETURN"
-  #   custom_color_enabled: true
-  #   show_single_value_title: true
-  #   show_comparison: true
-  #   # comparison_type: progress_percentage
-  #   comparison_type: progress
-  #   comparison_reverse_colors: false
-  #   show_comparison_label: false
-  #   enable_conditional_formatting: false
-  #   conditional_formatting_include_totals: false
-  #   conditional_formatting_include_nulls: false
-  #   # single_value_title: Booking Amount
-  #   hidden_pivots: {}
-  #   listen:
-  #     Date: sales_orders.ordered_date
-  #     Country: sales_orders.selected_customer_country
-  #     Customer: sales_orders.selected_customer_name
-  #     Business Unit: sales_orders.business_unit_name
-  #     Order Source: sales_orders.order_source_name
-  #     Item Category: sales_orders__lines.category_description
-  #     Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-  #   row: 6
-  #   col: 16
-  #   width: 8
-  #   height: 3
-  #   model: cortex-oracle-ebs-test
+  # # - name: Backlog
+  # #   title: Backlog Amount
+  # #   explore: sales_orders_daily_agg
+  # #   type: single_value
+  # #   fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_ordered_amount_target_currency_formatted]
+  # #   hidden_fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
+  # #   sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
+  # #   sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted]
+  # #   filters:
+  # #     sales_orders_daily_agg__lines.line_category_code: "-RETURN"
+  # #     sales_orders_daily_agg.order_category_code: "-RETURN"
+  # #   custom_color_enabled: true
+  # #   show_single_value_title: true
+  # #   show_comparison: true
+  # #   # comparison_type: progress_percentage
+  # #   comparison_type: progress
+  # #   comparison_reverse_colors: false
+  # #   show_comparison_label: false
+  # #   enable_conditional_formatting: false
+  # #   conditional_formatting_include_totals: false
+  # #   conditional_formatting_include_nulls: false
+  # #   # single_value_title: Booking Amount
+  # #   hidden_pivots: {}
+  # #   listen:
+  # #     date: sales_orders.ordered_date
+  # #     customer_country: sales_orders.selected_customer_country
+  # #     customer_name: sales_orders.selected_customer_name
+  # #     business_unit: sales_orders.business_unit_name
+  # #     order_source: sales_orders.order_source_name
+  # #     item_category: sales_orders__lines.category_description
+  # #     test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+  # #   row: 6
+  # #   col: 16
+  # #   width: 8
+  # #   height: 3
+  # #   model: cortex-oracle-ebs-test
 
-  # - name: shipped
-  #   title: Shipped Amount
-  #   explore: sales_orders_daily_agg
-  #   type: single_value
-  #   fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_ordered_amount_target_currency_formatted]
-  #   hidden_fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
-  #   sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
-  #   sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted]
-  #   filters:
-  #     sales_orders_daily_agg__lines.line_category_code: "-RETURN"
-  #     sales_orders_daily_agg.order_category_code: "-RETURN"
-  #   custom_color_enabled: true
-  #   show_single_value_title: true
-  #   show_comparison: true
-  #   # comparison_type: progress_percentage
-  #   comparison_type: progress
-  #   comparison_reverse_colors: false
-  #   show_comparison_label: false
-  #   enable_conditional_formatting: false
-  #   conditional_formatting_include_totals: false
-  #   conditional_formatting_include_nulls: false
-  #   # single_value_title: Booking Amount
-  #   hidden_pivots: {}
-  #   listen:
-  #     Date: sales_orders.ordered_date
-  #     Country: sales_orders.selected_customer_country
-  #     Customer: sales_orders.selected_customer_name
-  #     Business Unit: sales_orders.business_unit_name
-  #     Order Source: sales_orders.order_source_name
-  #     Item Category: sales_orders__lines.category_description
-  #     Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-  #   row: 9
-  #   col: 16
-  #   width: 8
-  #   height: 3
-  #   model: cortex-oracle-ebs-test
+  # # - name: shipped
+  # #   title: Shipped Amount
+  # #   explore: sales_orders_daily_agg
+  # #   type: single_value
+  # #   fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_ordered_amount_target_currency_formatted]
+  # #   hidden_fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
+  # #   sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
+  # #   sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted]
+  # #   filters:
+  # #     sales_orders_daily_agg__lines.line_category_code: "-RETURN"
+  # #     sales_orders_daily_agg.order_category_code: "-RETURN"
+  # #   custom_color_enabled: true
+  # #   show_single_value_title: true
+  # #   show_comparison: true
+  # #   # comparison_type: progress_percentage
+  # #   comparison_type: progress
+  # #   comparison_reverse_colors: false
+  # #   show_comparison_label: false
+  # #   enable_conditional_formatting: false
+  # #   conditional_formatting_include_totals: false
+  # #   conditional_formatting_include_nulls: false
+  # #   # single_value_title: Booking Amount
+  # #   hidden_pivots: {}
+  # #   listen:
+  # #     date: sales_orders.ordered_date
+  # #     customer_country: sales_orders.selected_customer_country
+  # #     customer_name: sales_orders.selected_customer_name
+  # #     business_unit: sales_orders.business_unit_name
+  # #     order_source: sales_orders.order_source_name
+  # #     item_category: sales_orders__lines.category_description
+  # #     test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+  # #   row: 9
+  # #   col: 16
+  # #   width: 8
+  # #   height: 3
+  # #   model: cortex-oracle-ebs-test
 
-  # - name: billed
-  #   title: Billed Amount
-  #   explore: sales_orders_daily_agg
-  #   type: single_value
-  #   fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted,
-  #     sales_orders_daily_agg__lines__amounts.total_ordered_amount_target_currency_formatted]
-  #   hidden_fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
-  #   sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
-  #   sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted]
-  #   filters:
-  #     sales_orders_daily_agg__lines.line_category_code: "-RETURN"
-  #     sales_orders_daily_agg.order_category_code: "-RETURN"
-  #   custom_color_enabled: true
-  #   show_single_value_title: true
-  #   show_comparison: true
-  #   comparison_type: progress_percentage
-  #   comparison_reverse_colors: false
-  #   show_comparison_label: false
-  #   enable_conditional_formatting: false
-  #   conditional_formatting_include_totals: false
-  #   conditional_formatting_include_nulls: false
-  #   # single_value_title: Booking Amount
-  #   hidden_pivots: {}
-  #   listen:
-  #     Date: sales_orders.ordered_date
-  #     Country: sales_orders.selected_customer_country
-  #     Customer: sales_orders.selected_customer_name
-  #     Business Unit: sales_orders.business_unit_name
-  #     Order Source: sales_orders.order_source_name
-  #     Item Category: sales_orders__lines.category_description
-  #     Test or Demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
-  #   row: 12
-  #   col: 16
-  #   width: 8
-  #   height: 3
-  #   model: cortex-oracle-ebs-test
+  # # - name: billed
+  # #   title: Billed Amount
+  # #   explore: sales_orders_daily_agg
+  # #   type: single_value
+  # #   fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_invoiced_amount_target_currency_formatted,
+  # #     sales_orders_daily_agg__lines__amounts.total_ordered_amount_target_currency_formatted]
+  # #   hidden_fields: [sales_orders_daily_agg__lines__amounts.total_booking_amount_target_currency_formatted,
+  # #   sales_orders_daily_agg__lines__amounts.total_backlog_amount_target_currency_formatted,
+  # #   sales_orders_daily_agg__lines__amounts.total_shipped_amount_target_currency_formatted]
+  # #   filters:
+  # #     sales_orders_daily_agg__lines.line_category_code: "-RETURN"
+  # #     sales_orders_daily_agg.order_category_code: "-RETURN"
+  # #   custom_color_enabled: true
+  # #   show_single_value_title: true
+  # #   show_comparison: true
+  # #   comparison_type: progress_percentage
+  # #   comparison_reverse_colors: false
+  # #   show_comparison_label: false
+  # #   enable_conditional_formatting: false
+  # #   conditional_formatting_include_totals: false
+  # #   conditional_formatting_include_nulls: false
+  # #   # single_value_title: Booking Amount
+  # #   hidden_pivots: {}
+  # #   listen:
+  # #     date: sales_orders.ordered_date
+  # #     customer_country: sales_orders.selected_customer_country
+  # #     customer_name: sales_orders.selected_customer_name
+  # #     business_unit: sales_orders.business_unit_name
+  # #     order_source: sales_orders.order_source_name
+  # #     item_category: sales_orders__lines.category_description
+  # #     test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
+  # #   row: 12
+  # #   col: 16
+  # #   width: 8
+  # #   height: 3
+  # #   model: cortex-oracle-ebs-test
