@@ -34,7 +34,7 @@ view: dso_days_sdt {
   }
 
   # dimension: test_constant {
-  #   # sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+  #   # sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase == 'YES' %}
   #   #       {% assign td = '2024-03-28' %} {%else%}
   #         # {% assign td = now | date: '%Y-%m-%d' %}{%endif%}{{td}} ;;
   #         # sql: {% assign td = 'now' | date: '%Y-%m-%d' %}'{{td}}' ;;

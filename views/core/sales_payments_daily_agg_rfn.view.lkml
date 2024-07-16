@@ -7,7 +7,7 @@ view: +sales_payments_daily_agg {
 
   extends: [sales_payments_common_fields_ext]
 
-  sql_table_name: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}${sales_payments_daily_agg_sample_pdt.SQL_TABLE_NAME}{%else%}`@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg`{%endif%} ;;
+  sql_table_name: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}{% if test_data == 'YES' %}${sales_payments_daily_agg_sample_pdt.SQL_TABLE_NAME}{%else%}`@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg`{%endif%} ;;
 
   dimension: key {
     hidden: no

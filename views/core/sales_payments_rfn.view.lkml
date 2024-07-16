@@ -35,7 +35,8 @@ view: +sales_payments {
   }
 
   dimension: is_open_and_overdue {
-     sql:  {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+     sql:  {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+           {% if test_data == 'YES' %}
                ${due_raw} < DATE(@{default_target_date}) AND ${is_open}
            {% else %}${TABLE}.IS_OPEN_AND_OVERDUE
            {% endif%};;
@@ -45,7 +46,8 @@ view: +sales_payments {
   }
 
   dimension: is_doubtful {
-    sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+    sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+         {% if test_data == 'YES' %}
             ${days_overdue} > 90 AND ${is_open}
          {% else %}${TABLE}.IS_DOUBTFUL
          {% endif%};;
@@ -58,7 +60,8 @@ view: +sales_payments {
   }
 
   dimension: days_overdue {
-    sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+    sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+         {% if test_data == 'YES' %}
              DATE_DIFF(DATE(@{default_target_date}), ${due_raw}, DAY)
          {% else %}${TABLE}.DAYS_OVERDUE
          {% endif%} ;;

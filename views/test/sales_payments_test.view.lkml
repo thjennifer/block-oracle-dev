@@ -9,21 +9,24 @@ view: +sales_payments {
   {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}`@{GCP_PROJECT_ID}.{{t}}.SalesPayments` ;;
 
   dimension: is_open_and_overdue {
-    sql:  {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+    sql:  {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+          {% if test_data == 'YES' %}
              ${due_raw} < DATE(@{default_target_date_test}) AND ${is_open}
           {% else %}${TABLE}.IS_OPEN_AND_OVERDUE
           {% endif%};;
   }
 
   dimension: days_overdue {
-    sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+    sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+          {% if test_data == 'YES' %}
               DATE_DIFF(DATE(@{default_target_date_test}), ${due_raw}, DAY)
           {% else %}${TABLE}.DAYS_OVERDUE
           {% endif%} ;;
   }
 
   dimension: is_doubtful {
-    sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+    sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+         {% if test_data == 'YES' %}
          ${days_overdue} > 90 AND ${is_open_and_overdue}
          {% else %}${TABLE}.IS_DOUBTFUL
          {% endif%};;
@@ -56,7 +59,8 @@ view: +sales_payments {
 
   dimension: days_late_using_null_payment_close {
     view_label: "TEST STUFF"
-    sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+    sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+         {% if test_data == 'YES' %}
               DATE_DIFF( ${payment_close_with_null_raw}, ${due_raw}, DAY)
           {% else %}${TABLE}.DAYS_LATE
           {% endif%} ;;
@@ -64,7 +68,8 @@ view: +sales_payments {
 
   dimension: days_to_payment_using_null_payment_close {
     view_label: "TEST STUFF"
-    sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+    sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+          {% if test_data == 'YES' %}
               DATE_DIFF( ${payment_close_with_null_raw}, ${transaction_raw}, DAY)
           {% else %}${TABLE}.DAYS_LATE
           {% endif%} ;;
@@ -168,7 +173,8 @@ dimension: test_target_date  {
   type: string
   hidden: no
   view_label: "TEST STUFF"
-  sql: {% assign ua = _user_attributes['cortex_oracle_ebs_use_test_data'] %} '{{ua}}';;
+  sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+           '{{test_data}}';;
   # sql: @{default_target_date_test}'{{td}}' ;;
 }
 

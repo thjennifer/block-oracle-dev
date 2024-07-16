@@ -86,7 +86,8 @@ constant: get_category_set {
 }
 
 constant: default_target_date {
-  value:  "{% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+  value:  "{% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+           {% if test_data == 'YES' %}
            {% assign td = '2024-03-28' %} {%else%}
            {% assign td = 'now' | date: '%Y-%m-%d' %}{%endif%}'{{td}}'"
   }
@@ -96,7 +97,8 @@ constant: sample_target_date {
 }
 
 constant: default_target_date_test {
-  value: "{% if _user_attributes['cortex_oracle_ebs_use_test_data'] == 'yes' %}
+  value: "{% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+          {% if test_data == 'YES' %}
                {% if otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value == 'demo' %}
                       {% assign td = '2024-03-28' %} {%else%} {% assign td = '2010-10-12' %}
                {% endif %}
@@ -533,10 +535,10 @@ constant: link_generate_dashboard_nav_style {
       {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 40px;' %}
 
     {% when 'tabs' %}
-      {% assign core_style = 'font-color: #4285F4; padding: 5px 10px; border-style: solid; border-radius: 5px 5px 0 0; float: left; line-height: 20px; letter-spacing: 0px'%}
+      {% assign core_style = 'font-color: #4285F4; padding: 5px 10px; border-style: solid; border-radius: 5px 5px 0 0; float: left; line-height: 20px;'%}
       {% assign page_style = core_style | append: 'border-width: 1px; border-color: #D3D3D3;' %}
       {% assign focus_page_style = core_style | append: 'border-width: 3px; border-color: #808080 #808080 #F5F5F5 #808080; font-weight: bold; background-color: #F5F5F5;' %}
-      {% assign div_style = 'border-bottom: solid 2px #808080; padding: 3px 10px 0px 10px; height: 38px;' %}
+      {% assign div_style = 'border-bottom: solid 2px #808080; padding: 4px 10px 0px 10px; height: 38px;' %}
       {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 38px;' %}
 
     {% when 'plain' %}
