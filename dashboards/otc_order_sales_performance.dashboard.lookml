@@ -1,9 +1,5 @@
-- dashboard: otc_sales_performance
+- dashboard: otc_order_sales_performance
   title: Sales Performance
-  layout: newspaper
-  preferred_viewer: dashboards-next
-  crossfilter_enabled: false
-  filters_location_top: false
   description: ''
 
   # pull navigation bar and filters from template

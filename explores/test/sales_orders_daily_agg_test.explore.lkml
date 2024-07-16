@@ -8,8 +8,8 @@ include: "/views/core/sales_orders_daily_agg__lines__amounts_rfn.view"
 
 
 include: "/views/test/otc_dashboard_navigation_ext_test.view"
-include: "/views/test/otc_dashboard_navigation_sales_ext_test.view"
-include: "/views/test/otc_orders_dashboard_navigation_ext_test.view"
+# include: "/views/test/otc_dashboard_navigation_sales_ext_test.view"
+# include: "/views/test/otc_orders_dashboard_navigation_ext_test.view"
 
 
 
@@ -23,15 +23,15 @@ explore: +sales_orders_daily_agg {
     relationship: one_to_many
   }
 
-  join: otc_dashboard_navigation_sales_ext {
-    view_label: "Test Navigation Sales"
-    relationship: one_to_one
-    sql:  ;;
-}
+#   join: otc_dashboard_navigation_sales_ext {
+#     view_label: "Test Navigation Sales"
+#     relationship: one_to_one
+#     sql:  ;;
+# }
 
-  join: otc_orders_dashboard_navigation_ext {
-    view_label: "Test Orders Dashboard Navigation"
-    relationship: one_to_one
-    sql:  ;;
-}
+#   join: otc_orders_dashboard_navigation_ext {
+#     view_label: "Test Orders Dashboard Navigation"
+#     relationship: one_to_one
+#     sql:  ;;
+# }
 }

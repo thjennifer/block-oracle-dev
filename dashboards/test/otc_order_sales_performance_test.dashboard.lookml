@@ -1,4 +1,4 @@
-- dashboard: otc_sales_performance_test
+- dashboard: otc_order_sales_performance_test
   title: Sales Performance TEST
   description: ''
 

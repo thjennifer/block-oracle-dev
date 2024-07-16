@@ -1,9 +1,5 @@
 - dashboard: otc_order_status
   title: Order Status
-  layout: newspaper
-  preferred_viewer: dashboards-next
-  crossfilter_enabled: false
-  filters_location_top: false
 
   # pull navigation bar and filters from template
   # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value

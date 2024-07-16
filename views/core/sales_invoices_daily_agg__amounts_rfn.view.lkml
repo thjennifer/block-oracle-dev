@@ -75,60 +75,6 @@ view: +sales_invoices_daily_agg__amounts {
     value_format_name: decimal_2
   }
 
-  measure: total_transaction_amount_target_currency_formatted {
-    link: {
-      label: "Open Invoice Details Dashboard"
-      icon_url: "/favicon.ico"
-      url: "
-      @{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign filters_mapping = '@{link_sales_invoices_daily_agg_source_to_target_dashboard_filters}'%}
-
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
-
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
-      "
-    }
-  }
-
-  measure: total_discount_amount_target_currency_formatted {
-    link: {
-      label: "Open Invoice Details Dashboard"
-      icon_url: "/favicon.ico"
-      url: "
-      @{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign filters_mapping = '@{link_sales_invoices_daily_agg_source_to_target_dashboard_filters}'%}
-
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
-
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
-      "
-    }
-  }
-
-  measure: total_tax_amount_target_currency_formatted {
-    link: {
-      label: "Open Invoice Details Dashboard"
-      icon_url: "/favicon.ico"
-      url: "
-      @{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign filters_mapping = '@{link_sales_invoices_daily_agg_source_to_target_dashboard_filters}'%}
-
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
-
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
-      "
-    }
-  }
-
 
 
 }
