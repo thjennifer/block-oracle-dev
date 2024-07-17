@@ -1,10 +1,9 @@
 - dashboard: otc_template_billing
   title: OTC Template for Billing
-  layout: newspaper
-  preferred_viewer: dashboards-next
+  description: "Template which defines filters and elements used on billing-related dashboards. Extendable and customizable."
 
   extension: required
-  extends: otc_template_core_filters
+  extends: otc_template_core
 
   filters:
   - name: date

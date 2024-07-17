@@ -1,10 +1,6 @@
 - dashboard: otc_billing_and_invoicing
   title: Billing and Invoicing
-  layout: newspaper
-  preferred_viewer: dashboards-next
-  crossfilter_enabled: false
-  filters_location_top: false
-  description: ''
+  description: "Overview of invoice volume and amounts. Highlights customers with highest discounts (average discount amount and percentages)."
 
   # pull navigation bar and filters from template
   # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value

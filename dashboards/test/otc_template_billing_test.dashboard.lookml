@@ -3,7 +3,7 @@
 
 
   extension: required
-  extends: otc_template_core_filters_test
+  extends: otc_template_core_test
 
   filters:
   - name: date

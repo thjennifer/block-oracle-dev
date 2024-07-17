@@ -1,10 +1,6 @@
 - dashboard: otc_billing_accounts_receivable
   title: Accounts Receivable
-  layout: newspaper
-  preferred_viewer: dashboards-next
-  crossfilter_enabled: false
-  filters_location_top: false
-  description: ''
+  description: "Analysis of receivables, encompassing both current and overdue amounts. Identification of customers with the highest outstanding receivables, along with an assessment of the duration of their overdue payments."
 
   # pull navigation bar and filters from template
   # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value
@@ -381,4 +377,3 @@
     col: 11
     width: 14
     height: 10
-

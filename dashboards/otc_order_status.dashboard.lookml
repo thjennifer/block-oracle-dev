@@ -1,5 +1,6 @@
 - dashboard: otc_order_status
   title: Order Status
+  description: "Provides an overview of order-related metrics, including order volume, a breakdown of the order flow status from booking to billing, and an analysis of order status categories (open, closed, and cancelled)."
 
   # pull navigation bar and filters from template
   # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value

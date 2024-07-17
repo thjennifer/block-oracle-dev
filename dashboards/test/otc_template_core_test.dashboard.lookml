@@ -4,7 +4,8 @@
 #
 ######################
 
-- dashboard: otc_template_core_filters
+- dashboard: otc_template_core_test
+  title: OTC Template Core Filters TEST
   layout: newspaper
   preferred_viewer: dashboards-next
   crossfilter_enabled: false
@@ -35,6 +36,7 @@
       display: popover
     explore: sales_orders_daily_agg
     field: sales_orders_daily_agg.business_unit_name
+    listens_to_filters: [test_or_demo]
 
   - name: customer_type
     title: 'Customer: Type'
@@ -62,7 +64,7 @@
       display: popover
     explore: sales_orders_daily_agg
     field: sales_orders_daily_agg.selected_customer_country
-    listens_to_filters: [business_unit,customer_type]
+    listens_to_filters: [business_unit,customer_type,test_or_demo]
 
   - name: customer_name
     title: 'Customer: Name'
@@ -75,7 +77,7 @@
       display: popover
     explore: sales_orders_daily_agg
     field: sales_orders_daily_agg.selected_customer_name
-    listens_to_filters: [business_unit,customer_type]
+    listens_to_filters: [business_unit,customer_type,customer_country, test_or_demo]
 
   - name: target_currency
     title: Target Currency
@@ -88,6 +90,18 @@
       display: inline
     explore: currency_rate_md
     field: currency_rate_md.to_currency
+
+  - name: test_or_demo
+    title: 'Test or Demo'
+    type: field_filter
+    default_value: 'demo'
+    allow_multiple_values: false
+    required: false
+    ui_config:
+      type: button_toggles
+      display: inline
+    explore: sales_orders_daily_agg
+    field: otc_common_parameters_xvw.parameter_use_demo_or_test_data
 
   elements:
   - name: dashboard_navigation
@@ -106,7 +120,9 @@
       customer_country: otc_dashboard_navigation_ext.filter4
       customer_name: otc_dashboard_navigation_ext.filter5
       target_currency: otc_dashboard_navigation_ext.filter6
+      test_or_demo: otc_dashboard_navigation_ext.filter10
     row: 0
     col: 0
     width: 24
     height: 1
+    model: cortex-oracle-ebs-test

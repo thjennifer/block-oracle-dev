@@ -1,6 +1,6 @@
 - dashboard: otc_order_sales_performance
   title: Sales Performance
-  description: ''
+  description: "Gain insights into top sales performers including items, categories, customers, business units, and order sources."
 
   # pull navigation bar and filters from template
   # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value
@@ -289,9 +289,6 @@
         title: {
           text: '<br>Order<br>Source',
           verticalAlign: 'middle',
-          align: 'center',
-          y: -7,
-          x: 0,
           style: {
                 fontSize: '120%',
                 fontWeight: 'bold',

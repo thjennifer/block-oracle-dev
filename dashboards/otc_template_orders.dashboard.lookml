@@ -1,8 +1,9 @@
 - dashboard: otc_template_orders
   title: OTC Template for Sales Orders
+  description: "Template which defines filters and elements used on sales orders-related dashboards. Extendable and customizable."
 
   extension: required
-  extends: otc_template_core_filters
+  extends: otc_template_core
 
   filters:
   - name: date

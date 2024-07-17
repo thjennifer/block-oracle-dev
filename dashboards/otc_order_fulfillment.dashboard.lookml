@@ -1,5 +1,6 @@
 - dashboard: otc_order_fulfillment
   title: Order Fulfillment
+  description: "See delivery performance over time, items with longest average order cycle time, and items currently having issues with fulfillment."
 
   # pull navigation bar and filters from template
   # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value
