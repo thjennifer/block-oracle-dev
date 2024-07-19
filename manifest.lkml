@@ -41,9 +41,8 @@ constant: derive_currency_label {
 
 
 
-constant: image_dashboard_navigation {
-  value: ""
-  # value: "https://marketplace-api.looker.com/block-icons/cortex_icon.png"
+constant: symbols_for_yes_no {
+  value: "{% if value == true %}✅ {% else %}  {% endif %}"
 }
 
 constant: view_label_for_filters {
@@ -157,6 +156,12 @@ constant: link_vis_pie {
 
 constant: link_vis_single {
   value: "{% assign vis_config = '{\"type\":\"single_value\"}' | url_encode | prepend: '&vis_config=' %}"
+}
+
+constant: link_line_chart_1_date_1_measure {
+  #Required
+  #measure
+  value: "{% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#CE642D\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}"
 }
 
 

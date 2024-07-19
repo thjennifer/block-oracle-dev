@@ -1,8 +1,21 @@
-######################
-# use this template to provide standard navigation and filters for Sales Order to Cash dashboards
-# this template can only be extended into another dashboard
+#########################################################{
+# OTC Core Filters and Elements template defines the
+# following elements shared across OTC-related dashboards:
 #
-######################
+#  - Filters including default values:
+#       date
+#       business_unit
+#       customer_type
+#       customer_country
+#       customer_name
+#       target_currency
+#
+#  - Visualization Elements:
+#       dashboard_navigation - appears at top with URL links to other dashboards
+#
+# This template must be EXTENDED into other dashboards and
+# filters/elements can be modified further as necessary
+#########################################################}
 
 - dashboard: otc_template_core
   title: OTC Template with Core Filters and Elements
@@ -18,7 +31,7 @@
   - name: date
     title: Date
     type: date_filter
-    default_value:  ""
+    default_value:  ''
     allow_multiple_values: true
     required: false
     ui_config:
@@ -94,7 +107,7 @@
   elements:
   - name: dashboard_navigation
     type: single_value
-    explore: sales_orders
+    explore: sales_orders_daily_agg
     fields: [otc_dashboard_navigation_ext.navigation_links]
     filters:
         otc_dashboard_navigation_ext.parameter_navigation_focus_page: '1'

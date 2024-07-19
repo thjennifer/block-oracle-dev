@@ -1,3 +1,19 @@
+#########################################################{
+# OTC Template for Sales Orders defines or modifies the
+# following elements shared across orders-related dashboards:
+#
+#  - Filters including default values:
+#       order_source
+#       item_category
+#
+#  - Extends otc_template_core and modifies:
+#       date to use title Ordered Date
+#       dashboard_navigation with additional listeners
+#
+# This template must be EXTENDED into other dashboards and
+# filters/elements can be modified further as necessary
+#########################################################}
+
 - dashboard: otc_template_orders
   title: OTC Template for Sales Orders
   description: "Template which defines filters and elements used on sales orders-related dashboards. Extendable and customizable."
@@ -38,9 +54,7 @@
   elements:
   - name: dashboard_navigation
     filters:
-      otc_dashboard_navigation_ext.parameter_navigation_focus_page: '1'
-      otc_dashboard_navigation_ext.parameter_navigation_style: 'tabs'
-      otc_dashboard_navigation_ext.parameter_navigation_subject: 'orders'
+      otc_dashboard_navigation_ext.parameter_navigation_style: 'buttons'
     listen:
       date: otc_dashboard_navigation_ext.filter1
       business_unit: otc_dashboard_navigation_ext.filter2

@@ -308,7 +308,7 @@ view: +sales_orders__lines {
     full_suggestions: yes
   }
 
-  dimension: language_code {
+  dimension: cancel_reason_language_code {
     hidden: no
     group_label: "Cancel Reasons"
     description: "Language in which to display cancel reasons."
@@ -423,20 +423,52 @@ view: +sales_orders__lines {
   dimension: unit_cost {
     hidden: no
     group_label: "Item Attributes"
+    label: "Unit Cost (Source Currency)"
     value_format_name: decimal_2
   }
 
   dimension: unit_list_price {
     hidden: no
     group_label: "Item Attributes"
+    label: "Unit List Price (Source Currency)"
     value_format_name: decimal_2
   }
 
   dimension: unit_selling_price {
     hidden: no
     group_label: "Item Attributes"
+    label: "Unit Selling Price (Source Currency)"
     value_format_name: decimal_2
   }
+
+  dimension: unit_list_price_target_currency {
+    hidden: no
+    type: number
+    group_label: "Item Attributes"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Unit List Price ({{currency}}){%else%}Unit List Price (Target Currency){%endif%}"
+    sql: ${unit_list_price} * ${currency_conversion_rate}  ;;
+    value_format_name: decimal_2
+  }
+
+  dimension: unit_selling_price_target_currency {
+    hidden: no
+    type: number
+    group_label: "Item Attributes"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Unit Selling Price ({{currency}}){%else%}Unit Selling Price (Target Currency){%endif%}"
+    sql: ${unit_selling_price} * ${currency_conversion_rate}  ;;
+    value_format_name: decimal_2
+  }
+
+  ## need to add gross_selling_price_target_currency
+  dimension: unit_discount_amount_target_currency {
+    hidden: no
+    group_label: "Item Attributes"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Unit Discount Amount ({{currency}}){%else%}Unit Discount Amount (Target Currency){%endif%}"
+    sql: ${unit_list_price_target_currency} - ${unit_selling_price_target_currency} ;;
+    value_format_name: decimal_2
+
+  }
+
 
 #} end item prices and cost
 
@@ -577,6 +609,7 @@ view: +sales_orders__lines {
   measure: count_order_lines {
     hidden: no
     type: count
+    label: "Order Lines Count"
     drill_fields: [order_line_details*]
   }
 

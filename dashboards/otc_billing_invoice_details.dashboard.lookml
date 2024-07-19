@@ -48,6 +48,21 @@
     field: sales_invoices.invoice_number
     listens_to_filters: [business_unit_name, customer_country, customer_name]
 
+  - name: item_language
+    title: Language of Item Description
+    type: field_filter
+    default_value: "{{ _user_attributes['cortex_oracle_ebs_default_language'] }}"
+    allow_multiple_values: false
+    required: false
+    ui_config:
+      type: dropdown_menu
+      display: inline
+      options: []
+    # explore: item_md
+    # field: item_md__item_descriptions.language
+    explore: language_codes_sdt
+    field: language_codes_sdt.language_code
+
   - name: is_complete
     title: Is Complete (Yes / No)
     type: field_filter
@@ -84,20 +99,7 @@
     explore: sales_invoices
     field: sales_invoices__lines.is_intercompany
 
-  - name: item_language
-    title: Language of Item Description
-    type: field_filter
-    default_value: "{{ _user_attributes['cortex_oracle_ebs_default_language'] }}"
-    allow_multiple_values: false
-    required: false
-    ui_config:
-      type: dropdown_menu
-      display: inline
-      options: []
-    # explore: item_md
-    # field: item_md__item_descriptions.language
-    explore: language_codes_sdt
-    field: language_codes_sdt.language_code
+
 
   elements:
   - name: dashboard_navigation
@@ -156,9 +158,11 @@
       target_currency: otc_common_parameters_xvw.parameter_target_currency
       order_source: sales_invoices__lines.order_source_name
       item_category: sales_invoices__lines.category_description
+      item_language: sales_invoices__lines.language_code
       invoice_number: sales_invoices.invoice_number
       is_complete: sales_invoices.is_complete
       is_discounted: sales_invoices__lines.is_discount_selling_price
+      is_intercompany: sales_invoices__lines.is_intercompany
     row: 0
     col: 0
     width: 24

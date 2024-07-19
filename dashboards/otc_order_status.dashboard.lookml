@@ -1,9 +1,27 @@
+#########################################################{
+# Order Status dashboard provides an overview of order-related metrics,
+# including order volume, a breakdown of the order flow status from booking to billing,
+# and an analysis of order status categories (open, closed, and cancelled).
+#
+# Extends otc_template_orders and modifies:
+#   dashboard_navigation to set parameter_navigation_focus_page: '1'
+#
+# Visualization Elements:
+#   total_orders - single-value viz
+#   return_sales_order_percent - single-value viz
+#   one_touch_orders_percent - single-value viz
+#   blocked_orders - single-value viz
+#   bbb_funnel - looker_funnel
+#   order_status_donut - looker_pie
+#
+#########################################################}
+
 - dashboard: otc_order_status
   title: Order Status
   description: "Provides an overview of order-related metrics, including order volume, a breakdown of the order flow status from booking to billing, and an analysis of order status categories (open, closed, and cancelled)."
 
   # pull navigation bar and filters from template
-  # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value
+  # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation to use the correct value
   extends: otc_template_orders
 
   elements:
@@ -12,28 +30,16 @@
     filters:
       otc_dashboard_navigation_ext.parameter_navigation_focus_page: '1'
 
-  # - name: dashboard_navigation_parts
-  #   listen:
-  #     date: otc_dashboard_navigation_ext.filter1
-  #     business_unit: otc_dashboard_navigation_ext.filter2
-  #     customer_type: otc_dashboard_navigation_ext.filter3
-  #     customer_country: otc_dashboard_navigation_ext.filter4
-  #     customer_name: otc_dashboard_navigation_ext.filter5
-  #     target_currency: otc_dashboard_navigation_ext.filter6
-  #     order_source: otc_dashboard_navigation_ext.filter7
-  #     item_category: otc_dashboard_navigation_ext.filter8
-  #     # item_language: otc_dashboard_navigation_ext.filter9
-
   - name: total_orders
     title: Total Sales Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
-    hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
+    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
+    hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
-      # customer_type: sales_orders.parameter_customer_type
+      customer_type: sales_orders.parameter_customer_type
       customer_country: sales_orders.selected_customer_country
       customer_name: sales_orders.selected_customer_name
       target_currency: otc_common_parameters_xvw.parameter_target_currency
@@ -47,16 +53,16 @@
     width: 6
     height: 2
 
-  - name: return_orders
+  - name: return_sales_order_percent
     title: Return Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
-    hidden_fields: [sales_orders.sales_order_count,sales_orders.no_holds_sales_order_percent]
+    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
+    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
-      # customer_type: sales_orders.parameter_customer_type
+      customer_type: sales_orders.parameter_customer_type
       customer_country: sales_orders.selected_customer_country
       customer_name: sales_orders.selected_customer_name
       target_currency: otc_common_parameters_xvw.parameter_target_currency
@@ -70,16 +76,16 @@
     width: 6
     height: 2
 
-  - name: one_touch_orders
+  - name: no_holds_sales_order_percent
     title: One Touch Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
-    hidden_fields: [sales_orders.sales_order_count,sales_orders.has_return_sales_order_percent]
+    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
+    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.blocked_sales_order_count]
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
-      # customer_type: sales_orders.parameter_customer_type
+      customer_type: sales_orders.parameter_customer_type
       customer_country: sales_orders.selected_customer_country
       customer_name: sales_orders.selected_customer_name
       target_currency: otc_common_parameters_xvw.parameter_target_currency
@@ -97,13 +103,15 @@
     title: Blocked Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.order_count]
-    filters:
-      sales_orders.is_blocked: 'Yes'
+    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
+    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
+    # fields: [sales_orders.blocked_sales_order_count]
+    # filters:
+    #   sales_orders.is_blocked: 'Yes'
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
-      # customer_type: sales_orders.parameter_customer_type
+      customer_type: sales_orders.parameter_customer_type
       customer_country: sales_orders.selected_customer_country
       customer_name: sales_orders.selected_customer_name
       target_currency: otc_common_parameters_xvw.parameter_target_currency
@@ -111,7 +119,7 @@
       item_category: sales_orders__lines.category_description
     note_state: collapsed
     note_display: hover
-    note_text: "The number of sales orders blocked (has hold or backorder)."
+    note_text: "The number of sales orders blocked (is on hold or has backorder)."
     row: 2
     col: 18
     width: 6
@@ -157,20 +165,10 @@
         reverse: true
     isStepped: true
     labelOverlap: false
-    up_color: false
-    down_color: false
-    total_color: "#80868B"
-    show_value_labels: true
-    show_x_axis_ticks: true
-    show_x_axis_label: true
-    x_axis_scale: auto
-    show_y_axis_labels: true
-    show_y_axis_ticks: true
-    y_axis_gridlines: true
     listen:
       date: sales_orders_daily_agg.ordered_date
       business_unit: sales_orders_daily_agg.business_unit_name
-      # customer_type: sales_orders_daily_agg.parameter_customer_type
+      customer_type: sales_orders_daily_agg.parameter_customer_type
       customer_country: sales_orders_daily_agg.selected_customer_country
       customer_name: sales_orders_daily_agg.selected_customer_name
       target_currency: otc_common_parameters_xvw.parameter_target_currency
@@ -189,7 +187,9 @@
     filters:
       sales_orders.open_closed_cancelled: "-NULL"
       sales_orders.order_category_code: "-RETURN"
+      sales_orders__lines.line_category_code: "-RETURN"
     sorts: [sales_orders.open_closed_cancelled desc]
+    title_hidden: true
     value_labels: labels
     label_type: labVal
     inner_radius: 60
@@ -213,31 +213,10 @@
           verticalAlign: 'middle',
         }
       }
-    show_value_labels: false
-    font_size: 12
-    hidden_pivots: {}
-    x_axis_gridlines: false
-    y_axis_gridlines: true
-    show_view_names: false
-    show_y_axis_labels: true
-    show_y_axis_ticks: true
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
-    show_x_axis_label: true
-    show_x_axis_ticks: true
-    legend_position: center
-    point_style: none
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
-    ordering: none
-    show_null_labels: false
-    show_totals_labels: false
-    title_hidden: true
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
-      # customer_type: sales_orders.parameter_customer_type
+      customer_type: sales_orders.parameter_customer_type
       customer_country: sales_orders.selected_customer_country
       customer_name: sales_orders.selected_customer_name
       target_currency: otc_common_parameters_xvw.parameter_target_currency

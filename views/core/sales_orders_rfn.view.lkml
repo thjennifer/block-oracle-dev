@@ -311,6 +311,14 @@ view: +sales_orders {
     # derived as LOGICAL_AND(Lines.IS_FULFILLED)
   }
 
+  dimension: is_fulfilled_with_symbols {
+    hidden: no
+    group_label: "Order Status with Symbols"
+    description: "✅ if all order lines are fulfilled (inventory is reserved and ready to be shipped). Else  ❌"
+    sql: ${is_fulfilled} ;;
+    html: @{symbols_for_yes_no};;
+  }
+
   dimension: is_held {
     hidden: no
     group_label: "Order Status"
@@ -338,15 +346,31 @@ view: +sales_orders {
   dimension: has_return_line {
     hidden: no
     group_label: "Order Status"
-    description: "Sales order has at least 1 line with a return."
+    description: "Yes if sales order has at least 1 line with a return."
+  }
+
+  dimension: has_return_line_with_symbols {
+    hidden: no
+    group_label: "Order Status with Symbols"
+    description: "✅ if sales order has at least 1 line with a return."
+    sql: ${has_return_line} ;;
+    html: @{symbols_for_yes_no} ;;
   }
 
   dimension: is_blocked {
     hidden: no
     type: yesno
     group_label: "Order Status"
-    description: "Order is either held or backordered."
+    description: "Yes if order is either held or has an item on backorder."
     sql: ${has_backorder} OR ${is_held} ;;
+  }
+
+  dimension: is_blocked_with_symbols {
+    hidden: no
+    group_label: "Order Status with Symbols"
+    description: "🟥 if order is either held or has an item on backorder."
+    sql: ${is_blocked};;
+    html: {% if value == true %}🟥 {% else %}   {% endif %}  ;;
   }
 
   dimension: open_closed_cancelled {
@@ -359,11 +383,11 @@ view: +sales_orders {
   }
 
   dimension: open_closed_cancelled_with_symbols {
-    group_label: "Order Status"
+    group_label: "Order Status with Symbols"
     hidden: no
     type: string
     sql: ${open_closed_cancelled} ;;
-    html: {% if value == "Open" %}{%assign sym = "〇" %}{% assign color = "#98B6B1" %}
+    html: {% if value == "Open" %}{%assign sym = "〇" %}{% assign color = "#4CBB17" %}
           {% elsif value == "Closed" %}{%assign sym = "◉"%}{% assign color = "#BFBDC1" %}
           {% elsif value == "Cancelled" %}{%assign sym = "X"%}{% assign color = "#EB9486" %}
             {% else %}
@@ -466,6 +490,28 @@ view: +sales_orders {
     drill_fields: [header_details*]
   }
 
+  measure: sales_order_count_formatted {
+    hidden: yes
+    type: number
+    sql: ${sales_order_count} ;;
+    # drill_fields: [header_drill_from_dash*]
+    value_format_name: format_large_numbers_d1
+    # drill_fields: [drill_monthly_orders*]
+    link: {
+      label: "Show Sales Orders by Month"
+      # url: "{{dummy_drill_monthly_orders._link}}"
+      url: "@{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign drill_fields = 'sales_orders.ordered_month,sales_orders.sales_order_count'%}
+      {% assign measure = sales_orders.sales_order_count %}
+      {% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#CE642D\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}
+      @{link_generate_explore_url}
+      "
+    }
+  }
+# {{ link }}&vis_config={{ vis_config | encode_uri }}&toggle=dat,pik,vis&limit=500&column_limit=15"
+
+
   measure: return_order_count {
     hidden: no
     type: count
@@ -522,6 +568,14 @@ view: +sales_orders {
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
     filters: [is_blocked: "Yes", order_category_code: "-RETURN"]
+    link: {
+      label: "Source of Block"
+      url: "{{dummy_drill_block_order_source._link}}&f[sales_orders.is_blocked]=Yes"
+    }
+    link: {
+      label: "Show Blocked Orders"
+      url: "{{ dummy_drill_orders_with_block._link}}&sorts=sales_orders.total_sales_ordered_amount_target_currency+desc&f[sales_orders.is_blocked]=Yes"
+    }
   }
 
   measure: cancelled_sales_order_count {
@@ -624,12 +678,58 @@ view: +sales_orders {
     sql: ${open_closed_cancelled} ;;
   }
 
+  measure: percent_of_sales_orders {
+    type: percent_of_total
+    sql: ${sales_order_count} ;;
+  }
 
+  measure: dummy_drill_monthly_orders {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [drill_monthly_orders*]
+  }
 
+  measure: dummy_drill_block_order_source {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [drill_block_order_source*]
+  }
+
+  measure: dummy_drill_orders_with_block {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [drill_orders_with_block*]
+  }
+
+  measure: link_generator {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [link_generator]
+  }
 
 #} end measures
   set: header_details {
     fields: [header_id,order_number,header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_sales_ordered_amount_target_currency]
+  }
+
+  set: header_drill_from_dash {
+    fields: [order_number, header_status, ordered_date, selected_customer_name, total_sales_ordered_amount_target_currency]
+  }
+
+  set: drill_orders_with_block {
+    fields: [header_drill_from_dash*,has_backorder,is_held]
+  }
+
+  set: drill_monthly_orders {
+    fields: [ordered_month, sales_order_count]
+  }
+
+  set: drill_block_order_source {
+    fields: [has_backorder,is_held,sales_order_count,percent_of_sales_orders]
   }
 
 }
