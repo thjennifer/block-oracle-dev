@@ -15,10 +15,10 @@ view: otc_dashboard_navigation_ext {
     sql: {% assign subject = parameter_navigation_subject._parameter_value %}
           {% case subject %}
             {% when "orders" %}
-            "otc_order_status|Order Status|1,2,3,4,5,6,7,8||otc_order_sales_performance|Sales Performance|1,2,3,4,5,6,7,8,9||otc_order_fulfillment|Order Fulfillment|1,2,3,4,5,6,7,8,9||otc_order_line_details|Orders with Line Details|1,2,3,4,5,6,7,8,9"
+            "otc_order_status|Order Status|1,2,3,4,5,6,7,8||otc_order_sales_performance|Sales Performance|1,2,3,4,5,6,7,8,9||otc_order_fulfillment|Order Fulfillment|1,2,3,4,5,6,7,8,9"
           {% when "billing" %}
             "otc_billing_and_invoicing|Billing & Invoicing|1,2,3,4,5,6,7,8||otc_billing_accounts_receivable|Accounts Receivable|1,2,3,4,5,6||otc_billing_invoice_details|Invoice Details|1,2,3,4,5,6,7,8,9"
-          {% when "orders_with_line_details" %}
+          {% when "odetails" %}
             "otc_order_status|Order Status|1,2,3,4,5,6,7,8||otc_order_sales_performance|Sales Performance|1,2,3,4,5,6,7,8,9||otc_order_fulfillment|Order Fulfillment|1,2,3,4,5,6,7,8,9||otc_order_line_details|Orders with Line Details|1,2,3,4,5,6,7,8,9"
           {% endcase %}
           ;;
@@ -48,11 +48,12 @@ view: otc_dashboard_navigation_ext {
     hidden: no
     type: unquoted
     label: "Navigation Subject Area"
-    description: "Which set of dashboards to display? Select either orders, orders_with_line_details, or billing."
-    allowed_value: {value: "orders" }
-    allowed_value: {value: "billing" }
-    allowed_value: {value: "orders_with_line_details" }
+    description: "Which set of dashboards to display? Select either Orders, Orders with Line Details, or Billing."
+    allowed_value: {value: "orders" label: "Orders" }
+    allowed_value: {value: "billing" label: "Billing"}
+    allowed_value: {value: "odetails" label: "Orders with Line Details"}
     default_value: "orders"
+    suggest_persist_for: "1 seconds"
   }
 
 

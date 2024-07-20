@@ -73,11 +73,11 @@ explore: sales_orders {
   #   relationship: one_to_many
   # }
 
-  # join: sales_orders__lines__return_line_ids {
-  #   view_label: "Sales Orders: Lines Return Line IDs"
-  #   sql: LEFT JOIN UNNEST(${sales_orders__lines.return_line_ids}) as sales_orders__lines__return_line_ids ;;
-  #   relationship: one_to_many
-  # }
+  join: sales_orders__lines__return_line_ids {
+    view_label: "Sales Orders: Lines Return Line IDs"
+    sql: LEFT JOIN UNNEST(${sales_orders__lines.return_line_ids}) as sales_orders__lines__return_line_ids ;;
+    relationship: one_to_many
+  }
 
 
 }

@@ -183,7 +183,7 @@
     title: Order Status
     explore: sales_orders
     type: looker_pie
-    fields: [sales_orders.open_closed_cancelled, sales_orders.order_count]
+    fields: [sales_orders.open_closed_cancelled, sales_orders.sales_order_count_formatted]
     filters:
       sales_orders.open_closed_cancelled: "-NULL"
       sales_orders.order_category_code: "-RETURN"

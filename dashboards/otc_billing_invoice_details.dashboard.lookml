@@ -158,7 +158,7 @@
       target_currency: otc_common_parameters_xvw.parameter_target_currency
       order_source: sales_invoices__lines.order_source_name
       item_category: sales_invoices__lines.category_description
-      item_language: sales_invoices__lines.language_code
+      item_language: otc_common_parameters_xvw.parameter_language
       invoice_number: sales_invoices.invoice_number
       is_complete: sales_invoices.is_complete
       is_discounted: sales_invoices__lines.is_discount_selling_price

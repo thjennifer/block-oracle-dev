@@ -121,7 +121,11 @@ constant: link_sales_invoices_daily_agg_source_to_target_dashboard_filters {
 }
 
 constant: link_sales_invoices_to_target_dashboard {
-  value: "invoice_date|date||business_unit_name|business_unit||bill_to_customer_country|customer_country||bill_to_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_use_demo_or_test_data|test_or_demo"
+  value: "invoice_date|date||business_unit_name|business_unit||bill_to_customer_country|customer_country||bill_to_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency"
+}
+
+constant: link_sales_orders_to_details_dashboard {
+  value: "ordered_date|date||business_unit_name|business_unit||parameter_customer_type|customer_type||selected_customer_country|customer_country||selected_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_language|item_language||open_closed_cancelled|order_status"
 }
 
 # test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data

@@ -222,6 +222,13 @@ view: +sales_orders__lines {
     sql: ${TABLE}.HAS_RETURN ;;
   }
 
+  dimension: has_return_with_symbols {
+    hidden: no
+    group_label: "Line Status with Symbols"
+    sql: ${has_return} ;;
+    html: @{symbols_for_yes_no} ;;
+  }
+
   dimension: is_sales_order {
     hidden: yes
     type: yesno

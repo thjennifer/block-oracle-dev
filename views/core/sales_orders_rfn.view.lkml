@@ -508,6 +508,22 @@ view: +sales_orders {
       @{link_generate_explore_url}
       "
     }
+    link: {
+      label: "Open Order Line Details Dashboard"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
   }
 # {{ link }}&vis_config={{ vis_config | encode_uri }}&toggle=dat,pik,vis&limit=500&column_limit=15"
 
@@ -575,6 +591,30 @@ view: +sales_orders {
     link: {
       label: "Show Blocked Orders"
       url: "{{ dummy_drill_orders_with_block._link}}&sorts=sales_orders.total_sales_ordered_amount_target_currency+desc&f[sales_orders.is_blocked]=Yes"
+    }
+  }
+
+  measure: has_return_sales_order_percent {
+    link: {
+      label: "Show Orders and Lines with Returns"
+      url: "{{ dummy_drill_orders_with_return._link}}&f[sales_orders.has_return_line]=Yes"
+    }
+
+    link: {
+      label: "Open Order Line Details Dashboard"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters='has_return=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
     }
   }
 
@@ -704,6 +744,13 @@ view: +sales_orders {
     drill_fields: [drill_orders_with_block*]
   }
 
+  measure: dummy_drill_orders_with_return{
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [drill_orders_with_return*]
+  }
+
   measure: link_generator {
     hidden: yes
     type: number
@@ -712,6 +759,8 @@ view: +sales_orders {
   }
 
 #} end measures
+
+
   set: header_details {
     fields: [header_id,order_number,header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_sales_ordered_amount_target_currency]
   }
@@ -730,6 +779,22 @@ view: +sales_orders {
 
   set: drill_block_order_source {
     fields: [has_backorder,is_held,sales_order_count,percent_of_sales_orders]
+  }
+
+  set: line_drill_from_dash {
+    fields: [sales_orders__lines.line_id, sales_orders__lines.line_number,
+            sales_orders__lines.item_part_number, sales_orders__lines.item_description,
+            sales_orders__lines.ordered_quantity, sales_orders__lines.quantity_uom,
+            sales_orders__lines.ordered_amount_target_currency,
+            sales_orders__lines.has_return]
+  }
+
+  set: return_order_lines {
+    fields: [sales_orders__lines__return_line_ids.return_line_id]
+  }
+
+  set: drill_orders_with_return {
+    fields: [header_drill_from_dash*,line_drill_from_dash*,return_order_lines*]
   }
 
 }

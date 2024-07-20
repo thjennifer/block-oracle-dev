@@ -21,18 +21,17 @@
     explore: language_codes_sdt
     field: language_codes_sdt.language_code
 
-  - name: order_number
-    title: Order Number
+  - name: order_status
+    title: Order Status
     type: field_filter
     default_value: ''
     allow_multiple_values: true
     required: false
     ui_config:
-      type: advanced
-      display: popover
+      type: button_group
+      display: inline
     explore: sales_orders
-    field: sales_orders.order_number
-    listens_to_filters: [business_unit_name, customer_country, customer_name]
+    field: sales_orders.open_closed_cancelled
 
   - name: is_fulfilled
     title: Is Fulfilled (Yes / No)
@@ -70,6 +69,32 @@
     explore: sales_orders
     field: sales_orders.is_blocked
 
+  - name: order_number
+    title: Order Number
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+    explore: sales_orders
+    field: sales_orders.order_number
+    listens_to_filters: [business_unit_name, customer_country, customer_name]
+
+  - name: line_id
+    title: Line ID
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+    explore: sales_orders
+    field: sales_orders__lines.line_id
+    listens_to_filters: [business_unit_name, customer_country, customer_name]
+
   # - name: is_discounted
   #   title: Is Discounted Item (Yes / No)
   #   type: field_filter
@@ -99,7 +124,7 @@
   elements:
   - name: dashboard_navigation
     filters:
-      otc_dashboard_navigation_ext.parameter_navigation_subject: 'orders'
+      otc_dashboard_navigation_ext.parameter_navigation_subject: 'odetails'
       otc_dashboard_navigation_ext.parameter_navigation_focus_page: '4'
 
     # Order Type / Status (open, delivered, blocked, canceled, return)
@@ -121,15 +146,17 @@
     title: Orders with Line Item Details
     explore: sales_orders
     type: looker_grid
-    fields: [sales_orders.order_number, sales_orders.open_closed_cancelled_with_symbols, sales_orders.is_fulfilled_with_symbols, sales_orders.is_blocked_with_symbols,
+    fields: [sales_orders.order_number, sales_orders.order_category_code, sales_orders.open_closed_cancelled_with_symbols, sales_orders.is_fulfilled_with_symbols, sales_orders.is_blocked_with_symbols,
             sales_orders.has_return_line_with_symbols, sales_orders.total_sales_ordered_amount_target_currency,
-            sales_orders__lines.line_number, sales_orders__lines.item_part_number, sales_orders__lines.item_description,
+            sales_orders__lines.line_id, sales_orders__lines.line_number,
+            sales_orders__lines.item_part_number, sales_orders__lines.item_description,
             sales_orders.selected_customer_name, sales_orders.ordered_date,
             sales_orders__lines.ordered_quantity, sales_orders__lines.quantity_uom, sales_orders__lines.fulfilled_quantity,
             sales_orders__lines.unit_list_price_target_currency, sales_orders__lines.unit_discount_amount_target_currency,
             sales_orders__lines.unit_selling_price_target_currency,
             sales_orders__lines.ordered_amount_target_currency, sales_orders__lines.fulfilled_amount_target_currency,
-            sales_orders__lines.currency_conversion_rate]
+            sales_orders__lines.currency_conversion_rate,
+            sales_orders__lines.has_return_with_symbols]
     sorts: [sales_orders.order_number, sales_orders__lines.line_number]
     limit: 500
     show_view_names: false
@@ -157,6 +184,7 @@
       sales_orders.is_fulfilled_with_symbols: Is Fulfilled
       sales_orders.is_blocked_with_symbols: Is Blocked
       sales_orders.has_return_line_with_symbols: Has Return
+      sales_orders__lines.has_return_with_symbols: Item Returned
     series_text_format:
       sales_orders.open_closed_cancelled_with_symbols:
         align: center
@@ -165,6 +193,8 @@
       sales_orders.is_blocked_with_symbols:
         align: center
       sales_orders.has_return_line_with_symbols:
+        align: center
+      sales_orders__lines.has_return_with_symbols:
         align: center
     series_column_widths:
       sales_orders__lines.item_description: 250
@@ -177,10 +207,12 @@
       order_source: sales_orders.order_source_name
       item_category: sales_orders__lines.category_description
       item_language: otc_common_parameters_xvw.parameter_language
-      order_number: sales_orders.order_number
+      order_status: sales_orders.open_closed_cancelled
       has_return: sales_orders.has_return_line
       is_blocked: sales_orders.is_blocked
       is_fulfilled: sales_orders.is_fulfilled
+      order_number: sales_orders.order_number
+      line_id: sales_orders__lines.line_id
     row: 0
     col: 0
     width: 24
@@ -216,18 +248,20 @@
       sales_orders.sales_order_count:
         is_active: false
     listen:
-      date: sales_orders.ordered_date
-      business_unit: sales_orders.business_unit_name
-      customer_country: sales_orders.selected_customer_country
-      customer_name: sales_orders.selected_customer_name
-      target_currency: otc_common_parameters_xvw.parameter_target_currency
-      order_source: sales_orders.order_source_name
-      item_category: sales_orders__lines.category_description
-      item_language: otc_common_parameters_xvw.parameter_language
-      order_number: sales_orders.order_number
-      has_return: sales_orders.has_return_line
-      is_blocked: sales_orders.is_blocked
-      is_fulfilled: sales_orders.is_fulfilled
+        date: sales_orders.ordered_date
+        business_unit: sales_orders.business_unit_name
+        customer_country: sales_orders.selected_customer_country
+        customer_name: sales_orders.selected_customer_name
+        target_currency: otc_common_parameters_xvw.parameter_target_currency
+        order_source: sales_orders.order_source_name
+        item_category: sales_orders__lines.category_description
+        item_language: otc_common_parameters_xvw.parameter_language
+        order_status: sales_orders.open_closed_cancelled
+        has_return: sales_orders.has_return_line
+        is_blocked: sales_orders.is_blocked
+        is_fulfilled: sales_orders.is_fulfilled
+        order_number: sales_orders.order_number
+        line_id: sales_orders__lines.line_id
     row: 13
     col: 0
     width: 24

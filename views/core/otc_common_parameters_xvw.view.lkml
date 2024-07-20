@@ -28,7 +28,7 @@ view: otc_common_parameters_xvw {
     suggest_explore: item_md
     suggest_dimension: item_md__item_descriptions.language_code
     default_value: "US"
-    suggest_persist_for: "0 seconds"
+    # suggest_persist_for: "0 seconds"
   }
 
  }
