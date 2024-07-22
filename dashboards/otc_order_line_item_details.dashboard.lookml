@@ -16,10 +16,9 @@
       type: dropdown_menu
       display: inline
       options: []
-    # explore: item_md
-    # field: item_md__item_descriptions.language
-    explore: language_codes_sdt
-    field: language_codes_sdt.language_code
+    explore: item_md
+    field: item_md__item_descriptions.language_code
+
 
   - name: order_status
     title: Order Status

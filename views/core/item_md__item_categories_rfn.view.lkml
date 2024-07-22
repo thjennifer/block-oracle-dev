@@ -1,4 +1,4 @@
-include: "/views/base/item_md.view"
+include: "/views/base/item_md__item_categories.view"
 include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
 
 view: +item_md__item_categories {

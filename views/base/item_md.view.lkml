@@ -42,17 +42,9 @@ view: item_md {
     type: number
     sql: ${TABLE}.COST_OF_SALES_ACCOUNT ;;
   }
-  dimension: customer_order_enabled_flag {
-    type: string
-    sql: ${TABLE}.CUSTOMER_ORDER_ENABLED_FLAG ;;
-  }
   dimension: eam_item_type {
     type: number
     sql: ${TABLE}.EAM_ITEM_TYPE ;;
-  }
-  dimension: enabled_flag {
-    type: string
-    sql: ${TABLE}.ENABLED_FLAG ;;
   }
   dimension: fixed_order_quantity {
     type: number
@@ -65,6 +57,22 @@ view: item_md {
   dimension: inventory_item_status_code {
     type: string
     sql: ${TABLE}.INVENTORY_ITEM_STATUS_CODE ;;
+  }
+  dimension: is_customer_order_enabled {
+    type: yesno
+    sql: ${TABLE}.IS_CUSTOMER_ORDER_ENABLED ;;
+  }
+  dimension: is_enabled {
+    type: yesno
+    sql: ${TABLE}.IS_ENABLED ;;
+  }
+  dimension: is_purchasing_enabled {
+    type: yesno
+    sql: ${TABLE}.IS_PURCHASING_ENABLED ;;
+  }
+  dimension: is_summary {
+    type: yesno
+    sql: ${TABLE}.IS_SUMMARY ;;
   }
   dimension: item_catalog_group_id {
     type: number
@@ -118,10 +126,6 @@ view: item_md {
     type: string
     sql: ${TABLE}.PRIMARY_UOM_CODE ;;
   }
-  dimension: purchasing_enabled_flag {
-    type: string
-    sql: ${TABLE}.PURCHASING_ENABLED_FLAG ;;
-  }
   dimension: qty_rcv_exception_code {
     type: string
     sql: ${TABLE}.QTY_RCV_EXCEPTION_CODE ;;
@@ -158,10 +162,6 @@ view: item_md {
     type: number
     sql: ${TABLE}.STD_LOT_SIZE ;;
   }
-  dimension: summary_flag {
-    type: string
-    sql: ${TABLE}.SUMMARY_FLAG ;;
-  }
   dimension: un_number_id {
     type: number
     sql: ${TABLE}.UN_NUMBER_ID ;;
@@ -187,50 +187,50 @@ view: item_md {
   }
 }
 
-view: item_md__item_categories {
-  drill_fields: [id]
+# view: item_md__item_categories {
+#   drill_fields: [id]
 
-  dimension: id {
-    primary_key: yes
-    type: number
-    sql: ID ;;
-  }
-  dimension: category_name {
-    type: string
-    sql: CATEGORY_NAME ;;
-  }
-  dimension: category_set_id {
-    type: number
-    sql: CATEGORY_SET_ID ;;
-  }
-  dimension: category_set_name {
-    type: string
-    sql: CATEGORY_SET_NAME ;;
-  }
-  dimension: description {
-    type: string
-    sql: DESCRIPTION ;;
-  }
-  dimension: item_md__item_categories {
-    type: string
-    hidden: yes
-    sql: item_md__item_categories ;;
-  }
-}
+#   dimension: id {
+#     primary_key: yes
+#     type: number
+#     sql: ID ;;
+#   }
+#   dimension: category_name {
+#     type: string
+#     sql: CATEGORY_NAME ;;
+#   }
+#   dimension: category_set_id {
+#     type: number
+#     sql: CATEGORY_SET_ID ;;
+#   }
+#   dimension: category_set_name {
+#     type: string
+#     sql: CATEGORY_SET_NAME ;;
+#   }
+#   dimension: description {
+#     type: string
+#     sql: DESCRIPTION ;;
+#   }
+#   dimension: item_md__item_categories {
+#     type: string
+#     hidden: yes
+#     sql: item_md__item_categories ;;
+#   }
+# }
 
-view: item_md__item_descriptions {
+# view: item_md__item_descriptions {
 
-  dimension: item_md__item_descriptions {
-    type: string
-    hidden: yes
-    sql: item_md__item_descriptions ;;
-  }
-  dimension: language {
-    type: string
-    sql: LANGUAGE ;;
-  }
-  dimension: text {
-    type: string
-    sql: TEXT ;;
-  }
-}
+#   dimension: item_md__item_descriptions {
+#     type: string
+#     hidden: yes
+#     sql: item_md__item_descriptions ;;
+#   }
+#   dimension: language {
+#     type: string
+#     sql: LANGUAGE ;;
+#   }
+#   dimension: text {
+#     type: string
+#     sql: TEXT ;;
+#   }
+# }
