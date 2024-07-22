@@ -147,8 +147,6 @@
     percentType: total
     percentPosition: inline
     valuePosition: inline
-    # labelColorEnabled: true
-    # labelColor: "#000000"
     color_application:
       collection_id: 1bc1f1d8-7461-4bfd-8c3b-424b924287b5
       custom:

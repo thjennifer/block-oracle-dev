@@ -177,6 +177,13 @@ view: +sales_orders__lines {
     full_suggestions: yes
   }
 
+  dimension: is_backlog_with_symbols {
+    hidden: no
+    group_label: "Line Status with Symbols"
+    sql: ${is_backlog} ;;
+    html: @{symbols_for_yes_no} ;;
+  }
+
   dimension: is_backordered {
     hidden: no
     group_label: "Line Status"
@@ -198,6 +205,13 @@ view: +sales_orders__lines {
     group_label: "Line Status"
     description: "Yes if line is in ENTERED or BOOKED statuses. Unlike IS_BOOKED, this will be No once it passes the booking phase."
     full_suggestions: yes
+  }
+
+  dimension: is_booking_with_symbols {
+    hidden: no
+    group_label: "Line Status with Symbols"
+    sql: ${is_booking} ;;
+    html: @{symbols_for_yes_no} ;;
   }
 
   dimension: is_cancelled {
@@ -726,12 +740,17 @@ view: +sales_orders__lines {
   #   value_format_name: decimal_0
   # }
 
-  # measure: total_backlog_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   sql: ${backlog_amount_target_currency} ;;
-  #   value_format_name: decimal_0
-  # }
+  measure: total_backlog_amount_target_currency_formatted {
+    link: {
+      label: "Show Customers with Highest Backlog"
+      url: "{{dummy_backlog_by_customer._link}}"
+      # url: "@{link_generate_variable_defaults}
+      # {% assign link = link_generator._link %}
+      # {% assign drill_fields = 'sales_orders.selected_customer_number,sales_orders.selected_customer_name,sales_orders__lines.total_backlog_amount_target_currency'%}
+      # @{link_generate_explore_url}
+      # "
+    }
+  }
 
   # measure: total_booking_amount_target_currency {
   #   hidden: no
@@ -759,10 +778,31 @@ view: +sales_orders__lines {
 
 #} end target currency dimensions and measures
 
+  measure: dummy_backlog_by_customer {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [backlog_by_customer*]
+  }
+
+  measure: dummy_backlog_by_item {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [backlog_by_item*]
+  }
+
   set: order_line_details {
     fields: [sales_orders.header_id, sales_orders.order_number, sales_orders.ordered_date, line_id, line_number, line_status, inventory_item_id, sales_orders__lines__item_descriptions.item_description, ordered_quantity, ordered_amount]
   }
 
+  set: backlog_by_customer {
+    fields: [sales_orders.selected_customer_number, sales_orders.selected_customer_name, total_backlog_amount_target_currency]
+  }
+
+  set: backlog_by_item {
+    fields: [item_part_number, item_description, category_description, total_backlog_amount_target_currency]
+  }
 
 
 

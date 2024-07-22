@@ -20,7 +20,7 @@ view: +sales_orders__lines__return_line_ids {
     html: {% if value > 0 %}{{value}}{% else %} {% endif %} ;;
 
     link: {
-      label: "Open Order Line Details Dashboard"
+      label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}

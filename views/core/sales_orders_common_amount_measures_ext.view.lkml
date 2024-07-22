@@ -128,6 +128,22 @@ view: sales_orders_common_amount_measures_ext {
     description: "@{derive_currency_label}Sum of booking amount in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_booking_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters='is_booking=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
   }
 
   measure: total_backlog_amount_target_currency_formatted {
@@ -138,6 +154,22 @@ view: sales_orders_common_amount_measures_ext {
     description: "@{derive_currency_label}Sum of backlog amount in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_backlog_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters='is_backlog=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
   }
 
   measure: total_fulfilled_amount_target_currency_formatted {
@@ -202,6 +234,13 @@ view: sales_orders_common_amount_measures_ext {
     description: "Provides a note in html when a source currency could not be converted to target currency. Add this measure to a table or single value visualization to alert users that amounts in target currency may be understated."
     sql: ${is_incomplete_conversion} ;;
     html: {% if value == true %}For timeframe and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
+  }
+
+  measure: link_generator {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [link_generator]
   }
 
   }

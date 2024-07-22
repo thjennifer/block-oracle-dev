@@ -185,4 +185,70 @@ view: +sales_orders_daily_agg__lines {
   #   #value format defined in sales_orders__lines_common_fields_ext
   # }
 
+  measure: total_backlog_amount_target_currency_formatted {
+    link: {
+      label: "Show Customers with Highest Backlog"
+      url: "{{dummy_backlog_by_customer._link}}"
+      # url: "@{link_generate_variable_defaults}
+      # {% assign link = link_generator._link %}
+      # {% assign drill_fields = 'sales_orders_daily_agg.selected_customer_number,sales_orders_daily_agg.selected_customer_name,sales_orders_dialy_agg__lines.total_backlog_amount_target_currency'%}
+      # {% assign measure = 'sales_orders_dialy_agg__lines.total_backlog_amount_target_currency' %}
+      # @{link_generate_explore_url}
+      # "
+    }
+    link: {
+      label: "Show Categories with Highest Backlog"
+      url: "{{dummy_backlog_by_category._link}}"
+      }
+  }
+
+  # measure: total_booking_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   sql: ${booking_amount_target_currency} ;;
+  #   value_format_name: decimal_0
+  # }
+
+  # measure: total_fulfilled_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   sql: ${fulfilled_amount_target_currency} ;;
+  #   value_format_name: decimal_0
+  # }
+
+
+  # measure: total_invoiced_amount_target_currency {
+  #   hidden: no
+  #   type: sum
+  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoiced Amount ({{currency}}){%else%}Total Invoiced Amount (Target Currency){%endif%}"
+  #   sql: ${invoiced_amount_target_currency} ;;
+  #   filters: [line_category_code: "-RETURN"]
+  #   value_format_name: format_large_numbers_d1
+  # }
+
+
+
+  measure: dummy_backlog_by_customer {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [backlog_by_customer*]
+  }
+
+  measure: dummy_backlog_by_category {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [backlog_by_category*]
+  }
+
+
+  set: backlog_by_customer {
+    fields: [sales_orders_daily_agg.selected_customer_number, sales_orders_daily_agg.selected_customer_name, total_backlog_amount_target_currency]
+  }
+
+  set: backlog_by_category {
+    fields: [category_description, total_backlog_amount_target_currency]
+  }
+
  }

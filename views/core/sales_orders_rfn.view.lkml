@@ -509,7 +509,7 @@ view: +sales_orders {
       "
     }
     link: {
-      label: "Open Order Line Details Dashboard"
+      label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
@@ -592,6 +592,23 @@ view: +sales_orders {
       label: "Show Blocked Orders"
       url: "{{ dummy_drill_orders_with_block._link}}&sorts=sales_orders.total_sales_ordered_amount_target_currency+desc&f[sales_orders.is_blocked]=Yes"
     }
+
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters='is_blocked=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
   }
 
   measure: has_return_sales_order_percent {
@@ -601,7 +618,7 @@ view: +sales_orders {
     }
 
     link: {
-      label: "Open Order Line Details Dashboard"
+      label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
