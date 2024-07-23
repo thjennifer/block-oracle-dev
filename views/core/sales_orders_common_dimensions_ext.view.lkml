@@ -82,8 +82,8 @@ view: sales_orders_common_dimensions_ext {
     {% if cust == 'bill' %}Bill To
     {% elsif cust == 'sold' %}Sold To
     {% elsif cust == 'ship' %}Ship To
-    {% endif %}Customer
-    {%else%}Selected Customer Name{%endif%}"
+    {% endif %}Customer Number
+    {%else%}Selected Customer Number{%endif%}"
     sql:{% assign cust = parameter_customer_type._parameter_value %}
         {% if cust == 'bill' %}${bill_to_customer_number}
         {% elsif cust == 'sold' %}${sold_to_customer_number}

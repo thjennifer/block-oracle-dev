@@ -80,10 +80,10 @@ view: +sales_orders__lines {
     group_label: "Item Categories & Descriptions"
     label: "{% if _field._is_selected %}
                 {% if parameter_display_product_level._parameter_value == 'Item' %}Item{%else%}Category{%endif%}
-            {%else%}Selected Product Dimenstion Description{%endif%}"
+            {%else%}Selected Product Dimension Description{%endif%}"
     description: "Values are either Item Description or Item Category Description based on user selection for Parameter Display Categories or Items."
     sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${item_description}{%else%}${category_description}{%endif%} ;;
-    can_filter: no
+    can_filter: yes
   }
 
   dimension: selected_product_dimension_id {
@@ -91,10 +91,10 @@ view: +sales_orders__lines {
     group_label: "Item Categories & Descriptions"
     label: "{% if _field._is_selected %}
     {% if parameter_display_product_level._parameter_value == 'Item' %}Inventory Item ID{%else%}Category ID{%endif%}
-    {%else%}Selected Product Dimenstion ID{%endif%}"
+    {%else%}Selected Product Dimension ID{%endif%}"
     description: "Values are either Item Inventory ID or Item Category ID based on user selection for Parameter Display Categories or Items."
     sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${category_id}{%endif%} ;;
-    can_filter: no
+    can_filter: yes
   }
 
 

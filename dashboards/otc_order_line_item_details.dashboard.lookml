@@ -19,7 +19,6 @@
     explore: item_md
     field: item_md__item_descriptions.language_code
 
-
   - name: order_status
     title: Order Status
     type: field_filter
@@ -117,6 +116,30 @@
     explore: sales_orders
     field: sales_orders__lines.line_id
     listens_to_filters: [business_unit_name, customer_country, customer_name]
+
+  - name: item_description
+    title: Item Description
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+    explore: sales_orders
+    field: sales_orders__lines.item_description
+    listens_to_filters: [item_language, category_description]
+
+  - name: product_description
+    title: Product Description
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    ui_config:
+      type: advanced
+      display: popover
+    explore: sales_orders
+    field: sales_orders__lines.selected_product_dimension_description
 
   # - name: is_discounted
   #   title: Is Discounted Item (Yes / No)
@@ -244,6 +267,7 @@
       is_backlog: sales_orders__lines.is_backlog
       order_number: sales_orders.order_number
       line_id: sales_orders__lines.line_id
+      item_description: sales_orders__lines.item_description
     row: 0
     col: 0
     width: 24
@@ -295,6 +319,7 @@
         is_backlog: sales_orders__lines.is_backlog
         order_number: sales_orders.order_number
         line_id: sales_orders__lines.line_id
+        item_description: sales_orders__lines.item_description
     row: 13
     col: 0
     width: 24

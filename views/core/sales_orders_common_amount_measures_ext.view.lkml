@@ -110,6 +110,7 @@ view: sales_orders_common_amount_measures_ext {
     value_format_name: format_large_numbers_d1
   }
 
+
   measure: total_sales_amount_target_currency_formatted {
     hidden: no
     type: number
@@ -118,6 +119,76 @@ view: sales_orders_common_amount_measures_ext {
     description: "@{derive_currency_label}Sum of sales in target currency {{currency}} and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_sales_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
+    # link: {
+    #   label: "Original Order Line Details"
+    #   icon_url: "/favicon.ico"
+    #   url: "
+    #   @{link_generate_variable_defaults}
+    #   {% assign link = link_generator._link %}
+    #   {% assign qualify_filter_names = false %}
+    #   {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+
+    #   {% assign model = _model._name %}
+    #   {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+    #   {% assign default_filters_override = false %}
+    #   @{link_generate_dashboard_url}
+    #   "
+    # }
+    # link: {
+    #   label: "test link"
+    #   url: "{% assign link = link_generator._link %}{{link}}"
+    # }
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign append_extra_mapping = false %}
+      {% assign expl = _explore._name %}
+      {% if expl == 'sales_orders' %}
+        @{link_sales_orders_to_details_dashboard_extra_mapping}
+      {% endif %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% if append_extra_mapping == true %}
+        {% assign filters_mapping = filters_mapping | append: extra_mapping %}
+      {% endif %}
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
+    # link: {
+    #   label: "Order Line Details"
+    #   icon_url: "/favicon.ico"
+    #   url: "
+    #   @{link_generate_variable_defaults}
+    #   {% assign link = link_generator._link %}
+    #   {% assign qualify_filter_names = false %}
+    #   {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}' | append: '||selected_product_dimension_description|product_description'%}
+    #   {% assign model = _model._name %}
+    #   {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+    #   {% assign default_filters_override = false %}
+    #   @{link_generate_dashboard_url}
+    #   "
+    # }
+    # link: {
+    #   label: "Test Dash"
+    #   icon_url: "/favicon.ico"
+    #   url: "
+    #   @{link_generate_variable_defaults}
+    #   {% assign link = link_generator._link %}
+    #   {% assign qualify_filter_names = false %}
+    #   {% assign filters_mapping = 'category_description|item_category||selected_product_dimension_description|product_description'%}
+
+    #   {% assign model = _model._name %}
+    #   {% assign target_dashboard = _model._name | append: '::jt_test' %}
+    #   {% assign default_filters_override = false %}
+    #   @{link_generate_dashboard_url}
+    #   "
+    # }
   }
 
   measure: total_booking_amount_target_currency_formatted {
@@ -222,10 +293,45 @@ view: sales_orders_common_amount_measures_ext {
   #   value_format_name: format_large_numbers_d1
   # }
 
+  measure: percent_of_total_sales {
+    hidden: no
+    group_label: "Amounts"
+    type: percent_of_total
+    sql: ${total_sales_amount_target_currency} ;;
+  }
+
+  measure: cumulative_sales_amount_target_currency {
+    hidden: no
+    type: running_total
+    group_label: "Amounts"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Cumulative Sales Amount ({{currency}}){%else%}Cumulative Sales Amount (Target Currency) {%endif%}"
+    sql: ${total_sales_amount_target_currency} ;;
+    direction: "column"
+    value_format_name: decimal_0
+  }
+
   measure: average_sales_amount_per_order_target_currency {
     group_label: "Amounts"
     label: "{% if _field._is_selected %}@{derive_currency_label}Average Sales Amount per Order ({{currency}}){%else%}Average Sales Amount per Order (Target Currency){%endif%}"
     value_format_name: decimal_0
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      @{link_sales_orders_to_details_dashboard_extra_mapping}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% if append_extra_mapping == true %}
+      {% assign filters_mapping = filters_mapping | append: extra_mapping %}
+      {% endif %}
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
   }
 
   measure: alert_note_for_incomplete_currency_conversion {
@@ -242,5 +348,7 @@ view: sales_orders_common_amount_measures_ext {
     sql: 1 ;;
     drill_fields: [link_generator]
   }
+
+
 
   }

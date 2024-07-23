@@ -491,7 +491,7 @@ view: +sales_orders {
   }
 
   measure: sales_order_count_formatted {
-    hidden: yes
+    hidden: no
     type: number
     sql: ${sales_order_count} ;;
     # drill_fields: [header_drill_from_dash*]
@@ -504,7 +504,7 @@ view: +sales_orders {
       {% assign link = link_generator._link %}
       {% assign drill_fields = 'sales_orders.ordered_month,sales_orders.sales_order_count'%}
       {% assign measure = sales_orders.sales_order_count %}
-      {% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#CE642D\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}
+      @{link_line_chart_1_date_1_measure}
       @{link_generate_explore_url}
       "
     }
@@ -526,6 +526,7 @@ view: +sales_orders {
     }
   }
 # {{ link }}&vis_config={{ vis_config | encode_uri }}&toggle=dat,pik,vis&limit=500&column_limit=15"
+
 
 
   measure: return_order_count {

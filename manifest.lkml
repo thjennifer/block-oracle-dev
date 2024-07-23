@@ -128,6 +128,20 @@ constant: link_sales_orders_to_details_dashboard {
   value: "ordered_date|date||business_unit_name|business_unit||parameter_customer_type|customer_type||selected_customer_country|customer_country||selected_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_language|item_language||open_closed_cancelled|order_status"
 }
 
+constant: link_sales_orders_to_details_dashboard_extra_mapping {
+  value: "{% assign extra_mapping = ''%}
+         {% if sales_orders__lines.selected_product_dimension_description._in_query %}
+          {% assign append_extra_mapping = true %}
+          {% assign pl = sales_orders__lines.parameter_display_product_level._parameter_value %}
+            {% if pl == 'Category' %}
+               {% assign target_filter = 'item_category'%}
+            {% elsif pl == 'Item' %} {% assign target_filter = 'item_description'%}
+            {% endif%}
+          {% assign extra_mapping = '||selected_product_dimension_description|' | append: target_filter %}
+          {% else %}{% assign append_extra_mapping = false %}
+         {% endif %}"
+}
+
 # test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
 
 constant: link_vis_table {
@@ -161,11 +175,11 @@ constant: link_vis_pie {
 constant: link_vis_single {
   value: "{% assign vis_config = '{\"type\":\"single_value\"}' | url_encode | prepend: '&vis_config=' %}"
 }
-
+#CE642D\
 constant: link_line_chart_1_date_1_measure {
   #Required
   #measure
-  value: "{% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#CE642D\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}"
+  value: "{% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#66FF00\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}"
 }
 
 
@@ -271,6 +285,7 @@ constant: link_build_filter_string {
   {% assign filter_string = '' %}
   {% assign filters_array_destination = filters_array_destination | split: ',' %}
   {% for filter in filters_array_destination %}
+  {% if filter contains 'EMPTY' %}{%else%}
     {% if filter != blank %}
       {% assign filter_key = filter | split:'|' | first %}
       {% assign filter_value = filter | split:'|' | last %}
@@ -282,6 +297,7 @@ constant: link_build_filter_string {
       {% endif %}
       {% assign filter_string = filter_string | append: filter_compile | append:'&' %}
     {% endif %}
+  {% endif %}
   {% endfor %}
   {% assign size = filter_string | size | minus: 1 %}
   {% if size > 0 %}

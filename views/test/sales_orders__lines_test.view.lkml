@@ -211,4 +211,19 @@ view: +sales_orders__lines {
   #   value_format_name: decimal_0
   # }
 
+  measure: test_links {
+    type: number
+    hidden: no
+    view_label: "TEST STUFF"
+    sql: max(1);;
+    # html: @{link_sales_orders_to_details_dashboard_extra_mapping}{{extra_mapping}};;
+    html: {% assign expl = _explore._name %}{{expl}} ;;
+    # html: @{link_sales_orders_to_details_dashboard_extra_mapping}
+    #   {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+    #   {% if append_extra_mapping == true %}
+    #     {% assign filters_mapping = filters_mapping | append: extra_mapping %}
+    #   {% endif %}{{filters_mapping}}
+    #   ;;
+  }
+
    }
