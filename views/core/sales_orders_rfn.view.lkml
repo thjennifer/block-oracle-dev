@@ -570,14 +570,30 @@ view: +sales_orders {
     filters: [has_backorder: "Yes", order_category_code: "-RETURN"]
   }
 
-  # measure: has_backorder_sales_order_percent {
-  #   hidden: no
-  #   type: number
-  #   label: "Has Backorder Percent"
-  #   description: "The percentage of sales orders that have at least one order line on backorder."
-  #   sql: SAFE_DIVIDE(${has_backorder_sales_order_count},${order_count}) ;;
-  #   value_format_name: percent_1
-  # }
+  measure: has_backorder_sales_order_percent {
+    link: {
+      label: "Show Top 20 Items with Highest Amount on Backorder"
+      url: "{{dummy_backordered_by_item._link}}&f[sales_orders__lines.total_backordered_amount_target_currency]=%3E0&limit=20"
+    }
+
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters='is_backordered=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
+
+  }
 
   measure: blocked_sales_order_count {
     hidden: no
@@ -769,12 +785,19 @@ view: +sales_orders {
     drill_fields: [drill_orders_with_return*]
   }
 
-  measure: link_generator {
+  measure: dummy_backordered_by_item {
     hidden: yes
     type: number
     sql: 1 ;;
-    drill_fields: [link_generator]
+    drill_fields: [backordered_by_item*]
   }
+
+  # measure: link_generator {
+  #   hidden: yes
+  #   type: number
+  #   sql: 1 ;;
+  #   drill_fields: [link_generator]
+  # }
 
 #} end measures
 
@@ -813,6 +836,10 @@ view: +sales_orders {
 
   set: drill_orders_with_return {
     fields: [header_drill_from_dash*,line_drill_from_dash*,return_order_lines*]
+  }
+
+  set: backordered_by_item {
+    fields: [sales_orders__lines.item_part_number, sales_orders__lines.item_description, sales_orders__lines.category_description, sales_orders__lines.total_backordered_amount_target_currency]
   }
 
 }

@@ -43,6 +43,18 @@
     explore: sales_orders
     field: sales_orders.is_fulfilled
 
+  - name: is_fulfilled_by_request_date
+    title: Is Fulfilled by Request Date (Yes / No)
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: button_group
+      display: inline
+    explore: sales_orders
+    field: sales_orders.is_fulfilled_by_request_date
+
   - name: has_return
     title: Has Return (Yes / No)
     type: field_filter
@@ -80,7 +92,7 @@
     field: sales_orders__lines.is_booking
 
   - name: is_backlog
-    title: Line Item Is in Backlog (Yes / No)
+    title: Line Item in Backlog (Yes / No)
     type: field_filter
     default_value: ''
     allow_multiple_values: true
@@ -90,6 +102,18 @@
       display: inline
     explore: sales_orders
     field: sales_orders__lines.is_backlog
+
+  - name: is_backordered
+    title: Line Item is Backordered (Yes / No)
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: button_group
+      display: inline
+    explore: sales_orders
+    field: sales_orders__lines.is_backordered
 
   - name: order_number
     title: Order Number
@@ -202,7 +226,8 @@
             sales_orders__lines.unit_selling_price_target_currency,
             sales_orders__lines.ordered_amount_target_currency, sales_orders__lines.fulfilled_amount_target_currency,
             sales_orders__lines.currency_conversion_rate,
-            sales_orders__lines.has_return_with_symbols, sales_orders__lines.is_backlog_with_symbols, sales_orders__lines.is_booking_with_symbols]
+            sales_orders__lines.has_return_with_symbols, sales_orders__lines.is_backlog_with_symbols,
+            sales_orders__lines.is_booking_with_symbols, sales_orders__lines.is_backordered_with_symbols]
     sorts: [sales_orders.order_number, sales_orders__lines.line_number]
     limit: 500
     show_view_names: false
@@ -233,6 +258,7 @@
       sales_orders__lines.has_return_with_symbols: Item Returned
       sales_orders__lines.is_backlog_with_symbols: Item in Backlog
       sales_orders__lines.is_booking_with_symbols: Item in Booking
+      sales_orders__lines.is_backordered_with_symbols: Item is Backordered
     series_text_format:
       sales_orders.open_closed_cancelled_with_symbols:
         align: center
@@ -247,6 +273,8 @@
       sales_orders__lines.is_backlog_with_symbols:
         align: center
       sales_orders__lines.is_booking_with_symbols:
+        align: center
+      sales_orders__lines.is_backordered_with_symbols:
         align: center
     series_column_widths:
       sales_orders__lines.item_description: 250
@@ -263,8 +291,10 @@
       has_return: sales_orders.has_return_line
       is_blocked: sales_orders.is_blocked
       is_fulfilled: sales_orders.is_fulfilled
+      is_fulfilled_by_request_date: sales_orders.is_fulfilled_by_request_date
       is_booking: sales_orders__lines.is_booking
       is_backlog: sales_orders__lines.is_backlog
+      is_backordered: sales_orders__lines.is_backordered
       order_number: sales_orders.order_number
       line_id: sales_orders__lines.line_id
       item_description: sales_orders__lines.item_description
@@ -315,8 +345,10 @@
         has_return: sales_orders.has_return_line
         is_blocked: sales_orders.is_blocked
         is_fulfilled: sales_orders.is_fulfilled
+        is_fulfilled_by_request_date: sales_orders.is_fulfilled_by_request_date
         is_booking: sales_orders__lines.is_booking
         is_backlog: sales_orders__lines.is_backlog
+        is_backordered: sales_orders__lines.is_backordered
         order_number: sales_orders.order_number
         line_id: sales_orders__lines.line_id
         item_description: sales_orders__lines.item_description

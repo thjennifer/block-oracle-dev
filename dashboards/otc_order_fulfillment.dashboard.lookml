@@ -1,9 +1,27 @@
+#########################################################{
+# Order Sales Performance dashboard provides insights into
+# delivery performance over time, items with longest average
+# order cycle time and items having fulfillment issues.
+#
+# Extends otc_template_orders and modifies dashboard_navigation to:
+#   set parameter_navigation_focus_page: '2'
+#   add listeners for item_language
+#
+# Visualization Elements:
+#   in_full - single value
+#   otif - single value
+#   backordered - single value
+#   delivery_performance_by_month - line chart
+#   average_cycle_time - bar chart
+#   delivery_efficiency - column + line chart
+#
+#########################################################}
+
+
 - dashboard: otc_order_fulfillment
   title: Order Fulfillment
-  description: "See delivery performance over time, items with longest average order cycle time, and items currently having issues with fulfillment."
+  description: "See delivery performance over time, items with longest average order cycle time, and items currently having fulfillment issues."
 
-  # pull navigation bar and filters from template
-  # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value
   extends: otc_template_orders
 
   filters:
@@ -36,18 +54,6 @@
       order_source: otc_dashboard_navigation_ext.filter7
       item_category: otc_dashboard_navigation_ext.filter8
       item_language: otc_dashboard_navigation_ext.filter9
-
-  # - name: dashboard_navigation_parts
-  #   listen:
-  #     date: otc_dashboard_navigation_ext.filter1
-  #     business_unit: otc_dashboard_navigation_ext.filter2
-  #     customer_type: otc_dashboard_navigation_ext.filter3
-  #     customer_country: otc_dashboard_navigation_ext.filter4
-  #     customer_name: otc_dashboard_navigation_ext.filter5
-  #     target_currency: otc_dashboard_navigation_ext.filter6
-  #     order_source: otc_dashboard_navigation_ext.filter7
-  #     item_category: otc_dashboard_navigation_ext.filter8
-  #     item_language: otc_dashboard_navigation_ext.filter9
 
   - name: in_full
     title: In Full %

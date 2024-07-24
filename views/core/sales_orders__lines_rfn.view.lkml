@@ -192,6 +192,13 @@ view: +sales_orders__lines {
     sql: ${TABLE}.IS_BACKORDERED ;;
   }
 
+  dimension: is_backordered_with_symbols {
+    hidden: no
+    group_label: "Line Status with Symbols"
+    sql: ${is_backordered} ;;
+    html: @{symbols_for_yes_no} ;;
+  }
+
   dimension: is_booked {
     hidden: no
     group_label: "Line Status"
@@ -752,6 +759,23 @@ view: +sales_orders__lines {
     }
   }
 
+  measure: total_backordered_amount_target_currency {
+    type: sum
+    sql: ${ordered_amount_target_currency} ;;
+    filters: [line_category_code: "-RETURN",is_backordered: "Yes"]
+  }
+
+  measure: total_backordered_amount_target_currency_formatted {
+    type: number
+    sql: ${total_backordered_amount_target_currency} ;;
+    value_format_name: format_large_numbers_d1
+    link: {
+      label: "Show Items with Highest Amount on Backorder"
+      url: "{{dummy_backordered_by_item._link}}"
+    }
+
+  }
+
   # measure: total_booking_amount_target_currency {
   #   hidden: no
   #   type: sum
@@ -792,6 +816,13 @@ view: +sales_orders__lines {
     drill_fields: [backlog_by_item*]
   }
 
+  measure: dummy_backordered_by_item {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [backordered_by_item*]
+  }
+
   set: order_line_details {
     fields: [sales_orders.header_id, sales_orders.order_number, sales_orders.ordered_date, line_id, line_number, line_status, inventory_item_id, sales_orders__lines__item_descriptions.item_description, ordered_quantity, ordered_amount]
   }
@@ -802,6 +833,10 @@ view: +sales_orders__lines {
 
   set: backlog_by_item {
     fields: [item_part_number, item_description, category_description, total_backlog_amount_target_currency]
+  }
+
+  set: backordered_by_item {
+    fields: [item_part_number, item_description, category_description, total_backordered_amount_target_currency]
   }
 
 
