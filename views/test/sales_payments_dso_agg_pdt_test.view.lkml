@@ -3,7 +3,7 @@ include: "/views/test/dso_days_sdt_test.view"
 
 view: +sales_payments_dso_days_agg_pdt {
    derived_table: {
-      datagroup_trigger: once_a_day_at_5
+      # datagroup_trigger: once_a_day_at_5
 
       sql:
         {% assign p = otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value %}

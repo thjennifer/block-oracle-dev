@@ -5,7 +5,7 @@ view: sales_payments_dso_days_agg_pdt {
     label: "Sales Payments DSO Days Agg"
 
     derived_table: {
-      datagroup_trigger: once_a_day_at_5
+      # datagroup_trigger: once_a_day_at_5
 
       sql: SELECT
         DSO_DAYS,
