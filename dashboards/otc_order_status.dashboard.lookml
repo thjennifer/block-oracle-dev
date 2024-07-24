@@ -30,7 +30,7 @@
     filters:
       otc_dashboard_navigation_ext.parameter_navigation_focus_page: '1'
 
-  - name: total_orders
+  - name: total_sales_orders
     title: Total Sales Orders
     explore: sales_orders
     type: single_value
@@ -126,7 +126,7 @@
     height: 2
 
   - name: bbb_funnel
-    title: Booking to Billed
+    title: Booking to Billing
     explore: sales_orders_daily_agg
     type: looker_funnel
     fields: [sales_orders_daily_agg__lines.total_ordered_amount_target_currency_formatted,
@@ -163,6 +163,9 @@
         reverse: true
     isStepped: true
     labelOverlap: false
+    note_state: collapsed
+    note_display: hover
+    note_text: "Beginning with Total Sales Ordered Amount, this funnel depicts the flow of amounts across the stages of a line item: Booking, Backlog, Shipping and Billing."
     listen:
       date: sales_orders_daily_agg.ordered_date
       business_unit: sales_orders_daily_agg.business_unit_name
@@ -211,6 +214,9 @@
           verticalAlign: 'middle',
         }
       }
+    note_state: collapsed
+    note_display: hover
+    note_text: "Percent of Sales Orders by Status: Open, Cancelled, or Closed."
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name

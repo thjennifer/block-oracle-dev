@@ -88,6 +88,7 @@ view: +sales_orders__lines {
 
   dimension: selected_product_dimension_id {
     hidden: no
+    type: number
     group_label: "Item Categories & Descriptions"
     label: "{% if _field._is_selected %}
     {% if parameter_display_product_level._parameter_value == 'Item' %}Inventory Item ID{%else%}Category ID{%endif%}
@@ -95,6 +96,7 @@ view: +sales_orders__lines {
     description: "Values are either Item Inventory ID or Item Category ID based on user selection for Parameter Display Categories or Items."
     sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${category_id}{%endif%} ;;
     can_filter: yes
+    value_format_name: id
   }
 
 
@@ -420,6 +422,13 @@ view: +sales_orders__lines {
     # required_fields: [item_part_number]
   }
 
+  dimension: difference_ordered_fulfilled_quantity {
+    hidden: yes
+    group_label: "Quantities"
+    label: "Difference between Ordered and Fulfilled Quantities"
+    sql: ${ordered_quantity} - COALESCE(${fulfilled_quantity},0) ;;
+  }
+
   dimension: weight_uom {
     hidden: no
     group_label: "Weights"
@@ -668,6 +677,10 @@ view: +sales_orders__lines {
     sql: ${total_ordered_quantity_by_item} - ${total_fulfilled_quantity_by_item} ;;
     required_fields: [inventory_item_id]
     value_format_name: decimal_0
+    link: {
+      label: "Show Fulfillment Details"
+      url: "{{dummy_drill_fulfillment_details._link}}&sorts=sales_orders__lines.difference_ordered_fulfilled_quantity+desc"
+    }
   }
 
   measure: count_inventory_item {
@@ -699,7 +712,15 @@ view: +sales_orders__lines {
     sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or category_id._is_selected or category_description._is_selected or selected_product_dimension_id._is_selected or selected_product_dimension_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
     value_format_name: decimal_2
     filters: [is_cancelled: "No"]
-    # required_fields: [category_description]
+    link: {
+      label: "Show Fulfillment Details"
+      url: "{{dummy_drill_fulfillment_details._link}}&sorts=sales_orders__lines.cycle_time_days+desc"
+      # url: "@{link_generate_variable_defaults}
+      # {% assign link = link_generator._link %}
+      # {% assign drill_fields = 'sales_orders.selected_customer_number,sales_orders.selected_customer_name,sales_orders__lines.total_backlog_amount_target_currency'%}
+      # @{link_generate_explore_url}
+      # "
+    }
   }
 
 #########################################################
@@ -823,8 +844,15 @@ view: +sales_orders__lines {
     drill_fields: [backordered_by_item*]
   }
 
+  measure: dummy_drill_fulfillment_details {
+    hidden: yes
+    type: number
+    sql: 1 ;;
+    drill_fields: [drill_fulfillment_details*]
+  }
+
   set: order_line_details {
-    fields: [sales_orders.header_id, sales_orders.order_number, sales_orders.ordered_date, line_id, line_number, line_status, inventory_item_id, sales_orders__lines__item_descriptions.item_description, ordered_quantity, ordered_amount]
+    fields: [sales_orders.order_number, sales_orders.ordered_date, line_id, line_number, line_status, item_part_number, sales_orders__lines.item_description, ordered_quantity, ordered_amount_target_currency]
   }
 
   set: backlog_by_customer {
@@ -837,6 +865,10 @@ view: +sales_orders__lines {
 
   set: backordered_by_item {
     fields: [item_part_number, item_description, category_description, total_backordered_amount_target_currency]
+  }
+
+  set: drill_fulfillment_details {
+    fields: [order_line_details*,fulfilled_quantity, difference_ordered_fulfilled_quantity, fulfilled_amount_target_currency, fulfillment_date,cycle_time_days]
   }
 
 

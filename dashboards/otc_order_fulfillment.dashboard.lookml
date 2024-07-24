@@ -71,7 +71,7 @@
       item_category: sales_orders__lines.category_description
     note_state: collapsed
     note_display: hover
-    note_text: "The percentage of sales orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
+    note_text: "The percentage of sales orders that are fulfilled (inventory is reserved and ready to be shipped) completely for all order lines."
     row: 2
     col: 0
     width: 4
@@ -93,7 +93,7 @@
       item_category: sales_orders__lines.category_description
     note_state: collapsed
     note_display: hover
-    note_text: "The percentage of sales orders fulfilled completely (for all line items) by the requested delivery date."
+    note_text: "On Time in Full (OTIF) is the percentage of sales orders fulfilled completely by the requested delivery date."
     row: 6
     col: 0
     width: 4
@@ -131,13 +131,11 @@
     fields: [sales_orders.ordered_month,sales_orders.fulfilled_sales_order_percent,sales_orders.fulfilled_by_request_date_sales_order_percent]
     sorts: [sales_orders.ordered_month]
     limit: 500
-    column_limit: 50
     legend_position: center
     point_style: none
     y_axis_combined: true
-    show_null_points: true
+    show_null_points: false
     interpolation: linear
-    y_axes: []
     x_axis_label: Month
     x_axis_zoom: true
     y_axis_zoom: true
@@ -145,15 +143,15 @@
       sales_orders.fulfilled_sales_order_percent: line
       sales_orders.fulfilled_by_request_date_sales_order_percent: line
     series_colors:
-      # sales_order_item_delivery_summary_ndt.percent_orders_delivered_on_time: "#F39B6D"
       sales_orders.fulfilled_sales_order_percent: "#6494AA"
       sales_orders.fulfilled_by_request_date_sales_order_percent: "#89BD9E"
     series_labels:
-      # sales_order_item_delivery_summary_ndt.percent_orders_delivered_on_time: On Time %
-      # sales_orders.ordered_month
       sales_orders.fulfilled_sales_order_percent: In Full %
       sales_orders.fulfilled_by_request_date_sales_order_percent: OTIF %
     x_axis_datetime_label: "%B %y"
+    note_state: collapsed
+    note_display: hover
+    note_text: "Monthly tracking of order fulfillment and on-time delivery. In Full % is the percentage of sales orders where all order lines have been fulfilled (inventory has been reserved and is ready for shipment). On Time in Full (OTIF) % is the percentage of sales orders that have been fulfilled completely by the requested delivery date."
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
@@ -175,7 +173,7 @@
     sorts: [sales_orders__lines.average_cycle_time_days desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
     filters:
-      sales_orders__lines.average_cycle_time_days: ">0"
+      sales_orders__lines.is_fulfilled: "Yes"
       sales_orders__lines.parameter_display_product_level: "Item"
     x_axis_gridlines: false
     y_axis_gridlines: true
@@ -235,7 +233,7 @@
       item_language: otc_common_parameters_xvw.parameter_language
     note_state: collapsed
     note_display: hover
-    note_text: "Order cycle time is average number of days between order placement and order fulfillment. "
+    note_text: "Top 10 Items with longest average order cycle times. Order cycle time is the average number of days between order placement and order fulfillment."
     row: 2
     col: 14
     width: 10
@@ -250,7 +248,7 @@
     sales_orders__lines.difference_ordered_fulfilled_quantity_by_item]
     sorts: [sales_orders__lines.difference_ordered_fulfilled_quantity_by_item desc]
     hidden_fields: [sales_orders__lines.inventory_item_id]
-    limit: 500
+    limit: 10
     x_axis_gridlines: false
     y_axis_gridlines: true
     show_view_names: false
@@ -297,37 +295,53 @@
     series_labels:
       sales_orders__lines.total_ordered_quantity_by_item: Total Ordered Quantity
       sales_orders__lines.total_fulfilled_quantity_by_item: Total Fulfilled Quantity
-    label_color: []
-    reference_lines: []
-    x_axis_label_rotation: 0
+    # label_color: []
+    # reference_lines: []
+    # x_axis_label_rotation: 0
     advanced_vis_config: |-
       {
         chart: {},
         series: [{
           name: 'Total Ordered Quantity',
           dataLabels: {
-            enabled: false,
+          enabled: false,
           }
-        }, {
+          }, {
           name: 'Total Fulfilled Quantity',
           dataLabels: {
-            enabled: false,
+          enabled: false,
           }
-        },
-        {
+          },
+          {
           name: 'Difference'
-        },]
+          },
+        ],
+        xAxis: {
+          allowDecimals: false,
+          gridLineColor: '#e6e6e6',
+          gridLineWidth: 0,
+          keepOrder: true,
+          labels: {
+            style: {
+              cursor: 'pointer',
+              fontSize: '12px',
+              color: 'inherit',
+              textOverflow: 'none',
+            },
+          },
+        },
+        legend: {
+          verticalAlign: 'top',
+        },
+        tooltip: {
+          backgroundColor: "#1A1B41",
+          format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f}<br/>{/each}',
+          shared: true
+        },
       }
-    ordering: none
-    show_null_labels: false
-    show_dropoff: false
-    show_totals_labels: false
-    show_silhouette: false
-    totals_color: "#808080"
-    defaults_version: 1
     note_state: collapsed
     note_display: above
-    note_text: Top 10 Items with Largest Difference between Quantity Ordered and Fulfilled
+    note_text: "Top 10 Items with Largest Difference between Quantity Ordered and Fulfilled"
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
