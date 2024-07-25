@@ -156,7 +156,7 @@ view: +sales_invoices {
 
   dimension: total_transaction_amount {
     group_label: "Amounts"
-    label: "Invoice Transaction Amount (Source Currency)"
+    label: "Invoice Amount (Source Currency)"
   }
 
   dimension: total_revenue_amount_target_currency {
@@ -173,7 +173,7 @@ view: +sales_invoices {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Transaction Amount ({{currency}}){%else%}Invoice Transaction Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Amount ({{currency}}){%else%}Invoice Amount (Target Currency){%endif%}"
     description: "Total transaction amount of invoice in target currency."
     sql: ${total_transaction_amount} * ${currency_conversion_rate}   ;;
     value_format_name: decimal_2
@@ -214,7 +214,7 @@ view: +sales_invoices {
     value_format_name: format_large_numbers_d1
     drill_fields: [invoice_header_details*]
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}

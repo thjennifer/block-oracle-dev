@@ -191,7 +191,7 @@ view: +sales_invoices_daily_agg {
 
   # measure: total_transaction_amount_target_currency_formatted {
   #   link: {
-  #     label: "Open Invoice Details Dashboard"
+  #     label: "Invoice Line Details"
   #     icon_url: "/favicon.ico"
   #     url: "
   #     @{link_generate_variable_defaults}
@@ -209,7 +209,7 @@ view: +sales_invoices_daily_agg {
 
   # measure: total_discount_amount_target_currency_formatted {
   #   link: {
-  #     label: "Open Invoice Details Dashboard"
+  #     label: "Invoice Line Details"
   #     icon_url: "/favicon.ico"
   #     url: "
   #     @{link_generate_variable_defaults}
@@ -227,7 +227,7 @@ view: +sales_invoices_daily_agg {
 
   # measure: total_tax_amount_target_currency_formatted {
   #   link: {
-  #     label: "Open Invoice Details Dashboard"
+  #     label: "Invoice Line Details"
   #     icon_url: "/favicon.ico"
   #     url: "
   #     @{link_generate_variable_defaults}

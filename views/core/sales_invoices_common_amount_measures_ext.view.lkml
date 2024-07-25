@@ -5,7 +5,7 @@ view: sales_invoices_common_amount_measures_ext {
   measure: total_transaction_amount_target_currency {
     hidden: no
     type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Transaction Amount ({{currency}}){%else%}Total Transaction Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoice Amount ({{currency}}){%else%}Total Invoice Amount (Target Currency){%endif%}"
     sql: ${transaction_amount_target_currency} ;;
     value_format_name: decimal_0
   }
@@ -44,20 +44,20 @@ view: sales_invoices_common_amount_measures_ext {
 
 
   measure: total_transaction_amount_target_currency_formatted {
-    hidden: yes
+    hidden: no
     type: sum
     group_label: "Formatted as Large Numbers"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Transaction Amount ({{currency}}){%else%}Total Transaction Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoice Amount ({{currency}}){%else%}Total Invoice Amount (Target Currency){%endif%}"
     sql: ${transaction_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}'%}
+      {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}'| append: '||invoice_month|date'%}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details' %}
@@ -69,14 +69,14 @@ view: sales_invoices_common_amount_measures_ext {
   }
 
   measure: total_discount_amount_target_currency_formatted {
-    hidden: yes
+    hidden: no
     type: number
     group_label: "Formatted as Large Numbers"
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Discount Amount ({{currency}}){%else%}Total Discount Amount (Target Currency){%endif%}"
     sql: ${total_discount_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
@@ -86,7 +86,7 @@ view: sales_invoices_common_amount_measures_ext {
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details' %}
-
+      {% assign default_filters='is_discounted=Yes'%}
       {% assign default_filters_override = false %}
       @{link_generate_dashboard_url}
       "
@@ -94,14 +94,14 @@ view: sales_invoices_common_amount_measures_ext {
   }
 
   measure: total_tax_amount_target_currency_formatted {
-    hidden: yes
+    hidden: no
     type: number
     group_label: "Formatted as Large Numbers"
     label: "{% if _field._is_selected %}@{derive_currency_label}Total Tax Amount ({{currency}}){%else%}Total Tax Amount (Target Currency){%endif%}"
     sql: ${total_tax_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}

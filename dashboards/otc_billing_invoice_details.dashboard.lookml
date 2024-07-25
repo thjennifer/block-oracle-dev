@@ -103,6 +103,7 @@
   - name: dashboard_navigation
     filters:
       otc_dashboard_navigation_ext.parameter_navigation_focus_page: '3'
+      otc_dashboard_navigation_ext.parameter_navigation_subject: 'bdetails'
     listen:
       date: otc_dashboard_navigation_ext.filter1
       business_unit: otc_dashboard_navigation_ext.filter2
@@ -125,7 +126,8 @@
       sales_invoices__lines.quantity_uom, sales_invoices__lines.unit_list_price_target_currency,
       sales_invoices__lines.unit_selling_price_target_currency, sales_invoices__lines.percent_discount,
       sales_invoices__lines.transaction_amount_target_currency, sales_invoices__lines.discount_amount_target_currency,
-      sales_invoices__lines.tax_amount_target_currency]
+      sales_invoices__lines.tax_amount_target_currency,
+      sales_invoices__lines.is_discount_selling_price_with_symbols]
     sorts: [sales_invoices.invoice_number, sales_invoices__lines.line_number]
     limit: 500
     show_view_names: false
@@ -148,6 +150,11 @@
     show_row_totals: false
     truncate_header: false
     minimum_column_width: 75
+    series_labels:
+      sales_invoices__lines.is_discount_selling_price_with_symbols: Item is Discounted
+    series_text_format:
+      sales_invoices__lines.is_discount_selling_price_with_symbols:
+        align: center
     listen:
       date: sales_invoices.invoice_date
       business_unit: sales_invoices.business_unit_name

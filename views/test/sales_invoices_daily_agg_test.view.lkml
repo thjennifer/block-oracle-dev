@@ -18,7 +18,7 @@ view:
       sql: ${transaction_amount_target_currency} ;;
       value_format_name: format_large_numbers_d1
       link: {
-        label: "Open Invoice Details Dashboard"
+        label: "Invoice Line Details"
         icon_url: "/favicon.ico"
         url: "
         @{link_generate_variable_defaults}

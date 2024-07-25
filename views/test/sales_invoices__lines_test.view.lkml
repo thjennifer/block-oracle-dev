@@ -9,7 +9,7 @@ view: +sales_invoices__lines {
     sql: ${average_unit_list_price_when_discount_target_currency} ;;
     value_format_name: decimal_2
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
@@ -31,7 +31,7 @@ view: +sales_invoices__lines {
     sql: ${average_unit_selling_price_when_discount_target_currency} ;;
     value_format_name: decimal_2
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
@@ -55,7 +55,7 @@ view: +sales_invoices__lines {
 
   measure: total_transaction_amount_target_currency_formatted {
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
@@ -73,7 +73,7 @@ view: +sales_invoices__lines {
 
   measure: total_discount_amount_target_currency_formatted {
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
@@ -91,7 +91,7 @@ view: +sales_invoices__lines {
 
   measure: total_tax_amount_target_currency_formatted {
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
@@ -206,7 +206,7 @@ view: +sales_invoices__lines {
     # drill_fields: [line_id]
 
     # link: {
-    #   label: "Open Invoice Details Dashboard"
+    #   label: "Invoice Line Details"
     #   icon_url: "/favicon.ico"
     #   url: "
     #   @{link_generate_variable_defaults}
@@ -219,7 +219,7 @@ view: +sales_invoices__lines {
     # }
 
       link: {
-        label: "Open Invoice Details Dashboard"
+        label: "Invoice Line Details"
         icon_url: "/favicon.ico"
         url: "
         @{link_generate_variable_defaults}
@@ -284,7 +284,7 @@ view: +sales_invoices__lines {
     sql: ${transaction_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}

@@ -115,6 +115,14 @@ view: +sales_invoices__lines {
     sql: ${unit_discount_price} <> 0 ;;
   }
 
+  dimension: is_discount_selling_price_with_symbols {
+    type: string
+    group_label: "Item Prices and Discounts"
+    description: "Yes if line item was sold at a discounted price."
+    sql: ${is_discount_selling_price} ;;
+    html: @{symbols_for_yes_no} ;;
+  }
+
   dimension: percent_discount {
     type: number
     group_label: "Item Prices and Discounts"
@@ -323,6 +331,13 @@ view: +sales_invoices__lines {
     value_format_name: decimal_2
   }
 
+  measure: average_gross_unit_selling_price_target_currency {
+    type: average
+    label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit Selling Price ({{currency}}){%else%}Average Unit Selling Price (Target Currency){%endif%}"
+    sql: ${gross_unit_selling_price_target_currency} ;;
+    value_format_name: decimal_2
+  }
+
   measure: average_unit_list_price_when_discount_target_currency {
     type: average
     label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit List Price when Discount ({{currency}}){%else%}Average Unit List Price when Discount (Target Currency){%endif%}"
@@ -337,7 +352,7 @@ view: +sales_invoices__lines {
     sql: ${average_unit_list_price_when_discount_target_currency} ;;
     value_format_name: decimal_2
     link: {
-      label: "Open Invoice Details Dashboard"
+      label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
@@ -345,28 +360,6 @@ view: +sales_invoices__lines {
       {% assign qualify_filter_names = false %}
       {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
 
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details' %}
-      {% assign default_filters='is_discounted=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
-      "
-    }
-  }
-
-  measure: average_unit_selling_price_when_discount_target_currency_with_drill_link {
-    hidden: yes
-    type: number
-    sql: ${average_unit_selling_price_when_discount_target_currency} ;;
-    value_format_name: decimal_2
-    link: {
-      label: "Open Invoice Details Dashboard"
-      icon_url: "/favicon.ico"
-      url: "
-      @{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details' %}
       {% assign default_filters='is_discounted=Yes'%}
@@ -383,6 +376,60 @@ view: +sales_invoices__lines {
     filters: [is_discount_selling_price: "Yes"]
     value_format_name: decimal_2
   }
+
+  measure: average_unit_selling_price_when_discount_target_currency_with_drill_link {
+    hidden: yes
+    type: number
+    sql: ${average_unit_selling_price_when_discount_target_currency} ;;
+    value_format_name: decimal_2
+    link: {
+      label: "Invoice Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details' %}
+      {% assign default_filters='is_discounted=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
+  }
+
+  measure: average_gross_unit_selling_price_when_discount_target_currency {
+    type: average
+    label: "{% if _field._is_selected %}@{derive_currency_label}Average Gross Unit Selling Price when Discount ({{currency}}){%else%}Average Gross Unit Selling Price when Discount (Target Currency){%endif%}"
+    sql: ${gross_unit_selling_price_target_currency} ;;
+    filters: [is_discount_selling_price: "Yes"]
+    value_format_name: decimal_2
+  }
+
+  measure: average_gross_unit_selling_price_when_discount_target_currency_with_drill_link {
+    hidden: yes
+    type: number
+    sql: ${average_gross_unit_selling_price_when_discount_target_currency} ;;
+    value_format_name: decimal_2
+    link: {
+      label: "Invoice Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details' %}
+      {% assign default_filters='is_discounted=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
+  }
+
+
 
   measure: discount_invoice_line_count {
     type: count
@@ -442,7 +489,7 @@ view: +sales_invoices__lines {
   #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Net Revenue Amount ({{currency}}){%else%}Total Net Revenue Amount (Target Currency) With Link{%endif%}"
   #   sql: ${total_revenue_amount_target_currency} ;;
   #   link: {
-  #     label: "Open Invoice Details Dashboard"
+  #     label: "Invoice Line Details"
   #     icon_url: "/favicon.ico"
   #     url: "
   #     @{link_generate_variable_defaults}
@@ -465,7 +512,7 @@ view: +sales_invoices__lines {
   #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Net Transaction Amount ({{currency}}){%else%}Total Net Transaction Amount (Target Currency) With Link{%endif%}"
   #   sql: ${total_transaction_amount_target_currency} ;;
   #   link: {
-  #     label: "Open Invoice Details Dashboard"
+  #     label: "Invoice Line Details"
   #     icon_url: "/favicon.ico"
   #     url: "
   #     @{link_generate_variable_defaults}

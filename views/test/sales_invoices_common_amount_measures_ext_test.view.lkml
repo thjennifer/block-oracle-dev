@@ -8,7 +8,7 @@ view: +sales_invoices_common_amount_measures_ext {
 
     measure: total_transaction_amount_target_currency_formatted {
       link: {
-        label: "Open Invoice Details Dashboard (TEST)"
+        label: "Invoice Line Details (TEST)"
         icon_url: "/favicon.ico"
         url: "
         @{link_generate_variable_defaults}
@@ -27,7 +27,7 @@ view: +sales_invoices_common_amount_measures_ext {
 
     measure: total_discount_amount_target_currency_formatted {
      link: {
-        label: "Open Invoice Details Dashboard (TEST)"
+        label: "Invoice Line Details (TEST)"
         icon_url: "/favicon.ico"
         url: "
         @{link_generate_variable_defaults}
@@ -46,7 +46,7 @@ view: +sales_invoices_common_amount_measures_ext {
 
     measure: total_tax_amount_target_currency_formatted {
       link: {
-        label: "Open Invoice Details Dashboard (TEST)"
+        label: "Invoice Line Details (TEST)"
         icon_url: "/favicon.ico"
         url: "
         @{link_generate_variable_defaults}
