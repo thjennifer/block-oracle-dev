@@ -342,13 +342,13 @@
     #           useHTML: true,
     #         },
     #       },
-    #       {
-    #         dataLabels: {
-    #           format: '{y:.0f}%',
-    #           color: '#000000',
-    #           align: 'left',
-    #           allowQverlap: false,
-    #         },
+          # {
+            # dataLabels: {
+            #   format: '{y:.0f}%',
+            #   color: '#000000',
+            #   align: 'left',
+            #   allowQverlap: false,
+            # },
     #       },
     #     ],
     #     tooltip: {
@@ -372,6 +372,12 @@
             headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
             pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b></span> {point.y:.1f}%<br/>',
             shared: true,
+          },
+          dataLabels: {
+            format: '{y:.0f}%',
+            color: '#000000',
+            align: 'left',
+            allowQverlap: false,
           },
         },
         ],
