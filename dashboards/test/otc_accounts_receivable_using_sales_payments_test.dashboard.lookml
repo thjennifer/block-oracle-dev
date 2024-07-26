@@ -36,7 +36,7 @@
   #       min: 1
   #       max: 6
   #   explore: sales_payments
-  #   field: sales_payments_dynamic_aging_bucket_sdt.dummy_bucket_number
+  #   field: sales_payments_dynamic_aging_bucket_sdt.dummy_bucket_count
 
   # - name: dso_days
   #   title: 'DSO: # Days for Calculation'

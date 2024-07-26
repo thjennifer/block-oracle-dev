@@ -1,11 +1,38 @@
+#########################################################{
+# Accounts Receivable dashboard provides an oAnalysis of
+# receivables, encompassing both current and overdue amounts.
+# Also identifies customers with the highest outstanding
+# receivables, along with an assessment of the duration
+# of their overdue payments..
+#
+# Extends otc_template_billing and modifies to:
+#   update business_unit, custoemr_country, customer_name to
+#     use sales_payments_daily_agg Explore
+#
+#   add new filters for aging_bucket_size, aging_bucket_count,
+#     and dso_days
+#
+#   update dashboard_navigation to:
+#       use sales_payments_daily_agg Explore
+#       set parameter_navigation_focus_page: '2'
+#
+#
+# Visualization Elements:
+#   total_receivables - single-value viz
+#   past_due_receivables - single-value viz
+#   doubtful_receivables - single-value viz
+#   days_sales_outstanding - single-value viz
+#   past_due_receivables_by_age - stacked bar chart as percent of total
+#   customers_with_highest_receivables - bar & line chart
+#   customer_receivables_by_age - stacked bar chart
+#
+#########################################################}
+
 - dashboard: otc_billing_accounts_receivable
   title: Accounts Receivable
   description: "Analysis of receivables, encompassing both current and overdue amounts. Identification of customers with the highest outstanding receivables, along with an assessment of the duration of their overdue payments."
 
-  # pull navigation bar and filters from template
-  # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value
   extends: otc_template_billing
-
 
   filters:
 
@@ -25,7 +52,7 @@
     title: 'Aging Bucket: # of Days in Range'
     type: field_filter
     default_value: '30'
-    allow_multiple_values: true
+    allow_multiple_values: false
     required: false
     ui_config:
       type: slider
@@ -40,7 +67,7 @@
     title: 'Aging Bucket: # of Ranges'
     type: field_filter
     default_value: '4'
-    allow_multiple_values: true
+    allow_multiple_values: false
     required: false
     ui_config:
       type: slider
@@ -49,7 +76,7 @@
         min: 1
         max: 6
     explore: sales_payments
-    field: sales_payments_dynamic_aging_bucket_sdt.dummy_bucket_number
+    field: sales_payments_dynamic_aging_bucket_sdt.dummy_bucket_count
 
   - name: dso_days
     title: 'DSO: # Days for Calculation'
@@ -204,6 +231,25 @@
     x_axis_zoom: true
     y_axis_zoom: false
     show_null_points: true
+    # tooltip: {
+    #     pointFormat: '<span style="color:{series.color}">{series.name}</span>' +
+    #         ': <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+    #     shared: true
+    # },
+    advanced_vis_config: |-
+      {
+        tooltip: {
+          format: '<span style="font-size: 1.8em">Past Due Receivables</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f} ({point.percentage:.0f}%) <br/>{/each}',
+          shared: true
+        },
+      }
+    # advanced_vis_config: |-
+    #   {
+    #     tooltip: {
+    #       format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f}<br/>{/each}',
+    #       shared: true
+    #     },
+    #   }
     note_state: collapsed
     note_display: hover
     note_text: "Percent of past due receivables by age (or days past due). Number and size of age ranges are defined by dashboard parameters 'Aging Bucket: # of Days in Range' and 'Aging Bucket: # of Ranges'."
@@ -242,10 +288,10 @@
     # Use Table Calculations for Cumulative Percent of Total Receivables
     dynamic_fields:
     - category: table_calculation
-      expression: "(${sales_payments_daily_agg.cumulative_total_receivables} / sum(${sales_payments_daily_agg.total_receivables_target_currency}))"
+      expression: "(${sales_payments_daily_agg.cumulative_total_receivables} / sum(${sales_payments_daily_agg.total_receivables_target_currency}))*100"
       label: Cumulative Percent of Total Receivables
       value_format:
-      value_format_name: percent_0
+      value_format_name: decimal_0
       _kind_hint: measure
       table_calculation: cumulative_percent_of_total_receivables
       _type_hint: number
@@ -289,6 +335,53 @@
       show_hide: show
       first_last: first
       num_rows: '10'
+    # advanced_vis_config: |-
+    #   {
+    #     series: [{
+    #         tooltip: {
+    #           useHTML: true,
+    #         },
+    #       },
+    #       {
+    #         dataLabels: {
+    #           format: '{y:.0f}%',
+    #           color: '#000000',
+    #           align: 'left',
+    #           allowQverlap: false,
+    #         },
+    #       },
+    #     ],
+    #     tooltip: {
+    #       backgroundColor: '#C0C0C0',
+    #       shared: true,
+    #       format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f}<br/>{/each}',
+    #     },
+    #   }
+    advanced_vis_config: |-
+      {
+        series: [
+        {
+          tooltip: {
+            headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
+            pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b> </span> {point.y:,.0f}<br/>',
+            shared: true,
+          },
+        },
+        {
+          tooltip: {
+            headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
+            pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b></span> {point.y:.1f}%<br/>',
+            shared: true,
+          },
+        },
+        ],
+        tooltip: {
+          backgroundColor: '#C0C0C0',
+          shared: true,
+          formatter: null,
+        },
+      }
+
     note_state: collapsed
     note_display: hover
     note_text: "Customers ranked in descending order by Total Receivables. Black line overlaying totals reflects a customer's Cumulative Percent of Total Receivables. Limited to 10 customers. To change, click Explore from Here. In the Visualization pane, click EDIT. Click on Plot tab and edit 'Limit Displayed Rows' property."
@@ -356,12 +449,19 @@
         reverse: false
     x_axis_zoom: true
     y_axis_zoom: true
+    advanced_vis_config: |-
+      {
+        tooltip: {
+          format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f} ({point.percentage:.0f}%) <br/>{/each}',
+          shared: true
+        },
+      }
     limit_displayed_rows_values:
       show_hide: show
       first_last: first
       num_rows: '10'
-    hidden_series: []
-    series_colors: {}
+    # hidden_series: []
+    # series_colors: {}
     note_state: collapsed
     note_display: hover
     note_text: "Customers ranked in descending order by Total Past Due Receivables by Age. Number and size of age ranges are defined by dashboard parameters 'Aging Bucket: # of Days in Range' and 'Aging Bucket: # of Ranges'. Limited to 10 customers. To change, click Explore from Here. In the Visualization pane, click EDIT. Click on Plot tab and edit 'Limit Displayed Rows' property."

@@ -5,7 +5,7 @@
 # discount amount and percentages).
 #
 # Extends otc_template_billing and modifies to:
-#   adds filters order_source and item_category
+#   add filters order_source and item_category
 #   update dashboard_navigation to:
 #       listen to order_source and item_category
 #       set parameter_navigation_focus_page: '1'

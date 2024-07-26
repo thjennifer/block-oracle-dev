@@ -70,7 +70,7 @@ view: sales_payments_dynamic_aging_bucket_sdt {
     sql: ${TABLE}.end_days ;;
   }
 
-  dimension: dummy_bucket_number {
+  dimension: dummy_bucket_count {
     hidden: yes
     type: number
     sql: 4 ;;
