@@ -161,9 +161,9 @@
     dynamic_fields:
     - category: table_calculation
       expression: "(${sales_orders_daily_agg__lines.cumulative_sales_amount_target_currency}\
-        \ / ${sales_orders_daily_agg__lines.total_sales_amount_target_currency:total})"
+        \ / ${sales_orders_daily_agg__lines.total_sales_amount_target_currency:total})*100"
       label: Cumulative Percent of Total Sales
-      value_format_name: percent_0
+      value_format_name: decimal_1
       _kind_hint: measure
       table_calculation: cumulative_percent_of_total_sales
       _type_hint: number
@@ -188,6 +188,36 @@
     series_colors:
       sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted: "#74A09F"
       cumulative_percent_of_total_sales: "#000"
+    advanced_vis_config: |-
+      {
+        series: [
+          {
+          tooltip: {
+            headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
+            pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b> </span> {point.y:,.0f}<br/>',
+            shared: true,
+          },
+          },
+          {
+          tooltip: {
+            headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
+            pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b></span> {point.y:.1f}%<br/>',
+            shared: true,
+          },
+          dataLabels: {
+            format: '{y:.0f}%',
+            color: '#000000',
+            align: 'left',
+            allowQverlap: false,
+          },
+          },
+        ],
+        tooltip: {
+          backgroundColor: '#C0C0C0',
+          shared: true,
+          formatter: null,
+        },
+      }
     note_display: hover
     note_text: |-
       <font size="-2">Total Sales (Target Currency).<br>Limited to 10 Customers. To change this row limit, select "Explore from Here" option and adjust the chart properties.
