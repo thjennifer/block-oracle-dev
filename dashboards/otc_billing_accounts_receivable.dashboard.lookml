@@ -100,7 +100,11 @@
     title: Total Receivables
     explore: sales_payments_daily_agg
     type: single_value
-    fields: [sales_payments_daily_agg.total_receivables_target_currency]
+    fields: [sales_payments_daily_agg.total_receivables_target_currency,
+            sales_payments_daily_agg.total_overdue_receivables_target_currency,
+            sales_payments_daily_agg.total_doubtful_receivables_target_currency]
+    hidden_fields: [sales_payments_daily_agg.total_overdue_receivables_target_currency,
+            sales_payments_daily_agg.total_doubtful_receivables_target_currency]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -124,7 +128,10 @@
     title: Total Past Due Receivables
     explore: sales_payments_daily_agg
     type: single_value
-    fields: [sales_payments_daily_agg.total_overdue_receivables_target_currency]
+    fields: [sales_payments_daily_agg.total_receivables_target_currency,
+             sales_payments_daily_agg.total_overdue_receivables_target_currency,
+             sales_payments_daily_agg.total_doubtful_receivables_target_currency]
+    hidden_fields: [sales_payments_daily_agg.total_receivables_target_currency,sales_payments_daily_agg.total_doubtful_receivables_target_currency]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -148,7 +155,11 @@
     title: Total Doubtful Receivables
     explore: sales_payments_daily_agg
     type: single_value
-    fields: [sales_payments_daily_agg.total_doubtful_receivables_target_currency]
+    fields: [sales_payments_daily_agg.total_receivables_target_currency,
+              sales_payments_daily_agg.total_overdue_receivables_target_currency,
+              sales_payments_daily_agg.total_doubtful_receivables_target_currency]
+    hidden_fields: [sales_payments_daily_agg.total_receivables_target_currency,
+              sales_payments_daily_agg.total_overdue_receivables_target_currency]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -231,22 +242,18 @@
     x_axis_zoom: true
     y_axis_zoom: false
     show_null_points: true
-    # tooltip: {
-    #     pointFormat: '<span style="color:{series.color}">{series.name}</span>' +
-    #         ': <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
-    #     shared: true
-    # },
     advanced_vis_config: |-
       {
         tooltip: {
-          format: '<span style="font-size: 1.8em">Past Due Receivables</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f} ({point.percentage:.0f}%) <br/>{/each}',
+          format: '<table><th style="font-size: 1.8em;text-align: left;">Past Due Receivables</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f} ({point.percentage:.0f}%)</td></tr>{/each}',
+          footerFormat: '</table>',
           shared: true
         },
       }
     # advanced_vis_config: |-
     #   {
     #     tooltip: {
-    #       format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f}<br/>{/each}',
+    #       format: '<span style="font-size: 1.8em">Past Due Receivables</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f} ({point.percentage:.0f}%) <br/>{/each}',
     #       shared: true
     #     },
     #   }
@@ -271,10 +278,8 @@
     explore: sales_payments_daily_agg
     type: looker_bar
     fields: [sales_payments_daily_agg.bill_to_customer_number, sales_payments_daily_agg.bill_to_customer_name,
-      sales_payments_daily_agg.total_receivables_target_currency, sales_payments_daily_agg.cumulative_total_receivables,
-      sales_payments_daily_agg.percent_of_total_receivables]
-    hidden_fields: [sales_payments_daily_agg.bill_to_customer_number, sales_payments_daily_agg.cumulative_total_receivables,
-    sales_payments_daily_agg.percent_of_total_receivables]
+      sales_payments_daily_agg.total_receivables_target_currency, sales_payments_daily_agg.cumulative_total_receivables]
+    hidden_fields: [sales_payments_daily_agg.bill_to_customer_number, sales_payments_daily_agg.cumulative_total_receivables]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     sorts: [sales_payments_daily_agg.percent_of_total_receivables desc]
@@ -297,31 +302,35 @@
       _type_hint: number
     x_axis_gridlines: false
     y_axis_gridlines: false
-    show_view_names: false
+    # show_view_names: false
     show_y_axis_labels: true
     show_y_axis_ticks: true
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
+    # y_axis_tick_density: default
+    # y_axis_tick_density_custom: 5
     show_x_axis_label: false
     show_x_axis_ticks: true
     y_axis_scale_mode: linear
-    x_axis_reversed: false
-    y_axis_reversed: false
-    plot_size_by_field: false
-    trellis: ''
-    stacking: ''
+    # x_axis_reversed: false
+    # y_axis_reversed: false
+    # plot_size_by_field: false
+    # trellis: ''
+    # stacking: ''
     limit_displayed_rows: true
+    limit_displayed_rows_values:
+      show_hide: show
+      first_last: first
+      num_rows: '10'
     legend_position: center
     point_style: circle
     show_value_labels: true
-    label_density: 25
+    # label_density: 25
     x_axis_scale: auto
     y_axis_combined: true
-    ordering: none
+    # ordering: none
     show_null_labels: false
     show_totals_labels: false
     show_silhouette: false
-    totals_color: "#808080"
+    # totals_color: "#808080"
     y_axes: [{label: '', orientation: top, series: [{axisId: sales_payments_daily_agg.total_receivables_target_currency,
             id: sales_payments_daily_agg.total_receivables_target_currency, name: Total Receivables
               (USD)}], showLabels: false, showValues: false, unpinAxis: false, tickDensity: default,
@@ -331,53 +340,29 @@
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
     y_axis_zoom: true
-    limit_displayed_rows_values:
-      show_hide: show
-      first_last: first
-      num_rows: '10'
-    # advanced_vis_config: |-
-    #   {
-    #     series: [{
-    #         tooltip: {
-    #           useHTML: true,
-    #         },
-    #       },
-          # {
-            # dataLabels: {
-            #   format: '{y:.0f}%',
-            #   color: '#000000',
-            #   align: 'left',
-            #   allowQverlap: false,
-            # },
-    #       },
-    #     ],
-    #     tooltip: {
-    #       backgroundColor: '#C0C0C0',
-    #       shared: true,
-    #       format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f}<br/>{/each}',
-    #     },
-    #   }
     advanced_vis_config: |-
       {
         series: [
         {
           tooltip: {
-            headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
-            pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b> </span> {point.y:,.0f}<br/>',
+            headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+            pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>',
             shared: true,
+            footerFormat: '</table>'
           },
         },
         {
           tooltip: {
-            headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
-            pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b></span> {point.y:.1f}%<br/>',
+            headerFormat: '<table> <th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+            pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};">{point.y:,.0f}%</td></tr>',
             shared: true,
+            footerFormat: '</table>'
           },
           dataLabels: {
             format: '{y:.0f}%',
             color: '#000000',
             align: 'left',
-            allowQverlap: false,
+            allowOverlap: false,
           },
         },
         ],
@@ -387,7 +372,36 @@
           formatter: null,
         },
       }
-
+    # advanced_vis_config: |-
+    #   {
+    #     series: [
+    #     {
+    #       tooltip: {
+    #         headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
+    #         pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b> </span> {point.y:,.0f}<br/>',
+    #         shared: true,
+    #       },
+    #     },
+    #     {
+    #       tooltip: {
+    #         headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
+    #         pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b></span> {point.y:.1f}%<br/>',
+    #         shared: true,
+    #       },
+    #       dataLabels: {
+    #         format: '{y:.0f}%',
+    #         color: '#000000',
+    #         align: 'left',
+    #         allowQverlap: false,
+    #       },
+    #     },
+    #     ],
+    #     tooltip: {
+    #       backgroundColor: '#C0C0C0',
+    #       shared: true,
+    #       formatter: null,
+    #     },
+    #   }
     note_state: collapsed
     note_display: hover
     note_text: "Customers ranked in descending order by Total Receivables. Black line overlaying totals reflects a customer's Cumulative Percent of Total Receivables. Limited to 10 customers. To change, click Explore from Here. In the Visualization pane, click EDIT. Click on Plot tab and edit 'Limit Displayed Rows' property."
@@ -458,10 +472,18 @@
     advanced_vis_config: |-
       {
         tooltip: {
-          format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f} ({point.percentage:.0f}%) <br/>{/each}',
+          format: '<table><th style="font-size: 1.8em;text-align: left;">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f} ({point.percentage:.0f}%)</td></tr>{/each}',
+          footerFormat: '</table>',
           shared: true
         },
       }
+    # advanced_vis_config: |-
+    #   {
+    #     tooltip: {
+    #       format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f} ({point.percentage:.0f}%) <br/>{/each}',
+    #       shared: true
+    #     },
+    #   }
     limit_displayed_rows_values:
       show_hide: show
       first_last: first

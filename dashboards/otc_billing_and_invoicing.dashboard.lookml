@@ -205,12 +205,30 @@
             },
           }, ],
           tooltip: {
-            backgroundColor: '#C0C0C0',
+            backgroundColor: '#D3D3D3',
             crosshairs: [true, true],
-            format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f}<br/>{/each}',
+            format: '<table><th style="font-size: 1.8em;text-align: left;">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
+            footerFormat: '</table>',
             shared: true
           },
         }
+      # advanced_vis_config: |-
+      #   {
+      #     chart: {},
+      #     series: [{
+      #       name: "Invoice Count",
+      #       lineWidth: 5,
+      #       marker: {
+      #         enabled: false
+      #       },
+      #     }, ],
+      #     tooltip: {
+      #       backgroundColor: '#C0C0C0',
+      #       crosshairs: [true, true],
+      #       format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f}<br/>{/each}',
+      #       shared: true
+      #     },
+      #   }
       listen:
         date: sales_invoices.invoice_date
         business_unit: sales_invoices.business_unit_name
@@ -301,20 +319,79 @@
         sales_invoices__lines.average_percent_discount_when_taken: "#873e23"
       series_point_styles:
         sales_invoices__lines.average_percent_discount_when_taken: triangle
+
+      # advanced_vis_config: |-
+      #   {
+      #     series: [
+      #       {
+      #         id: 'sales_invoices__lines.average_percent_discount_when_taken',
+      #         tooltip: {
+      #           followPointer: false,
+      #         },
+      #       },
+      #       {
+      #         id: 'sales_invoices__lines.discount_invoice_line_percent',
+
+      #         tooltip: {
+      #           followPointer: false,
+      #         },
+      #         type: 'line',
+      #         dashStyle: "dash",
+      #       },
+      #       {
+      #         id: 'sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link',
+      #         dataLabels: {
+      #           enabled: false,
+      #         },
+      #         tooltip: {
+      #           followPointer: true,
+      #         },
+      #       },
+      #       {
+      #         id: 'sales_invoices__lines.average_unit_selling_price_when_discount_target_currency_with_drill_link',
+      #         dataLabels: {
+      #           enabled: false,
+      #         },
+      #         tooltip: {
+      #           followPointer: true,
+      #         },
+      #       },
+      #     ],
+      #     tooltip: {
+      #       backgroundColor: '#C0C0C0',
+      #       format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.2f}<br/>{/each}',
+      #       shared: true,
+      #     },
+      #   }
       advanced_vis_config: |-
         {
           series: [
             {
               id: 'sales_invoices__lines.average_percent_discount_when_taken',
               tooltip: {
-                followPointer: false,
+                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+                pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.1f}%</td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+              },
+              dataLabels: {
+                format: '{y:.1f}%',
+                color: '#873e23',
+                allowOverlap: false,
               },
             },
             {
               id: 'sales_invoices__lines.discount_invoice_line_percent',
-
               tooltip: {
-                followPointer: false,
+                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+                pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.1f}%</td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+              },
+              dataLabels: {
+                format: '{y:.1f}%',
+                color: '#192d54',
+                allowOverlap: false,
               },
               type: 'line',
               dashStyle: "dash",
@@ -325,7 +402,10 @@
                 enabled: false,
               },
               tooltip: {
-                followPointer: true,
+                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+                pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>',
+                footerFormat: '</table>',
+                shared: true,
               },
             },
             {
@@ -334,14 +414,18 @@
                 enabled: false,
               },
               tooltip: {
-                followPointer: true,
+                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+                pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>',
+                footerFormat: '</table>',
+                shared: true,
               },
             },
           ],
           tooltip: {
-            backgroundColor: '#C0C0C0',
-            format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.2f}<br/>{/each}',
+            backgroundColor: '#D3D3D3',
+            formatter: null,
             shared: true,
+            crosshairs: true,
           },
         }
       listen:
