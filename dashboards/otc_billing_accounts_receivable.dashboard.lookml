@@ -6,7 +6,7 @@
 # of their overdue payments..
 #
 # Extends otc_template_billing and modifies to:
-#   update business_unit, custoemr_country, customer_name to
+#   update business_unit, customer_country, customer_name to
 #     use sales_payments_daily_agg Explore
 #
 #   add new filters for aging_bucket_size, aging_bucket_count,
@@ -212,24 +212,13 @@
       sales_payments.is_payment_transaction: 'No'
     sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     x_axis_gridlines: false
-    y_axis_gridlines: false
-    show_view_names: false
     show_y_axis_labels: false
     show_y_axis_ticks: false
-    show_x_axis_label: false
+    show_x_axis_labels: false
     show_x_axis_ticks: false
-    y_axis_scale_mode: linear
-    x_axis_reversed: false
-    y_axis_reversed: false
-    plot_size_by_field: false
     stacking: percent
-    limit_displayed_rows: false
     legend_position: center
-    point_style: none
     show_value_labels: true
-    x_axis_scale: auto
-    y_axis_combined: true
-    ordering: none
     show_null_labels: false
     show_totals_labels: false
     show_silhouette: false
@@ -241,7 +230,6 @@
         reverse: false
     x_axis_zoom: true
     y_axis_zoom: false
-    show_null_points: true
     advanced_vis_config: |-
       {
         tooltip: {
@@ -252,13 +240,6 @@
           shadow: true,
         },
       }
-    # advanced_vis_config: |-
-    #   {
-    #     tooltip: {
-    #       format: '<span style="font-size: 1.8em">Past Due Receivables</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f} ({point.percentage:.0f}%) <br/>{/each}',
-    #       shared: true
-    #     },
-    #   }
     note_state: collapsed
     note_display: hover
     note_text: "Percent of past due receivables by age (or days past due). Number and size of age ranges are defined by dashboard parameters 'Aging Bucket: # of Days in Range' and 'Aging Bucket: # of Ranges'."
@@ -290,7 +271,7 @@
     series_colors:
       sales_payments_daily_agg.total_receivables_target_currency: "#2596be"
       cumulative_percent_of_total_receivables: "#000"
-    limit: 5000
+    limit: 10
     total: true
     # Use Table Calculations for Cumulative Percent of Total Receivables
     dynamic_fields:
@@ -304,19 +285,11 @@
       _type_hint: number
     x_axis_gridlines: false
     y_axis_gridlines: false
-    # show_view_names: false
     show_y_axis_labels: true
     show_y_axis_ticks: true
-    # y_axis_tick_density: default
-    # y_axis_tick_density_custom: 5
     show_x_axis_label: false
     show_x_axis_ticks: true
     y_axis_scale_mode: linear
-    # x_axis_reversed: false
-    # y_axis_reversed: false
-    # plot_size_by_field: false
-    # trellis: ''
-    # stacking: ''
     limit_displayed_rows: true
     limit_displayed_rows_values:
       show_hide: show
@@ -325,14 +298,11 @@
     legend_position: center
     point_style: circle
     show_value_labels: true
-    # label_density: 25
     x_axis_scale: auto
     y_axis_combined: true
-    # ordering: none
     show_null_labels: false
     show_totals_labels: false
     show_silhouette: false
-    # totals_color: "#808080"
     y_axes: [{label: '', orientation: top, series: [{axisId: sales_payments_daily_agg.total_receivables_target_currency,
             id: sales_payments_daily_agg.total_receivables_target_currency, name: Total Receivables
               (USD)}], showLabels: false, showValues: false, unpinAxis: false, tickDensity: default,
@@ -376,36 +346,6 @@
           crosshairs: true,
         },
       }
-    # advanced_vis_config: |-
-    #   {
-    #     series: [
-    #     {
-    #       tooltip: {
-    #         headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
-    #         pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b> </span> {point.y:,.0f}<br/>',
-    #         shared: true,
-    #       },
-    #     },
-    #     {
-    #       tooltip: {
-    #         headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
-    #         pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b></span> {point.y:.1f}%<br/>',
-    #         shared: true,
-    #       },
-    #       dataLabels: {
-    #         format: '{y:.0f}%',
-    #         color: '#000000',
-    #         align: 'left',
-    #         allowQverlap: false,
-    #       },
-    #     },
-    #     ],
-    #     tooltip: {
-    #       backgroundColor: '#C0C0C0',
-    #       shared: true,
-    #       formatter: null,
-    #     },
-    #   }
     note_state: collapsed
     note_display: hover
     note_text: "Customers ranked in descending order by Total Receivables. Black line overlaying totals reflects a customer's Cumulative Percent of Total Receivables. Limited to 10 customers. To change, click Explore from Here. In the Visualization pane, click EDIT. Click on Plot tab and edit 'Limit Displayed Rows' property."
@@ -425,7 +365,7 @@
     explore: sales_payments
     type: looker_bar
     fields: [sales_payments.bill_to_customer_number, sales_payments.bill_to_customer_name,
-      sales_payments.total_receivables_target_currency, sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
+      sales_payments.total_overdue_receivables_target_currency, sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     pivots: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     hidden_fields: [sales_payments.bill_to_customer_number]
     hidden_pivots:
@@ -438,29 +378,13 @@
         desc 4]
     limit: 5000
     row_total: right
-    x_axis_gridlines: false
-    y_axis_gridlines: false
-    show_view_names: false
-    show_y_axis_labels: false
     show_y_axis_ticks: false
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
+    show_y_axis_labels: false
     show_x_axis_label: false
-    show_x_axis_ticks: true
-    y_axis_scale_mode: linear
-    x_axis_reversed: false
-    y_axis_reversed: false
-    plot_size_by_field: false
-    trellis: ''
     stacking: normal
     limit_displayed_rows: true
     legend_position: center
-    point_style: none
     show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
-    ordering: none
     show_null_labels: false
     show_totals_labels: true
     show_silhouette: false
@@ -481,24 +405,16 @@
           shared: true,
           crosshairs: true,
           backgroundColor: '#ffffff',
+          shadow: true,
         },
       }
-    # advanced_vis_config: |-
-    #   {
-    #     tooltip: {
-    #       format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f} ({point.percentage:.0f}%) <br/>{/each}',
-    #       shared: true
-    #     },
-    #   }
     limit_displayed_rows_values:
       show_hide: show
       first_last: first
       num_rows: '10'
-    # hidden_series: []
-    # series_colors: {}
     note_state: collapsed
     note_display: hover
-    note_text: "Customers ranked in descending order by Total Past Due Receivables by Age. Number and size of age ranges are defined by dashboard parameters 'Aging Bucket: # of Days in Range' and 'Aging Bucket: # of Ranges'. Limited to 10 customers. To change, click Explore from Here. In the Visualization pane, click EDIT. Click on Plot tab and edit 'Limit Displayed Rows' property."
+    note_text: "Customers ranked in descending order by Total Past Due Receivables. Number and size of age ranges are defined by dashboard parameters 'Aging Bucket: # of Days in Range' and 'Aging Bucket: # of Ranges'. Limited to 10 customers. To change, click Explore from Here. In the Visualization pane, click EDIT. Click on Plot tab and edit 'Limit Displayed Rows' property."
     listen:
       date: sales_payments.transaction_date
       business_unit: sales_payments.business_unit_name
