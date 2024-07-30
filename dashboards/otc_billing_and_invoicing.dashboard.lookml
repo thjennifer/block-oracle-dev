@@ -205,11 +205,13 @@
             },
           }, ],
           tooltip: {
-            backgroundColor: '#D3D3D3',
-            crosshairs: [true, true],
-            format: '<table><th style="font-size: 1.8em;text-align: left;">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
+            backgroundColor: '#ffffff',
+            shadow: true,
+            format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080; ">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
             footerFormat: '</table>',
-            shared: true
+            useHTML: true,
+            shared: true,
+            crosshairs: true,
           },
         }
       # advanced_vis_config: |-
@@ -369,7 +371,7 @@
             {
               id: 'sales_invoices__lines.average_percent_discount_when_taken_formatted',
               tooltip: {
-                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;color: #808080;">{point.key}</th>',
                 pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.1f}%</td></tr>',
                 footerFormat: '</table>',
                 shared: true,
@@ -383,7 +385,7 @@
             {
               id: 'sales_invoices__lines.discount_invoice_line_percent_formatted',
               tooltip: {
-                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;color: #808080;">{point.key}</th>',
                 pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.1f}%</td></tr>',
                 footerFormat: '</table>',
                 shared: true,
@@ -402,7 +404,7 @@
                 enabled: false,
               },
               tooltip: {
-                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;color: #808080;">{point.key}</th>',
                 pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>',
                 footerFormat: '</table>',
                 shared: true,
@@ -414,7 +416,7 @@
                 enabled: false,
               },
               tooltip: {
-                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+                headerFormat: '<table><th style="font-size: 1.8em;text-align: left;color: #808080;">{point.key}</th>',
                 pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>',
                 footerFormat: '</table>',
                 shared: true,
@@ -422,10 +424,11 @@
             },
           ],
           tooltip: {
-            backgroundColor: '#D3D3D3',
+            backgroundColor: '#ffffff',
             formatter: null,
             shared: true,
             crosshairs: true,
+            shadow: true,
           },
         }
       listen:

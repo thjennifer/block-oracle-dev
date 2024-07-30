@@ -245,9 +245,11 @@
     advanced_vis_config: |-
       {
         tooltip: {
-          format: '<table><th style="font-size: 1.8em;text-align: left;">Past Due Receivables</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f} ({point.percentage:.0f}%)</td></tr>{/each}',
+          format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080;">Past Due Receivables</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f} ({point.percentage:.0f}%)</td></tr>{/each}',
           footerFormat: '</table>',
-          shared: true
+          shared: true,
+          backgroundColor: '#ffffff',
+          shadow: true,
         },
       }
     # advanced_vis_config: |-
@@ -345,7 +347,7 @@
         series: [
         {
           tooltip: {
-            headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+            headerFormat: '<table><th style="font-size: 1.8em;text-align: left;color: #808080;">{point.key}</th>',
             pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>',
             shared: true,
             footerFormat: '</table>'
@@ -353,7 +355,7 @@
         },
         {
           tooltip: {
-            headerFormat: '<table> <th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
+            headerFormat: '<table> <th style="font-size: 1.8em;text-align: left;color: #808080;">{point.key}</th>',
             pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};">{point.y:,.0f}%</td></tr>',
             shared: true,
             footerFormat: '</table>'
@@ -367,9 +369,11 @@
         },
         ],
         tooltip: {
-          backgroundColor: '#C0C0C0',
+          backgroundColor: '#ffffff',
           shared: true,
           formatter: null,
+          shadow: true,
+          crosshairs: true,
         },
       }
     # advanced_vis_config: |-
@@ -472,9 +476,11 @@
     advanced_vis_config: |-
       {
         tooltip: {
-          format: '<table><th style="font-size: 1.8em;text-align: left;">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f} ({point.percentage:.0f}%)</td></tr>{/each}',
+          format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080;">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f} ({point.percentage:.0f}%)</td></tr>{/each}',
           footerFormat: '</table>',
-          shared: true
+          shared: true,
+          crosshairs: true,
+          backgroundColor: '#ffffff',
         },
       }
     # advanced_vis_config: |-
