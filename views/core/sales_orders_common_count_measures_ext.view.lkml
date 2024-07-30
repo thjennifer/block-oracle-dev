@@ -89,7 +89,31 @@ view: sales_orders_common_count_measures_ext {
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
       {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters='is_fulfilled=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
+  }
 
+  measure: fulfilled_sales_order_percent_formatted {
+    hidden: yes
+    type: number
+    label: "In-Full Percent"
+    description: "The percentage of sales orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
+    sql: ${fulfilled_sales_order_percent} * 100 ;;
+    value_format_name: decimal_1
+    html: {{rendered_value}}% ;;
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_fulfilled=Yes'%}
@@ -111,6 +135,32 @@ view: sales_orders_common_count_measures_ext {
     description: "The percentage of sales orders that are on-time (all lines fulfilled by requested delivery date)."
     sql: SAFE_DIVIDE(${fulfilled_by_request_date_sales_order_count},${sales_order_count}) ;;
     value_format_name: percent_1
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters='is_fulfilled_by_request_date=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
+  }
+
+  measure: fulfilled_by_request_date_sales_order_percent_formatted {
+    hidden: yes
+    type: number
+    label: "On-Time & In-Full Percent"
+    description: "The percentage of sales orders that are on-time (all lines fulfilled by requested delivery date)."
+    sql: ${fulfilled_by_request_date_sales_order_percent} * 100 ;;
+    value_format_name: decimal_1
+    html: {{rendered_value}}% ;;
     link: {
       label: "Order Line Details"
       icon_url: "/favicon.ico"

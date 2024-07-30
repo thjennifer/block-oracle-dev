@@ -250,9 +250,9 @@
       explore: sales_invoices
       type: looker_line
       fields: [sales_invoices.bill_to_site_use_id, sales_invoices.bill_to_customer_name,
-        sales_invoices.invoice_count, sales_invoices__lines.average_percent_discount_when_taken,
+        sales_invoices.invoice_count, sales_invoices__lines.average_percent_discount_when_taken_formatted,
         sales_invoices__lines.invoice_line_count, sales_invoices__lines.total_discount_amount_target_currency,
-        sales_invoices__lines.discount_invoice_line_percent, sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link,
+        sales_invoices__lines.discount_invoice_line_percent_formatted, sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link,
         sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link]
       hidden_fields: [sales_invoices.bill_to_site_use_id, sales_invoices.invoice_count,
         sales_invoices__lines.invoice_line_count, sales_invoices__lines.total_discount_amount_target_currency]
@@ -291,10 +291,10 @@
               id: sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link,
               name: Average Unit Selling Price when Discount}], showLabels: true,
           showValues: true, valueFormat: "#,###", unpinAxis: false, tickDensity: default, type: linear},
-        {label: 'Discount percentages', orientation: right, series: [{axisId: sales_invoices__lines.average_percent_discount_when_taken,
-              id: sales_invoices__lines.average_percent_discount_when_taken, name: Average
-                % Discount}, {axisId: sales_invoices__lines.discount_invoice_line_percent,
-              id: sales_invoices__lines.discount_invoice_line_percent, name: Frequency of Discounts}], showLabels: true, showValues: true,
+        {label: 'Discount percentages', orientation: right, series: [{axisId: sales_invoices__lines.average_percent_discount_when_taken_formatted,
+              id: sales_invoices__lines.average_percent_discount_when_taken_formatted, name: Average
+                % Discount}, {axisId: sales_invoices__lines.discount_invoice_line_percent_formatted,
+              id: sales_invoices__lines.discount_invoice_line_percent_formatted, name: Frequency of Discounts}], showLabels: true, showValues: true,
               # maxValue: 1,
           minValue: 0, unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
       x_axis_zoom: true
@@ -308,29 +308,29 @@
         sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link: column
         sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link: column
       series_labels:
-        sales_invoices__lines.average_percent_discount_when_taken: "Average Discount %"
-        sales_invoices__lines.discount_invoice_line_percent: "Discount Frequency (% of Invoice Lines)"
+        sales_invoices__lines.average_percent_discount_when_taken_formatted: "Average Discount %"
+        sales_invoices__lines.discount_invoice_line_percent_formatted: "Discount Frequency (% of Invoice Lines)"
         sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link: "Average Unit List Price"
         sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link: "Average Gross Unit Selling Price"
       series_colors:
         sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link: "#76b5c5"
         sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link: "#e28743"
-        sales_invoices__lines.discount_invoice_line_percent: "#192d54"
-        sales_invoices__lines.average_percent_discount_when_taken: "#873e23"
+        sales_invoices__lines.discount_invoice_line_percent_formatted: "#192d54"
+        sales_invoices__lines.average_percent_discount_when_taken_formatted: "#873e23"
       series_point_styles:
-        sales_invoices__lines.average_percent_discount_when_taken: triangle
+        sales_invoices__lines.average_percent_discount_when_taken_formatted: triangle
 
       # advanced_vis_config: |-
       #   {
       #     series: [
       #       {
-      #         id: 'sales_invoices__lines.average_percent_discount_when_taken',
+      #         id: 'sales_invoices__lines.average_percent_discount_when_taken_formatted',
       #         tooltip: {
       #           followPointer: false,
       #         },
       #       },
       #       {
-      #         id: 'sales_invoices__lines.discount_invoice_line_percent',
+      #         id: 'sales_invoices__lines.discount_invoice_line_percent_formatted',
 
       #         tooltip: {
       #           followPointer: false,
@@ -367,7 +367,7 @@
         {
           series: [
             {
-              id: 'sales_invoices__lines.average_percent_discount_when_taken',
+              id: 'sales_invoices__lines.average_percent_discount_when_taken_formatted',
               tooltip: {
                 headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
                 pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.1f}%</td></tr>',
@@ -381,7 +381,7 @@
               },
             },
             {
-              id: 'sales_invoices__lines.discount_invoice_line_percent',
+              id: 'sales_invoices__lines.discount_invoice_line_percent_formatted',
               tooltip: {
                 headerFormat: '<table><th style="font-size: 1.8em;text-align: left;">{point.key}</th>',
                 pointFormat: '<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.1f}%</td></tr>',

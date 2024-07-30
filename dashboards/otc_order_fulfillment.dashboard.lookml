@@ -128,7 +128,7 @@
     title: Delivery Performance by Month
     explore: sales_orders
     type: looker_line
-    fields: [sales_orders.ordered_month,sales_orders.fulfilled_sales_order_percent,sales_orders.fulfilled_by_request_date_sales_order_percent]
+    fields: [sales_orders.ordered_month,sales_orders.fulfilled_sales_order_percent_formatted,sales_orders.fulfilled_by_request_date_sales_order_percent_formatted]
     sorts: [sales_orders.ordered_month]
     limit: 500
     legend_position: center
@@ -140,15 +140,35 @@
     x_axis_zoom: true
     y_axis_zoom: true
     series_types:
-      sales_orders.fulfilled_sales_order_percent: line
-      sales_orders.fulfilled_by_request_date_sales_order_percent: line
+      sales_orders.fulfilled_sales_order_percent_formatted: line
+      sales_orders.fulfilled_by_request_date_sales_order_percent_formatted: line
     series_colors:
-      sales_orders.fulfilled_sales_order_percent: "#6494AA"
-      sales_orders.fulfilled_by_request_date_sales_order_percent: "#89BD9E"
+      sales_orders.fulfilled_sales_order_percent_formatted: "#6494AA"
+      sales_orders.fulfilled_by_request_date_sales_order_percent_formatted: "#89BD9E"
     series_labels:
-      sales_orders.fulfilled_sales_order_percent: In Full %
-      sales_orders.fulfilled_by_request_date_sales_order_percent: OTIF %
+      sales_orders.fulfilled_sales_order_percent_formatted: In Full %
+      sales_orders.fulfilled_by_request_date_sales_order_percent_formatted: OTIF %
     x_axis_datetime_label: "%B %y"
+    advanced_vis_config: |-
+      {
+        tooltip: {
+          format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080; ">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:.1f}%</td></tr>{/each}',
+          footerFormat: '</table>',
+          shared: true,
+          crosshairs: true,
+          shadow: true,
+          borderColor: '#cccccc',
+          backgroundColor: '#ffffff',
+        },
+        yAxis: {
+          labels: {
+            format: '{text}%' ,
+          },
+          ceiling: 102,
+          endOnTick: false,
+          maxPadding: 0.2,
+        },
+      }
     note_state: collapsed
     note_display: hover
     note_text: "Monthly tracking of order fulfillment and on-time delivery. In Full % is the percentage of sales orders where all order lines have been fulfilled (inventory has been reserved and is ready for shipment). On Time in Full (OTIF) % is the percentage of sales orders that have been fulfilled completely by the requested delivery date."
@@ -216,12 +236,39 @@
       label: '', line_value: max}, {reference_type: line, line_value: min, range_start: max,
       range_end: min, margin_top: deviation, margin_value: mean, margin_bottom: deviation,
       label_position: right, color: "#000000"}]
-    advanced_vis_config: "{\n  yAxis: [{\n \n    plotLines: [{\n        color: '#transparent',\n\
-        \        label: {\n          align: 'center',\n          verticalAlign: 'top',\n\
-        \          x: -5,\n          y: 2,\n        },\n    \n      },\n      {\n  \
-        \      color: '#transparent',\n        label: {\n          align: 'center',\n\
-        \          verticalAlign: 'bottom',\n          x: 0,\n          y: -1,\n   \
-        \     },\n        \n      },\n    ],\n    \n\n  }, ],\n}"
+    advanced_vis_config: |-
+      {
+      tooltip: {
+        format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080;">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:.1f}</td></tr>{/each}',
+        footerFormat: '</table>',
+        shared: true,
+        crosshairs: true,
+        borderColor: '#cccccc',
+        backgroundColor: '#ffffff',
+        shadow: true,
+      },
+      yAxis: [{
+        plotLines: [{
+            color: '#transparent',
+            label: {
+              align: 'right',
+              verticalAlign: 'top',
+              x: -5,
+              y: 2,
+            },
+          },
+          {
+            color: '#transparent',
+            label: {
+              align: 'left',
+              verticalAlign: 'bottom',
+              x: 0,
+              y: -1,
+            },
+          },
+        ]
+      }, ],
+      }
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
@@ -291,52 +338,58 @@
     series_colors:
       sales_orders__lines.total_ordered_quantity_by_item: "#12B5CB"
       sales_orders__lines.total_fulfilled_quantity_by_item: "#A6CFD5"
-      sales_orders__lines.difference_ordered_fulfilled_quantity_by_item: "#596157"
+      # sales_orders__lines.difference_ordered_fulfilled_quantity_by_item: "#596157"
+      sales_orders__lines.difference_ordered_fulfilled_quantity_by_item: "#404040"
     series_labels:
       sales_orders__lines.total_ordered_quantity_by_item: Total Ordered Quantity
       sales_orders__lines.total_fulfilled_quantity_by_item: Total Fulfilled Quantity
     # label_color: []
     # reference_lines: []
-    # x_axis_label_rotation: 0
+    x_axis_label_rotation: 0
     advanced_vis_config: |-
       {
-        chart: {},
+        chart: {
+          spacingBottom: 60,
+        },
         series: [{
           name: 'Total Ordered Quantity',
           dataLabels: {
-          enabled: false,
+            enabled: false,
           }
           }, {
           name: 'Total Fulfilled Quantity',
           dataLabels: {
-          enabled: false,
+            enabled: false,
           }
           },
           {
-          name: 'Difference'
+          name: 'Difference',
+          lineWidth: 1,
           },
         ],
-        xAxis: {
-          allowDecimals: false,
-          gridLineColor: '#e6e6e6',
-          gridLineWidth: 0,
-          keepOrder: true,
-          labels: {
-            style: {
-              cursor: 'pointer',
-              fontSize: '12px',
-              color: 'inherit',
-              textOverflow: 'none',
-            },
-          },
-        },
         legend: {
           verticalAlign: 'top',
         },
         tooltip: {
-          backgroundColor: "#1A1B41",
-          format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f}<br/>{/each}',
-          shared: true
+          format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080;">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
+          footerFormat: '</table>',
+          shared: true,
+          crosshairs: true,
+          borderColor: '#cccccc',
+          backgroundColor: '#ffffff',
+          shadow: true,
+        },
+        xAxis: {
+          crosshair: true,
+          labels: {
+            angle: 0,
+            style: {
+              cursor: 'pointer',
+              fontSize: '11px',
+              color: 'inherit',
+              textOverflow: 'none',
+            },
+          },
         },
       }
     note_state: collapsed

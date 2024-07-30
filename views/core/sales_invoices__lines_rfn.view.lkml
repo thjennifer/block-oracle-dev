@@ -438,7 +438,14 @@ view: +sales_invoices__lines {
 
   measure: discount_invoice_line_percent {
     type: number
-    sql: SAFE_DIVIDE(${discount_invoice_line_count},${invoice_line_count}) * 100 ;;
+    sql: SAFE_DIVIDE(${discount_invoice_line_count},${invoice_line_count});;
+    value_format_name: percent_1
+  }
+
+  measure: discount_invoice_line_percent_formatted {
+    hidden: yes
+    type: number
+    sql: ${discount_invoice_line_percent} * 100 ;;
     value_format_name: decimal_1
     html: {{rendered_value}}% ;;
   }
@@ -447,19 +454,23 @@ view: +sales_invoices__lines {
     type: average
     label: "Average % Discount"
     description: "Average percent discount off list price per invoice line (all lines even if there is no discount."
-    sql: ${percent_discount} *100 ;;
-    # value_format_name: percent_1
-    value_format_name: decimal_1
-    html: {{ rendered_value }}% ;;
+    sql: ${percent_discount};;
+    value_format_name: percent_1
   }
 
   measure: average_percent_discount_when_taken {
     type: average
     label: "Average % Discount When Discount Taken"
     description: "For invoice lines with a discount, average percent discount off list price."
-    sql: ${percent_discount} * 100;;
+    sql: ${percent_discount};;
     filters: [is_discount_selling_price: "Yes"]
-    # value_format_name: percent_1
+    value_format_name: percent_1
+  }
+
+  measure: average_percent_discount_when_taken_formatted {
+    hidden: yes
+    type: number
+    sql: ${average_percent_discount_when_taken} * 100;;
     value_format_name: decimal_1
     html: {{ rendered_value }}% ;;
   }

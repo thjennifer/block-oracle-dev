@@ -166,6 +166,12 @@
     note_state: collapsed
     note_display: hover
     note_text: "Beginning with Total Sales Ordered Amount, this funnel depicts the flow of amounts across the stages of a line item: Booking, Backlog, Shipping and Billing."
+    advanced_vis_config: |-
+      {
+        tooltip: {
+          enabled: false,
+          },
+        }
     listen:
       date: sales_orders_daily_agg.ordered_date
       business_unit: sales_orders_daily_agg.business_unit_name
@@ -212,7 +218,10 @@
         title: {
           text: 'Order<br>Status',
           verticalAlign: 'middle',
-        }
+        },
+        tooltip: {
+          enabled: false,
+        },
       }
     note_state: collapsed
     note_display: hover
