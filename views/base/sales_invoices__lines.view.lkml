@@ -103,6 +103,10 @@ view: sales_invoices__lines {
     type: number
     sql: ORDER_HEADER_ID ;;
   }
+  dimension: order_header_number {
+    type: number
+    sql: ORDER_HEADER_NUMBER ;;
+  }
   dimension: order_source_id {
     type: number
     sql: ORDER_SOURCE_ID ;;

@@ -1,5 +1,25 @@
+#########################################################{
+# Order Line Details dashboard provides
+# a table of orders including details like customer, items,
+# ordered quantities and amounts.
+#
+# This dashboard is accessed through drills from select KPIs.
+#
+# Extends otc_template_orders and modifies to:
+#   add filters to support KPI-specific drills
+#   update dashboard_navigation to:
+#       listen to item_language
+#       set parameter_navigation_focus_page: '4'
+#       set parameter_navigation_subject: 'odetails'
+#
+# Visualization Elements:
+#   order_line_item_table
+#
+#########################################################}
+
 - dashboard: otc_order_line_item_details
-  title: Order Details with Line Items
+  title: Order Line Details
+  description: 'Provides a table of orders including details like customer, items, ordered quantities and amounts.'
 
 
   extends: otc_template_orders
@@ -154,69 +174,29 @@
     field: sales_orders__lines.item_description
     listens_to_filters: [item_language, category_description]
 
-  - name: product_description
-    title: Product Description
-    type: field_filter
-    default_value: ''
-    allow_multiple_values: true
-    ui_config:
-      type: advanced
-      display: popover
-    explore: sales_orders
-    field: sales_orders__lines.selected_product_dimension_description
-
-  # - name: is_discounted
-  #   title: Is Discounted Item (Yes / No)
-  #   type: field_filter
-  #   default_value: ''
-  #   allow_multiple_values: true
-  #   required: false
-  #   ui_config:
-  #     type: button_group
-  #     display: inline
-  #   explore: sales_invoices
-  #   field: sales_invoices__lines.is_discount_selling_price
-
-  # - name: is_intercompany
-  #   title: Is Intercompany (Yes / No)
-  #   type: field_filter
-  #   default_value: ''
-  #   allow_multiple_values: true
-  #   required: false
-  #   ui_config:
-  #     type: button_group
-  #     display: inline
-  #   explore: sales_invoices
-  #   field: sales_invoices__lines.is_intercompany
-
-
 
   elements:
   - name: dashboard_navigation
     filters:
       otc_dashboard_navigation_ext.parameter_navigation_subject: 'odetails'
       otc_dashboard_navigation_ext.parameter_navigation_focus_page: '4'
-
-    # Order Type / Status (open, delivered, blocked, canceled, return)
-# OrderID
-# ItemID
-# Product
-# Customer (Sold To / Ship To / Billed To parties)
-# Order Date (Creation Date)
-# Item Ordered Quantity with Unit of Measure
-# Item Fulfilled Quantity (inventory is reserved and ready to be shipped)
-# Item List Price (per Unit)
-# Item Discount Amount
-# Item Net Price (after discount)
-# Item Ordered Amount (Item Net Price multiplied by Item Quantity)
-# Item Fulfilled Amount (Item Net Price multiplied by Item Quantity where item is fulfilled)
-# Target Currency & Exchange Rate
+    listen:
+      date: otc_dashboard_navigation_ext.filter1
+      business_unit: otc_dashboard_navigation_ext.filter2
+      customer_type: otc_dashboard_navigation_ext.filter3
+      customer_country: otc_dashboard_navigation_ext.filter4
+      customer_name: otc_dashboard_navigation_ext.filter5
+      target_currency: otc_dashboard_navigation_ext.filter6
+      order_source: otc_dashboard_navigation_ext.filter7
+      item_category: otc_dashboard_navigation_ext.filter8
+      item_language: otc_dashboard_navigation_ext.filter9
 
   - name: order_line_item_table
     title: Orders with Line Item Details
     explore: sales_orders
     type: looker_grid
-    fields: [sales_orders.order_number, sales_orders.order_category_code, sales_orders.open_closed_cancelled_with_symbols, sales_orders.is_fulfilled_with_symbols, sales_orders.is_blocked_with_symbols,
+    fields: [sales_orders.order_number, sales_orders.order_category_code,
+            sales_orders.open_closed_cancelled_with_symbols, sales_orders.is_fulfilled_with_symbols, sales_orders.is_blocked_with_symbols,
             sales_orders.has_return_line_with_symbols, sales_orders.total_sales_ordered_amount_target_currency,
             sales_orders__lines.line_id, sales_orders__lines.line_number,
             sales_orders__lines.item_part_number, sales_orders__lines.item_description,

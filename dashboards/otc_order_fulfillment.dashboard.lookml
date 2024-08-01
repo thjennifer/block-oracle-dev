@@ -3,9 +3,11 @@
 # delivery performance over time, items with longest average
 # order cycle time and items having fulfillment issues.
 #
-# Extends otc_template_orders and modifies dashboard_navigation to:
-#   set parameter_navigation_focus_page: '2'
-#   add listeners for item_language
+# Extends otc_template_orders and modifies to:
+#   add filter for item_language
+#   update dashboard_navigation to:
+#       listen to item_language
+#       set parameter_navigation_focus_page: '3'
 #
 # Visualization Elements:
 #   in_full - single value

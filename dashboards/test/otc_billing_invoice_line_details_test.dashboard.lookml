@@ -1,16 +1,10 @@
-- dashboard: otc_billing_invoice_details
-  title: Billing Invoice Details
-  layout: newspaper
-  preferred_viewer: dashboards-next
-  crossfilter_enabled: false
-  filters_location_top: false
-  description: ''
+- dashboard: otc_billing_invoice_line_details_test
+  title: Invoice Details TEST
 
-  # pull navigation bar and filters from template
-  # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation tile to use the correct value
-  extends: otc_template_billing
+  extends: otc_template_billing_test
 
   filters:
+
   - name: order_source
     title: Order Source
     type: field_filter
@@ -22,6 +16,7 @@
       display: popover
     explore: sales_invoices_daily_agg
     field: sales_invoices_daily_agg.order_source_name
+    listens_to_filters: [test_or_demo]
 
   - name: item_category
     title: Item Category
@@ -34,6 +29,7 @@
       display: popover
     explore: sales_invoices
     field: sales_invoices__lines.category_description
+    listens_to_filters: [test_or_demo]
 
   - name: invoice_number
     title: Invoice Number
@@ -46,20 +42,7 @@
       display: popover
     explore: sales_invoices
     field: sales_invoices.invoice_number
-    listens_to_filters: [business_unit_name, customer_country, customer_name]
-
-  - name: item_language
-    title: Language of Item Description
-    type: field_filter
-    default_value: "{{ _user_attributes['cortex_oracle_ebs_default_language'] }}"
-    allow_multiple_values: false
-    required: false
-    ui_config:
-      type: dropdown_menu
-      display: inline
-      options: []
-    explore: item_md
-    field: item_md__item_descriptions.language_code
+    listens_to_filters: [business_unit_name, customer_country, customer_name, test_or_demo]
 
   - name: is_complete
     title: Is Complete (Yes / No)
@@ -97,21 +80,35 @@
     explore: sales_invoices
     field: sales_invoices__lines.is_intercompany
 
-
+  - name: item_language
+    title: Language of Item Description
+    type: field_filter
+    default_value: "{{ _user_attributes['cortex_oracle_ebs_default_language'] }}"
+    allow_multiple_values: false
+    required: false
+    ui_config:
+      type: dropdown_menu
+      display: inline
+      options: []
+    explore: item_md
+    field: item_md__item_descriptions.language_code
+    listens_to_filters: [test_demo]
 
   elements:
+
   - name: dashboard_navigation
     filters:
       otc_dashboard_navigation_ext.parameter_navigation_focus_page: '3'
-      otc_dashboard_navigation_ext.parameter_navigation_subject: 'bdetails'
     listen:
       date: otc_dashboard_navigation_ext.filter1
       business_unit: otc_dashboard_navigation_ext.filter2
+      # customer_type: otc_dashboard_navigation_ext.filter3
       customer_country: otc_dashboard_navigation_ext.filter4
       customer_name: otc_dashboard_navigation_ext.filter5
       target_currency: otc_dashboard_navigation_ext.filter6
       order_source: otc_dashboard_navigation_ext.filter7
       item_category: otc_dashboard_navigation_ext.filter8
+      test_or_demo: otc_dashboard_navigation_ext.filter10
 
   - name: invoice_table
     title: Invoices with Line Item Details
@@ -126,8 +123,7 @@
       sales_invoices__lines.quantity_uom, sales_invoices__lines.unit_list_price_target_currency,
       sales_invoices__lines.unit_selling_price_target_currency, sales_invoices__lines.percent_discount,
       sales_invoices__lines.transaction_amount_target_currency, sales_invoices__lines.discount_amount_target_currency,
-      sales_invoices__lines.tax_amount_target_currency,
-      sales_invoices__lines.is_discount_selling_price_with_symbols]
+      sales_invoices__lines.tax_amount_target_currency]
     sorts: [sales_invoices.invoice_number, sales_invoices__lines.line_number]
     limit: 500
     show_view_names: false
@@ -146,29 +142,49 @@
     conditional_formatting_include_totals: false
     conditional_formatting_include_nulls: false
     show_sql_query_menu_options: false
-    show_totals: false
-    show_row_totals: false
+    show_totals: true
+    show_row_totals: true
     truncate_header: false
     minimum_column_width: 75
-    series_labels:
-      sales_invoices__lines.is_discount_selling_price_with_symbols: Item is Discounted
-    series_text_format:
-      sales_invoices__lines.is_discount_selling_price_with_symbols:
-        align: center
+    series_labels: {}
+    hidden_fields: []
+    hidden_points_if_no: []
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_y_axis_labels: true
+    show_y_axis_ticks: true
+    y_axis_tick_density: default
+    y_axis_tick_density_custom: 5
+    show_x_axis_label: true
+    show_x_axis_ticks: true
+    y_axis_scale_mode: linear
+    x_axis_reversed: false
+    y_axis_reversed: false
+    plot_size_by_field: false
+    trellis: ''
+    stacking: ''
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    show_null_points: true
+    interpolation: linear
     listen:
       date: sales_invoices.invoice_date
-      business_unit: sales_invoices.business_unit_name
       customer_country: sales_invoices.bill_to_customer_country
       customer_name: sales_invoices.bill_to_customer_name
-      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      business_unit: sales_invoices.business_unit_name
       order_source: sales_invoices__lines.order_source_name
       item_category: sales_invoices__lines.category_description
-      item_language: otc_common_parameters_xvw.parameter_language
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
       invoice_number: sales_invoices.invoice_number
       is_complete: sales_invoices.is_complete
       is_discounted: sales_invoices__lines.is_discount_selling_price
-      is_intercompany: sales_invoices__lines.is_intercompany
+      test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
     row: 0
     col: 0
     width: 24
     height: 12
+    model: cortex-oracle-ebs-test

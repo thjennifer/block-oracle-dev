@@ -199,7 +199,7 @@ view: +sales_invoices_daily_agg {
   #     {% assign filters_mapping = '@{link_sales_invoices_daily_agg_source_to_target_dashboard_filters}'%}
 
   #     {% assign model = _model._name %}
-  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
   #     {% assign default_filters_override = false %}
   #     @{link_generate_dashboard_url}
@@ -217,7 +217,7 @@ view: +sales_invoices_daily_agg {
   #     {% assign filters_mapping = '@{link_sales_invoices_daily_agg_source_to_target_dashboard_filters}'%}
 
   #     {% assign model = _model._name %}
-  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
   #     {% assign default_filters_override = false %}
   #     @{link_generate_dashboard_url}
@@ -235,7 +235,7 @@ view: +sales_invoices_daily_agg {
   #     {% assign filters_mapping = '@{link_sales_invoices_daily_agg_source_to_target_dashboard_filters}'%}
 
   #     {% assign model = _model._name %}
-  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
   #     {% assign default_filters_override = false %}
   #     @{link_generate_dashboard_url}

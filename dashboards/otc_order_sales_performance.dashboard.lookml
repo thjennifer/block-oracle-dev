@@ -2,9 +2,12 @@
 # Order Sales Performance dashboard provides insights into
 # top sales performers including items, categories, customers,
 # business units, and order sources.
-# Extends otc_template_orders and modifies dashboard_navigation to:
-#   set parameter_navigation_focus_page: '2'
-#   add listeners for item_language
+#
+# Extends otc_template_orders and modifies to:
+#   add filters item_language and product_level
+#   update dashboard_navigation to:
+#       listen to item_language
+#       set parameter_navigation_focus_page: '2'
 #
 # Visualization Elements:
 #   top_products_by_sales - bar chart

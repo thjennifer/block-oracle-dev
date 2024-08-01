@@ -17,7 +17,7 @@ view: +sales_invoices__lines {
       {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
 
       {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
       {% assign default_filters='is_discounted=Yes'%}
       {% assign default_filters_override = false %}
       @{link_generate_dashboard_url}
@@ -38,7 +38,7 @@ view: +sales_invoices__lines {
       {% assign link = link_generator._link %}
       {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
       {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
       {% assign default_filters='is_discounted=Yes'%}
       {% assign default_filters_override = false %}
       @{link_generate_dashboard_url}
@@ -63,7 +63,7 @@ view: +sales_invoices__lines {
       {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
       {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
       {% assign default_filters_override = false %}
       @{link_generate_dashboard_url}
@@ -81,7 +81,7 @@ view: +sales_invoices__lines {
       {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
       {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
       {% assign default_filters_override = false %}
       @{link_generate_dashboard_url}
@@ -99,7 +99,7 @@ view: +sales_invoices__lines {
       {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
       {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
       {% assign default_filters_override = false %}
       @{link_generate_dashboard_url}
@@ -227,7 +227,7 @@ view: +sales_invoices__lines {
         {% assign filters_mapping = 'sales_invoices.invoice_date|date||sales_invoices.bill_to_customer_country|customer_country'%}
 
         {% assign model = _model._name %}
-        {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+        {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
         {% assign default_filters_override = false %}
         @{link_generate_dashboard_url}
@@ -293,7 +293,7 @@ view: +sales_invoices__lines {
       {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}'  | append: '||is_discount_selling_price|is_discounted||is_intercompany|is_intercompany' %}
 
       {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
       {% assign default_filters_override = false %}
       @{link_generate_dashboard_url}
@@ -303,7 +303,7 @@ view: +sales_invoices__lines {
     # html: <div>
     # @{link_generate_variable_defaults}
     # {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' %}
-    # {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+    # {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
     # <b>Filters Mapping: </b> {{filters_mapping}}
     # <br><br><b>Target Dashboard: </b>{{target_dashboard}}
     # </div>;;
@@ -313,7 +313,7 @@ view: +sales_invoices__lines {
 
     # {% assign link = link_generator._link %}
     # {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' %}
-    # {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_details_test' %}
+    # {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
     # <b>Target Dashboard: </b>{{target_dashboard}}
 

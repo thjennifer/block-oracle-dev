@@ -3,6 +3,7 @@ include: "/views/base/template_dashboard_navigation.view"
 view: otc_dashboard_navigation_ext {
   extends: [template_dashboard_navigation]
 
+  view_label: "@{view_label_for_dashboard_navigation}"
 
   dimension: map_filter_numbers_to_dashboard_filter_names {
     sql: '1|date||2|business_unit||3|customer_type||4|customer_country||5|customer_name||6|target_currency||7|order_source||8|item_category||9|item_language' ;;
@@ -21,7 +22,7 @@ view: otc_dashboard_navigation_ext {
           {% when "odetails" %}
             "otc_order_status|Order Status|1,2,3,4,5,6,7,8||otc_order_sales_performance|Sales Performance|1,2,3,4,5,6,7,8,9||otc_order_fulfillment|Order Fulfillment|1,2,3,4,5,6,7,8,9||otc_order_line_details|Orders with Line Details|1,2,3,4,5,6,7,8,9"
            {% when "bdetails" %}
-            "otc_billing_and_invoicing|Billing & Invoicing|1,2,3,4,5,6,7,8||otc_billing_accounts_receivable|Accounts Receivable|1,2,3,4,5,6||otc_billing_invoice_details|Invoice Details|1,2,3,4,5,6,7,8,9"
+            "otc_billing_and_invoicing|Billing & Invoicing|1,2,3,4,5,6,7,8||otc_billing_accounts_receivable|Accounts Receivable|1,2,3,4,5,6||otc_billing_invoice_line_details|Invoice Details|1,2,3,4,5,6,7,8,9"
           {% endcase %}
           ;;
     # sql: "otc_order_status|Order Status|1,2,3,4||otc_sales_performance|Sales Performance|1,2,3,4" ;;

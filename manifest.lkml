@@ -128,6 +128,10 @@ constant: link_sales_orders_to_details_dashboard {
   value: "ordered_date|date||business_unit_name|business_unit||parameter_customer_type|customer_type||selected_customer_country|customer_country||selected_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_language|item_language||open_closed_cancelled|order_status"
 }
 
+constant: link_invoices_to_orders_details_dashboard {
+  value: "parameter_target_currency|target_currency||parameter_language|item_language||order_header_number|order_number"
+}
+
 constant: link_sales_orders_to_details_dashboard_extra_mapping {
   value: "{% assign extra_mapping = ''%}
          {% if sales_orders__lines.selected_product_dimension_description._in_query %}
