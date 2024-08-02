@@ -14,52 +14,6 @@ view: +sales_orders {
     value_format_name: id
   }
 
-#########################################################
-# Parameters
-# parameter_target_currency to choose the desired currency into which the order currency should be converted
-#{
-
-  # parameter: parameter_customer_type {
-  #   hidden: no
-  #   type: unquoted
-  #   view_label: "@{view_label_for_filters}"
-  #   label: "Customer Type"
-  #   description: "Select customer type to use for Customer Name and Country to display and filter by."
-  #   allowed_value: {label: "Bill To" value: "bill" }
-  #   allowed_value: {label: "Sold To" value: "sold" }
-  #   allowed_value: {label: "Ship To" value: "ship" }
-  #   default_value: "bill"
-  # }
-
-  # parameter: parameter_use_test_or_demo_data {
-  #   hidden: no
-  #   type: unquoted
-  #   view_label: "🔍 Filters & 🛠 Tools"
-  #   label: "Use Test or Demo Data"
-  #   allowed_value: {label: "test" value:"test"}
-  #   allowed_value: {label: "demo" value: "demo"}
-  #   default_value: "test"
-  # }
-
-  # parameter: parameter_use_test_or_demo_data {
-  #   hidden: no
-  #   type: unquoted
-  #   view_label: "🔍 Filters & 🛠 Tools"
-  #   label: "Use Test or Demo Data"
-  #   allowed_value: {label: "test" value:"CORTEX_ORACLE_EBS_REPORTING_VISION"}
-  #   allowed_value: {label: "demo" value: "CORTEX_ORACLE_EBS_REPORTING"}
-  #   default_value: "CORTEX_ORACLE_EBS_REPORTING_VISION"
-  # }
-
-  # filter: filter_ordered_date {
-  #   hidden: no
-  #   type: date
-  #   view_label: "🔍 Filters & 🛠 Tools"
-  #   sql: {% condition %} ${ordered_date} {% endcondition %} ;;
-  # }
-
-#} end parameters
-
   dimension: order_number {
     hidden: no
     value_format_name: id
@@ -86,6 +40,7 @@ view: +sales_orders {
 
 #########################################################
 # Business Unit / Order Source / Customer Dimensions
+# selected_customer_name, _country and _type extebded from sales_orders_common_dimensions_ext
 #{
 
   dimension: business_unit_id {
@@ -126,48 +81,6 @@ view: +sales_orders {
   dimension: sold_to_customer_country {
     sql: COALESCE(${TABLE}.SOLD_TO_CUSTOMER_COUNTRY,"Unknown") ;;
   }
-
-  # dimension: selected_customer_name {
-  #   group_label: "Selected Customer Type"
-  #   label: "{% if _field._is_selected %}
-  #           {% assign cust = parameter_customer_type._parameter_value %}
-  #               {% if cust == 'bill' %}Bill To
-  #               {% elsif cust == 'sold' %}Sold To
-  #               {% elsif cust == 'ship' %}Ship To
-  #               {% endif %}Customer
-  #           {%else%}Selected Customer Name{%endif%}"
-  #   sql:{% assign cust = parameter_customer_type._parameter_value %}
-  #       {% if cust == 'bill' %}${bill_to_customer_name}
-  #       {% elsif cust == 'sold' %}${sold_to_customer_name}
-  #       {% elsif cust == 'ship' %}${ship_to_customer_name}
-  #       {% endif %}
-  #       ;;
-  # }
-
-  # dimension: selected_customer_country {
-  #   group_label: "Selected Customer Type"
-  #   label: "{% if _field._is_selected %}
-  #   {% assign cust = parameter_customer_type._parameter_value %}
-  #   {% if cust == 'bill' %}Bill To
-  #   {% elsif cust == 'sold' %}Sold To
-  #   {% elsif cust == 'ship' %}Ship To
-  #   {% endif %}Country
-  #   {%else%}Selected Customer Country{%endif%}"
-  #   sql:{% assign cust = parameter_customer_type._parameter_value %}
-  #       {% if cust == 'bill' %}${bill_to_customer_country}
-  #       {% elsif cust == 'sold' %}${sold_to_customer_country}
-  #       {% elsif cust == 'ship' %}${ship_to_customer_country}
-  #       {% endif %}
-  #       ;;
-  # }
-
-  # dimension: selected_customer_type {
-  #   group_label: "Selected Customer Type"
-  #   sql:  {% assign cust = parameter_customer_type._parameter_value %}
-  #         '{{cust}}';;
-  # }
-
-
 
 #} end business unit / order source / customer dimensions
 
@@ -446,17 +359,19 @@ view: +sales_orders {
     hidden: no
     type: number
     group_label: "Order Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Order Amount ({{currency}}){%else%}Total Order Amount (Target Currency){%endif%}"
+    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Order Amount ({{currency}}){%else%}Total Order Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     description: "Total amount for an order in target currency."
     sql: COALESCE(${total_ordered_amount},0) * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
     value_format_name: decimal_2
   }
 
-  dimension: total_sales_ordered_amount_target_currency {
+  dimension: total_sales_amount_target_currency {
     hidden: no
     type: number
     group_label: "Order Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Sales Amount ({{currency}}){%else%}Total Sales Amount (Target Currency){%endif%}"
+    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Sales Amount ({{currency}}){%else%}Total Sales Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     description: "Total sales amount for an order in target currency. Includes only lines with line category code of 'ORDER'"
     sql: COALESCE(${total_sales_ordered_amount},0) * IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
     value_format_name: decimal_2
@@ -542,24 +457,6 @@ view: +sales_orders {
     hidden: yes
     type: number
     sql: ${order_count} ;;
-
-    ## dynamic capture of filters with link
-    # link: {
-    #   label: "Open Order Details Dashboard"
-    #   icon_url: "/favicon.ico"
-    #   url: "
-    #   @{link_generate_variable_defaults}
-    #   {% assign link = link_generator._link %}
-    #   {% assign filters_mapping = '@{link_otc_shared_filters}' | strip_new_lines | append: '||across_sales_and_billing_summary_xvw.order_status|Order Status||deliveries.is_blocked|Is Blocked' %}
-
-    #   {% assign model = _model._name %}
-    #   {% assign target_dashboard = _model._name | append: '::otc_order_details' %}
-
-    #   {% assign default_filters_override = false %}
-
-    #   @{link_generate_dashboard_url}
-    #   "
-    # }
   }
 
   measure: has_backorder_sales_order_count {
@@ -607,7 +504,7 @@ view: +sales_orders {
     }
     link: {
       label: "Show Blocked Orders"
-      url: "{{ dummy_drill_orders_with_block._link}}&sorts=sales_orders.total_sales_ordered_amount_target_currency+desc&f[sales_orders.is_blocked]=Yes"
+      url: "{{ dummy_drill_orders_with_block._link}}&sorts=sales_orders.total_sales_amount_target_currency+desc&f[sales_orders.is_blocked]=Yes"
     }
 
     link: {
@@ -803,11 +700,11 @@ view: +sales_orders {
 
 
   set: header_details {
-    fields: [header_id,order_number,header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_sales_ordered_amount_target_currency]
+    fields: [header_id,order_number,header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_sales_amount_target_currency]
   }
 
   set: header_drill_from_dash {
-    fields: [order_number, header_status, ordered_date, selected_customer_name, total_sales_ordered_amount_target_currency]
+    fields: [order_number, header_status, ordered_date, selected_customer_name, total_sales_amount_target_currency]
   }
 
   set: drill_orders_with_block {

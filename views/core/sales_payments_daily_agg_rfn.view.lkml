@@ -77,7 +77,7 @@ view: +sales_payments_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Adjusted ({{currency}}){%else%}Amount Adjusted (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: (select SUM(TOTAL_ADJUSTED) FROM sales_payments_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
     value_format_name: decimal_2
   }
@@ -86,7 +86,7 @@ view: +sales_payments_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Applied ({{currency}}){%else%}Amount Applied (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: (select SUM(TOTAL_APPLIED) FROM sales_payments_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %})  ;;
     value_format_name: decimal_2
   }
@@ -95,7 +95,7 @@ view: +sales_payments_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Credited ({{currency}}){%else%}Amount Credited (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: (select SUM(TOTAL_CREDITED) FROM sales_payments_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %})   ;;
     value_format_name: decimal_2
   }
@@ -104,7 +104,7 @@ view: +sales_payments_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Discounted ({{currency}}){%else%}Amount Discounted (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: (select SUM(TOTAL_DISCOUNTED) FROM sales_payments_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %})  ;;
     value_format_name: decimal_2
   }
@@ -113,7 +113,7 @@ view: +sales_payments_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Due Original ({{currency}}){%else%}Amount Due Original (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: (select SUM(TOTAL_ORIGINAL) FROM sales_payments_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %})  ;;
     value_format_name: decimal_2
   }
@@ -122,7 +122,7 @@ view: +sales_payments_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Due Remaining ({{currency}}){%else%}Amount Due Remaining (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: (select SUM(TOTAL_REMAINING) FROM sales_payments_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %})  ;;
     value_format_name: decimal_2
   }
@@ -131,7 +131,7 @@ view: +sales_payments_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount Original ({{currency}}){%else%}Tax Amount Original (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Tax Amount Original (@{label_get_target_currency}){%else%}Tax Amount Original (Target Currency){%endif%}"
     sql: (select SUM(TOTAL_TAX_ORIGINAL) FROM sales_payments_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %})   ;;
     value_format_name: decimal_2
   }
@@ -140,7 +140,7 @@ view: +sales_payments_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount Remaining ({{currency}}){%else%}Tax Amount Remaining (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Tax Amount Remaining (@{label_get_target_currency}){%else%}Tax Amount Remaining (Target Currency){%endif%}"
     sql: (select SUM(TOTAL_TAX_REMAINING) FROM sales_payments_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %})   ;;
     value_format_name: decimal_2
   }
@@ -149,7 +149,7 @@ view: +sales_payments_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Past Due Receivables ({{currency}}){%else%}Past Due Receivables (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Past Due Receivables (@{label_get_target_currency}){%else%}Past Due Receivables (Target Currency){%endif%}"
     sql: (select SUM(TOTAL_OVERDUE_REMAINING) FROM sales_payments_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %})   ;;
     value_format_name: decimal_2
   }
@@ -158,30 +158,13 @@ view: +sales_payments_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Doubtful Receivables ({{currency}}){%else%}Doubtful Receivables (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: (select SUM(TOTAL_DOUBTFUL_REMAINING) FROM sales_payments_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = {% parameter otc_common_parameters_xvw.parameter_target_currency %})   ;;
     value_format_name: decimal_2
   }
 
 #} end amount dimensions
 
-  # measure: total_amount_adjusted_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   label: "{% if _field._is_selected %}@{derive_currency_label}Amount Adjusted ({{currency}}){%else%}Amount Adjusted (Target Currency){%endif%}"
-  #   sql: ${amount_adjusted_target_currency} ;;
-  #   value_format_name: decimal_2
-  #   # filters: [is_payment_transaction: "No"]
-  # }
-
-  # measure: total_amount_applied_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   label: "{% if _field._is_selected %}@{derive_currency_label}Amount Applied ({{currency}}){%else%}Amount Applied (Target Currency){%endif%}"
-  #   sql: ${amount_applied_target_currency} * if(${payment_class_code} = 'CM',-1,1) ;;
-  #   value_format_name: decimal_2
-  #   # filters: [is_payment_transaction: "No"]
-  # }
 
 
 }

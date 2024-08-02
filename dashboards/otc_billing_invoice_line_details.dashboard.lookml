@@ -143,17 +143,17 @@
       item_category: otc_dashboard_navigation_ext.filter8
 
   - name: invoice_table
-    title: Invoices with Line Item Details
+    title: Invoice Line Details
     explore: sales_invoices
     type: looker_grid
     fields: [sales_invoices.invoice_number, sales_invoices.invoice_type_name, sales_invoices.invoice_date,
       sales_invoices.total_transaction_amount_target_currency, sales_invoices.total_tax_amount_target_currency,
-      sales_invoices.is_complete,sales_invoices.bill_to_customer_name,
+      sales_invoices.is_complete_with_symbols,sales_invoices.bill_to_customer_name,
       sales_invoices__lines.order_header_number, sales_invoices__lines.order_source_name, sales_invoices__lines.line_number,
       sales_invoices__lines.item_part_number, sales_invoices__lines.item_description,
       sales_invoices__lines.category_description, sales_invoices__lines.invoiced_or_credited_quantity,
       sales_invoices__lines.quantity_uom, sales_invoices__lines.unit_list_price_target_currency,
-      sales_invoices__lines.unit_selling_price_target_currency, sales_invoices__lines.percent_discount,
+      sales_invoices__lines.gross_unit_selling_price_target_currency, sales_invoices__lines.percent_discount,
       sales_invoices__lines.transaction_amount_target_currency, sales_invoices__lines.discount_amount_target_currency,
       sales_invoices__lines.tax_amount_target_currency,
       sales_invoices__lines.is_discount_selling_price_with_symbols]
@@ -181,9 +181,13 @@
     minimum_column_width: 75
     series_labels:
       sales_invoices__lines.is_discount_selling_price_with_symbols: Item is Discounted
+      sales_invoices__lines.is_complete_with_symbols: Is Complete
     series_text_format:
       sales_invoices__lines.is_discount_selling_price_with_symbols:
         align: center
+    note_state: collapsed
+    note_display: below
+    note_text: 'Discounts are calculated by subtracting the Gross Unit Selling Price from the Unit List Price as both prices are inclusive of taxes. If the Gross Unit Selling Price is unavailable, the pre-tax price is used, leading to inflated discounts.'
     listen:
       date: sales_invoices.invoice_date
       business_unit: sales_invoices.business_unit_name
@@ -197,6 +201,7 @@
       is_complete: sales_invoices.is_complete
       is_discounted: sales_invoices__lines.is_discount_selling_price
       is_intercompany: sales_invoices__lines.is_intercompany
+      order_number: sales_invoices__lines.order_header_number
     row: 0
     col: 0
     width: 24

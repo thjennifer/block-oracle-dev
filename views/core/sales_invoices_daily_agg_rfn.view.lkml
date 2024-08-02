@@ -150,7 +150,7 @@ view: +sales_invoices_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Revenue Amount ({{currency}}){%else%}Revenue Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Net Revenue Amount (@{label_get_target_currency}){%else%}Net Revenue Amount (Target Currency){%endif%}"
     sql: (select SUM(TOTAL_REVENUE) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -159,7 +159,7 @@ view: +sales_invoices_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Transaction Amount ({{currency}}){%else%}Transaction Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Invoice Amount (@{label_get_target_currency}){%else%}Invoice Amount (Target Currency){%endif%}"
     sql: (select SUM(TOTAL_REVENUE) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -168,7 +168,7 @@ view: +sales_invoices_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount ({{currency}}){%else%}Tax Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: (select SUM(TOTAL_TAX) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -177,7 +177,7 @@ view: +sales_invoices_daily_agg {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Discount Amount ({{currency}}){%else%}Discount Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: (select SUM(TOTAL_DISCOUNT) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -189,58 +189,5 @@ view: +sales_invoices_daily_agg {
     type: count
   }
 
-  # measure: total_transaction_amount_target_currency_formatted {
-  #   link: {
-  #     label: "Invoice Line Details"
-  #     icon_url: "/favicon.ico"
-  #     url: "
-  #     @{link_generate_variable_defaults}
-  #     {% assign link = link_generator._link %}
-  #     {% assign filters_mapping = '@{link_sales_invoices_daily_agg_source_to_target_dashboard_filters}'%}
-
-  #     {% assign model = _model._name %}
-  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
-
-  #     {% assign default_filters_override = false %}
-  #     @{link_generate_dashboard_url}
-  #     "
-  #   }
-  # }
-
-  # measure: total_discount_amount_target_currency_formatted {
-  #   link: {
-  #     label: "Invoice Line Details"
-  #     icon_url: "/favicon.ico"
-  #     url: "
-  #     @{link_generate_variable_defaults}
-  #     {% assign link = link_generator._link %}
-  #     {% assign filters_mapping = '@{link_sales_invoices_daily_agg_source_to_target_dashboard_filters}'%}
-
-  #     {% assign model = _model._name %}
-  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
-
-  #     {% assign default_filters_override = false %}
-  #     @{link_generate_dashboard_url}
-  #     "
-  #   }
-  # }
-
-  # measure: total_tax_amount_target_currency_formatted {
-  #   link: {
-  #     label: "Invoice Line Details"
-  #     icon_url: "/favicon.ico"
-  #     url: "
-  #     @{link_generate_variable_defaults}
-  #     {% assign link = link_generator._link %}
-  #     {% assign filters_mapping = '@{link_sales_invoices_daily_agg_source_to_target_dashboard_filters}'%}
-
-  #     {% assign model = _model._name %}
-  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
-
-  #     {% assign default_filters_override = false %}
-  #     @{link_generate_dashboard_url}
-  #     "
-  #   }
-  # }
 
 }

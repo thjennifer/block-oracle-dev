@@ -52,7 +52,7 @@ view: dso_dynamic_days_sdt {
 
   measure: days_sales_outstanding {
     type: number
-    label: "{% if _field._is_selected %}@{derive_currency_label}Days Sales Outstanding ({{currency}}){%else%}Days Sales Outstanding (Target Currency){%endif%}"
+    label: "@{label_build}"
     # sql: SAFE_DIVIDE(${sales_payments.total_amount_due_remaining_target_currency},${sales_payments.total_amount_due_original_target_currency}) * ANY_VALUE(${dso_days}) ;;
     sql: SAFE_DIVIDE(${sales_payments.total_receivables_target_currency},${sales_payments.total_amount_original_target_currency}) * ANY_VALUE(${dso_days}) ;;
     value_format_name: decimal_1

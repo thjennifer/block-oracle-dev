@@ -193,24 +193,25 @@ view: +sales_orders__lines {
     sql: ${invoiced_quantity} ;;
   }
 
-  # measure: total2_fulfilled_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total2 Fulfilled Amount ({{currency}}){%else%}Total2 Fulfilled Amount (Target Currency){%endif%}"
-  #   sql: ${ordered_amount_target_currency} ;;
-  #   filters: [sales_orders__lines.is_fulfilled: "Yes", line_category_code: "-RETURN"]
-  #   value_format_name: decimal_0
-  # }
 
-  # measure: total2_shipped_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total2 Shipped Amount ({{currency}}){%else%}Total2 Shipped Amount (Target Currency){%endif%}"
-  #   sql: ${shipped_amount_target_currency} ;;
-  #   filters: [line_category_code: "-RETURN"]
-  #   value_format_name: decimal_0
-  # }
 
+
+  dimension: test_unit_list_price_target_currency {
+    hidden: no
+    type: string
+    view_label: "TEST STUFF"
+    label: "@{label_build}"
+    # label: "{% if _field._is_selected %}@{label_derive_field_name}{{field_name}} (@{label_get_target_currency}){%else%}{{field_name}} (Target Currency){%endif%}"
+    sql: '1'  ;;
+
+
+  }
+#(% for w in fname_array %}
+          #     {% assign field_name = field_name | append: w %}
+          # {% endfor %}
+          # {{field_name}} ;;
+
+# {% assign parameter_key = parameter | split:'=' | first %}
   measure: test_links {
     type: number
     hidden: no

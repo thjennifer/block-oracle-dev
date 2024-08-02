@@ -156,21 +156,21 @@ view: +sales_invoices__lines {
 
   dimension: unit_list_price_target_currency {
     group_label: "Item Prices and Discounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Unit List Price ({{currency}}){%else%}Unit List Price (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${unit_list_price} * ${currency_conversion_rate} ;;
     value_format_name: decimal_2
   }
 
   dimension: unit_selling_price_target_currency {
     group_label: "Item Prices and Discounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Unit Selling Price ({{currency}}){%else%}Unit Selling Price (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${unit_selling_price} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
   dimension: gross_unit_selling_price_target_currency {
     group_label: "Item Prices and Discounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Gross Unit Selling Price ({{currency}}){%else%}Unit Selling Price (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${gross_unit_selling_price} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -281,7 +281,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Net Revenue Amount ({{currency}}){%else%}Net Revenue Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Net Revenue Amount (@{label_get_target_currency}){%else%}Net Revenue Amount (Target Currency){%endif%}"
     description: "Amount in target currency recognized as revenue for accounting purposes."
     sql: ${revenue_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -291,7 +291,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Gross Transaction Amount ({{currency}}){%else%}Gross Transaction Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Gross Invoice Amount (@{label_get_target_currency}){%else%}Gross Invoice Amount (Target Currency){%endif%}"
     description: "Gross Transaction Amount with taxes and before any discounts in target currency."
     sql: ${gross_transaction_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -301,7 +301,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Transaction Amount ({{currency}}){%else%}Transaction Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Invoice Amount (@{label_get_target_currency}){%else%}Invoice Amount (Target Currency){%endif%}"
     description: "Invoice line pre-tax transaction amount in target currency."
     sql: ${transaction_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -311,7 +311,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount ({{currency}}){%else%}Tax Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${tax_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -320,7 +320,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Discount Amount ({{currency}}){%else%}Discount Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${discount_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -342,28 +342,28 @@ view: +sales_invoices__lines {
 
   measure: average_unit_list_price_target_currency {
     type: average
-    label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit List Price ({{currency}}){%else%}Average Unit List Price (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${unit_list_price_target_currency} ;;
     value_format_name: decimal_2
   }
 
   measure: average_unit_selling_price_target_currency {
     type: average
-    label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit Selling Price ({{currency}}){%else%}Average Unit Selling Price (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
   }
 
   measure: average_gross_unit_selling_price_target_currency {
     type: average
-    label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit Selling Price ({{currency}}){%else%}Average Unit Selling Price (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${gross_unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
   }
 
   measure: average_unit_list_price_when_discount_target_currency {
     type: average
-    label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit List Price when Discount ({{currency}}){%else%}Average Unit List Price when Discount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Average Unit List Price when Discount (@{label_get_target_currency}){%else%}Average Unit List Price when Discount (Target Currency){%endif%}"
     sql: ${unit_list_price_target_currency} ;;
     filters: [is_discount_selling_price: "Yes"]
     value_format_name: decimal_2
@@ -394,7 +394,7 @@ view: +sales_invoices__lines {
 
   measure: average_unit_selling_price_when_discount_target_currency {
     type: average
-    label: "{% if _field._is_selected %}@{derive_currency_label}Average Unit Selling Price when Discount ({{currency}}){%else%}Average Unit Selling Price when Discount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Average Unit Selling Price when Discount (@{label_get_target_currency}){%else%}Average Unit Selling Price when Discount (Target Currency){%endif%}"
     sql: ${unit_selling_price_target_currency} ;;
     filters: [is_discount_selling_price: "Yes"]
     value_format_name: decimal_2
@@ -424,7 +424,7 @@ view: +sales_invoices__lines {
 
   measure: average_gross_unit_selling_price_when_discount_target_currency {
     type: average
-    label: "{% if _field._is_selected %}@{derive_currency_label}Average Gross Unit Selling Price when Discount ({{currency}}){%else%}Average Gross Unit Selling Price when Discount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Average Gross Unit Selling Price when Discount (@{label_get_target_currency}){%else%}Average Gross Unit Selling Price when Discount (Target Currency){%endif%}"
     sql: ${gross_unit_selling_price_target_currency} ;;
     filters: [is_discount_selling_price: "Yes"]
     value_format_name: decimal_2
@@ -507,89 +507,26 @@ view: +sales_invoices__lines {
 # updated here for drill fields or links
 #{
   measure: total_transaction_amount_target_currency {
-    # type: sum
-    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Transaction Amount ({{currency}}){%else%}Total Transaction Amount (Target Currency){%endif%}"
-    # sql: ${transaction_amount_target_currency} ;;
     drill_fields: [invoice_line_details*]
-    # value_format_name: decimal_0
+
   }
 
   measure: total_revenue_amount_target_currency {
-    # type: sum
-    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Net Revenue Amount ({{currency}}){%else%}Total Net Revenue Amount (Target Currency){%endif%}"
-    # sql: ${revenue_amount_target_currency} ;;
     drill_fields: [invoice_line_details*]
-    # value_format_name: decimal_0
   }
 
-  # measure: total_revenue_amount_target_currency_with_drill_link {
-  #   hidden: yes
-  #   type: number
-  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Net Revenue Amount ({{currency}}){%else%}Total Net Revenue Amount (Target Currency) With Link{%endif%}"
-  #   sql: ${total_revenue_amount_target_currency} ;;
-  #   link: {
-  #     label: "Invoice Line Details"
-  #     icon_url: "/favicon.ico"
-  #     url: "
-  #     @{link_generate_variable_defaults}
-  #     {% assign link = link_generator._link %}
-  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
-  #     {% assign model = _model._name %}
-  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
-
-  #     {% assign default_filters_override = false %}
-  #     @{link_generate_dashboard_url}
-  #     "
-  #   }
-  #   value_format_name: format_large_numbers_d1
-  # }
-
-  # measure: total_transaction_amount_target_currency_with_drill_link {
-  #   hidden: yes
-  #   type: number
-  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Net Transaction Amount ({{currency}}){%else%}Total Net Transaction Amount (Target Currency) With Link{%endif%}"
-  #   sql: ${total_transaction_amount_target_currency} ;;
-  #   link: {
-  #     label: "Invoice Line Details"
-  #     icon_url: "/favicon.ico"
-  #     url: "
-  #     @{link_generate_variable_defaults}
-  #     {% assign link = link_generator._link %}
-  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
-
-  #     {% assign model = _model._name %}
-  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
-
-  #     {% assign default_filters_override = false %}
-  #     @{link_generate_dashboard_url}
-  #     "
-  #   }
-  #   value_format_name: format_large_numbers_d1
-  # }
 
   measure: total_gross_transaction_amount_target_currency {
-    # type: sum
-    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Gross Revenue Amount ({{currency}}){%else%}Total Gross Revenue Amount (Target Currency){%endif%}"
-    # sql: ${gross_transaction_amount_target_currency} ;;
     drill_fields: [invoice_line_details*]
-    # value_format_name: decimal_0
   }
 
   measure: total_tax_amount_target_currency {
-    # type: sum
-    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Tax Amount ({{currency}}){%else%}Total Tax Amount (Target Currency){%endif%}"
-    # sql: ${tax_amount_target_currency} ;;
     drill_fields: [invoice_line_details*]
-    # value_format_name: decimal_0
   }
 
   measure: total_discount_amount_target_currency {
-    # type: sum
-    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Discount Amount ({{currency}}){%else%}Total Discount Amount (Target Currency){%endif%}"
-    # sql: ${discount_amount_target_currency} ;;
     drill_fields: [invoice_line_details*]
-    # value_format_name: decimal_0
   }
 
 

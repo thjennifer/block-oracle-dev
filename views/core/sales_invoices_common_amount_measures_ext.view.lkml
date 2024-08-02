@@ -5,7 +5,7 @@ view: sales_invoices_common_amount_measures_ext {
   measure: total_transaction_amount_target_currency {
     hidden: no
     type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoice Amount ({{currency}}){%else%}Total Invoice Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Total Invoice Amount (@{label_get_target_currency}){%else%}Total Invoice Amount (Target Currency){%endif%}"
     sql: ${transaction_amount_target_currency} ;;
     value_format_name: decimal_0
   }
@@ -13,7 +13,7 @@ view: sales_invoices_common_amount_measures_ext {
   measure: total_revenue_amount_target_currency {
     hidden: no
     type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Net Revenue Amount ({{currency}}){%else%}Total Net Revenue Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Total Net Revenue Amount (@{label_get_target_currency}){%else%}Total Net Revenue Amount (Target Currency){%endif%}"
     sql: ${revenue_amount_target_currency} ;;
     value_format_name: decimal_0
   }
@@ -29,7 +29,7 @@ view: sales_invoices_common_amount_measures_ext {
   measure: total_tax_amount_target_currency {
     hidden: no
     type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Tax Amount ({{currency}}){%else%}Total Tax Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${tax_amount_target_currency} ;;
     value_format_name: decimal_0
   }
@@ -37,7 +37,7 @@ view: sales_invoices_common_amount_measures_ext {
   measure: total_discount_amount_target_currency {
     hidden: no
     type: sum
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Discount Amount ({{currency}}){%else%}Total Discount Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${discount_amount_target_currency} ;;
     value_format_name: decimal_0
   }
@@ -47,7 +47,7 @@ view: sales_invoices_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Formatted as Large Numbers"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoice Amount ({{currency}}){%else%}Total Invoice Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Total Invoice Amount (@{label_get_target_currency}){%else%}Total Invoice Amount (Target Currency){%endif%}"
     sql: ${transaction_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
     link: {
@@ -72,7 +72,7 @@ view: sales_invoices_common_amount_measures_ext {
     hidden: no
     type: number
     group_label: "Formatted as Large Numbers"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Discount Amount ({{currency}}){%else%}Total Discount Amount (Target Currency){%endif%}"
+    label: "@{label_build_formatted}"
     sql: ${total_discount_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
     link: {
@@ -97,7 +97,7 @@ view: sales_invoices_common_amount_measures_ext {
     hidden: no
     type: number
     group_label: "Formatted as Large Numbers"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Total Tax Amount ({{currency}}){%else%}Total Tax Amount (Target Currency){%endif%}"
+    label: "@{label_build_formatted}"
     sql: ${total_tax_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
     link: {

@@ -77,30 +77,14 @@ view: +sales_orders_daily_agg__lines__amounts {
     sql: COALESCE(${TABLE}.IS_INCOMPLETE_CONVERSION,FALSE) ;;
   }
 
-  # measure: total_sales_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   # description: "Total sales amount in target currency."
-  #   sql: ${total_ordered} ;;
-  #   filters: [sales_orders_daily_agg__lines.line_category_code: "-RETURN"]
-  #   # value_format_name: format_large_numbers_d1
-  # }
-
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
     type: number
-    #label defined in sales_orders__lines_common_fields_ext
-    #description defined in sales_orders__lines_common_fields_ext
+    #label defined in sales_orders_common_amount_measures_ext
+    #description defined in sales_orders_common_amount_measures_ext
     sql: SAFE_DIVIDE(${total_sales_amount_target_currency},(${sales_orders_daily_agg.non_cancelled_sales_order_count})) ;;
-    #value format defined in sales_orders__lines_common_fields_ext
+    #value format defined in sales_orders_common_amount_measures_ext
   }
 
-  # measure: total_invoiced_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   description: "Total invoiced amount in target currency."
-  #   sql: ${total_invoiced} ;;
-  #   value_format_name: format_large_numbers_d1
-  # }
 
  }

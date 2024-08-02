@@ -197,7 +197,7 @@
     type: looker_grid
     fields: [sales_orders.order_number, sales_orders.order_category_code,
             sales_orders.open_closed_cancelled_with_symbols, sales_orders.is_fulfilled_with_symbols, sales_orders.is_blocked_with_symbols,
-            sales_orders.has_return_line_with_symbols, sales_orders.total_sales_ordered_amount_target_currency,
+            sales_orders.has_return_line_with_symbols, sales_orders.total_sales_amount_target_currency,
             sales_orders__lines.line_id, sales_orders__lines.line_number,
             sales_orders__lines.item_part_number, sales_orders__lines.item_description,
             sales_orders.selected_customer_name, sales_orders.ordered_date,
@@ -258,6 +258,9 @@
         align: center
     series_column_widths:
       sales_orders__lines.item_description: 250
+      note_state: collapsed
+      note_display: below
+      note_text: 'In Sales Orders, discounts are determined by deducting the Unit Selling Price (pre-tax amount) from the Unit List Price (post-tax amount). This method can result in inflated discounts compared to discounts derived from Sales Invoices, where the Gross Unit Selling Price (post-tax amount) is utilized whenever possible.'
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name

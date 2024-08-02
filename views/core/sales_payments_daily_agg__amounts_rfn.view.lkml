@@ -27,7 +27,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Adjusted ({{currency}}){%else%}Amount Adjusted (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${total_adjusted}  ;;
     value_format_name: decimal_2
   }
@@ -36,7 +36,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Applied ({{currency}}){%else%}Amount Applied (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${total_applied}  ;;
     value_format_name: decimal_2
   }
@@ -45,7 +45,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Credited ({{currency}}){%else%}Amount Credited (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${total_credited}  ;;
     value_format_name: decimal_2
   }
@@ -54,7 +54,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Discounted ({{currency}}){%else%}Amount Discounted (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${total_discounted}  ;;
     value_format_name: decimal_2
   }
@@ -63,7 +63,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Due Original ({{currency}}){%else%}Amount Due Original (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${total_original}  ;;
     value_format_name: decimal_2
   }
@@ -72,7 +72,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Amount Due Remaining ({{currency}}){%else%}Amount Due Remaining (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${total_remaining}  ;;
     value_format_name: decimal_2
   }
@@ -81,7 +81,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount Original ({{currency}}){%else%}Tax Amount Original (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Tax Amount Original (@{label_get_target_currency}){%else%}Tax Amount Original (Target Currency){%endif%}"
     sql: ${total_tax_original}  ;;
     value_format_name: decimal_2
   }
@@ -90,7 +90,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount Remaining ({{currency}}){%else%}Tax Amount Remaining (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Tax Amount Remaining (@{label_get_target_currency}){%else%}Tax Amount Remaining (Target Currency){%endif%}"
     sql: ${total_tax_remaining}  ;;
     value_format_name: decimal_2
   }
@@ -99,7 +99,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Past Due Receivables ({{currency}}){%else%}Past Due Receivables (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Past Due Receivables (@{label_get_target_currency}){%else%}Past Due Receivables (Target Currency){%endif%}"
     sql: ${total_overdue_remaining}   ;;
     value_format_name: decimal_2
   }
@@ -108,7 +108,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Doubtful Receivables ({{currency}}){%else%}Doubtful Receivables (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${total_doubtful_remaining}   ;;
     value_format_name: decimal_2
   }

@@ -155,15 +155,6 @@ view: +sales_orders_daily_agg__lines {
     value_format_name: decimal_2
   }
 
-  # measure: total_sales_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   #label defined in sales_orders__lines_common_fields_ext
-  #   #description defined in sales_orders__lines_common_fields_ext
-  #   sql: ${ordered_amount_target_currency} ;;
-  #   # filters: [line_category_code: "-RETURN"]
-  #   #value format defined in sales_orders__lines_common_fields_ext
-  # }
 
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
@@ -175,15 +166,6 @@ view: +sales_orders_daily_agg__lines {
     #value format defined in sales_orders_common_amount_measures_ext
   }
 
-  # measure: total_invoiced_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   #label defined in sales_orders__lines_common_fields_ext
-  #   #description defined in sales_orders__lines_common_fields_ext
-  #   sql: ${invoiced_amount_target_currency} ;;
-  #   # filters: [line_category_code: "-RETURN"]
-  #   #value format defined in sales_orders__lines_common_fields_ext
-  # }
 
   measure: total_backlog_amount_target_currency_formatted {
     link: {
@@ -201,31 +183,6 @@ view: +sales_orders_daily_agg__lines {
       url: "{{dummy_backlog_by_category._link}}"
       }
   }
-
-  # measure: total_booking_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   sql: ${booking_amount_target_currency} ;;
-  #   value_format_name: decimal_0
-  # }
-
-  # measure: total_fulfilled_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   sql: ${fulfilled_amount_target_currency} ;;
-  #   value_format_name: decimal_0
-  # }
-
-
-  # measure: total_invoiced_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoiced Amount ({{currency}}){%else%}Total Invoiced Amount (Target Currency){%endif%}"
-  #   sql: ${invoiced_amount_target_currency} ;;
-  #   filters: [line_category_code: "-RETURN"]
-  #   value_format_name: format_large_numbers_d1
-  # }
-
 
 
   measure: dummy_backlog_by_customer {

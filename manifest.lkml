@@ -34,8 +34,47 @@ constant: REPORTING_DATASET {
 #     sql: ${ordered_amount_target_currency} ;;
 #     }
 
-constant: derive_currency_label {
-  value: "{% assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" %}"
+# constant: derive_currency_label {
+#   value: "{% assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" %}"
+# }
+
+constant: label_get_target_currency {
+  value: "{% assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" %}{{currency}}"
+}
+
+constant: label_derive_field_name {
+  value: "{% assign fname = _field._name | split: '.' | last | remove: '_target_currency' | remove: '_formatted' %}
+          {% assign field_name = '' %}
+          {% assign fname_array = fname | split: '_' %}
+          {% for word in fname_array %}
+          {% assign cap = word | capitalize %}
+          {% assign field_name = field_name | append: cap %}
+          {% unless forloop.last %}{% assign field_name = field_name | append: ' ' %}{% endunless %}
+          {% endfor %}
+          "
+}
+
+constant: label_derive_field_name_minus_total {
+  value: "{% assign fname = _field._name | split: '.' | last | remove: '_target_currency' | remove: '_formatted' | remove: 'total_' %}
+          {% assign field_name = '' %}
+          {% assign fname_array = fname | split: '_' %}
+          {% for word in fname_array %}
+          {% assign cap = word | capitalize %}
+          {% assign field_name = field_name | append: cap %}
+          {% unless forloop.last %}{% assign field_name = field_name | append: ' ' %}{% endunless %}
+          {% endfor %}"
+}
+
+constant: label_build {
+  value: "@{label_derive_field_name}{% if _field._is_selected %}{{field_name}} (@{label_get_target_currency}){%else%}{{field_name}} (Target Currency){%endif%}"
+}
+
+constant: label_build_formatted {
+  value: "@{label_derive_field_name}{% if _field._is_selected %}{{field_name}} (@{label_get_target_currency}){%else%}{{field_name}} (Target Currency) Formatted {%endif%}"
+}
+
+constant: label_build_minus_total {
+  value: "@{label_derive_field_name_minus_total}{% if _field._is_selected %}{{field_name}} (@{label_get_target_currency}){%else%}{{field_name}} (Target Currency){%endif%}"
 }
 
 

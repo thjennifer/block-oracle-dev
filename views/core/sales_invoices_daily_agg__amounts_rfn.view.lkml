@@ -31,7 +31,7 @@ view: +sales_invoices_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Net Revenue Amount ({{currency}}){%else%}Net Revenue Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Net Revenue Amount (@{label_get_target_currency}){%else%}Net Revenue Amount (Target Currency){%endif%}"
     description: "Amount in target currency recognized as revenue for accounting purposes."
     sql: ${total_revenue} ;;
     value_format_name: decimal_2
@@ -51,7 +51,7 @@ view: +sales_invoices_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Transaction Amount ({{currency}}){%else%}Transaction Amount (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Invoice Amount (@{label_get_target_currency}){%else%}Invoice Amount (Target Currency){%endif%}"
     description: "Invoice line amount in target currency."
     sql: ${total_transaction};;
     value_format_name: decimal_2
@@ -61,7 +61,7 @@ view: +sales_invoices_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Tax Amount ({{currency}}){%else%}Tax Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${total_tax} ;;
     value_format_name: decimal_2
   }
@@ -70,7 +70,7 @@ view: +sales_invoices_daily_agg__amounts {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Discount Amount ({{currency}}){%else%}Discount Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${total_discount}  ;;
     value_format_name: decimal_2
   }

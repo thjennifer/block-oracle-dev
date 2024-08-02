@@ -172,11 +172,11 @@ view: +sales_orders {
     value_format_name: decimal_0
   }
 
-  measure: sum_total_sales_ordered_amount_target_currency {
+  measure: sum_total_sales_amount_target_currency {
     hidden: no
     view_label: "TEST STUFF"
     type: sum
-    sql: ${total_sales_ordered_amount_target_currency} ;;
+    sql: ${total_sales_amount_target_currency} ;;
     value_format_name: decimal_0
   }
 

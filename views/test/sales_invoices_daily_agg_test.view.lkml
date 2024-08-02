@@ -14,7 +14,6 @@ view:
       type: sum
       view_label: "TEST STUFF"
       group_label: "Formatted as Large Numbers"
-      label: "{% if _field._is_selected %}@{derive_currency_label}Total Transaction Amount ({{currency}}){%else%}Total Transaction Amount (Target Currency){%endif%}"
       sql: ${transaction_amount_target_currency} ;;
       value_format_name: format_large_numbers_d1
       link: {

@@ -5,7 +5,7 @@ view: sales_payments_dso_days_agg_pdt {
     label: "Sales Payments DSO Days Agg"
 
     derived_table: {
-      # datagroup_trigger: once_a_day_at_5
+      datagroup_trigger: once_a_day_at_5
 
       sql: SELECT
         DSO_DAYS,
@@ -122,16 +122,11 @@ view: sales_payments_dso_days_agg_pdt {
       sql: ${TABLE}.IS_INCOMPLETE_CONVERSION ;;
     }
 
-    # measure: total_revenue_amount_target_currency {
-    #   type: sum
-    #   label: "{% if _field._is_selected %}@{derive_currency_label}Invoice Revenue Amount ({{currency}}){%else%}Invoice Revenue Amount (Target Currency){%endif%}"
-    #   sql: ${total_revenue} ;;
-    # }
 
     measure: total_amount_original_target_currency {
       hidden: no
       type: sum
-      label: "{% if _field._is_selected %}@{derive_currency_label}Amount Original ({{currency}}){%else%}Amount Original (Target Currency){%endif%}"
+      label: "Amount Original (Target Currency)"
       sql: ${total_original} ;;
       # value_format_name: format_large_numbers_d1
       value_format_name: decimal_0
@@ -140,23 +135,14 @@ view: sales_payments_dso_days_agg_pdt {
     measure: total_amount_due_remaining_target_currency {
       hidden: no
       type: sum
-      label: "{% if _field._is_selected %}@{derive_currency_label}Amount Due Remaining ({{currency}}){%else%}Amount Due Remaining (Target Currency){%endif%}"
+      label: "Amount Due Remaining (Target Currency)"
       sql: ${total_remaining} ;;
       # value_format_name: format_large_numbers_d1
       value_format_name: decimal_0
     }
 
-    # measure: days_sales_outstanding {
-    #   type: number
-    #   label: "{% if _field._is_selected %}@{derive_currency_label}DSO Value ({{currency}}){%else%}DSO Value (Target Currency){%endif%}"
-    #   sql: SAFE_DIVIDE(${total_amount_due_remaining_target_currency},${total_revenue_amount_target_currency}) * ANY_VALUE(${dso_days}) ;;
-    #   value_format_name: decimal_1
-    #   required_fields: [dso_days,target_currency_code]
-    # }
-
     measure: days_sales_outstanding {
       type: number
-      label: "{% if _field._is_selected %}@{derive_currency_label}Days Sales Outstanding ({{currency}}){%else%}Days Sales Outstanding (Target Currency){%endif%}"
       sql: SAFE_DIVIDE(${total_amount_due_remaining_target_currency},${total_amount_original_target_currency}) * ANY_VALUE(${dso_days}) ;;
       value_format_name: decimal_1
       required_fields: [dso_days,target_currency_code]

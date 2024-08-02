@@ -8,7 +8,7 @@ view: +sales_orders__lines {
 
   fields_hidden_by_default: yes
   extends: [sales_orders_common_amount_measures_ext,otc_derive_common_product_fields_ext]
-  # extends: [sales_orders__lines_common_fields_ext,otc_unnest_item_categories_common_fields_ext]
+
   dimension: key {
     type: string
     primary_key: yes
@@ -482,7 +482,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Item Attributes"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Unit List Price ({{currency}}){%else%}Unit List Price (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${unit_list_price} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -491,7 +491,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Item Attributes"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Unit Selling Price ({{currency}}){%else%}Unit Selling Price (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${unit_selling_price} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -500,7 +500,7 @@ view: +sales_orders__lines {
   dimension: unit_discount_amount_target_currency {
     hidden: no
     group_label: "Item Attributes"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Unit Discount Amount ({{currency}}){%else%}Unit Discount Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${unit_list_price_target_currency} - ${unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
 
@@ -591,7 +591,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Ordered Amount ({{currency}}){%else%}Ordered Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${ordered_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -600,7 +600,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Booking Amount ({{currency}}){%else%}Booking Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${booking_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -609,7 +609,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Backlog Amount ({{currency}}){%else%}Backlog Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${backlog_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -618,7 +618,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Fulfilled Amount ({{currency}}){%else%}Fulfilled Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${fulfilled_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -627,7 +627,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Shipped Amount ({{currency}}){%else%}Shipped Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${shipped_amount} * ${currency_conversion_rate} ;;
     value_format_name: decimal_2
   }
@@ -636,7 +636,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}@{derive_currency_label}Invoiced Amount ({{currency}}){%else%}Invoiced Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: ${invoiced_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -738,17 +738,6 @@ view: +sales_orders__lines {
     value_format_name: decimal_0
   }
 
-
-  # measure: total_sales_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   #label defined in sales_orders__lines_common_fields_ext
-  #   #description defined in sales_orders__lines_common_fields_ext
-  #   sql: ${ordered_amount_target_currency} ;;
-  #   filters: [line_category_code: "-RETURN"]
-  #   # value_format defined in sales_orders__lines_common_fields_ext
-  # }
-
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
     type: number
@@ -758,15 +747,6 @@ view: +sales_orders__lines {
     sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_sales_order_count})  ;;
     # value_format defined in sales_orders_common_amount_measures_ext
   }
-
-
-
-  # measure: total_shipped_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   sql: ${shipped_amount_target_currency} ;;
-  #   value_format_name: decimal_0
-  # }
 
   measure: total_backlog_amount_target_currency_formatted {
     link: {
@@ -797,29 +777,6 @@ view: +sales_orders__lines {
 
   }
 
-  # measure: total_booking_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   sql: ${booking_amount_target_currency} ;;
-  #   value_format_name: decimal_0
-  # }
-
-  # measure: total_fulfilled_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   sql: ${fulfilled_amount_target_currency} ;;
-  #   value_format_name: decimal_0
-  # }
-
-
-  # measure: total_invoiced_amount_target_currency {
-  #   hidden: no
-  #   type: sum
-  #   label: "{% if _field._is_selected %}@{derive_currency_label}Total Invoiced Amount ({{currency}}){%else%}Total Invoiced Amount (Target Currency){%endif%}"
-  #   sql: ${invoiced_amount_target_currency} ;;
-  #   filters: [line_category_code: "-RETURN"]
-  #   value_format_name: format_large_numbers_d1
-  # }
 
 #} end target currency dimensions and measures
 
