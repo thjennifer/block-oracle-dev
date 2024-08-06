@@ -112,7 +112,9 @@
     enable_conditional_formatting: false
     note_state: collapsed
     note_display: hover
-    note_text: "Total value of all receivables not yet paid. May be lower value than other receivables KPIs because total includes any credits a customer may have."
+    note_text: |-
+      Total value of all receivables not yet paid.
+      </br></br>May be lower value than other receivables KPIs because total includes any credits a customer may have.
     listen:
       date: sales_payments_daily_agg.transaction_date
       business_unit: sales_payments_daily_agg.business_unit_name
@@ -139,7 +141,8 @@
     enable_conditional_formatting: false
     note_state: collapsed
     note_display: hover
-    note_text: "Total value of receivables past their due date."
+    note_text: |-
+      Total value of receivables past their due date.
     listen:
       date: sales_payments_daily_agg.transaction_date
       business_unit: sales_payments_daily_agg.business_unit_name
@@ -167,7 +170,8 @@
     enable_conditional_formatting: false
     note_state: collapsed
     note_display: hover
-    note_text: "Total value of receivables not yet paid and expected to become bad debt (receivables past due > 90 days)."
+    note_text: |-
+      Total value of receivables not yet paid and expected to become bad debt (receivables past due > 90 days).
     listen:
       date: sales_payments_daily_agg.transaction_date
       business_unit: sales_payments_daily_agg.business_unit_name
@@ -189,7 +193,18 @@
     enable_conditional_formatting: false
     note_state: collapsed
     note_display: hover
-    note_text: "Average time, in days, for which the receivables are outstanding. Calculated as (Ending Receivables Balance / Credit Sales) * N where N is number of days in period. User can choose 30, 90 or 365 days for the calculation with the dashboard parameter 'DSO: # Days for Calculation'."
+    note_text: |-
+      <div style="text-align: left;">
+      Average time, in days, for which the receivables are outstanding.
+      </br></br>Calculated as:
+      <p style="text-align: center;">(Ending Receivables Balance / Credit Sales) * N</p>
+      where N is number of days in period.
+      </br></br>User can choose 30, 90 or 365 days for the calculation with the dashboard parameter:
+      <span style="color:#AECBFA;">
+      </br>&ensp;&ensp;&ensp;DSO: # Days for Calculation
+      </span>
+      </br></br>The dashboard filter <span style="color:#AECBFA;">Invoice Date</span> does not impact this KPI.
+      </div>
     listen:
         business_unit: sales_payments_dso_days_agg_pdt.business_unit_name
         customer_country: sales_payments_dso_days_agg_pdt.bill_to_customer_country
@@ -242,7 +257,15 @@
       }
     note_state: collapsed
     note_display: hover
-    note_text: "Percent of past due receivables by age (or days past due). Number and size of age ranges are defined by dashboard parameters 'Aging Bucket: # of Days in Range' and 'Aging Bucket: # of Ranges'."
+    note_text: |-
+      <p style="text-align: left;">
+      Percent of past due receivables by age (or days past due).
+      </br> </br>Number and size of age ranges are defined by dashboard parameters:
+      <span style="color:#AECBFA;">
+      </br>&ensp;&ensp;&ensp;Aging Bucket: # of Days in Range
+      </br>&ensp;&ensp;&ensp;Aging Bucket: # of Ranges
+      </span>
+      </p>
     listen:
       date: sales_payments.transaction_date
       business_unit: sales_payments.business_unit_name
@@ -276,7 +299,7 @@
     # Use Table Calculations for Cumulative Percent of Total Receivables
     dynamic_fields:
     - category: table_calculation
-      expression: "(${sales_payments_daily_agg.cumulative_total_receivables} / sum(${sales_payments_daily_agg.total_receivables_target_currency}))*100"
+      expression: "(${sales_payments_daily_agg.cumulative_total_receivables} / ${sales_payments_daily_agg.total_receivables_target_currency:total} )*100"
       label: Cumulative Percent of Total Receivables
       value_format:
       value_format_name: decimal_0
@@ -290,11 +313,6 @@
     show_x_axis_label: false
     show_x_axis_ticks: true
     y_axis_scale_mode: linear
-    limit_displayed_rows: true
-    limit_displayed_rows_values:
-      show_hide: show
-      first_last: first
-      num_rows: '10'
     legend_position: center
     point_style: circle
     show_value_labels: true
@@ -348,7 +366,15 @@
       }
     note_state: collapsed
     note_display: hover
-    note_text: "Customers ranked in descending order by Total Receivables. Black line overlaying totals reflects a customer's Cumulative Percent of Total Receivables. Limited to 10 customers. To change, click Explore from Here. In the Visualization pane, click EDIT. Click on Plot tab and edit 'Limit Displayed Rows' property."
+    note_text: |-
+      <p style="text-align: left;">
+      Customers ranked in descending order by Total Receivables. The black line reflects a customer's Cumulative Percent of Total Receivables.
+      </br></br>Limited to 10 customers.
+      To change:
+      </br>1. Click the three-dot menu at the top right of tile
+      and select 'Explore from here'.
+      </br></br>2. In the Data pane, change the row limit to desired value.
+      </div>
     listen:
       date: sales_payments_daily_agg.transaction_date
       business_unit: sales_payments_daily_agg.business_unit_name
@@ -414,7 +440,20 @@
       num_rows: '10'
     note_state: collapsed
     note_display: hover
-    note_text: "Customers ranked in descending order by Total Past Due Receivables. Number and size of age ranges are defined by dashboard parameters 'Aging Bucket: # of Days in Range' and 'Aging Bucket: # of Ranges'. Limited to 10 customers. To change, click Explore from Here. In the Visualization pane, click EDIT. Click on Plot tab and edit 'Limit Displayed Rows' property."
+    note_text: |-
+      <div style="text-align: left;">
+        Customers ranked in descending order by Total Past Due Receivables.
+      </br> </br>Number and size of age ranges are defined by dashboard parameters:
+      <span style="color:#AECBFA;">
+      </br>&ensp;&ensp;&ensp;Aging Bucket: # of Days in Range
+      </br>&ensp;&ensp;&ensp;Aging Bucket: # of Ranges
+      </span>
+      </br></br>Limited to 10 customers. To change:
+      </br> 1. Click the three-dot menu at the top right of tile
+      and select 'Explore from here'.
+      </br></br>2. In the Visualization pane, click EDIT.
+      </br></br>3. Click on Plot tab and edit 'Limit Displayed Rows' property.
+      </div>
     listen:
       date: sales_payments.transaction_date
       business_unit: sales_payments.business_unit_name

@@ -187,7 +187,11 @@
         align: center
     note_state: collapsed
     note_display: below
-    note_text: 'Discounts are calculated by subtracting the Gross Unit Selling Price from the Unit List Price as both prices are inclusive of taxes. If the Gross Unit Selling Price is unavailable, the pre-tax price is used, leading to inflated discounts.'
+    note_text: |-
+      <div style=text-align:left;font-size:11px;color:#808080;">
+      Discounts are calculated by subtracting the Gross Unit Selling Price from the Unit List Price as both prices are inclusive of taxes.
+      If the Gross Unit Selling Price is unavailable, the pre-tax price is used, possibly leading to inflated discounts.
+      </div>
     listen:
       date: sales_invoices.invoice_date
       business_unit: sales_invoices.business_unit_name

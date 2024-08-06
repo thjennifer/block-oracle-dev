@@ -127,7 +127,11 @@
         item_category: sales_invoices_daily_agg.category_description
       note_state: collapsed
       note_display: hover
-      note_text: "Total discount amount of invoices."
+      note_text: |-
+        Total discount amount of invoices.
+        </br></br>Discounts are calculated by subtracting the Gross Unit Selling Price from the Unit List Price as both prices are inclusive of taxes.
+        If the Gross Unit Selling Price is unavailable, the pre-tax price is used, possibly leading to inflated discounts.
+
       row: 2
       col: 12
       width: 6
@@ -322,49 +326,7 @@
       series_point_styles:
         sales_invoices__lines.average_percent_discount_when_taken_formatted: triangle
 
-      # advanced_vis_config: |-
-      #   {
-      #     series: [
-      #       {
-      #         id: 'sales_invoices__lines.average_percent_discount_when_taken_formatted',
-      #         tooltip: {
-      #           followPointer: false,
-      #         },
-      #       },
-      #       {
-      #         id: 'sales_invoices__lines.discount_invoice_line_percent_formatted',
 
-      #         tooltip: {
-      #           followPointer: false,
-      #         },
-      #         type: 'line',
-      #         dashStyle: "dash",
-      #       },
-      #       {
-      #         id: 'sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link',
-      #         dataLabels: {
-      #           enabled: false,
-      #         },
-      #         tooltip: {
-      #           followPointer: true,
-      #         },
-      #       },
-      #       {
-      #         id: 'sales_invoices__lines.average_unit_selling_price_when_discount_target_currency_with_drill_link',
-      #         dataLabels: {
-      #           enabled: false,
-      #         },
-      #         tooltip: {
-      #           followPointer: true,
-      #         },
-      #       },
-      #     ],
-      #     tooltip: {
-      #       backgroundColor: '#C0C0C0',
-      #       format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.2f}<br/>{/each}',
-      #       shared: true,
-      #     },
-      #   }
       advanced_vis_config: |-
         {
           series: [
@@ -431,6 +393,16 @@
             shadow: true,
           },
         }
+      note_state: collapsed
+      note_display: hover
+      note_text: |-
+        <div style="text-align: left;">
+        Customers are ranked in descending order by Total Discount Amount across non-Intercompany invoice lines.
+        </br></br>Average Unit List Price and Average Unit Selling Price across invoice lines with a discount are shown as columns.
+        </br></br>The Average Discount % taken as well as the Frequncy of Discounts (as % of invoice lines) are also shown as lines.
+        </br></br>Discounts are calculated by subtracting the Gross Unit Selling Price from the Unit List Price as both prices are inclusive of taxes.
+        If the Gross Unit Selling Price is unavailable, the pre-tax price is used, possibly leading to inflated discounts.
+        </div>
       listen:
         date: sales_invoices.invoice_date
         business_unit: sales_invoices.business_unit_name
@@ -439,9 +411,6 @@
         target_currency: otc_common_parameters_xvw.parameter_target_currency
         order_source: sales_invoices__lines.order_source_name
         item_category: sales_invoices__lines.category_description
-      note_state: collapsed
-      note_display: hover
-      note_text: "Customers are ranked in descending order by Total Discount Amount across non-Intercompany invoice lines. Average Unit List Price and Average Unit Selling Price across invoice lines are shown as columns. The Average Discount % taken as well as the Frequncy of Discounts (as % of invoice lines) are also shown as lines."
       row: 16
       col: 0
       width: 24

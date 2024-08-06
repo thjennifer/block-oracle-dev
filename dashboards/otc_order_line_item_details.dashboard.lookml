@@ -258,29 +258,33 @@
         align: center
     series_column_widths:
       sales_orders__lines.item_description: 250
-      note_state: collapsed
-      note_display: below
-      note_text: 'In Sales Orders, discounts are determined by deducting the Unit Selling Price (pre-tax amount) from the Unit List Price (post-tax amount). This method can result in inflated discounts compared to discounts derived from Sales Invoices, where the Gross Unit Selling Price (post-tax amount) is utilized whenever possible.'
+
+    note_state: collapsed
+    note_display: below
+    note_text: |-
+      <div style=text-align:left;font-size:11px;color:#808080;">
+      In Sales Orders, discounts are determined by deducting the Unit Selling Price (pre-tax amount) from the Unit List Price (post-tax amount). This method can result in inflated discounts compared to discounts derived from Sales Invoices, where the Gross Unit Selling Price (post-tax amount) is utilized whenever possible.
+      </div>
     listen:
-      date: sales_orders.ordered_date
-      business_unit: sales_orders.business_unit_name
-      customer_country: sales_orders.selected_customer_country
-      customer_name: sales_orders.selected_customer_name
-      target_currency: otc_common_parameters_xvw.parameter_target_currency
-      order_source: sales_orders.order_source_name
-      item_category: sales_orders__lines.category_description
-      item_language: otc_common_parameters_xvw.parameter_language
-      order_status: sales_orders.open_closed_cancelled
-      has_return: sales_orders.has_return_line
-      is_blocked: sales_orders.is_blocked
-      is_fulfilled: sales_orders.is_fulfilled
-      is_fulfilled_by_request_date: sales_orders.is_fulfilled_by_request_date
-      is_booking: sales_orders__lines.is_booking
-      is_backlog: sales_orders__lines.is_backlog
-      is_backordered: sales_orders__lines.is_backordered
-      order_number: sales_orders.order_number
-      line_id: sales_orders__lines.line_id
-      item_description: sales_orders__lines.item_description
+        date: sales_orders.ordered_date
+        business_unit: sales_orders.business_unit_name
+        customer_country: sales_orders.selected_customer_country
+        customer_name: sales_orders.selected_customer_name
+        target_currency: otc_common_parameters_xvw.parameter_target_currency
+        order_source: sales_orders.order_source_name
+        item_category: sales_orders__lines.category_description
+        item_language: otc_common_parameters_xvw.parameter_language
+        order_status: sales_orders.open_closed_cancelled
+        has_return: sales_orders.has_return_line
+        is_blocked: sales_orders.is_blocked
+        is_fulfilled: sales_orders.is_fulfilled
+        is_fulfilled_by_request_date: sales_orders.is_fulfilled_by_request_date
+        is_booking: sales_orders__lines.is_booking
+        is_backlog: sales_orders__lines.is_backlog
+        is_backordered: sales_orders__lines.is_backordered
+        order_number: sales_orders.order_number
+        line_id: sales_orders__lines.line_id
+        item_description: sales_orders__lines.item_description
     row: 0
     col: 0
     width: 24

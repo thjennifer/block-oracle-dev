@@ -100,6 +100,18 @@
           shared: true,
         },
       }
+    note_display: hover
+    note_text: |-
+      <div style="text-align: left;">
+      Top items or categories ranked in descending order by Total Sales.
+      </br></br>Use the dashboard parameter <span style="color:#AECBFA;">Product Level to Display</span> to show either items or categories.
+      </br></br>If Item is displayed, use the <span style="color:#AECBFA;">Language of Item Description</span> dashboard parameter to modify the description language.
+      </br></br>Limited to 10 items or categories.
+      To change:
+      </br>1. Click the three-dot menu at the top right of tile
+      and select 'Explore from here'.
+      </br></br>2. In the Data pane, change the row limit to desired value.
+      </div>
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
@@ -111,10 +123,6 @@
       item_category: sales_orders__lines.category_description
       item_language: otc_common_parameters_xvw.parameter_language
       product_level: sales_orders__lines.parameter_display_product_level
-    note_display: hover
-    note_text: |-
-      <font size="-2">Limited to 10 Products. To change this row limit, select "Explore from Here" option and adjust the row limit.
-      </font>
     row: 2
     col: 0
     width: 12
@@ -150,6 +158,20 @@
             shared: true,
           },
         }
+    note_display: hover
+    note_text: |-
+      <div style="text-align: left;">
+      Top items or categories ranked in descending order by Average Sales per Order.
+      </br></br>Use the dashboard parameter <span style="color:#AECBFA;">Product Level to Display</span> to show either items or categories.
+
+      </br></br>If Item is displayed, use the <span style="color:#AECBFA;">Language of Item Description</span> dashboard parameter to modify the description language.
+
+      </br></br>Limited to 10 items or categories.
+      To change:
+      </br>1. Click the three-dot menu at the top right of tile
+      and select 'Explore from here'.
+      </br></br>2. In the Data pane, change the row limit to desired value.
+      </div>
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
@@ -161,10 +183,6 @@
       item_category: sales_orders__lines.category_description
       item_language: otc_common_parameters_xvw.parameter_language
       product_level: sales_orders__lines.parameter_display_product_level
-    note_display: hover
-    note_text: |-
-      <font size="-2">Average Sales per Order (Target Currency).<br>Limited to 10 Products. To change this row limit, select "Explore from Here" option and adjust the row limit.
-      </font>
     row: 2
     col: 12
     width: 12
@@ -244,40 +262,18 @@
           shadow: true,
         },
       }
-    # advanced_vis_config: |-
-    #   {
-    #     series: [
-    #       {
-    #       tooltip: {
-    #         headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
-    #         pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b> </span> {point.y:,.0f}<br/>',
-    #         shared: true,
-    #       },
-    #       },
-    #       {
-    #       tooltip: {
-    #         headerFormat: '<span style="font-size: 1.8em">{point.key}</span><br/>',
-    #         pointFormat: '<span style="color:{point.color}">\u25CF <b>{series.name}:</b></span> {point.y:.1f}%<br/>',
-    #         shared: true,
-    #       },
-    #       dataLabels: {
-    #         format: '{y:.0f}%',
-    #         color: '#000000',
-    #         align: 'left',
-    #         allowQverlap: false,
-    #       },
-    #       },
-    #     ],
-    #     tooltip: {
-    #       backgroundColor: '#C0C0C0',
-    #       shared: true,
-    #       formatter: null,
-    #     },
-    #   }
     note_display: hover
     note_text: |-
-      <font size="-2">Total Sales (Target Currency).<br>Limited to 10 Customers. To change this row limit, select "Explore from Here" option and adjust the chart properties.
-      </font>
+      <div style="text-align: left;">
+      Top customers ranked in descending order by Total Sales. The black line reflects a customer's Cumulative Percent of Total Sales.
+      </br></br>Use the dashboard parameter <span style="color:#AECBFA;">Customer Type</span> to show either Bill To or Sold To Customers.
+
+      </br></br>Limited to 10 customers.
+      To change:
+      </br>1. Click the three-dot menu at the top right of tile
+      and select 'Explore from here'.
+      </br></br>2. In the Data pane, change the row limit to desired value.
+      </div>
     listen:
       date: sales_orders_daily_agg.ordered_date
       business_unit: sales_orders_daily_agg.business_unit_name
@@ -334,10 +330,83 @@
       item_category: sales_orders__lines.category_description
     note_display: hover
     note_text: |-
-      <font size="-2">Average Sales per Order (Target Currency).<br>Limited to 10 Sold to customers. To change this row limit, select "Explore from Here" option and adjust the row limit.
-      </font>
+      <div style="text-align: left;">
+      Top customers ranked in descending order by Average Sales per Order.
+      </br></br>Use the dashboard parameter <span style="color:#AECBFA;">Customer Type</span> to show either Bill To or Sold To Customers.
+
+      </br></br>Limited to 10 customers.
+      To change:
+      </br>1. Click the three-dot menu at the top right of tile
+      and select 'Explore from here'.
+      </br></br>2. In the Data pane, change the row limit to desired value.
+      </div>
     row: 20
     col: 12
+    width: 12
+    height: 10
+
+  - name: top_business_units_by_sales
+    title: Top Business Units by Sales
+    explore: sales_orders_daily_agg
+    type: looker_bar
+    fields: [sales_orders_daily_agg.business_unit_id,sales_orders_daily_agg.business_unit_name,sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted]
+    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted desc]
+    hidden_fields: [sales_orders_daily_agg.business_unit_id]
+    limit: 10
+    x_axis_gridlines: false
+    y_axis_gridlines: true
+    show_y_axis_labels: false
+    show_y_axis_ticks: true
+    show_x_axis_label: false
+    show_x_axis_ticks: true
+    limit_displayed_rows: false
+    legend_position: center
+    point_style: none
+    show_value_labels: true
+    label_density: 25
+    x_axis_scale: auto
+    y_axis_combined: true
+    series_colors:
+      {sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted: "#74A09F"}
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
+            id: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted, name: Total
+              Sales}], showLabels: true, showValues: false,
+        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
+    x_axis_zoom: true
+    y_axis_zoom: true
+    advanced_vis_config: |-
+      {
+        tooltip: {
+          backgroundColor: '#ffffff',
+          shadow: true,
+          format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080; ">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
+            footerFormat: '</table>',
+            useHTML: true,
+            shared: true,
+          },
+        }
+    note_display: hover
+    note_text: |-
+      <div style="text-align: left;">
+      Top business units ranked in descending order by Average Sales per Order.
+
+      </br></br>Limited to 10 business units.
+      To change:
+      </br>1. Click the three-dot menu at the top right of tile
+      and select 'Explore from here'.
+      </br></br>2. In the Data pane, change the row limit to desired value.
+      </div>
+    listen:
+      date: sales_orders_daily_agg.ordered_date
+      business_unit: sales_orders_daily_agg.business_unit_name
+      customer_type: sales_orders_daily_agg.parameter_customer_type
+      customer_country: sales_orders_daily_agg.selected_customer_country
+      customer_name: sales_orders_daily_agg.selected_customer_name
+      target_currency: otc_common_parameters_xvw.parameter_target_currency
+      order_source: sales_orders_daily_agg.order_source_name
+      item_category: sales_orders_daily_agg__lines.category_description
+    row: 21
+    col: 0
     width: 12
     height: 10
 
@@ -391,61 +460,6 @@
     x_axis_zoom: true
     y_axis_zoom: true
     title_hidden: true
-    listen:
-      date: sales_orders_daily_agg.ordered_date
-      business_unit: sales_orders_daily_agg.business_unit_name
-      customer_type: sales_orders_daily_agg.parameter_customer_type
-      customer_country: sales_orders_daily_agg.selected_customer_country
-      customer_name: sales_orders_daily_agg.selected_customer_name
-      target_currency: otc_common_parameters_xvw.parameter_target_currency
-      order_source: sales_orders_daily_agg.order_source_name
-      item_category: sales_orders_daily_agg__lines.category_description
-    row: 21
-    col: 0
-    width: 12
-    height: 10
-
-
-  - name: top_business_units_by_sales
-    title: Top Business Units by Sales
-    explore: sales_orders_daily_agg
-    type: looker_bar
-    fields: [sales_orders_daily_agg.business_unit_id,sales_orders_daily_agg.business_unit_name,sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted]
-    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted desc]
-    hidden_fields: [sales_orders_daily_agg.business_unit_id]
-    limit: 10
-    x_axis_gridlines: false
-    y_axis_gridlines: true
-    show_y_axis_labels: false
-    show_y_axis_ticks: true
-    show_x_axis_label: false
-    show_x_axis_ticks: true
-    limit_displayed_rows: false
-    legend_position: center
-    point_style: none
-    show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
-    series_colors:
-      {sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted: "#74A09F"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
-            id: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted, name: Total
-              Sales}], showLabels: true, showValues: false,
-        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
-    x_axis_zoom: true
-    y_axis_zoom: true
-    advanced_vis_config: |-
-      {
-        tooltip: {
-          backgroundColor: '#ffffff',
-          shadow: true,
-          format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080; ">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
-            footerFormat: '</table>',
-            useHTML: true,
-            shared: true,
-          },
-        }
     listen:
       date: sales_orders_daily_agg.ordered_date
       business_unit: sales_orders_daily_agg.business_unit_name
