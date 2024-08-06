@@ -230,7 +230,7 @@ constant: link_vis_single {
 constant: link_line_chart_1_date_1_measure {
   #Required
   #measure
-  value: "{% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#66FF00\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}"
+  value: "{% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#468faf\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}"
 }
 
 

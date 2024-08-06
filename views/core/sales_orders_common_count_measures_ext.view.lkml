@@ -285,7 +285,7 @@ view: sales_orders_common_count_measures_ext {
     sql: ${sales_order_count} ;;
     value_format_name: format_large_numbers_d1
     link: {
-      label: "Show Sales Orders by Month (Common)"
+      label: "Show Sales Orders by Month"
       # url: "{{dummy_drill_monthly_orders._link}}"
       url: "@{link_generate_variable_defaults}
       {% assign link = link_generator._link %}

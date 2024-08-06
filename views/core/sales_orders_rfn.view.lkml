@@ -494,22 +494,22 @@ view: +sales_orders {
     drill_fields: [header_details*]
   }
 
-  measure: sales_order_count_formatted {
-    hidden: no
-    type: number
-    sql: ${sales_order_count} ;;
-    value_format_name: format_large_numbers_d1
-    link: {
-      label: "Show Sales Orders by Month"
-      # url: "{{dummy_drill_monthly_orders._link}}"
-      url: "@{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign drill_fields = 'sales_orders.ordered_month,sales_orders.sales_order_count'%}
-      {% assign measure = sales_orders.sales_order_count %}
-      @{link_line_chart_1_date_1_measure}
-      @{link_generate_explore_url}
-      "
-    }
+  # measure: sales_order_count_formatted {
+  #   hidden: no
+  #   type: number
+  #   sql: ${sales_order_count} ;;
+  #   value_format_name: format_large_numbers_d1
+  #   link: {
+  #     label: "Show Sales Orders by Month"
+  #     # url: "{{dummy_drill_monthly_orders._link}}"
+  #     url: "@{link_generate_variable_defaults}
+  #     {% assign link = link_generator._link %}
+  #     {% assign drill_fields = 'sales_orders.ordered_month,sales_orders.sales_order_count'%}
+  #     {% assign measure = sales_orders.sales_order_count %}
+  #     @{link_line_chart_1_date_1_measure}
+  #     @{link_generate_explore_url}
+  #     "
+  #   }
     # link: {
     #   label: "Order Line Details"
     #   icon_url: "/favicon.ico"
@@ -524,7 +524,7 @@ view: +sales_orders {
     #   @{link_generate_dashboard_url}
     #   "
     # }
-  }
+  # }
 
   measure: return_order_count {
     hidden: no
