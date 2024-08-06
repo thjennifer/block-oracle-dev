@@ -1,9 +1,9 @@
 include: "/views/base/sales_invoices__lines__item_categories.view"
-include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
+include: "/views/core/otc_common_item_categories_ext.view"
 
 view: +sales_invoices__lines__item_categories {
   fields_hidden_by_default: yes
-  extends: [otc_unnest_item_categories_common_fields_ext]
+  extends: [otc_common_item_categories_ext]
 
   dimension: key {
     type: string
@@ -28,5 +28,4 @@ view: +sales_invoices__lines__item_categories {
     sql: COALESCE(${TABLE}.CATEGORY_SET_NAME,"Unknown") ;;
   }
 
-
-   }
+}

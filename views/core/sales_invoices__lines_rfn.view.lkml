@@ -1,10 +1,11 @@
 include: "/views/base/sales_invoices__lines.view"
 include: "/views/core/otc_fiscal_gl_dates_ext.view"
-include: "/views/core/otc_derive_common_product_fields_ext.view"
+include: "/views/core/otc_common_item_categories_ext.view"
+include: "/views/core/otc_common_item_descriptions_ext.view"
 include: "/views/core/sales_invoices_common_amount_measures_ext.view"
 
 view: +sales_invoices__lines {
-    extends: [otc_fiscal_gl_dates_ext, otc_derive_common_product_fields_ext, sales_invoices_common_amount_measures_ext]
+    extends: [otc_fiscal_gl_dates_ext, otc_common_item_categories_ext, otc_common_item_descriptions_ext, sales_invoices_common_amount_measures_ext]
 
   dimension: key {
     hidden: yes

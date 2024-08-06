@@ -1,10 +1,11 @@
 include: "/views/base/item_md__item_categories.view"
-include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
+include: "/views/core/otc_common_item_categories_ext.view"
+
 
 view: +item_md__item_categories {
   fields_hidden_by_default: yes
 
-  extends: [otc_unnest_item_categories_common_fields_ext]
+  extends: [otc_common_item_categories_ext]
 
   dimension: key {
     primary_key: yes

@@ -1,12 +1,12 @@
 include: "/views/base/sales_invoices_daily_agg.view"
-include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
+include: "/views/core/otc_common_item_categories_ext.view"
 include: "/views/core/sales_invoices_common_amount_measures_ext.view"
 
 view: +sales_invoices_daily_agg {
 
   fields_hidden_by_default: yes
 
-  extends: [otc_unnest_item_categories_common_fields_ext,sales_invoices_common_amount_measures_ext]
+  extends: [otc_common_item_categories_ext,sales_invoices_common_amount_measures_ext]
 
   dimension: key {
     hidden: yes

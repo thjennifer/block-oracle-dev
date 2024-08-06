@@ -1,10 +1,12 @@
+# language_code and item_description from otc_common_item_descriptions
+
 include: "/views/base/item_md__item_descriptions.view"
-include: "/views/core/otc_unnest_item_descriptions_common_fields_ext.view"
+include: "/views/core/otc_common_item_descriptions_ext.view"
 
 view: +item_md__item_descriptions {
 
   fields_hidden_by_default: yes
-  extends: [otc_unnest_item_descriptions_common_fields_ext]
+  extends: [otc_common_item_descriptions_ext]
 
   dimension: key {
     hidden: yes
@@ -12,30 +14,14 @@ view: +item_md__item_descriptions {
     sql: CONCAT(${item_md.key},${language_code}) ;;
   }
 
-  # dimension: language {
-  #   label: "Language Code of Item Description"
-  #   full_suggestions: yes
-  # }
-
-  # dimension: text {
-  #   hidden: yes
-  #   label: "Item Description"
-  #   full_suggestions: yes
-  # }
-
-  # dimension: item_description {
-  #   hidden: no
-  #   sql: ${text} ;;
-  #   full_suggestions: yes
-  # }
+  dimension: item_part_number {
+    hidden: yes
+    sql: ${item_md.item_part_number} ;;
+  }
 
   measure: distinct_language_count {
     type: count_distinct
     sql: ${language} ;;
   }
 
-
-
-
-
-   }
+}

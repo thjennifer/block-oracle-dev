@@ -253,20 +253,42 @@ view: +sales_orders {
     } # NOTE the &pivots=
   }
 
-  measure: test2_sales_count {
+  # measure: test2_sales_count {
+  #   hidden: no
+  #   type: number
+  #   view_label: "TEST STUFF"
+  #   sql: ${sales_order_count} ;;
+  #   drill_fields: [test2_sales_count, ordered_month]
+  #   link: {
+  #     label: "Show line"
+  #     url: "{% assign measure = 'sales_orders.test2_sales_count' %}
+  #     {% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#66FF00\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}
+
+  #     {{ link }}&vis_config={{ vis_config | encode_uri }}&sorts=sales_orders.ordered_month+asc&toggle=dat,pik,vis&limit=500&column_limit=15"
+  #   }
+  # }
+
+  measure: test3_sales_count {
     hidden: no
     type: number
     view_label: "TEST STUFF"
     sql: ${sales_order_count} ;;
-    drill_fields: [test2_sales_count, ordered_month]
     link: {
-      label: "Show line"
-      url: "{% assign measure = 'sales_orders.test2_sales_count' %}
-      {% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#66FF00\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}
-
-      {{ link }}&vis_config={{ vis_config | encode_uri }}&sorts=sales_orders.ordered_month+asc&toggle=dat,pik,vis&limit=500&column_limit=15"
+      label: "Show Sales Orders by Month (Common)"
+      # url: "{{dummy_drill_monthly_orders._link}}"
+      url: "@{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign v = _view._name | append: '.' %}
+      {% assign measure = 'test3_sales_count' | prepend: v %}
+      {% assign m = 'ordered_month' | prepend: v %}
+      {% assign drill_fields =  m | append: ',' | append: measure %}
+      @{link_line_chart_1_date_1_measure}
+      @{link_generate_explore_url}
+      "
     }
   }
+
+
 
   dimension: test_explore_link_parts {
     type: string

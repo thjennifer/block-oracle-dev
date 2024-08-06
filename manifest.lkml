@@ -115,12 +115,20 @@ constant: is_agg_category_in_query {
 }
 
 
-constant: get_category_set {
+constant: get_category_set_test {
   value: "{% assign d = otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value %}
           {% if d == 'test' %}{% assign category_set = 'Purchasing' %}{%elsif d == 'demo' %}
           {% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
           {% else %} {% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
           {% endif %}"
+}
+
+constant: get_category_set {
+  value: "{% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}"
+}
+
+constant: category_set {
+  value: "{% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}{{category_set}}"
 }
 
 constant: default_target_date {

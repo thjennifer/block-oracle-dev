@@ -3,12 +3,12 @@
 
 include: "/views/base/sales_orders_daily_agg__lines.view"
 include: "/views/core/sales_orders_common_amount_measures_ext.view"
-include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
+include: "/views/core/otc_common_item_categories_ext.view"
 
 view: +sales_orders_daily_agg__lines {
   fields_hidden_by_default: yes
   label: "Sales Orders Daily Agg: Item Categories"
-  extends: [sales_orders_common_amount_measures_ext,otc_unnest_item_categories_common_fields_ext]
+  extends: [sales_orders_common_amount_measures_ext,otc_common_item_categories_ext]
 
   dimension: key {
     hidden: yes

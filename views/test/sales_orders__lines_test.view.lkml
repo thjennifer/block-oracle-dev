@@ -227,4 +227,43 @@ view: +sales_orders__lines {
     #   ;;
   }
 
+  measure: total_sales_visual_drill {
+    hidden: no
+    type: sum
+    value_format_name: usd
+    view_label: "TEST STUFF"
+    sql: ${ordered_amount_target_currency} ;;
+    drill_fields: [total_sales_visual_drill, sales_orders.ordered_month_num, sales_orders.ordered_year]
+    link: {
+      label: "Show Amount by Month and Year"
+      url: "
+      {% assign vis_config = '{
+      \"stacking\" : \"normal\",
+      \"legend_position\" : \"right\",
+      \"x_axis_gridlines\" : false,
+      \"y_axis_gridlines\" : true,
+      \"show_view_names\" : false,
+      \"y_axis_combined\" : true,
+      \"show_y_axis_labels\" : true,
+      \"show_y_axis_ticks\" : true,
+      \"y_axis_tick_density\" : \"default\",
+      \"show_x_axis_label\" : true,
+      \"show_x_axis_ticks\" : true,
+      \"show_null_points\" : false,
+      \"interpolation\" : \"monotone\",
+      \"type\" : \"looker_line\",
+      \"colors\": [
+      \"#5245ed\",
+      \"#ff8f95\",
+      \"#1ea8df\",
+      \"#353b49\",
+      \"#49cec1\",
+      \"#b3a0dd\"
+      ],
+      \"x_axis_label\" : \"Month Number\"
+      }' %}
+      {{ link }}&vis_config={{ vis_config | encode_uri }}&sorts=sales_orders.ordered_year+asc,sales_orders.created_month_num+asc&pivots=sales_orders.ordered_year&toggle=dat,pik,vis&limit=500&column_limit=15"
+    } # NOTE the &pivots=
+  }
+
    }

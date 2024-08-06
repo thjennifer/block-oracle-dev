@@ -1,13 +1,61 @@
+#########################################################{
+# PURPOSE
+# UNNESTED view of Nested Repeated Struct LINES found in SalesOrders table
+# captures Order Line details by header_id (labeled Order ID)
+#
+# SOURCES
+# Refines View sales_orders__lines (defined in /views/base folder)
+# Extends Views:
+#   otc_derive_common_product_fields_ext
+#   sales_orders_common_amount_measures_ext
+#
+# REFERENCED BY
+# Explore sales_orders
+#
+# EXTENDED FIELDS found in sales_orders__lines,
+# sales_orders_daily_agg__lines, and sales_orders_daily_agg__lines__amounts
+# and other OTC-related views
+# Extends common product-dimensions:
+#    item_description, selected_customer_number, selected_customer_name,
+#    selected_customer_country plus bill_to_customer_*, ship_to_customer_*,
+#    and sold_to_customer_* dimensions
+#
+# Extends common amount measures:
+#    e.g., total_sales_amount_target_currency, total_booking_amount_target_currency, etc...
+#
+# KEY MEASURES
+#    Amount in Local Currency, Amount in Target Currency
+#    Cumulative Amount in Local Currency, Cumulative Amount in Target Currency
+#    Exchange Rate (based on last date in the period)
+#    Avg Exchange Rate, Max Exchange Rate
+#    Current Ratio, Current Assets, and Current Liabilities
+#
+# CAVEATS
+# This table includes both ORDERS and RETURNS. Use order_category_code to pick which to include.
+# All of the OTC dashboards focus on ORDERS and exclude RETURNS from reported KPIs.
+# Fields hidden by default. Update field's 'hidden' property to show/hide.
+#
+# HOW TO USE
+# To query this table, always include Fiscal Year and Fiscal Period as dimensions
+# and filter to:
+#   - a single Client MANDT (handled with Constant defined in Manifest file)
+#   - a single Language (the Explore based on this view uses User Attribute locale to select language in joined view language_map_sdt)
+#   - a single Target Currency
+#   - a single Hierarchy Name or Financial Statement Version
+#   - a single Chart of Accounts
+#   - a single Company
+#########################################################}
+
 ## when column is duplicate of another in header (like is_open) then restate sql using ${TABLE}. reference
 include: "/views/base/sales_orders__lines.view"
 include: "/views/core/sales_orders_common_amount_measures_ext.view"
-include: "/views/core/otc_derive_common_product_fields_ext.view"
-# include: "/views/core/otc_unnest_item_categories_common_fields_ext.view"
+include: "/views/core/otc_common_item_descriptions_ext.view"
+include: "/views/core/otc_common_item_categories_ext.view"
 
 view: +sales_orders__lines {
 
   fields_hidden_by_default: yes
-  extends: [sales_orders_common_amount_measures_ext,otc_derive_common_product_fields_ext]
+  extends: [sales_orders_common_amount_measures_ext,otc_common_item_descriptions_ext,otc_common_item_categories_ext]
 
   dimension: key {
     type: string
@@ -91,8 +139,8 @@ view: +sales_orders__lines {
     type: number
     group_label: "Item Categories & Descriptions"
     label: "{% if _field._is_selected %}
-    {% if parameter_display_product_level._parameter_value == 'Item' %}Inventory Item ID{%else%}Category ID{%endif%}
-    {%else%}Selected Product Dimension ID{%endif%}"
+              {% if parameter_display_product_level._parameter_value == 'Item' %}Inventory Item ID{%else%}Category ID{%endif%}
+            {%else%}Selected Product Dimension ID{%endif%}"
     description: "Values are either Item Inventory ID or Item Category ID based on user selection for Parameter Display Categories or Items."
     sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${category_id}{%endif%} ;;
     can_filter: yes
