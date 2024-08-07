@@ -71,6 +71,22 @@ view: sales_orders_common_count_measures_ext {
   measure: blocked_sales_order_count {
     # label: "Blocked Orders"
     description: "Number of sales orders that are blocked (backordered or held)."
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters='is_blocked=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
   }
 
   measure: cancelled_sales_order_count {

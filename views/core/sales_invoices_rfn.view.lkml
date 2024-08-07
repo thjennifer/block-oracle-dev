@@ -62,10 +62,16 @@ view: +sales_invoices {
     value_format_name: id
   }
 
+  dimension: is_complete {
+    hidden: no
+    description: "Yes if invoice is complete else No."
+  }
+
   dimension: is_complete_with_symbols {
-    hidden: yes
-    sql: ${is_complete} ;;
-    html: @{symbols_for_yes_no} ;;
+    hidden: no
+    description: "✅ if invoice is complete."
+    sql: COALESCE(${is_complete},false) ;;
+    html: @{symbols_for_yes} ;;
   }
 
 #########################################################

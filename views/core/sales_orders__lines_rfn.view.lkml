@@ -1,61 +1,44 @@
 #########################################################{
 # PURPOSE
-# UNNESTED view of Nested Repeated Struct LINES found in SalesOrders table
-# captures Order Line details by header_id (labeled Order ID)
+# UNNESTED view of Repeated Struct LINES found in SalesOrders table.
+# Captures order lines details by header_id (labeled Order ID)
 #
 # SOURCES
 # Refines View sales_orders__lines (defined in /views/base folder)
 # Extends Views:
-#   otc_derive_common_product_fields_ext
+#   otc_common_item_categories_ext
+#   otc_common_item_descriptions_ext
 #   sales_orders_common_amount_measures_ext
 #
 # REFERENCED BY
 # Explore sales_orders
 #
-# EXTENDED FIELDS found in sales_orders__lines,
-# sales_orders_daily_agg__lines, and sales_orders_daily_agg__lines__amounts
-# and other OTC-related views
-# Extends common product-dimensions:
-#    item_description, selected_customer_number, selected_customer_name,
-#    selected_customer_country plus bill_to_customer_*, ship_to_customer_*,
-#    and sold_to_customer_* dimensions
-#
-# Extends common amount measures:
-#    e.g., total_sales_amount_target_currency, total_booking_amount_target_currency, etc...
-#
-# KEY MEASURES
-#    Amount in Local Currency, Amount in Target Currency
-#    Cumulative Amount in Local Currency, Cumulative Amount in Target Currency
-#    Exchange Rate (based on last date in the period)
-#    Avg Exchange Rate, Max Exchange Rate
-#    Current Ratio, Current Assets, and Current Liabilities
+# EXTENDED FIELDS:
+#    item_description, language_code,
+#    category_id, category_description, category_name_code
+#    total_sales_amount_target_currency, total_booking_amount_target_currency, and other amounts
 #
 # CAVEATS
-# This table includes both ORDERS and RETURNS. Use order_category_code to pick which to include.
-# All of the OTC dashboards focus on ORDERS and exclude RETURNS from reported KPIs.
-# Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - This table includes both ORDER and RETURN lines. Use line_category_code to pick which to include.
+# - All of the OTC dashboards focus on ORDERS and exclude RETURNS from reported KPIs.
+# - Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - When field name is duplicated in header (like is_open), the sql property is restated to use the ${TABLE} reference
 #
 # HOW TO USE
-# To query this table, always include Fiscal Year and Fiscal Period as dimensions
-# and filter to:
-#   - a single Client MANDT (handled with Constant defined in Manifest file)
-#   - a single Language (the Explore based on this view uses User Attribute locale to select language in joined view language_map_sdt)
-#   - a single Target Currency
-#   - a single Hierarchy Name or Financial Statement Version
-#   - a single Chart of Accounts
-#   - a single Company
+# - Also includes Repeated Structs for Cancel Reasons, Item Categories and Item Descriptions
+# - Select fields from these Repeated Structs have been defined here so this do not have to be unnested
+#
 #########################################################}
 
-## when column is duplicate of another in header (like is_open) then restate sql using ${TABLE}. reference
 include: "/views/base/sales_orders__lines.view"
-include: "/views/core/sales_orders_common_amount_measures_ext.view"
 include: "/views/core/otc_common_item_descriptions_ext.view"
 include: "/views/core/otc_common_item_categories_ext.view"
+include: "/views/core/sales_orders_common_amount_measures_ext.view"
 
 view: +sales_orders__lines {
 
   fields_hidden_by_default: yes
-  extends: [sales_orders_common_amount_measures_ext,otc_common_item_descriptions_ext,otc_common_item_categories_ext]
+  extends: [otc_common_item_descriptions_ext,otc_common_item_categories_ext,sales_orders_common_amount_measures_ext]
 
   dimension: key {
     type: string
@@ -67,6 +50,12 @@ view: +sales_orders__lines {
     hidden: no
     sql: COALESCE(${TABLE}.LINE_ID,-1) ;;
     value_format_name: id
+  }
+
+  dimension: line_category_code {
+    hidden: no
+    description: "ORDER or RETURN"
+    full_suggestions: yes
   }
 
   dimension: line_number {
@@ -81,6 +70,7 @@ view: +sales_orders__lines {
 #########################################################
 # Parameters
 # parameter_display_product_level to show either Item or Categories in visualization
+#    used in dimensions selected_product_dimension_id and selected_product_dimension_description
 #{
 
 
@@ -99,10 +89,15 @@ view: +sales_orders__lines {
 
 #########################################################
 # Item dimensions
+# values for item_description, language_code, category_description, category_id, category_name_code are:
+# - extended into this view from otc_common_item_descriptions_ext and otc_common_item_categories
+# - pulled from the Repeated Struct fields ITEM_CATEGORIES and ITEM_DESCRIPTIONS
 #{
 
   dimension: inventory_item_id {
     hidden: no
+    label: "Item ID"
+    description: "Unique identifier for inventory item."
     value_format_name: id
   }
 
@@ -113,13 +108,11 @@ view: +sales_orders__lines {
 
   dimension: item_organization_id {
     hidden: no
-    group_label: "Item Attributes"
     value_format_name: id
   }
 
   dimension: item_organization_name {
     hidden: no
-    group_label: "Item Attributes"
     sql: COALESCE(${TABLE}.ITEM_ORGANIZATION_NAME,CAST(${item_organization_id} AS STRING)) ;;
   }
 
@@ -147,7 +140,6 @@ view: +sales_orders__lines {
     value_format_name: id
   }
 
-
 #} end item dimensions
 
 
@@ -155,60 +147,65 @@ view: +sales_orders__lines {
 # Dates
 #{
 
+#--> also in sales_orders so adding ${TABLE} reference
   dimension_group: fulfillment {
     hidden: no
-    timeframes: [raw,date,week,month,quarter,year,yesno]
     sql: ${TABLE}.FULFILLMENT_DATE ;;
   }
 
+#--> adding label to avoid _date_date
   dimension_group: request_date {
     hidden: no
     label: "Request"
     description: "Requested delivery date for the order line."
-    timeframes: [raw,date,week,month,quarter,year,yesno]
     sql:${TABLE}.REQUEST_DATE ;;
   }
 
+#--> adding label to avoid _date_date
   dimension_group: promise_date {
     hidden: no
     label: "Promise"
     description: "Promised delivery date."
-    timeframes: [raw,date,week,month,quarter,year,yesno]
   }
 
   dimension_group: actual_ship {
     hidden: no
     description: "Actual ship date of order line."
-    timeframes: [raw,date,week,month,quarter,year,yesno]
   }
 
   dimension_group: schedule_ship {
     hidden: no
     description: "Scheduled ship date of order line."
-    timeframes: [raw,date,week,month,quarter,year,yesno]
   }
 
+#--> limiting timeframe options for this timestamp
+#--> also in sales_orders so adding ${TABLE} reference
   dimension_group: creation_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"
     description: "Creation timestamp of record in Oracle source table."
+    sql: ${TABLE}.CREATION_TS ;;
   }
 
+#--> limiting timeframe options for this timestamp
+#--> also in sales_orders so adding ${TABLE} reference
   dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Last Update"
     description: "Last update timestamp of record in Oracle source table."
+    sql: ${TABLE}.LAST_UPDATE_TS ;;
   }
-
 
 #} end dates
 
 #########################################################
 # Line Status
+# overall line status code along with flags like is_backlog, is_cancelled, etc...
+# also includes _with_symbols version of select flags that displays a symbol like ✅
+# instead of Yes/No
 #{
-
 
   dimension: line_status {
     hidden: no
@@ -216,22 +213,20 @@ view: +sales_orders__lines {
     full_suggestions: yes
   }
 
-  dimension: line_category_code {
-    hidden: no
-  }
-
   dimension: is_backlog {
     hidden: no
     group_label: "Line Status"
-    description: "Yes if line is not in ENTERED, BOOKED, CLOSED, OR CANCELLED statuses."
+    description: "Yes if line is not in ENTERED, BOOKED, CLOSED or CANCELLED statuses."
     full_suggestions: yes
   }
 
   dimension: is_backlog_with_symbols {
     hidden: no
     group_label: "Line Status with Symbols"
-    sql: ${is_backlog} ;;
-    html: @{symbols_for_yes_no} ;;
+    description: "✅ if line is not in ENTERED, BOOKED, CLOSED or CANCELLED statuses."
+    sql: COALESCE(${is_backlog},false) ;;
+    can_filter: no
+    html: @{symbols_for_yes} ;;
   }
 
   dimension: is_backordered {
@@ -245,8 +240,10 @@ view: +sales_orders__lines {
   dimension: is_backordered_with_symbols {
     hidden: no
     group_label: "Line Status with Symbols"
-    sql: ${is_backordered} ;;
-    html: @{symbols_for_yes_no} ;;
+    description: "✅ if line cannot be fulfilled with the current inventory."
+    sql: COALESCE(${is_backordered},false) ;;
+    can_filter: no
+    html: @{symbols_for_yes} ;;
   }
 
   dimension: is_booked {
@@ -267,10 +264,13 @@ view: +sales_orders__lines {
   dimension: is_booking_with_symbols {
     hidden: no
     group_label: "Line Status with Symbols"
-    sql: ${is_booking} ;;
-    html: @{symbols_for_yes_no} ;;
+    description: "✅ if line is in ENTERED or BOOKED statuses."
+    sql: COALESCE(${is_booking},false) ;;
+    can_filter: no
+    html: @{symbols_for_yes} ;;
   }
 
+#--> also in sales_orders so adding ${TABLE} reference
   dimension: is_cancelled {
     hidden: no
     group_label: "Line Status"
@@ -278,6 +278,7 @@ view: +sales_orders__lines {
     sql: ${TABLE}.IS_CANCELLED ;;
   }
 
+#--> also in sales_orders so adding ${TABLE} reference
   dimension: is_open {
     hidden: no
     type: yesno
@@ -290,23 +291,23 @@ view: +sales_orders__lines {
     hidden: no
     group_label: "Line Status"
     full_suggestions: yes
-    sql: ${TABLE}.HAS_RETURN ;;
   }
 
   dimension: has_return_with_symbols {
     hidden: no
     group_label: "Line Status with Symbols"
-    sql: ${has_return} ;;
-    html: @{symbols_for_yes_no} ;;
+    sql: COALESCE(${has_return},false) ;;
+    html: @{symbols_for_yes} ;;
   }
 
   dimension: is_sales_order {
     hidden: yes
     type: yesno
-    description: "Line Category Code equals Order (and is not a return)"
+    description: "Line Category Code equals ORDER (and is not a return)"
     sql: ${line_category_code} = 'ORDER' ;;
   }
 
+#--> also in sales_orders so adding ${TABLE} reference
   dimension: is_fulfilled {
     hidden: no
     type: yesno
@@ -321,38 +322,17 @@ view: +sales_orders__lines {
     full_suggestions: yes
   }
 
-  dimension: is_fulfilled_by_promise_date_yes_no_null {
-    hidden: no
-    type: string
-    group_label: "Line Status"
-    label: "Is Fulfilled by Promise Date (Yes/No/Null)"
-    sql: CASE WHEN ${TABLE}.IS_FULFILLED_BY_PROMISE_DATE THEN 'Yes'
-              WHEN ${TABLE}.IS_FULFILLED_BY_PROMISE_DATE = FALSE then 'No'
-         ELSE NULL END
-        ;;
-  }
-
   dimension: is_fulfilled_by_request_date {
     hidden: no
     group_label: "Line Status"
     full_suggestions: yes
   }
 
-  dimension: is_fulfilled_by_request_date_yes_no_null {
-    hidden: no
-    type: string
-    group_label: "Line Status"
-    label: "Is Fulfilled by Request Date (Yes/No/Null)"
-    sql: CASE WHEN ${TABLE}.IS_FULFILLED_BY_REQUEST_DATE THEN 'Yes'
-              WHEN ${TABLE}.IS_FULFILLED_BY_REQUEST_DATE = FALSE then 'No'
-         ELSE NULL END
-        ;;
-  }
-
   dimension: is_shipped {
     hidden: no
     type: yesno
     group_label: "Line Status"
+    description: "Yes if shipped quantity > 0."
     sql: ${shipped_quantity} > 0 ;;
   }
 
@@ -360,14 +340,17 @@ view: +sales_orders__lines {
     hidden: no
     type: yesno
     group_label: "Line Status"
+    description: "Yes if invoiced quantity <> 0."
     sql: ${invoiced_quantity} <> 0 ;;
   }
-
 
 #} end  line status
 
 #########################################################
 # Cancel Reasons
+# pulled from CANCEL_REASON Repeated Struct
+# Cancel Reason provided in multiple languages and parameter_language used to
+# limit reason to only 1 languae
 #{
   dimension: cancel_reason_code {
     hidden: no
@@ -507,21 +490,21 @@ view: +sales_orders__lines {
 
   dimension: unit_cost {
     hidden: no
-    group_label: "Item Attributes"
+    group_label: "Item Prices and Cost"
     label: "Unit Cost (Source Currency)"
     value_format_name: decimal_2
   }
 
   dimension: unit_list_price {
     hidden: no
-    group_label: "Item Attributes"
+    group_label: "Item Prices and Cost"
     label: "Unit List Price (Source Currency)"
     value_format_name: decimal_2
   }
 
   dimension: unit_selling_price {
     hidden: no
-    group_label: "Item Attributes"
+    group_label: "Item Prices and Cost"
     label: "Unit Selling Price (Source Currency)"
     value_format_name: decimal_2
   }
@@ -529,29 +512,28 @@ view: +sales_orders__lines {
   dimension: unit_list_price_target_currency {
     hidden: no
     type: number
-    group_label: "Item Attributes"
+    group_label: "Item Prices and Cost"
     label: "@{label_build}"
-    sql: ${unit_list_price} * ${currency_conversion_rate}  ;;
+    sql: ${unit_list_price} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
   dimension: unit_selling_price_target_currency {
     hidden: no
     type: number
-    group_label: "Item Attributes"
+    group_label: "Item Prices and Cost"
     label: "@{label_build}"
-    sql: ${unit_selling_price} * ${currency_conversion_rate}  ;;
+    sql: ${unit_selling_price} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
-  ## need to add gross_selling_price_target_currency
   dimension: unit_discount_amount_target_currency {
     hidden: no
-    group_label: "Item Attributes"
+    group_label: "Item Prices and Cost"
+    description: "Pre-tax unit list price minus pre-tax unit selling price. Reported in target currency."
     label: "@{label_build}"
     sql: ${unit_list_price_target_currency} - ${unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
-
   }
 
 
@@ -602,45 +584,12 @@ view: +sales_orders__lines {
     value_format_name: decimal_2
   }
 
-
-
-  dimension: currency_code {
-    hidden: no
-    type: string
-    group_label: "Amounts"
-    label: "Currency (Source)"
-    description: "Currency of the order header."
-    sql: ${sales_orders.currency_code} ;;
-  }
-
-  dimension: target_currency_code {
-    hidden: no
-    type: string
-    group_label: "Amounts"
-    label: "Currency (Target)"
-    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
-  }
-
-  dimension: currency_conversion_rate {
-    hidden: no
-    group_label: "Amounts"
-    sql: IF(${sales_orders.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
-    value_format_name: decimal_4
-  }
-
-  dimension: is_incomplete_conversion {
-    hidden: no
-    type: yesno
-    group_label: "Amounts"
-    sql: ${currency_code} <> ${target_currency_code} AND ${currency_conversion_sdt.from_currency} is NULL ;;
-  }
-
   dimension: ordered_amount_target_currency {
     hidden: no
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
-    sql: ${ordered_amount} * ${currency_conversion_rate}  ;;
+    sql: ${ordered_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
@@ -649,7 +598,7 @@ view: +sales_orders__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
-    sql: ${booking_amount} * ${currency_conversion_rate}  ;;
+    sql: ${booking_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
@@ -658,7 +607,7 @@ view: +sales_orders__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
-    sql: ${backlog_amount} * ${currency_conversion_rate}  ;;
+    sql: ${backlog_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
@@ -667,7 +616,7 @@ view: +sales_orders__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
-    sql: ${fulfilled_amount} * ${currency_conversion_rate}  ;;
+    sql: ${fulfilled_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
@@ -676,7 +625,7 @@ view: +sales_orders__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
-    sql: ${shipped_amount} * ${currency_conversion_rate} ;;
+    sql: ${shipped_amount} * ${sales_orders.currency_conversion_rate} ;;
     value_format_name: decimal_2
   }
 
@@ -685,11 +634,15 @@ view: +sales_orders__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
-    sql: ${invoiced_amount} * ${currency_conversion_rate}  ;;
+    sql: ${invoiced_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
 #} end amount dimensions
+
+#########################################################
+# Non-Amount Measures
+#{
 
   measure: count_order_lines {
     hidden: no
@@ -697,7 +650,6 @@ view: +sales_orders__lines {
     label: "Order Lines Count"
     drill_fields: [order_line_details*]
   }
-
 
 
   measure: total_ordered_quantity_by_item {
@@ -763,16 +715,14 @@ view: +sales_orders__lines {
     link: {
       label: "Show Fulfillment Details"
       url: "{{dummy_drill_fulfillment_details._link}}&sorts=sales_orders__lines.cycle_time_days+desc"
-      # url: "@{link_generate_variable_defaults}
-      # {% assign link = link_generator._link %}
-      # {% assign drill_fields = 'sales_orders.selected_customer_number,sales_orders.selected_customer_name,sales_orders__lines.total_backlog_amount_target_currency'%}
-      # @{link_generate_explore_url}
-      # "
     }
   }
 
+#} end non-amount measures
+
 #########################################################
-# Amounts measures
+# Amount measures
+# measures also extended from sales_orders_common_amount_measures_ext
 #{
 
   measure: total_sales_amount_by_source_currency {
@@ -800,11 +750,6 @@ view: +sales_orders__lines {
     link: {
       label: "Show Customers with Highest Backlog"
       url: "{{dummy_backlog_by_customer._link}}"
-      # url: "@{link_generate_variable_defaults}
-      # {% assign link = link_generator._link %}
-      # {% assign drill_fields = 'sales_orders.selected_customer_number,sales_orders.selected_customer_name,sales_orders__lines.total_backlog_amount_target_currency'%}
-      # @{link_generate_explore_url}
-      # "
     }
   }
 
@@ -826,7 +771,12 @@ view: +sales_orders__lines {
   }
 
 
-#} end target currency dimensions and measures
+#} end amount measures
+
+#########################################################
+# Helper measures
+# used to support links and drills; hidden from explore
+#{
 
   measure: dummy_backlog_by_customer {
     hidden: yes
@@ -856,6 +806,12 @@ view: +sales_orders__lines {
     drill_fields: [drill_fulfillment_details*]
   }
 
+  #} end helper measures
+
+#########################################################
+# Sets
+#{
+
   set: order_line_details {
     fields: [sales_orders.order_number, sales_orders.ordered_date, line_id, line_number, line_status, item_part_number, sales_orders__lines.item_description, ordered_quantity, ordered_amount_target_currency]
   }
@@ -876,8 +832,7 @@ view: +sales_orders__lines {
     fields: [order_line_details*,fulfilled_quantity, difference_ordered_fulfilled_quantity, fulfilled_amount_target_currency, fulfillment_date,cycle_time_days]
   }
 
+#}
 
 
-
-
-   }
+}

@@ -205,7 +205,7 @@
             sales_orders__lines.unit_list_price_target_currency, sales_orders__lines.unit_discount_amount_target_currency,
             sales_orders__lines.unit_selling_price_target_currency,
             sales_orders__lines.ordered_amount_target_currency, sales_orders__lines.fulfilled_amount_target_currency,
-            sales_orders__lines.currency_conversion_rate,
+            sales_orders.currency_conversion_rate,
             sales_orders__lines.has_return_with_symbols, sales_orders__lines.is_backlog_with_symbols,
             sales_orders__lines.is_booking_with_symbols, sales_orders__lines.is_backordered_with_symbols]
     sorts: [sales_orders.order_number, sales_orders__lines.line_number]
@@ -263,7 +263,7 @@
     note_display: below
     note_text: |-
       <div style=text-align:left;font-size:11px;color:#808080;">
-      In Sales Orders, discounts are determined by deducting the Unit Selling Price (pre-tax amount) from the Unit List Price (post-tax amount). This method can result in inflated discounts compared to discounts derived from Sales Invoices, where the Gross Unit Selling Price (post-tax amount) is utilized whenever possible.
+      In Sales Orders, discounts are determined by deducting the pre-tax Unit Selling Price from the pre-tax Unit List Price. This method differs from Sales Invoices, where the post-tax prices are used.
       </div>
     listen:
         date: sales_orders.ordered_date

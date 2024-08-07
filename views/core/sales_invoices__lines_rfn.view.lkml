@@ -142,9 +142,9 @@ view: +sales_invoices__lines {
   dimension: is_discount_selling_price_with_symbols {
     type: string
     group_label: "Item Prices and Discounts"
-    description: "Yes if line item was sold at a discounted price."
+    description: "✅ if line item was sold at a discounted price."
     sql: ${is_discount_selling_price} ;;
-    html: @{symbols_for_yes_no} ;;
+    html: @{symbols_for_yes} ;;
   }
 
   dimension: percent_discount {

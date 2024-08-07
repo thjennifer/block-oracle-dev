@@ -263,8 +263,8 @@ view: +sales_orders {
     hidden: no
     group_label: "Order Status with Symbols"
     description: "✅ if sales order has at least 1 line with a return."
-    sql: ${has_return_line} ;;
-    html: @{symbols_for_yes_no} ;;
+    sql: COALESCE(${has_return_line},false) ;;
+    html: @{symbols_for_yes} ;;
   }
 
   dimension: is_blocked {
@@ -279,7 +279,7 @@ view: +sales_orders {
     hidden: no
     group_label: "Order Status with Symbols"
     description: "🟥 if order is either held or has an item on backorder."
-    sql: ${is_blocked};;
+    sql: COALESCE(${is_blocked},false);;
     html: {% if value == true %}🟥 {% else %}   {% endif %}  ;;
   }
 
@@ -312,6 +312,15 @@ view: +sales_orders {
     # derived as LOGICAL_AND(Lines.IS_FULFILLED)
   }
 
+  dimension: is_fulfilled_with_symbols {
+    hidden: no
+    group_label: "Order Status with Symbols"
+    description: "✅ if all order lines are fulfilled (inventory is reserved and ready to be shipped)."
+    sql: COALESCE(${is_fulfilled},false) ;;
+    html: @{symbols_for_yes};;
+  }
+
+
   dimension: is_fulfilled_by_request_date {
     hidden: no
     type: yesno
@@ -328,14 +337,6 @@ view: +sales_orders {
     label: "Is Fulfilled by Promise Date"
     description: "Yes if all lines of order are fulfilled by promised delivery date."
     sql: ${num_lines} > 0 AND ${num_lines} = ${num_lines_fulfilled_by_promise_date} ;;
-  }
-
-  dimension: is_fulfilled_with_symbols {
-    hidden: no
-    group_label: "Order Status with Symbols"
-    description: "✅ if all order lines are fulfilled (inventory is reserved and ready to be shipped). Else  ❌"
-    sql: ${is_fulfilled} ;;
-    html: @{symbols_for_yes_no};;
   }
 
   dimension: is_held {
@@ -404,7 +405,14 @@ view: +sales_orders {
     hidden: no
     group_label: "Currency Conversion"
     description: "Exchange rate between source and target currency for a specific date."
-    sql: IF(${sales_orders.currency_code} = ${target_currency_code}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    sql: IF(${currency_code} = ${target_currency_code}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+  }
+
+  dimension: is_incomplete_conversion {
+    hidden: no
+    type: yesno
+    group_label: "Amounts"
+    sql: ${currency_code} <> ${target_currency_code} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 
 #} end currency conversion
@@ -494,38 +502,6 @@ view: +sales_orders {
     drill_fields: [header_details*]
   }
 
-  # measure: sales_order_count_formatted {
-  #   hidden: no
-  #   type: number
-  #   sql: ${sales_order_count} ;;
-  #   value_format_name: format_large_numbers_d1
-  #   link: {
-  #     label: "Show Sales Orders by Month"
-  #     # url: "{{dummy_drill_monthly_orders._link}}"
-  #     url: "@{link_generate_variable_defaults}
-  #     {% assign link = link_generator._link %}
-  #     {% assign drill_fields = 'sales_orders.ordered_month,sales_orders.sales_order_count'%}
-  #     {% assign measure = sales_orders.sales_order_count %}
-  #     @{link_line_chart_1_date_1_measure}
-  #     @{link_generate_explore_url}
-  #     "
-  #   }
-    # link: {
-    #   label: "Order Line Details"
-    #   icon_url: "/favicon.ico"
-    #   url: "
-    #   @{link_generate_variable_defaults}
-    #   {% assign link = link_generator._link %}
-    #   {% assign qualify_filter_names = false %}
-    #   {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
-    #   {% assign model = _model._name %}
-    #   {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
-    #   {% assign default_filters_override = false %}
-    #   @{link_generate_dashboard_url}
-    #   "
-    # }
-  # }
-
   measure: return_order_count {
     hidden: no
     type: count
@@ -558,22 +534,22 @@ view: +sales_orders {
       url: "{{ dummy_drill_orders_with_block._link}}&sorts=sales_orders.total_sales_amount_target_currency+desc&f[sales_orders.is_blocked]=Yes"
     }
 
-    link: {
-      label: "Order Line Details"
-      icon_url: "/favicon.ico"
-      url: "
-      @{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+    # link: {
+    #   label: "Order Line Details"
+    #   icon_url: "/favicon.ico"
+    #   url: "
+    #   @{link_generate_variable_defaults}
+    #   {% assign link = link_generator._link %}
+    #   {% assign qualify_filter_names = false %}
+    #   {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
 
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
-      {% assign default_filters='is_blocked=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
-      "
-    }
+    #   {% assign model = _model._name %}
+    #   {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+    #   {% assign default_filters='is_blocked=Yes'%}
+    #   {% assign default_filters_override = false %}
+    #   @{link_generate_dashboard_url}
+    #   "
+    # }
   }
 
   measure: cancelled_sales_order_count {
@@ -679,6 +655,14 @@ view: +sales_orders {
   }
 
 #} end count measures
+
+  measure: alert_note_for_incomplete_currency_conversion {
+    hidden: no
+    type: max
+    description: "Provides a note in html when a source currency could not be converted to target currency. Add this measure to a table or single value visualization to alert users that amounts in target currency may be understated."
+    sql: ${is_incomplete_conversion} ;;
+    html: {% if value == true %}For timeframe and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
+  }
 
 #########################################################
 # Add Links to Order Percent Measures

@@ -81,7 +81,16 @@ constant: label_build_minus_total {
 
 
 constant: symbols_for_yes_no {
-  value: "{% if value == true %}✅ {% else %}  {% endif %}"
+  value: "{% if value == true %}✅ {% else %}❌{% endif %}"
+}
+
+constant: symbols_for_yes {
+  value: "{% if value == true %}✅
+  {% else %}  {% endif %}"
+}
+
+constant: symbols_for_no {
+  value: "{% if value == false %}❌{% else %}  {% endif %}"
 }
 
 constant: view_label_for_filters {
