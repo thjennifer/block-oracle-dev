@@ -293,7 +293,7 @@
     explore: sales_orders
     type: looker_line
     fields: [sales_orders__lines.inventory_item_id, sales_orders__lines.item_description,
-    sales_orders__lines.total_ordered_quantity_by_item, sales_orders__lines.total_fulfilled_quantity_by_item,
+    sales_orders__lines.total_ordered_quantity_by_item_formatted, sales_orders__lines.total_fulfilled_quantity_by_item_formatted,
     sales_orders__lines.difference_ordered_fulfilled_quantity_by_item]
     sorts: [sales_orders__lines.difference_ordered_fulfilled_quantity_by_item desc]
     hidden_fields: [sales_orders__lines.inventory_item_id]
@@ -316,10 +316,10 @@
     y_axis_combined: true
     show_null_points: true
     interpolation: step
-    y_axes: [{label: 'Quantities', orientation: left, series: [{axisId: sales_orders__lines.total_ordered_quantity_by_item,
-          id: sales_orders__lines.total_ordered_quantity_by_item, name: Total Ordered
-            Quantity}, {axisId: sales_orders__lines.total_fulfilled_quantity_by_item,
-          id: sales_orders__lines.total_fulfilled_quantity_by_item, name: Total Fulfilled
+    y_axes: [{label: 'Quantities', orientation: left, series: [{axisId: sales_orders__lines.total_ordered_quantity_by_item_formatted,
+          id: sales_orders__lines.total_ordered_quantity_by_item_formatted, name: Total Ordered
+            Quantity}, {axisId: sales_orders__lines.total_fulfilled_quantity_by_item_formatted,
+          id: sales_orders__lines.total_fulfilled_quantity_by_item_formatted, name: Total Fulfilled
             Quantity}], showLabels: true, showValues: true, unpinAxis: false, tickDensity: default,
       type: linear}, {label: 'Difference', orientation: right, series: [{axisId: sales_orders__lines.difference_ordered_fulfilled_quantity_by_item,
           id: sales_orders__lines.difference_ordered_fulfilled_quantity_by_item, name: Difference
@@ -334,17 +334,17 @@
       num_rows: '10'
     hidden_series: []
     series_types:
-      sales_orders__lines.total_ordered_quantity_by_item: column
-      sales_orders__lines.total_fulfilled_quantity_by_item: column
+      sales_orders__lines.total_ordered_quantity_by_item_formatted: column
+      sales_orders__lines.total_fulfilled_quantity_by_item_formatted: column
       sales_orders__lines.difference_ordered_fulfilled_quantity_by_item: line
     series_colors:
-      sales_orders__lines.total_ordered_quantity_by_item: "#12B5CB"
-      sales_orders__lines.total_fulfilled_quantity_by_item: "#A6CFD5"
+      sales_orders__lines.total_ordered_quantity_by_item_formatted: "#12B5CB"
+      sales_orders__lines.total_fulfilled_quantity_by_item_formatted: "#A6CFD5"
       # sales_orders__lines.difference_ordered_fulfilled_quantity_by_item: "#596157"
       sales_orders__lines.difference_ordered_fulfilled_quantity_by_item: "#404040"
     series_labels:
-      sales_orders__lines.total_ordered_quantity_by_item: Total Ordered Quantity
-      sales_orders__lines.total_fulfilled_quantity_by_item: Total Fulfilled Quantity
+      sales_orders__lines.total_ordered_quantity_by_item_formatted: Total Ordered Quantity
+      sales_orders__lines.total_fulfilled_quantity_by_item_formatted: Total Fulfilled Quantity
     # label_color: []
     # reference_lines: []
     x_axis_label_rotation: 0

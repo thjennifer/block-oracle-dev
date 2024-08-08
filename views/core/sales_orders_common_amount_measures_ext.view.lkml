@@ -33,7 +33,6 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Ordered Amount ({{currency}}){%else%}Total Ordered Amount (Target Currency){%endif%}"
     label: "@{label_build}"
     description: "Sum of ordered amount in target currency."
     sql: ${ordered_amount_target_currency} ;;
@@ -44,7 +43,6 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Sales Amount ({{currency}}){%else%}Total Sales Amount (Target Currency){%endif%}"
     label: "@{label_build}"
     description: "Sum of sales in target currency."
     sql: ${ordered_amount_target_currency} ;;
@@ -56,7 +54,6 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Booking Amount ({{currency}}){%else%}Total Booking Amount (Target Currency){%endif%}"
     label: "@{label_build}"
     description: "Sum of booking amount in target currency."
     sql: ${booking_amount_target_currency} ;;
@@ -67,7 +64,6 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Backlog Amount ({{currency}}){%else%}Total Backlog Amount (Target Currency){%endif%}"
     label: "@{label_build}"
     description: "Sum of backlog amount in target currency."
     sql: ${backlog_amount_target_currency} ;;
@@ -231,9 +227,10 @@ view: sales_orders_common_amount_measures_ext {
 
   measure: percent_of_total_sales {
     hidden: no
-    group_label: "Amounts"
     type: percent_of_total
+    description: "Column percent of total sales."
     sql: ${total_sales_amount_target_currency} ;;
+    direction: "column"
   }
 
   measure: cumulative_sales_amount_target_currency {

@@ -25,8 +25,9 @@
 # - When field name is duplicated in header (like is_open), the sql property is restated to use the ${TABLE} reference
 #
 # HOW TO USE
-# - Also includes Repeated Structs for Cancel Reasons, Item Categories and Item Descriptions
-# - Select fields from these Repeated Structs have been defined here so this do not have to be unnested
+# - Also includes Repeated Structs for Cancel Reasons, Item Categories and Item Descriptions. Select fields from
+#   these Repeated Structs have been defined here so this do not have to be unnested.
+# - Also include Repeated INT for Return Line IDs (Array of IDs of all return lines that reference the order line)
 #
 #########################################################}
 
@@ -64,6 +65,7 @@ view: +sales_orders__lines {
 
   dimension: return_line_ids {
     primary_key: no
+    description: "Array of IDs of all return lines that reference this order line. An order line may have multiple returns."
   }
 
 
@@ -103,6 +105,7 @@ view: +sales_orders__lines {
 
   dimension: item_part_number {
     hidden: no
+    full_suggestions: yes
     value_format_name: id
   }
 
@@ -541,51 +544,52 @@ view: +sales_orders__lines {
 
 #########################################################
 # Amounts as dimensions including Currency Conversions
+# hidden from explore because measures for each are defined.
 #{
   dimension: ordered_amount {
-    hidden: no
+    hidden: yes
     group_label: "Amounts"
     label: "Ordered Amount (Source Currency)"
     value_format_name: decimal_2
   }
 
   dimension: booking_amount {
-    hidden: no
+    hidden: yes
     group_label: "Amounts"
     label: "Booking Amount (Source Currency)"
     value_format_name: decimal_2
   }
 
   dimension: backlog_amount {
-    hidden: no
+    hidden: yes
     group_label: "Amounts"
     label: "Backlog Amount (Source Currency)"
     value_format_name: decimal_2
   }
 
   dimension: shipped_amount {
-    hidden: no
+    hidden: yes
     group_label: "Amounts"
     label: "Shipped Amount (Source Currency)"
     value_format_name: decimal_2
   }
 
   dimension: invoiced_amount {
-    hidden: no
+    hidden: yes
     group_label: "Amounts"
     label: "Invoiced Amount (Source Currency)"
     value_format_name: decimal_2
   }
 
   dimension: fulfilled_amount {
-    hidden: no
+    hidden: yes
     group_label: "Amounts"
     label: "Fulfilled Amount (Source Currency)"
     value_format_name: decimal_2
   }
 
   dimension: ordered_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -594,7 +598,7 @@ view: +sales_orders__lines {
   }
 
   dimension: booking_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -603,7 +607,7 @@ view: +sales_orders__lines {
   }
 
   dimension: backlog_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -612,7 +616,7 @@ view: +sales_orders__lines {
   }
 
   dimension: fulfilled_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -621,7 +625,7 @@ view: +sales_orders__lines {
   }
 
   dimension: shipped_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -630,7 +634,7 @@ view: +sales_orders__lines {
   }
 
   dimension: invoiced_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -651,32 +655,54 @@ view: +sales_orders__lines {
     drill_fields: [order_line_details*]
   }
 
-
   measure: total_ordered_quantity_by_item {
     hidden: no
     type: sum
-    description: "Sum of order quantity by item. Inventory Item ID is required field to avoid summing across multiple Unit of Measures."
-    sql: ${ordered_quantity} ;;
-    required_fields: [inventory_item_id]
+    label: "Total Ordered Quantity by Item"
+    description: "Sum of order quantity by item. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned."
+    sql: @{is_item_selected}${ordered_quantity}{%- else -%}NULL {%- endif -%} ;;
+    html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
+    value_format_name: decimal_0
+  }
+
+  measure: total_ordered_quantity_by_item_formatted {
+    hidden: yes
+    type: number
+    label: "Total Ordered Quantity by Item Formatted"
+    description: "Sum of order quantity by item formatted as large number. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned."
+    sql: ${total_ordered_quantity_by_item} ;;
+    html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
     value_format_name: format_large_numbers_d1
   }
 
   measure: total_fulfilled_quantity_by_item {
     hidden: no
     type: sum
-    description: "Sum of fulfilled quantity by item. Inventory Item ID is required field to avoid summing across multiple Unit of Measures."
-    sql: ${fulfilled_quantity} ;;
-    required_fields: [inventory_item_id]
+    label: "Total Fulfilled Quantity by Item"
+    description: "Sum of fulfilled quantity by item. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned."
+    sql: @{is_item_selected}${fulfilled_quantity}{%- else -%}NULL {%- endif -%} ;;
+    html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
+    value_format_name: decimal_0
+  }
+
+  measure: total_fulfilled_quantity_by_item_formatted {
+    hidden: yes
+    type: number
+    label: "Total Fulfilled Quantity by Item Formatted"
+    description: "Sum of fulfilled quantity by item formatted as large number. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned."
+    sql: ${total_fulfilled_quantity_by_item} ;;
+    html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
     value_format_name: format_large_numbers_d1
   }
 
   measure: difference_ordered_fulfilled_quantity_by_item {
     hidden: no
     type: number
-    description: "Ordered minus fulfilled quantity by item. Inventory Item ID is required field to avoid reporting quantitites across multiple Unit of Measures."
+    label: "Difference between Ordered and Fulfilled Quantity by Item"
+    description: "Ordered minus fulfilled quantity by item. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned."
     sql: ${total_ordered_quantity_by_item} - ${total_fulfilled_quantity_by_item} ;;
-    required_fields: [inventory_item_id]
     value_format_name: decimal_0
+    html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
     link: {
       label: "Show Fulfillment Details"
       url: "{{dummy_drill_fulfillment_details._link}}&sorts=sales_orders__lines.difference_ordered_fulfilled_quantity+desc"
@@ -689,13 +715,12 @@ view: +sales_orders__lines {
     sql: ${inventory_item_id} ;;
   }
 
-
-
   measure: average_fulfillment_days_after_promise_date {
     hidden: no
     type: average
     description: "Average number of days between fulfillment date and promised delivery date per order line. Positive values indicate fulfillment occurred after requested delivery date."
     sql: ${fulfillment_days_after_promise_date} ;;
+    value_format_name: decimal_2
   }
 
   measure: average_fulfillment_days_after_request_date {
@@ -703,13 +728,14 @@ view: +sales_orders__lines {
     type: average
     description: "Average number of days between fulfillment date and requested delivery date per order line. Positive values indicate fulfillment occurred after requested delivery date. "
     sql: ${fulfillment_days_after_request_date} ;;
+    value_format_name: decimal_2
   }
 
   measure: average_cycle_time_days {
     hidden: no
     type: average
     description: "Average number of days from order to fulfillment per order line. Item Category or ID must be in query or compution will return null."
-    sql: {% if inventory_item_id._is_selected or item_part_number._is_selected or item_description._is_selected or category_id._is_selected or category_description._is_selected or selected_product_dimension_id._is_selected or selected_product_dimension_description._is_selected%}${cycle_time_days}{% else %}null{%endif%};;
+    sql: @{is_item_or_category_selected}${cycle_time_days}{%- else -%}NULL{%- endif -%};;
     value_format_name: decimal_2
     filters: [is_cancelled: "No"]
     link: {
@@ -721,21 +747,95 @@ view: +sales_orders__lines {
 #} end non-amount measures
 
 #########################################################
-# Amount measures
-# measures also extended from sales_orders_common_amount_measures_ext
+# Amount measures in Source Currency
 #{
 
-  measure: total_sales_amount_by_source_currency {
+  measure: total_ordered_amount_in_source_currency {
     hidden: no
     type: sum
-    group_label: "Amounts"
-    description: "Sum of sales for order lines in source currency. Currency Code is required field to avoid summing across multiple currencies."
-    required_fields: [sales_orders.currency_code]
-    sql: ${ordered_amount} ;;
-    filters: [line_category_code: "-RETURN"]
+    group_label: "Amounts in Source Currency"
+    label: "Total Ordered Amount in Source Currency"
+    description: "Sum of ordered amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_orders.currency_code._is_selected -%}${ordered_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_0
+    html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+
   }
 
+  measure: total_sales_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Sales Amount in Source Currency"
+    description: "Sum of ordered amount where line_category_code = 'ORDER' in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_orders.currency_code._is_selected -%}${ordered_amount}{%- else -%}NULL{%- endif -%} ;;
+    filters: [line_category_code: "ORDER"]
+    value_format_name: decimal_0
+    html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+  measure: total_booking_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Booking Amount in Source Currency"
+    description: "Sum of booking amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_orders.currency_code._is_selected -%}${booking_amount}{%- else -%}NULL{%- endif -%} ;;
+    value_format_name: decimal_0
+    html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+  measure: total_backlog_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Backlog Amount in Source Currency"
+    description: "Sum of backlog amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_orders.currency_code._is_selected -%}${backlog_amount}{%- else -%}NULL{%- endif -%} ;;
+    value_format_name: decimal_0
+    html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+  measure: total_fulfilled_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Fulfilled Amount in Source Currency"
+    description: "Sum of fulfilled amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_orders.currency_code._is_selected -%}${fulfilled_amount}{%- else -%}NULL{%- endif -%} ;;
+    value_format_name: decimal_0
+    html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+  measure: total_shipped_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Shipped Amount in Source Currency"
+    description: "Sum of shipped amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_orders.currency_code._is_selected -%}${shipped_amount}{%- else -%}NULL{%- endif -%} ;;
+    value_format_name: decimal_0
+    html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+  measure: total_invoiced_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Billed Amount in Source Currency"
+    description: "Sum of invoiced amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: ${invoiced_amount} ;;
+    value_format_name: decimal_0
+    html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+#} end amount measures in source currency
+
+#########################################################
+# Amount measures in Target Currency
+# measures extended from sales_orders_common_amount_measures_ext
+# and edited here for links and/or sql property
+#{
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
     type: number

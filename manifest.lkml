@@ -43,38 +43,38 @@ constant: label_get_target_currency {
 }
 
 constant: label_derive_field_name {
-  value: "{% assign fname = _field._name | split: '.' | last | remove: '_target_currency' | remove: '_formatted' %}
-          {% assign field_name = '' %}
-          {% assign fname_array = fname | split: '_' %}
-          {% for word in fname_array %}
-          {% assign cap = word | capitalize %}
-          {% assign field_name = field_name | append: cap %}
-          {% unless forloop.last %}{% assign field_name = field_name | append: ' ' %}{% endunless %}
-          {% endfor %}
+  value: "{%- assign fname = _field._name | split: '.' | last | remove: '_target_currency' | remove: '_formatted' -%}
+          {%- assign field_name = '' -%}
+          {%- assign fname_array = fname | split: '_' -%}
+          {%- for word in fname_array -%}
+            {%- assign cap = word | capitalize -%}
+            {%- assign field_name = field_name | append: cap -%}
+            {%- unless forloop.last -%}{%- assign field_name = field_name | append: ' ' -%}{%- endunless -%}
+          {%- endfor -%}
           "
 }
 
 constant: label_derive_field_name_minus_total {
-  value: "{% assign fname = _field._name | split: '.' | last | remove: '_target_currency' | remove: '_formatted' | remove: 'total_' %}
-          {% assign field_name = '' %}
-          {% assign fname_array = fname | split: '_' %}
-          {% for word in fname_array %}
-          {% assign cap = word | capitalize %}
-          {% assign field_name = field_name | append: cap %}
-          {% unless forloop.last %}{% assign field_name = field_name | append: ' ' %}{% endunless %}
-          {% endfor %}"
+  value: "{%- assign fname = _field._name | split: '.' | last | remove: '_target_currency' | remove: '_formatted' | remove: 'total_' -%}
+          {%- assign field_name = '' -%}
+          {%- assign fname_array = fname | split: '_' -%}
+          {%- for word in fname_array -%}
+            {%- assign cap = word | capitalize -%}
+            {%- assign field_name = field_name | append: cap -%}
+            {%- unless forloop.last -%}{%- assign field_name = field_name | append: ' ' -%}{%- endunless -%}
+          {%- endfor -%}"
 }
 
 constant: label_build {
-  value: "@{label_derive_field_name}{% if _field._is_selected %}{{field_name}} (@{label_get_target_currency}){%else%}{{field_name}} (Target Currency){%endif%}"
+  value: "@{label_derive_field_name}{%- if _field._is_selected -%}{{field_name}} (@{label_get_target_currency}){%- else -%}{{field_name}} (Target Currency){%- endif -%}"
 }
 
 constant: label_build_formatted {
-  value: "@{label_derive_field_name}{% if _field._is_selected %}{{field_name}} (@{label_get_target_currency}){%else%}{{field_name}} (Target Currency) Formatted {%endif%}"
+  value: "@{label_derive_field_name}{%- if _field._is_selected -%}{{field_name}} (@{label_get_target_currency}){%- else -%}{{field_name}} (Target Currency) Formatted {%- endif -%}"
 }
 
 constant: label_build_minus_total {
-  value: "@{label_derive_field_name_minus_total}{% if _field._is_selected %}{{field_name}} (@{label_get_target_currency}){%else%}{{field_name}} (Target Currency){%endif%}"
+  value: "@{label_derive_field_name_minus_total}{%- if _field._is_selected -%}{{field_name}} (@{label_get_target_currency}){%- else -%}{{field_name}} (Target Currency){%- endif -%}"
 }
 
 
@@ -114,6 +114,9 @@ constant: view_label_for_dashboard_navigation {
 #     sql: @{is_agg_category_selected}NULL {%else} ${num_orders} {% endif %} ;;
 #.  }
 
+# _in_query returns true if the field you ask for is selected and therefore included in the query,
+# or is included in a filter for a query,
+# or is included in a query using the required_fields parameter.
 constant: is_agg_category_in_query {
   value: "{% if sales_orders_daily_agg__lines.category_id._in_query or
                 sales_orders_daily_agg__lines.category_description._in_query or
@@ -123,6 +126,29 @@ constant: is_agg_category_in_query {
                 %}"
 }
 
+# _is_selected returns true if the field you ask for is selected and therefore included in the query
+# or is included in the query using the required_fields parameter
+constant: is_item_or_category_selected {
+  value: "{%- if inventory_item_id._is_selected or
+                 item_part_number._is_selected or
+                 item_description._is_selected or
+                 category_id._is_selected or
+                 category_description._is_selected or
+                 category_name_code._is_selected or
+                 selected_product_dimension_description._is_selected or
+                 selected_product_dimension_id._is_selected
+          -%}"
+}
+
+constant: is_item_selected {
+  value: "{%- if inventory_item_id._is_selected or
+  item_part_number._is_selected or
+  item_description._is_selected or
+  (parameter_display_product_level._parameter_value == 'Item' and
+  (selected_product_dimension_description._is_selected or selected_product_dimension_id._is_selected)
+  )
+  -%}"
+}
 
 constant: get_category_set_test {
   value: "{% assign d = otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value %}
