@@ -24,10 +24,15 @@
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - When field name is duplicated in header (like is_open), the sql property is restated to use the ${TABLE} reference
 #
-# HOW TO USE
+# REPEATED STRUCTS
 # - Also includes Repeated Structs for Cancel Reasons, Item Categories and Item Descriptions. Select fields from
-#   these Repeated Structs have been defined here so this do not have to be unnested.
-# - Also include Repeated INT for Return Line IDs (Array of IDs of all return lines that reference the order line)
+#   these Repeated Structs have been defined here so these do not have to be unnested. See each related view which
+#   could be added to Explore if needed:
+#     sales_orders__lines__item_descriptions
+#     sales_orders__lines__item_categories
+#     sales_orders__lines__cancel_reasons
+# - Also includes Repeated INT for Return Line IDs. See:
+#     sales_orders__lines__return_line_ids
 #
 #########################################################}
 
@@ -70,11 +75,10 @@ view: +sales_orders__lines {
 
 
 #########################################################
-# Parameters
+# PARAMETERS
+#{
 # parameter_display_product_level to show either Item or Categories in visualization
 #    used in dimensions selected_product_dimension_id and selected_product_dimension_description
-#{
-
 
   parameter: parameter_display_product_level {
     hidden: no
@@ -90,11 +94,11 @@ view: +sales_orders__lines {
 #} end parameters
 
 #########################################################
-# Item dimensions
+# DIMENSIONS: Item
+#{
 # values for item_description, language_code, category_description, category_id, category_name_code are:
 # - extended into this view from otc_common_item_descriptions_ext and otc_common_item_categories
 # - pulled from the Repeated Struct fields ITEM_CATEGORIES and ITEM_DESCRIPTIONS
-#{
 
   dimension: inventory_item_id {
     hidden: no
@@ -145,9 +149,8 @@ view: +sales_orders__lines {
 
 #} end item dimensions
 
-
 #########################################################
-# Dates
+# DIMENSIONS: Date
 #{
 
 #--> also in sales_orders so adding ${TABLE} reference
@@ -204,11 +207,11 @@ view: +sales_orders__lines {
 #} end dates
 
 #########################################################
-# Line Status
+# DIMENSIONS: Line Status
+#{
 # overall line status code along with flags like is_backlog, is_cancelled, etc...
 # also includes _with_symbols version of select flags that displays a symbol like ✅
 # instead of Yes/No
-#{
 
   dimension: line_status {
     hidden: no
@@ -350,11 +353,12 @@ view: +sales_orders__lines {
 #} end  line status
 
 #########################################################
-# Cancel Reasons
+# DIMENSIONS: Cancel Reason
+#{
 # pulled from CANCEL_REASON Repeated Struct
 # Cancel Reason provided in multiple languages and parameter_language used to
 # limit reason to only 1 languae
-#{
+
   dimension: cancel_reason_code {
     hidden: no
     type: string
@@ -382,9 +386,9 @@ view: +sales_orders__lines {
 #} end cancel reasons
 
 #########################################################
-# Fulfillment Cycle Days Dimensions
-# dimensions hidden and shown in Explore as average measure
+# DIMENSIONS: Fulfillment Cycle Days
 #{
+# dimensions hidden and shown in Explore as average measure
 
 # shown in Explore as measure average_days_from_promise_to_fulfillment
   dimension: fulfillment_days_after_promise_date {
@@ -408,9 +412,8 @@ view: +sales_orders__lines {
 
 #} end fulfillment cycle days dimensions
 
-
 #########################################################
-# Item quantities and weights as dimensions
+# DIMENSIONS: Item quantities and weights
 #{
   dimension: quantity_uom {
     hidden: no
@@ -488,7 +491,7 @@ view: +sales_orders__lines {
 #} end item quantities and weights
 
 #########################################################
-# Item prices and cost
+# DIMENSIONS: Item price and cost
 #{
 
   dimension: unit_cost {
@@ -543,9 +546,10 @@ view: +sales_orders__lines {
 #} end item prices and cost
 
 #########################################################
-# Amounts as dimensions including Currency Conversions
-# hidden from explore because measures for each are defined.
+# DIMENSIONS: Amounts
 #{
+# hidden from explore because measures for each are defined.
+
   dimension: ordered_amount {
     hidden: yes
     group_label: "Amounts"
@@ -567,6 +571,13 @@ view: +sales_orders__lines {
     value_format_name: decimal_2
   }
 
+  dimension: fulfilled_amount {
+    hidden: yes
+    group_label: "Amounts"
+    label: "Fulfilled Amount (Source Currency)"
+    value_format_name: decimal_2
+  }
+
   dimension: shipped_amount {
     hidden: yes
     group_label: "Amounts"
@@ -578,13 +589,6 @@ view: +sales_orders__lines {
     hidden: yes
     group_label: "Amounts"
     label: "Invoiced Amount (Source Currency)"
-    value_format_name: decimal_2
-  }
-
-  dimension: fulfilled_amount {
-    hidden: yes
-    group_label: "Amounts"
-    label: "Fulfilled Amount (Source Currency)"
     value_format_name: decimal_2
   }
 
@@ -645,7 +649,7 @@ view: +sales_orders__lines {
 #} end amount dimensions
 
 #########################################################
-# Non-Amount Measures
+# MEASURES: Non-Amount measures
 #{
 
   measure: count_order_lines {
@@ -747,7 +751,7 @@ view: +sales_orders__lines {
 #} end non-amount measures
 
 #########################################################
-# Amount measures in Source Currency
+# MEASURES: Amounts in Source Currency
 #{
 
   measure: total_ordered_amount_in_source_currency {
@@ -829,13 +833,14 @@ view: +sales_orders__lines {
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
   }
 
-#} end amount measures in source currency
+#} end amounts source currency
 
 #########################################################
-# Amount measures in Target Currency
+# MEASURES: Amounts in Target Currency
+#{
 # measures extended from sales_orders_common_amount_measures_ext
 # and edited here for links and/or sql property
-#{
+
   measure: average_sales_amount_per_order_target_currency {
     hidden: no
     type: number
@@ -856,7 +861,7 @@ view: +sales_orders__lines {
   measure: total_backordered_amount_target_currency {
     type: sum
     sql: ${ordered_amount_target_currency} ;;
-    filters: [line_category_code: "-RETURN",is_backordered: "Yes"]
+    filters: [line_category_code: "ORDER",is_backordered: "Yes"]
   }
 
   measure: total_backordered_amount_target_currency_formatted {
@@ -870,13 +875,12 @@ view: +sales_orders__lines {
 
   }
 
-
-#} end amount measures
+#} end amounts target currency
 
 #########################################################
-# Helper measures
-# used to support links and drills; hidden from explore
+# MEASURES: Helper
 #{
+# used to support links and drills; hidden from explore
 
   measure: dummy_backlog_by_customer {
     hidden: yes
@@ -909,7 +913,7 @@ view: +sales_orders__lines {
   #} end helper measures
 
 #########################################################
-# Sets
+# SETS
 #{
 
   set: order_line_details {

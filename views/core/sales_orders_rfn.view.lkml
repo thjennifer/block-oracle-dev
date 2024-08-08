@@ -12,36 +12,26 @@
 # REFERENCED BY
 # Explore sales_orders
 #
-# EXTENDED FIELDS found in both sales_orders and sales_orders_daily_agg
+# EXTENDED FIELDS
 # Extends common dimensions:
 #    parameter_customer_type, selected_customer_number, selected_customer_name,
 #    selected_customer_country plus bill_to_customer_*, ship_to_customer_*,
 #    and sold_to_customer_* dimensions
 #
-# Extends common count measures:
+# Extends common count and percent of sales orders measures:
 #    e.g., cancelled_sales_order_percent, fulfilled_sales_order_percent, etc...
 #
-# KEY MEASURES
-#    Amount in Local Currency, Amount in Target Currency
-#    Cumulative Amount in Local Currency, Cumulative Amount in Target Currency
-#    Exchange Rate (based on last date in the period)
-#    Avg Exchange Rate, Max Exchange Rate
-#    Current Ratio, Current Assets, and Current Liabilities
-#
 # CAVEATS
-# This table includes both ORDERS and RETURNS. Use order_category_code to pick which to include.
-# All of the OTC dashboards focus on ORDERS and exclude RETURNS from reported KPIs.
-# Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - Table includes both ORDERS and RETURNS. Use order_category_code to pick which to include.
+# - All of the order-related dashboards focus on ORDERS and exclude RETURNS from reported KPIs.
+# - Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - Includes fields which reference CURRENCY_CONVERSION_SDT so this view must be included in the
+#   Sales Orders Explore
 #
-# HOW TO USE
-# To query this table, always include Fiscal Year and Fiscal Period as dimensions
-# and filter to:
-#   - a single Client MANDT (handled with Constant defined in Manifest file)
-#   - a single Language (the Explore based on this view uses User Attribute locale to select language in joined view language_map_sdt)
-#   - a single Target Currency
-#   - a single Hierarchy Name or Financial Statement Version
-#   - a single Chart of Accounts
-#   - a single Company
+# REPEATED STRUCTS
+# - Also includes Repeated Struct for LINES. See view sales_orders__lines for
+#   order line dimensions and measures.
+#
 #########################################################}
 
 
@@ -104,9 +94,10 @@ view: +sales_orders {
 
 
 #########################################################
-# Customer Dimensions
-# selected_customer_name, _country and _type extebded from sales_orders_common_dimensions_ext
+# DIMENSIONS: Customer
 #{
+# selected_customer_name, _country and _type extebded from sales_orders_common_dimensions_ext
+
   dimension: bill_to_customer_name {
     hidden: no
     sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,"Unknown") ;;
@@ -134,10 +125,10 @@ view: +sales_orders {
     sql: COALESCE(${TABLE}.SHIP_TO_CUSTOMER_COUNTRY,"Unknown") ;;
   }
 
-#} end business unit / order source / customer dimensions
+#} end customer
 
 #########################################################
-# Dates
+# DIMENSIONS: Dates
 #{
 
   dimension_group: ordered {
@@ -224,7 +215,7 @@ view: +sales_orders {
 #} end dates
 
 #########################################################
-# Order Status
+# DIMENSIONS: Order Status
 #{
 
   dimension: header_status {
@@ -383,7 +374,7 @@ view: +sales_orders {
 #} end order status
 
 #########################################################
-# Currency Conversion
+# DIMENSIONS: Currency Conversion
 #{
 
   dimension: currency_code {
@@ -418,7 +409,7 @@ view: +sales_orders {
 #} end currency conversion
 
 #########################################################
-# Order Totals as Dimensions
+# DIMENSIONS: Order Totals
 #{
 
   dimension: total_ordered_amount {
@@ -451,7 +442,6 @@ view: +sales_orders {
     hidden: no
     type: number
     group_label: "Order Totals"
-    # label: "{% if _field._is_selected %}@{derive_currency_label}Total Sales Amount ({{currency}}){%else%}Total Sales Amount (Target Currency){%endif%}"
     label: "@{label_build}"
     description: "Total sales amount for an order in target currency. Includes only lines with line category code of 'ORDER'"
     sql: COALESCE(${total_sales_ordered_amount},0) * ${currency_conversion_rate} ;;
@@ -476,12 +466,12 @@ view: +sales_orders {
     label: "Number of Lines Fulfilled by Promise Date"
   }
 
-#} end order amount
+#} end order totals
 
 #########################################################
-# Count Measures
-# see sales_orders_common_count_measures_ext for labels & descriptions
+# MEASURES: Counts
 #{
+# see sales_orders_common_count_measures_ext for labels & descriptions
 
   measure: count {hidden: yes}
 
@@ -640,12 +630,6 @@ view: +sales_orders {
     value_format_name: decimal_1
   }
 
-  measure: max_open_closed_cancelled {
-    hidden: yes
-    type: max
-    sql: ${open_closed_cancelled} ;;
-  }
-
   measure: percent_of_sales_orders {
     hidden: no
     type: percent_of_total
@@ -654,20 +638,14 @@ view: +sales_orders {
     sql: ${sales_order_count} ;;
   }
 
-#} end count measures
+#} end counts
 
-  measure: alert_note_for_incomplete_currency_conversion {
-    hidden: no
-    type: max
-    description: "Provides a note in html when a source currency could not be converted to target currency. Add this measure to a table or single value visualization to alert users that amounts in target currency may be understated."
-    sql: ${is_incomplete_conversion} ;;
-    html: {% if value == true %}For timeframe and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
-  }
 
 #########################################################
-# Add Links to Order Percent Measures
-# measures defined in and extended from sales_orders_common_count_measures_ext
+# MEASURES: Percent of Sales Orders
 #{
+# measures defined in and extended from sales_orders_common_count_measures_ext
+# updates for Explore-specific links
   measure: has_backorder_sales_order_percent {
     link: {
       label: "Show Top 20 Items with Highest Amount on Backorder"
@@ -693,8 +671,6 @@ view: +sales_orders {
 
   }
 
-
-
   measure: has_return_sales_order_percent {
     link: {
       label: "Show Orders and Lines with Returns"
@@ -719,12 +695,25 @@ view: +sales_orders {
     }
   }
 
-  #} end measures
+#} end percent of sales orders
 
 #########################################################
-# Helper measures
-# hidden measures used to support drills and links
+# MEASURES: Misc
 #{
+  measure: alert_note_for_incomplete_currency_conversion {
+    hidden: no
+    type: max
+    description: "Provides a note in html when a source currency could not be converted to target currency. Add this measure to a table or single value visualization to alert users that amounts in target currency may be understated."
+    sql: ${is_incomplete_conversion} ;;
+    html: {% if value == true %}For timeframe and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
+  }
+#} end misc
+
+#########################################################
+# MEASURES: Helper measures
+#{
+# hidden measures used to support drills and links
+
 
   measure: dummy_drill_monthly_orders {
     hidden: yes
@@ -761,10 +750,16 @@ view: +sales_orders {
     drill_fields: [backordered_by_item*]
   }
 
- #} end helper measures
+  measure: max_open_closed_cancelled {
+    hidden: yes
+    type: max
+    sql: ${open_closed_cancelled} ;;
+  }
+
+ #} end helper
 
 #########################################################
-# Sets
+# SETS
 #{
 
   set: header_details {

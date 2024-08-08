@@ -1,3 +1,18 @@
+#########################################################{
+# PURPOSE
+# UNNESTED view of Repeated INT return_line_ids found in sales_orders__lines table.
+# Array of IDs of all return lines that reference the order line.
+# A single order line could have multiple return_line_ids
+#
+# SOURCES
+# Refines View sales_orders__lines__return_line_ids (defined in /views/base folder)
+#
+#
+# REFERENCED BY
+# Explore sales_orders
+#
+#########################################################}
+
 include: "/views/base/sales_orders__lines__return_line_ids.view"
 
 view: +sales_orders__lines__return_line_ids {
@@ -18,7 +33,7 @@ view: +sales_orders__lines__return_line_ids {
     value_format_name: id
     sql: COALESCE(sales_orders__lines__return_line_ids,-1) ;;
     html: {% if value > 0 %}{{value}}{% else %} {% endif %} ;;
-
+#--> link opens order line details filtered to the line_id that matches the given return_line_id
     link: {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
@@ -36,6 +51,7 @@ view: +sales_orders__lines__return_line_ids {
     }
   }
 
+#--> helper measure used to generate link
   measure: link_generator {
     hidden: yes
     type: number
