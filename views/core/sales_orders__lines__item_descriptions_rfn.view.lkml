@@ -5,7 +5,7 @@
 #
 # SOURCES
 # Refines View sales_orders__lines__item_descriptions (defined in /views/base folder)
-# Extends Views:
+# Extends View:
 #   otc_common_item_descriptions_ext
 #
 # REFERENCED BY
@@ -19,6 +19,7 @@
 #   selected for parameter_language is pulled into sales_orders__lines.
 # - Could optionally include in Explore Sales Orders.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #
 #########################################################}
 

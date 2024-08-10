@@ -4,17 +4,16 @@
   layout: newspaper
   preferred_viewer: dashboards-next
   description: ''
-  preferred_slug: OSxoeA7cMnhLUhkrYoSulB
+
   elements:
   - title: Daily Agg unnesting Amounts
     name: Daily Agg unnesting Amounts
-    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     type: looker_grid
     fields: [sales_orders_daily_agg.ordered_year, sales_orders_daily_agg__lines__amounts.target_currency_code,
-      sales_orders_daily_agg__lines__amounts.total_sales_amount_target_currency, sales_orders_daily_agg__lines.average_sales_amount_per_order_target_currency,
-      sales_orders_daily_agg.sales_order_count, sales_orders_daily_agg.cancelled_sales_order_count,
-      sales_orders_daily_agg.non_cancelled_sales_order_count]
+      sales_orders_daily_agg__lines__amounts.total_sales_amount_target_currency, sales_orders_daily_agg__lines.average_ordered_amount_per_order_target_currency,
+      sales_orders_daily_agg.sales_order_count, sales_orders_daily_agg.cancelled_order_count,
+      sales_orders_daily_agg.non_cancelled_order_count]
     filters: {}
     sorts: [sales_orders_daily_agg.ordered_year desc]
     limit: 500
@@ -49,19 +48,19 @@
     listen:
       Ordered Year: sales_orders_daily_agg.ordered_year
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+      order_category_code: sales_orders_daily_agg.order_category_code
+      # Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 4
     col: 0
     width: 10
     height: 7
   - title: Sales Orders
     name: Sales Orders
-    model: cortex-oracle-ebs
     explore: sales_orders
     type: looker_grid
-    fields: [sales_orders.ordered_year, sales_orders__lines.currency_target, sales_orders__lines.total_sales_amount_target_currency,
-      sales_orders__lines.average_sales_amount_per_order_target_currency, sales_orders.sales_order_count,
-      sales_orders.cancelled_sales_order_count, sales_orders.non_cancelled_sales_order_count]
+    fields: [sales_orders.ordered_year, sales_orders.target_currency_code, sales_orders__lines.total_sales_amount_target_currency,
+      sales_orders__lines.average_ordered_amount_per_order_target_currency, sales_orders.sales_order_count,
+      sales_orders.cancelled_order_count, sales_orders.non_cancelled_order_count]
     filters: {}
     sorts: [sales_orders.ordered_year desc]
     limit: 500
@@ -117,20 +116,20 @@
     totals_color: "#808080"
     defaults_version: 1
     y_axes: []
-    column_order: ["$$$_row_numbers_$$$", sales_orders.ordered_year, sales_orders__lines.currency_target,
-      sales_orders__lines.total_sales_amount_target_currency, sales_orders__lines.average_sales_amount_per_order_target_currency,
-      sales_orders.sales_order_count, sales_orders.cancelled_sales_order_count, sales_orders.non_cancelled_sales_order_count]
+    column_order: ["$$$_row_numbers_$$$", sales_orders.ordered_year, sales_orders.target_currency_code,
+      sales_orders__lines.total_sales_amount_target_currency, sales_orders__lines.average_ordered_amount_per_order_target_currency,
+      sales_orders.sales_order_count, sales_orders.cancelled_order_count, sales_orders.non_cancelled_order_count]
     listen:
       Ordered Year: sales_orders.ordered_year
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+      order_category_code: sales_orders.order_category_code
+      # Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 4
     col: 10
     width: 11
     height: 7
   - title: Amount from SalesOrders
     name: Amount from SalesOrders
-    model: cortex-oracle-ebs
     explore: sales_orders
     type: single_value
     fields: [sales_orders__lines.total_sales_amount_target_currency]
@@ -196,19 +195,19 @@
     listen:
       Ordered Year: sales_orders.ordered_year
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+      order_category_code: sales_orders.order_category_code
+      # Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 0
     col: 10
     width: 7
     height: 4
   - title: Amount from DailyAgg
     name: Amount from DailyAgg
-    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     type: single_value
     fields: [sales_orders_daily_agg__lines.total_sales_amount_target_currency]
-    filters:
-      sales_orders_daily_agg.order_category_code: "-RETURN"
+    # filters:
+    #   sales_orders_daily_agg.order_category_code: "-RETURN"
     limit: 500
     column_limit: 50
     custom_color_enabled: true
@@ -246,18 +245,18 @@
     listen:
       Ordered Year: sales_orders_daily_agg.ordered_year
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+      order_category_code: sales_orders_daily_agg.order_category_code
+      # Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 0
     col: 0
     width: 7
     height: 4
   - title: Agg by Category
     name: Agg by Category
-    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     type: looker_grid
     fields: [sales_orders_daily_agg__lines.category_id, sales_orders_daily_agg__lines.category_description,
-      sales_orders_daily_agg__lines.total_sales_amount_target_currency, sales_orders_daily_agg__lines.average_sales_amount_per_order_target_currency]
+      sales_orders_daily_agg__lines.total_sales_amount_target_currency, sales_orders_daily_agg__lines.average_ordered_amount_per_order_target_currency]
     filters: {}
     sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency desc]
     limit: 500
@@ -292,18 +291,18 @@
     listen:
       Ordered Year: sales_orders_daily_agg.ordered_year
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+      order_category_code: sales_orders_daily_agg.order_category_code
+      # Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 17
     col: 0
     width: 10
     height: 6
   - title: SalesOrder by Category
     name: SalesOrder by Category
-    model: cortex-oracle-ebs
     explore: sales_orders
     type: looker_grid
     fields: [sales_orders__lines.category_id, sales_orders__lines.category_description,
-      sales_orders__lines.total_sales_amount_target_currency, sales_orders__lines.average_sales_amount_per_order_target_currency]
+      sales_orders__lines.total_sales_amount_target_currency, sales_orders__lines.average_ordered_amount_per_order_target_currency]
     filters: {}
     sorts: [sales_orders__lines.total_sales_amount_target_currency desc]
     limit: 500
@@ -362,20 +361,20 @@
     listen:
       Ordered Year: sales_orders.ordered_year
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+      order_category_code: sales_orders.order_category_code
+      # Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 17
     col: 10
     width: 11
     height: 6
   - title: Daily Agg using Lines only
     name: Daily Agg using Lines only
-    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     type: looker_grid
     fields: [sales_orders_daily_agg.ordered_year, sales_orders_daily_agg__lines.total_sales_amount_target_currency,
-      sales_orders_daily_agg__lines.average_sales_amount_per_order_target_currency,
-      sales_orders_daily_agg.sales_order_count, sales_orders_daily_agg.cancelled_sales_order_count,
-      sales_orders_daily_agg.non_cancelled_sales_order_count]
+      sales_orders_daily_agg__lines.average_ordered_amount_per_order_target_currency,
+      sales_orders_daily_agg.sales_order_count, sales_orders_daily_agg.cancelled_order_count,
+      sales_orders_daily_agg.non_cancelled_order_count]
     fill_fields: [sales_orders_daily_agg.ordered_year]
     filters: {}
     sorts: [sales_orders_daily_agg.ordered_year desc]
@@ -411,7 +410,8 @@
     listen:
       Ordered Year: sales_orders_daily_agg.ordered_year
       Target Currency: otc_common_parameters_xvw.parameter_target_currency
-      Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+      order_category_code: sales_orders_daily_agg.order_category_code
+      # Use Test or Demo Data: otc_common_parameters_xvw.parameter_use_test_or_demo_data
     row: 11
     col: 0
     width: 11
@@ -427,23 +427,22 @@
       type: advanced
       display: popover
       options: []
-    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     listens_to_filters: []
     field: sales_orders_daily_agg.ordered_year
-  - name: Use Test or Demo Data
-    title: Use Test or Demo Data
-    type: field_filter
-    default_value: demo
-    allow_multiple_values: true
-    required: false
-    ui_config:
-      type: button_toggles
-      display: inline
-    model: cortex-oracle-ebs
-    explore: sales_orders_daily_agg
-    listens_to_filters: []
-    field: otc_common_parameters_xvw.parameter_use_test_or_demo_data
+  # - name: Use Test or Demo Data
+  #   title: Use Test or Demo Data
+  #   type: field_filter
+  #   default_value: demo
+  #   allow_multiple_values: true
+  #   required: false
+  #   ui_config:
+  #     type: button_toggles
+  #     display: inline
+  #   model: cortex-oracle-ebs
+  #   explore: sales_orders_daily_agg
+  #   listens_to_filters: []
+  #   field: otc_common_parameters_xvw.parameter_use_test_or_demo_data
   - name: Target Currency
     title: Target Currency
     type: field_filter
@@ -453,7 +452,18 @@
     ui_config:
       type: button_toggles
       display: inline
-    model: cortex-oracle-ebs
     explore: sales_orders_daily_agg
     listens_to_filters: []
     field: otc_common_parameters_xvw.parameter_target_currency
+
+  - name: order_category_code
+    title: Order Category Code
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: popover
+    explore: sales_orders_daily_agg
+    field: sales_orders_daily_agg.order_category_code

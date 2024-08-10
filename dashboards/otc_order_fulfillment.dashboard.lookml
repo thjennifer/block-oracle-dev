@@ -61,8 +61,10 @@
     title: In Full %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
-    hidden_fields: [sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
+    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
+    hidden_fields: [sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
@@ -83,8 +85,10 @@
     title: OTIF %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
-    hidden_fields: [sales_orders.fulfilled_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
+    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
+    hidden_fields: [sales_orders.fulfilled_order_percent,sales_orders.has_backorder_order_percent]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
@@ -105,11 +109,10 @@
     title: Backordered %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.fulfilled_sales_order_percent, sales_orders.fulfilled_by_request_date_sales_order_percent,sales_orders.has_backorder_sales_order_percent]
-    hidden_fields: [sales_orders.fulfilled_sales_order_percent,sales_orders.fulfilled_by_request_date_sales_order_percent]
-    # enable_conditional_formatting: true
-    # conditional_formatting: [{type: greater than, value: 0.05, background_color: '',
-    #     font_color: "#DB4C40", bold: false, italic: false, strikethrough: false, fields: !!null ''}]
+    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
+    hidden_fields: [sales_orders.fulfilled_order_percent,sales_orders.fulfilled_by_request_date_order_percent]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
@@ -130,8 +133,10 @@
     title: Delivery Performance by Month
     explore: sales_orders
     type: looker_line
-    fields: [sales_orders.ordered_month,sales_orders.fulfilled_sales_order_percent_formatted,sales_orders.fulfilled_by_request_date_sales_order_percent_formatted]
+    fields: [sales_orders.ordered_month,sales_orders.fulfilled_order_percent_formatted,sales_orders.fulfilled_by_request_date_order_percent_formatted]
     sorts: [sales_orders.ordered_month]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
     limit: 500
     legend_position: center
     point_style: none
@@ -142,14 +147,14 @@
     x_axis_zoom: true
     y_axis_zoom: true
     series_types:
-      sales_orders.fulfilled_sales_order_percent_formatted: line
-      sales_orders.fulfilled_by_request_date_sales_order_percent_formatted: line
+      sales_orders.fulfilled_order_percent_formatted: line
+      sales_orders.fulfilled_by_request_date_order_percent_formatted: line
     series_colors:
-      sales_orders.fulfilled_sales_order_percent_formatted: "#6494AA"
-      sales_orders.fulfilled_by_request_date_sales_order_percent_formatted: "#89BD9E"
+      sales_orders.fulfilled_order_percent_formatted: "#6494AA"
+      sales_orders.fulfilled_by_request_date_order_percent_formatted: "#89BD9E"
     series_labels:
-      sales_orders.fulfilled_sales_order_percent_formatted: In Full %
-      sales_orders.fulfilled_by_request_date_sales_order_percent_formatted: OTIF %
+      sales_orders.fulfilled_order_percent_formatted: In Full %
+      sales_orders.fulfilled_by_request_date_order_percent_formatted: OTIF %
     x_axis_datetime_label: "%B %y"
     advanced_vis_config: |-
       {
@@ -197,6 +202,8 @@
     filters:
       sales_orders__lines.is_fulfilled: "Yes"
       sales_orders__lines.parameter_display_product_level: "Item"
+      sales_orders__lines.line_category_code: 'ORDER'
+      sales_orders.order_category_code: '-RETURN'
     x_axis_gridlines: false
     y_axis_gridlines: true
     show_y_axis_labels: true
@@ -297,6 +304,9 @@
     sales_orders__lines.difference_ordered_fulfilled_quantity_by_item]
     sorts: [sales_orders__lines.difference_ordered_fulfilled_quantity_by_item desc]
     hidden_fields: [sales_orders__lines.inventory_item_id]
+    filters:
+      sales_orders__lines.line_category_code: 'ORDER'
+      sales_orders.order_category_code: '-RETURN'
     limit: 10
     x_axis_gridlines: false
     y_axis_gridlines: true
@@ -340,13 +350,10 @@
     series_colors:
       sales_orders__lines.total_ordered_quantity_by_item_formatted: "#12B5CB"
       sales_orders__lines.total_fulfilled_quantity_by_item_formatted: "#A6CFD5"
-      # sales_orders__lines.difference_ordered_fulfilled_quantity_by_item: "#596157"
       sales_orders__lines.difference_ordered_fulfilled_quantity_by_item: "#404040"
     series_labels:
       sales_orders__lines.total_ordered_quantity_by_item_formatted: Total Ordered Quantity
       sales_orders__lines.total_fulfilled_quantity_by_item_formatted: Total Fulfilled Quantity
-    # label_color: []
-    # reference_lines: []
     x_axis_label_rotation: 0
     advanced_vis_config: |-
       {

@@ -135,6 +135,30 @@
     explore: sales_orders
     field: sales_orders__lines.is_backordered
 
+  - name: order_category_code
+    title: Order Category Code
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: advanced
+      display: inline
+    explore: sales_orders
+    field: sales_orders.order_category_code
+
+  - name: line_category_code
+    title: Line Category Code
+    type: field_filter
+    default_value: ''
+    allow_multiple_values: true
+    required: false
+    ui_config:
+      type: button_group
+      display: inline
+    explore: sales_orders
+    field: sales_orders__lines.line_category_code
+
   - name: order_number
     title: Order Number
     type: field_filter
@@ -282,6 +306,8 @@
         is_booking: sales_orders__lines.is_booking
         is_backlog: sales_orders__lines.is_backlog
         is_backordered: sales_orders__lines.is_backordered
+        order_category_code: sales_orders.order_category_code
+        line_category_code: sales_orders__lines.line_category_code
         order_number: sales_orders.order_number
         line_id: sales_orders__lines.line_id
         item_description: sales_orders__lines.item_description
@@ -294,7 +320,7 @@
     title: Summary
     explore: sales_orders
     type: looker_grid
-    fields: [sales_orders.sales_order_count,sales_orders.fulfilled_sales_order_count, sales_orders.blocked_sales_order_count, sales_orders.has_return_sales_order_count, sales_orders__lines.count_order_lines,
+    fields: [sales_orders.sales_order_count,sales_orders.fulfilled_order_count, sales_orders.blocked_order_count, sales_orders.has_return_sales_order_count, sales_orders__lines.count_order_lines,
              sales_orders__lines.total_sales_amount_target_currency,sales_orders__lines.total_fulfilled_amount_target_currency]
     show_view_names: false
     show_row_numbers: false
@@ -336,6 +362,8 @@
         is_booking: sales_orders__lines.is_booking
         is_backlog: sales_orders__lines.is_backlog
         is_backordered: sales_orders__lines.is_backordered
+        order_category_code: sales_orders.order_category_code
+        line_category_code: sales_orders__lines.line_category_code
         order_number: sales_orders.order_number
         line_id: sales_orders__lines.line_id
         item_description: sales_orders__lines.item_description

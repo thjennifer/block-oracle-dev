@@ -34,8 +34,10 @@
     title: Total Sales Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
-    hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
+    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
+    hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
@@ -57,8 +59,10 @@
     title: Return Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
-    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
+    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
+    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
@@ -80,8 +84,10 @@
     title: One Touch Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
-    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.blocked_sales_order_count]
+    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
+    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.blocked_order_count]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name
@@ -103,11 +109,10 @@
     title: Blocked Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent,sales_orders.blocked_sales_order_count]
-    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_sales_order_percent]
-    # fields: [sales_orders.blocked_sales_order_count]
-    # filters:
-    #   sales_orders.is_blocked: 'Yes'
+    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
+    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
     listen:
       date: sales_orders.ordered_date
       business_unit: sales_orders.business_unit_name

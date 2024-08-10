@@ -13,16 +13,10 @@
 # REFERENCED BY
 # Explore sales_orders
 #
-# EXTENDED FIELDS:
+# EXTENDED FIELDS
 #    item_description, language_code,
 #    category_id, category_description, category_name_code
 #    total_sales_amount_target_currency, total_booking_amount_target_currency, and other amounts
-#
-# CAVEATS
-# - This table includes both ORDER and RETURN lines. Use line_category_code to pick which to include.
-# - All of the OTC dashboards focus on ORDERS and exclude RETURNS from reported KPIs.
-# - Fields hidden by default. Update field's 'hidden' property to show/hide.
-# - When field name is duplicated in header (like is_open), the sql property is restated to use the ${TABLE} reference
 #
 # REPEATED STRUCTS
 # - Also includes Repeated Structs for Cancel Reasons, Item Categories and Item Descriptions. Select fields from
@@ -33,6 +27,13 @@
 #     sales_orders__lines__cancel_reasons
 # - Also includes Repeated INT for Return Line IDs. See:
 #     sales_orders__lines__return_line_ids
+#
+# CAVEATS
+# - This view includes both ORDER and RETURN lines. Use line_category_code to pick which to include.
+# - All of the OTC dashboards focus on ORDERS and exclude RETURNS from reported KPIs.
+# - Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - When field name is duplicated in header (like is_open), the sql property is restated to use the ${TABLE} reference.
+# - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #
 #########################################################}
 
@@ -841,13 +842,23 @@ view: +sales_orders__lines {
 # measures extended from sales_orders_common_amount_measures_ext
 # and edited here for links and/or sql property
 
-  measure: average_sales_amount_per_order_target_currency {
+  # measure: average_sales_amount_per_order_target_currency {
+  #   hidden: no
+  #   type: number
+  #   #group label defined in sales_orders_common_amount_measures_ext
+  #   #label defined in sales_orders_common_amount_measures_ext
+  #   #description defined in sales_orders_common_amount_measures_ext
+  #   sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_sales_order_count})  ;;
+  #   # value_format defined in sales_orders_common_amount_measures_ext
+  # }
+
+  measure: average_ordered_amount_per_order_target_currency {
     hidden: no
     type: number
     #group label defined in sales_orders_common_amount_measures_ext
     #label defined in sales_orders_common_amount_measures_ext
     #description defined in sales_orders_common_amount_measures_ext
-    sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_sales_order_count})  ;;
+    sql: SAFE_DIVIDE(${total_ordered_amount_target_currency},${sales_orders.non_cancelled_order_count})  ;;
     # value_format defined in sales_orders_common_amount_measures_ext
   }
 

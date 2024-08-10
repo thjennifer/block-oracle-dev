@@ -29,6 +29,7 @@ view: +sales_orders__lines__cancel_reason {
 
   dimension: code {
     label: "Cancel Reason Code"
+    full_suggestions: yes
   }
   dimension: language {
     type: string
@@ -39,6 +40,7 @@ view: +sales_orders__lines__cancel_reason {
     type: string
     label: "Cancel Reason"
     sql: ${TABLE}.MEANING ;;
+    full_suggestions: yes
   }
 
    }

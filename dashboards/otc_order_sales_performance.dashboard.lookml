@@ -76,6 +76,9 @@
     fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.total_sales_amount_target_currency_formatted]
     sorts: [sales_orders__lines.total_sales_amount_target_currency_formatted desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
+      sales_orders__lines.line_category_code: 'ORDER'
     limit: 10
     show_value_labels: true
     label_density: 25
@@ -132,18 +135,21 @@
     title: Top Products by Average Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.average_sales_amount_per_order_target_currency]
-    sorts: [sales_orders__lines.average_sales_amount_per_order_target_currency desc]
+    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted]
+    sorts: [sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
+      sales_orders__lines.line_category_code: 'ORDER'
     limit: 10
     show_value_labels: true
     label_density: 25
     x_axis_scale: auto
     y_axis_combined: true
     series_colors:
-      {sales_orders__lines.average_sales_amount_per_order_target_currency: "#53575E"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.average_sales_amount_per_order_target_currency,
-            id: sales_orders__lines.average_sales_amount_per_order_target_currency, name: Avg Sales per Order}], showLabels: true, showValues: false,
+      {sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted: "#53575E"}
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted,
+            id: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted, name: Avg Sales per Order}], showLabels: true, showValues: false,
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
     y_axis_zoom: true
@@ -199,6 +205,9 @@
     hidden_fields: [sales_orders_daily_agg.selected_customer_number, sales_orders_daily_agg__lines.percent_of_total_sales,
                     sales_orders_daily_agg__lines.cumulative_sales_amount_target_currency,
                     sales_orders_daily_agg__lines.total_sales_amount_target_currency]
+    filters:
+      sales_orders_daily_agg.order_category_code: '-RETURN'
+      sales_orders_daily_agg__lines.line_category_code: 'ORDER'
     limit: 10
     total: true
     dynamic_fields:
@@ -292,18 +301,21 @@
     title: Top Customers by Average Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders.selected_customer_number, sales_orders.selected_customer_name, sales_orders__lines.average_sales_amount_per_order_target_currency]
-    sorts: [sales_orders__lines.average_sales_amount_per_order_target_currency desc]
+    fields: [sales_orders.selected_customer_number, sales_orders.selected_customer_name, sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted]
+    sorts: [sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted desc]
     hidden_fields: [sales_orders.selected_customer_number]
+    filters:
+      sales_orders.order_category_code: '-RETURN'
+      sales_orders__lines.line_category_code: 'ORDER'
     limit: 10
     show_value_labels: true
     label_density: 25
     x_axis_scale: auto
     y_axis_combined: true
     series_colors:
-      {sales_orders__lines.average_sales_amount_per_order_target_currency: "#53575E"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.average_sales_amount_per_order_target_currency,
-            id: sales_orders__lines.average_sales_amount_per_order_target_currency
+      {sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted: "#53575E"}
+    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted,
+            id: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted
     }], showLabels: true, showValues: false,
         unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
     x_axis_zoom: true
@@ -352,6 +364,9 @@
     fields: [sales_orders_daily_agg.business_unit_id,sales_orders_daily_agg.business_unit_name,sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted]
     sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted desc]
     hidden_fields: [sales_orders_daily_agg.business_unit_id]
+    filters:
+      sales_orders_daily_agg.order_category_code: '-RETURN'
+      sales_orders_daily_agg__lines.line_category_code: 'ORDER'
     limit: 10
     x_axis_gridlines: false
     y_axis_gridlines: true
@@ -418,6 +433,9 @@
       sales_orders_daily_agg.order_source_name]
     sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted desc 0]
     hidden_fields: [sales_orders_daily_agg.order_source_id]
+    filters:
+      sales_orders_daily_agg.order_category_code: '-RETURN'
+      sales_orders_daily_agg__lines.line_category_code: 'ORDER'
     limit: 50
     value_labels: labels
     label_type: labVal

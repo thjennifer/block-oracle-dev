@@ -25,8 +25,10 @@ include: "/components/datagroups.lkml"
 
 include: "/explores/test/*.explore"
 
-include: "/dashboards/test/*.dashboard"
+# include: "/dashboards/test/*.dashboard"
 
 include: "/explores/dso_days_sdt.explore"
 # include: "/views/core/dso_01_dso_days_sdt.view"
 # explore: dso_days_sdt {}
+
+include: "/dashboards/qa/*.dashboard"

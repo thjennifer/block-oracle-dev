@@ -243,10 +243,36 @@ view: sales_orders_common_amount_measures_ext {
     value_format_name: decimal_0
   }
 
-  measure: average_sales_amount_per_order_target_currency {
+  measure: average_ordered_amount_per_order_target_currency {
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Average Sales Amount per Order (@{label_get_target_currency}){%else%}Average Sales Amount per Order (Target Currency){%endif%}"
+    label: "{% if _field._is_selected %}Average Amount per Order (@{label_get_target_currency}){%else%}Average Amount per Order (Target Currency){%endif%}"
     value_format_name: decimal_0
+    # link: {
+    #   label: "Order Line Details"
+    #   icon_url: "/favicon.ico"
+    #   url: "
+    #   @{link_generate_variable_defaults}
+    #   {% assign link = link_generator._link %}
+    #   {% assign qualify_filter_names = false %}
+    #   @{link_sales_orders_to_details_dashboard_extra_mapping}
+    #   {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+    #   {% if append_extra_mapping == true %}
+    #   {% assign filters_mapping = filters_mapping | append: extra_mapping %}
+    #   {% endif %}
+    #   {% assign model = _model._name %}
+    #   {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+    #   {% assign default_filters_override = false %}
+    #   @{link_generate_dashboard_url}
+    #   "
+    # }
+  }
+
+  measure: average_ordered_amount_per_order_target_currency_formatted {
+    type: number
+    group_label: "Amounts with Large Number Format"
+    label: "{% if _field._is_selected %}Average Amount per Order (@{label_get_target_currency}){%else%}Average Amount per Order (Target Currency){%endif%}"
+    value_format_name: format_large_numbers_d1
+    sql: ${average_ordered_amount_per_order_target_currency} ;;
     link: {
       label: "Order Line Details"
       icon_url: "/favicon.ico"

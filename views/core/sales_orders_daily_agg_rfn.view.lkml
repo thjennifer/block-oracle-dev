@@ -5,33 +5,39 @@
 #   Ordered Date
 #   Business Unit ID
 #   Order Source ID
+#   Order Category Code
 #   Sold To Site ID
 #   Ship To Site ID
 #   Bill To Site ID
 #
-# Provides various Orders Counts like Sales Orders, Open Orders, Blocked Orders, etc...
-# Includes NESTED Structs (eeach defined in sepaprate views and joined in Explore):
-#     sales_orders_daily_agg__lines - provides Cycle Days and Order Line Counts by Item Categories, Item Organization
-#     sales_orders_daily_agg__lines__amounts - provides Total Amounts cconverted to Target Currencies by Item Categories & Item Organication
-#
 # SOURCES
 # Refines base view sales_order_daily_agg
-# Extends view sales_orders_common_dimensions_ext which provides labels for:
-#     business unit
-#     order source
-#     sold to/ship to/bill to customers
+# Extends view sales_orders_common_dimensions_ext
+# Extends view sales_orders_common_count_measures_ext
 #
 # REFERENCED BY
-# Explore sales_order_daily_agg
+# Explore sales_orders_daily_agg
 #
-# KEY MEASURES
+# EXTENDED FIELDS
+# Extends common dimensions:
+#    parameter_customer_type, selected_customer_number, selected_customer_name,
+#    selected_customer_country plus bill_to_customer_*, ship_to_customer_*,
+#    and sold_to_customer_* dimensions
+#
+# Extends common count and percent of sales orders measures:
+#    e.g., cancelled_sales_order_percent, fulfilled_sales_order_percent, etc...
+#
+# REPEATED STRUCTS
+# Includes repeated structs LINES (defined in separate views for unnesting):
+#     sales_orders_daily_agg__lines - provides Cycle Days and Order Line Counts by Item Categories, Item Organization
 #
 # CAVEATS
-# Order Counts in this view cannot be aggregated across categories and are defined to return 0 if categories are included.
-# If you need order counts by category (or filtered by category) use the sales_orders view and Explore
-#
-# HOW TO USE
-# Fields are hidden by default so to expose a field in Explore set hidden property to no
+# - Aggregates by Order Category Code (ORDER, RETURN, MIXED) so should filter on this dimension to exclude returns.
+# - Most of OTC Count Measures are defined for Sales Orders only and exclude Returns.
+# - Order Counts in this view cannot be aggregated across categories and are defined to return warning message
+#   if categories are included in the query. If you need order counts by category (or filtered by category)
+#   use the sales_orders view and Explore.
+# - Fields hidden by default. Update field's 'hidden' property to show/hide.
 #########################################################}
 
 include: "/views/base/sales_orders_daily_agg.view"
@@ -56,6 +62,10 @@ view: +sales_orders_daily_agg {
     sql: ${TABLE}.ORDERED_DATE ;;
     convert_tz: no
   }
+
+#########################################################
+# DIMENSIONS: Dates
+#{
 
   dimension_group: ordered {
     hidden: no
@@ -88,9 +98,10 @@ view: +sales_orders_daily_agg {
     sql: UPPER(${TABLE}.ORDER_CATEGORY_CODE);;
   }
 
+#} end dates
 
 #########################################################
-# Business Unit and Order Source Dimensions
+# DIMENSIONS: Business Unit and Order Source
 #{
 
   dimension: business_unit_id {hidden: no}
@@ -115,10 +126,10 @@ view: +sales_orders_daily_agg {
     # group_label: "Bill to Customer"
     sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CAST(${bill_to_customer_number} AS STRING)) ;;
   }
-#} end business unit and order source dimensions
+#} end business unit and order source
 
 #########################################################
-# Measures
+# MEASURES: Counts
 #{
 
   measure: count {
@@ -151,70 +162,63 @@ view: +sales_orders_daily_agg {
     filters: [order_category_code: "RETURN"]
   }
 
-  measure: has_backorder_sales_order_count {
-    hidden: no
-    type: sum
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
-    sql: @{is_agg_category_in_query}NULL{%else%}${num_backordered_orders}{%endif%};;
-    filters: [order_category_code: "-RETURN"]
-  }
-
-  measure: blocked_sales_order_count {
+  measure: blocked_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_blocked_orders}{%endif%};;
-    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: cancelled_sales_order_count {
+  measure: cancelled_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_cancelled_orders}{%endif%};;
-    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: fillable_sales_order_count {
+  measure: fillable_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_fillable_orders}{%endif%} ;;
-    filters: [order_category_code: "-RETURN"]
   }
 
-
-  measure: fulfilled_sales_order_count {
+  measure: fulfilled_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_fulfilled_orders}{%endif%} ;;
-    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: fulfilled_by_request_date_sales_order_count {
+  measure: fulfilled_by_request_date_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_fulfilled_by_request_date}{%endif%} ;;
-    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: fulfilled_by_promise_date_sales_order_count {
+  measure: fulfilled_by_promise_date_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_fulfilled_by_promise_date}{%endif%} ;;
-    filters: [order_category_code: "-RETURN"]
   }
 
+  measure: has_backorder_order_count {
+    hidden: no
+    type: sum
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
+    sql: @{is_agg_category_in_query}NULL{%else%}${num_backordered_orders}{%endif%};;
+  }
+
+#--> filter to sales orders as not relevant to returns
   measure: has_return_sales_order_count {
     hidden: no
     type: sum
@@ -224,36 +228,31 @@ view: +sales_orders_daily_agg {
     filters: [order_category_code: "-RETURN"]
   }
 
-  measure: no_holds_sales_order_count {
+  measure: no_holds_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_orders_with_no_holds}{%endif%} ;;
-    filters: [order_category_code: "-RETURN"]
   }
 
-  measure: non_cancelled_sales_order_count {
+  measure: non_cancelled_order_count {
     hidden: no
     type: number
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
-    sql: ${sales_order_count} - ${cancelled_sales_order_count};;
+    sql: ${order_count} - ${cancelled_order_count};;
   }
 
-  measure: open_sales_order_count {
+  measure: open_order_count {
     hidden: no
     type: sum
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
     sql: @{is_agg_category_in_query}NULL{%else%}${num_open_orders}{%endif%} ;;
-    filters: [order_category_code: "-RETURN"]
   }
 
-
-
-
-#} end measures
+#} end count measures
 
 
  }

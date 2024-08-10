@@ -22,7 +22,7 @@
 #    e.g., cancelled_sales_order_percent, fulfilled_sales_order_percent, etc...
 #
 # CAVEATS
-# - Table includes both ORDERS and RETURNS. Use order_category_code to pick which to include.
+# - This view includes both ORDERS and RETURNS. Use order_category_code to pick which to include.
 # - All of the order-related dashboards focus on ORDERS and exclude RETURNS from reported KPIs.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - Includes fields which reference CURRENCY_CONVERSION_SDT so this view must be included in the
@@ -286,13 +286,13 @@ view: +sales_orders {
     description: "Entire order is cancelled."
   }
 
-  # not displayed in Explore but used in filtered measure Fillable Sales Order Count
+#--> not displayed in Explore but used in filtered measure Fillable Sales Order Count
   dimension: is_fillable {
     hidden: yes
     type: yesno
     group_label: "Order Status"
     description: "Yes, if sales order can be met with available inventory (no items are backordered)."
-    # did not use ${is_backordered} = No becuase would count orders where ${TABLE}.IS_BACKORDERED = NULL
+#--> did not use ${is_backordered} = No becuase would count orders where ${TABLE}.IS_BACKORDERED = NULL
     sql: ${TABLE}.HAS_BACKORDER = FALSE ;;
   }
 
@@ -501,20 +501,12 @@ view: +sales_orders {
     drill_fields: [header_details*]
   }
 
-  measure: has_backorder_sales_order_count {
+  measure: blocked_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
-    filters: [has_backorder: "Yes", order_category_code: "-RETURN"]
-  }
-
-  measure: blocked_sales_order_count {
-    hidden: no
-    type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
-    filters: [is_blocked: "Yes", order_category_code: "-RETURN"]
+    filters: [is_blocked: "Yes"]
     link: {
       label: "Source of Block"
       url: "{{dummy_drill_block_order_source._link}}&f[sales_orders.is_blocked]=Yes"
@@ -523,34 +515,57 @@ view: +sales_orders {
       label: "Show Blocked Orders"
       url: "{{ dummy_drill_orders_with_block._link}}&sorts=sales_orders.total_sales_amount_target_currency+desc&f[sales_orders.is_blocked]=Yes"
     }
-
-    # link: {
-    #   label: "Order Line Details"
-    #   icon_url: "/favicon.ico"
-    #   url: "
-    #   @{link_generate_variable_defaults}
-    #   {% assign link = link_generator._link %}
-    #   {% assign qualify_filter_names = false %}
-    #   {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
-
-    #   {% assign model = _model._name %}
-    #   {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
-    #   {% assign default_filters='is_blocked=Yes'%}
-    #   {% assign default_filters_override = false %}
-    #   @{link_generate_dashboard_url}
-    #   "
-    # }
   }
 
-  measure: cancelled_sales_order_count {
+  measure: cancelled_order_count {
+    hidden: yes
+    type: count
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
+    filters: [is_cancelled: "Yes"]
+  }
+
+  measure: fillable_order_count {
+    hidden: no
+    type: count
+    description: "Number of sales orders that can be met with the available inventory (none of items are backordered)."
+    filters: [is_fillable: "Yes"]
+  }
+
+  measure: fulfilled_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
-    filters: [is_cancelled: "Yes", order_category_code: "-RETURN"]
+    filters: [is_fulfilled: "Yes"]
   }
 
-  measure: has_return_sales_order_count {
+  measure: fulfilled_by_request_date_order_count {
+    hidden: no
+    type: count
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
+    filters: [is_fulfilled_by_request_date : "Yes"]
+  }
+
+  measure: fulfilled_by_promise_date_order_count {
+    hidden: no
+    type: count
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
+    filters: [is_fulfilled_by_promise_date : "Yes"]
+  }
+
+  measure: has_backorder_order_count {
+    hidden: no
+    type: count
+    #label defined in sales_orders_common_count_measures_ext
+    #description defined in sales_orders_common_count_measures_ext
+    filters: [has_backorder: "Yes"]
+  }
+
+#--> filter to sales orders as not relevant to returns
+   measure: has_return_sales_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_count_measures_ext
@@ -558,76 +573,30 @@ view: +sales_orders {
     filters: [has_return_line: "Yes", order_category_code: "-RETURN"]
   }
 
-  measure: fillable_sales_order_count {
-    hidden: no
-    type: count
-    description: "Number of sales orders that can be met with the available inventory (none of items are backordered)."
-    filters: [is_fillable: "Yes", order_category_code: "-RETURN"]
-  }
-
-  measure: fulfilled_sales_order_count {
+  measure: no_holds_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
-    filters: [is_fulfilled: "Yes", order_category_code: "-RETURN"]
-  }
-
-  measure: fulfilled_by_request_date_sales_order_count {
-    hidden: no
-    type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
-    filters: [is_fulfilled_by_request_date : "Yes", order_category_code: "-RETURN"]
-  }
-
-  measure: fulfilled_by_promise_date_sales_order_count {
-    hidden: no
-    type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
-    filters: [is_fulfilled_by_promise_date : "Yes", order_category_code: "-RETURN"]
-  }
-
-  measure: no_holds_sales_order_count {
-    hidden: no
-    type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
-    filters: [has_hold: "No", order_category_code: "-RETURN"]
+    filters: [has_hold: "No"]
     drill_fields: [header_details*]
   }
 
-  measure: non_cancelled_sales_order_count {
+  measure: non_cancelled_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
-    filters: [is_cancelled: "No", order_category_code: "-RETURN"]
+    filters: [is_cancelled: "No"]
   }
 
-  measure: open_sales_order_count {
+  measure: open_order_count {
     hidden: no
     type: count
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
-    filters: [is_open: "Yes", order_category_code: "-RETURN"]
+    filters: [is_open: "Yes"]
     # drill_fields: [header_details*]
-  }
-
-  measure: total_count_lines {
-    hidden: yes
-    type: sum
-    sql: ${num_lines} ;;
-  }
-
-  measure: average_count_lines {
-    hidden: yes
-    type: average
-    label: "Average Line Count per Order"
-    description: "Average number of lines per order"
-    sql: ${num_lines} ;;
-    value_format_name: decimal_1
   }
 
   measure: percent_of_sales_orders {
@@ -638,15 +607,22 @@ view: +sales_orders {
     sql: ${sales_order_count} ;;
   }
 
-#} end counts
+  measure: percent_of_orders {
+    hidden: no
+    type: percent_of_total
+    description: "Column Percent of Orders"
+    direction: "column"
+    sql: ${order_count} ;;
+  }
 
+#} end counts
 
 #########################################################
 # MEASURES: Percent of Sales Orders
 #{
 # measures defined in and extended from sales_orders_common_count_measures_ext
 # updates for Explore-specific links
-  measure: has_backorder_sales_order_percent {
+  measure: has_backorder_order_percent {
     link: {
       label: "Show Top 20 Items with Highest Amount on Backorder"
       url: "{{dummy_backordered_by_item._link}}&f[sales_orders__lines.total_backordered_amount_target_currency]=%3E0&limit=20"
@@ -668,7 +644,6 @@ view: +sales_orders {
       @{link_generate_dashboard_url}
       "
     }
-
   }
 
   measure: has_return_sales_order_percent {
@@ -763,11 +738,11 @@ view: +sales_orders {
 #{
 
   set: header_details {
-    fields: [header_id,order_number,header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_sales_amount_target_currency]
+    fields: [order_number, order_category_code, header_status,ordered_date,sold_to_customer_name, bill_to_customer_name, total_sales_amount_target_currency]
   }
 
   set: header_drill_from_dash {
-    fields: [order_number, header_status, ordered_date, selected_customer_name, total_sales_amount_target_currency]
+    fields: [order_number, order_category_code, header_status, ordered_date, selected_customer_name, total_sales_amount_target_currency]
   }
 
   set: drill_orders_with_block {

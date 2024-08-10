@@ -207,7 +207,7 @@ constant: link_sales_invoices_to_target_dashboard {
 }
 
 constant: link_sales_orders_to_details_dashboard {
-  value: "ordered_date|date||business_unit_name|business_unit||parameter_customer_type|customer_type||selected_customer_country|customer_country||selected_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_language|item_language||open_closed_cancelled|order_status"
+  value: "ordered_date|date||business_unit_name|business_unit||parameter_customer_type|customer_type||selected_customer_country|customer_country||selected_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_language|item_language||open_closed_cancelled|order_status||order_category_code|order_category_code||line_category_code|line_category_code"
 }
 
 constant: link_invoices_to_orders_details_dashboard {

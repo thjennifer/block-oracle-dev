@@ -32,6 +32,7 @@ view: +sales_orders__lines__return_line_ids {
     type: number
     value_format_name: id
     sql: COALESCE(sales_orders__lines__return_line_ids,-1) ;;
+    full_suggestions: yes
     html: {% if value > 0 %}{{value}}{% else %} {% endif %} ;;
 #--> link opens order line details filtered to the line_id that matches the given return_line_id
     link: {

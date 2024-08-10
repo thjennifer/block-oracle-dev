@@ -113,10 +113,12 @@
     title: Top Products by Avg Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.average_sales_amount_per_order_target_currency]
-    sorts: [sales_orders__lines.average_sales_amount_per_order_target_currency desc]
+    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.average_ordered_amount_per_order_target_currency]
+    sorts: [sales_orders__lines.average_ordered_amount_per_order_target_currency desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
-
+    filters:
+      sales_orders__lines.line_category_code: 'ORDER'
+      sales_orders.order_category_code: '-RETURN'
     # filters:
     #   sales_orders_v2.count_orders: ">=10"
     limit: 10
