@@ -17,6 +17,13 @@
 #   average_cycle_time - bar chart
 #   delivery_efficiency - column + line chart
 #
+# Order Counts and Percents apply chart filter order_category_code <> 'RETURN'.
+# Not equal to return is used in case there is a category code like MIXED
+# which includes lines for orders and returns.
+#
+# To handle order_category_code like MIXED, amount KPIs use chart filters for both
+#   order_category_code <> 'RETURN'
+#   line_category_code = 'ORDER'
 #########################################################}
 
 
@@ -200,10 +207,10 @@
     sorts: [sales_orders__lines.average_cycle_time_days desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
     filters:
+      sales_orders.order_category_code: '-RETURN'
+      sales_orders__lines.line_category_code: 'ORDER'
       sales_orders__lines.is_fulfilled: "Yes"
       sales_orders__lines.parameter_display_product_level: "Item"
-      sales_orders__lines.line_category_code: 'ORDER'
-      sales_orders.order_category_code: '-RETURN'
     x_axis_gridlines: false
     y_axis_gridlines: true
     show_y_axis_labels: true
@@ -305,8 +312,8 @@
     sorts: [sales_orders__lines.difference_ordered_fulfilled_quantity_by_item desc]
     hidden_fields: [sales_orders__lines.inventory_item_id]
     filters:
-      sales_orders__lines.line_category_code: 'ORDER'
       sales_orders.order_category_code: '-RETURN'
+      sales_orders__lines.line_category_code: 'ORDER'
     limit: 10
     x_axis_gridlines: false
     y_axis_gridlines: true

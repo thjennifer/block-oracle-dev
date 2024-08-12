@@ -625,7 +625,7 @@ view: +sales_orders {
   measure: has_backorder_order_percent {
     link: {
       label: "Show Top 20 Items with Highest Amount on Backorder"
-      url: "{{dummy_backordered_by_item._link}}&f[sales_orders__lines.total_backordered_amount_target_currency]=%3E0&limit=20"
+      url: "{{dummy_backordered_by_item._link}}&f[sales_orders__lines.total_backordered_amount_target_currency]=%3E0&limit=20&f[sales_orders__lines.line_category_code]=ORDER"
     }
 
     link: {

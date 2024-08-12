@@ -17,6 +17,10 @@
 #   sales_by_order_source - donut chart (looker_pie)
 #   top_business_units_by_sales - bar chart
 #
+# To handle order_category_code of MIXED, amount KPIs use chart filters for both
+#   order_category_code <> 'RETURN'
+#   line_category_code = 'ORDER'
+#
 #########################################################}
 
 
@@ -436,7 +440,7 @@
     filters:
       sales_orders_daily_agg.order_category_code: '-RETURN'
       sales_orders_daily_agg__lines.line_category_code: 'ORDER'
-    limit: 50
+    limit: 10
     value_labels: labels
     label_type: labVal
     inner_radius: 50

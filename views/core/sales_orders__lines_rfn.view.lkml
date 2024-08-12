@@ -872,7 +872,7 @@ view: +sales_orders__lines {
   measure: total_backordered_amount_target_currency {
     type: sum
     sql: ${ordered_amount_target_currency} ;;
-    filters: [line_category_code: "ORDER",is_backordered: "Yes"]
+    filters: [is_backordered: "Yes"]
   }
 
   measure: total_backordered_amount_target_currency_formatted {
@@ -881,7 +881,7 @@ view: +sales_orders__lines {
     value_format_name: format_large_numbers_d1
     link: {
       label: "Show Items with Highest Amount on Backorder"
-      url: "{{dummy_backordered_by_item._link}}"
+      url: "{{dummy_backordered_by_item._link}}&f[sales_orders__lines.line_category_code]=ORDER"
     }
 
   }

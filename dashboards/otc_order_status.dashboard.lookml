@@ -14,14 +14,20 @@
 #   bbb_funnel - looker_funnel
 #   order_status_donut - looker_pie
 #
+# Order Counts and Percents apply chart filter order_category_code <> 'RETURN'
+# Not equal to return is used in case there is a category code like MIXED
+# which includes lines for orders and returns.
+#
+# To handle order_category_code of MIXED, amount KPIs use chart filters for both
+#   order_category_code <> 'RETURN'
+#   line_category_code = 'ORDER'
+#
 #########################################################}
 
 - dashboard: otc_order_status
   title: Order Status
   description: "Provides an overview of order-related metrics, including order volume, a breakdown of the order flow status from booking to billing, and an analysis of order status categories (open, closed, and cancelled)."
 
-  # pull navigation bar and filters from template
-  # if using parameter_navigation_focus_page for active dashboard, update dashboard_navigation to use the correct value
   extends: otc_template_orders
 
   elements:
@@ -140,7 +146,7 @@
       sales_orders_daily_agg__lines.total_shipped_amount_target_currency_formatted,
       sales_orders_daily_agg__lines.total_invoiced_amount_target_currency_formatted]
     filters:
-      sales_orders_daily_agg__lines.line_category_code: "-RETURN"
+      sales_orders_daily_agg__lines.line_category_code: "ORDER"
       sales_orders_daily_agg.order_category_code: "-RETURN"
     leftAxisLabelVisible: false
     leftAxisLabel: ''
@@ -198,7 +204,6 @@
     filters:
       sales_orders.open_closed_cancelled: "-NULL"
       sales_orders.order_category_code: "-RETURN"
-      sales_orders__lines.line_category_code: "-RETURN"
     sorts: [sales_orders.open_closed_cancelled desc]
     title_hidden: true
     value_labels: labels
