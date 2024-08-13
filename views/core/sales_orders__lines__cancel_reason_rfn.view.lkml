@@ -7,12 +7,13 @@
 # Refines View sales_orders__lines__cancel_reason (defined in /views/base folder)
 #
 # REFERENCED BY
-# View sales_orders__lines
+# not used but could optionally be added to Explore sales_orders
 #
-# HOW TO USE
-# - Single reason where language matches the language selected
+# NOTES
+# - A single reason where language matches the language selected
 #   for parameter_language is pulled into sales_orders__lines
-# - could optionally include in Explore Sales Orders
+#   so this view is not used.
+# - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #
 #########################################################}
 
@@ -35,6 +36,7 @@ view: +sales_orders__lines__cancel_reason {
     type: string
     label: "Language of Cancel Reason"
     sql: ${TABLE}.LANGUAGE ;;
+    full_suggestions: yes
   }
   dimension: meaning {
     type: string

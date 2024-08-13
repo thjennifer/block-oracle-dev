@@ -28,9 +28,8 @@
 # - Also includes Repeated INT for Return Line IDs. See:
 #     sales_orders__lines__return_line_ids
 #
-# CAVEATS
+# NOTES
 # - This view includes both ORDER and RETURN lines. Use line_category_code to pick which to include.
-# - All of the OTC dashboards focus on ORDERS and exclude RETURNS from reported KPIs.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - When field name is duplicated in header (like is_open), the sql property is restated to use the ${TABLE} reference.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
@@ -739,10 +738,10 @@ view: +sales_orders__lines {
   measure: average_cycle_time_days {
     hidden: no
     type: average
-    description: "Average number of days from order to fulfillment per order line. Item Category or ID must be in query or compution will return null."
+    description: "Average number of days from order to fulfillment per order line. Item Category or ID must be in query or computation will return null."
     sql: @{is_item_or_category_selected}${cycle_time_days}{%- else -%}NULL{%- endif -%};;
     value_format_name: decimal_2
-    filters: [is_cancelled: "No"]
+    filters: [is_cancelled: "No", is_fulfilled: "Yes"]
     link: {
       label: "Show Fulfillment Details"
       url: "{{dummy_drill_fulfillment_details._link}}&sorts=sales_orders__lines.cycle_time_days+desc"

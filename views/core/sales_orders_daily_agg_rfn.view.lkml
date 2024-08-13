@@ -33,7 +33,6 @@
 #
 # CAVEATS
 # - Aggregates by Order Category Code (ORDER, RETURN, MIXED) so should filter on this dimension to exclude returns.
-# - Most of OTC Count Measures are defined for Sales Orders only and exclude Returns.
 # - Order Counts in this view cannot be aggregated across categories and are defined to return warning message
 #   if categories are included in the query. If you need order counts by category (or filtered by category)
 #   use the sales_orders view and Explore.
@@ -121,12 +120,41 @@ view: +sales_orders_daily_agg {
     sql: COALESCE(${TABLE}.ORDER_SOURCE_NAME,COALESCE(CAST(NULLIF(${order_source_id},-1) AS STRING),"Unknown")) ;;
   }
 
-  dimension: bill_to_customer_name {
-    # hidden: no
-    # group_label: "Bill to Customer"
-    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CAST(${bill_to_customer_number} AS STRING)) ;;
-  }
 #} end business unit and order source
+
+#########################################################
+# DIMENSIONS: Customer
+#{
+# selected_customer_name, _country and _type extebded from sales_orders_common_dimensions_ext
+
+  dimension: bill_to_customer_name {
+    hidden: no
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,"Unknown") ;;
+  }
+
+  dimension: bill_to_customer_country {
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_COUNTRY,"Unknown") ;;
+  }
+
+  dimension: sold_to_customer_name {
+    hidden: no
+    sql: COALESCE(${TABLE}.SOLD_TO_CUSTOMER_NAME,"Unknown") ;;
+  }
+
+  dimension: sold_to_customer_country {
+    sql: COALESCE(${TABLE}.SOLD_TO_CUSTOMER_COUNTRY,"Unknown") ;;
+  }
+
+  dimension: ship_to_customer_name {
+    hidden: no
+    sql: COALESCE(${TABLE}.SHIP_TO_CUSTOMER_NAME,"Unknown") ;;
+  }
+
+  dimension: ship_to_customer_country {
+    sql: COALESCE(${TABLE}.SHIP_TO_CUSTOMER_COUNTRY,"Unknown") ;;
+  }
+
+#} end customer
 
 #########################################################
 # MEASURES: Counts
@@ -253,6 +281,7 @@ view: +sales_orders_daily_agg {
   }
 
 #} end count measures
+
 
 
  }

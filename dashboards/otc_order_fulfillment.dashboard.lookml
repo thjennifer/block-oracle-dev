@@ -210,6 +210,7 @@
       sales_orders.order_category_code: '-RETURN'
       sales_orders__lines.line_category_code: 'ORDER'
       sales_orders__lines.is_fulfilled: "Yes"
+      sales_orders__lines.is_cancelled: "No"
       sales_orders__lines.parameter_display_product_level: "Item"
     x_axis_gridlines: false
     y_axis_gridlines: true

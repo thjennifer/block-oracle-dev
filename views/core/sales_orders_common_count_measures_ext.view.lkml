@@ -208,6 +208,22 @@ view: sales_orders_common_count_measures_ext {
     value_format_name: percent_1
   }
 
+  measure: percent_of_sales_orders {
+    hidden: no
+    type: percent_of_total
+    description: "Column Percent of Sales Orders"
+    direction: "column"
+    sql: ${sales_order_count} ;;
+  }
+
+  measure: percent_of_orders {
+    hidden: no
+    type: percent_of_total
+    description: "Column Percent of Orders"
+    direction: "column"
+    sql: ${order_count} ;;
+  }
+
  #} end percent of orders measures
 
 #########################################################

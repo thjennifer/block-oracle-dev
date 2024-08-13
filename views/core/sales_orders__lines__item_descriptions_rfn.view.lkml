@@ -9,15 +9,15 @@
 #   otc_common_item_descriptions_ext
 #
 # REFERENCED BY
-# View sales_orders__lines
+# not used but could optionally be added to Explore sales_orders
 #
-# EXTENDED FIELDS:
+# EXTENDED FIELDS
 #    item_description, language_code
 #
-# HOW TO USE
-# - Single description where language_code matches the language
-#   selected for parameter_language is pulled into sales_orders__lines.
-# - Could optionally include in Explore Sales Orders.
+# NOTES
+# - A single item description where language_code matches the language
+#   selected for parameter_language is pulled into sales_orders__lines
+#   so this view is not used.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #

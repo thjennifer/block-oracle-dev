@@ -23,15 +23,15 @@
 #
 # REPEATED STRUCTS
 # Includes repeated structs AMOUNTS (defined in separate views for unnesting):
-#     sales_orders_daily_agg__lines__amounts - provides Total Amounts converted to Target Currencies by Item Categories & Item Organication
-# NOTE: Select fields from AMOUNTS have been defined here so the separate view does not have to be included in the Explore.
+#     sales_orders_daily_agg__lines__amounts - provides Total Amounts converted to Target Currencies by Item Categories & Item Organization
 #
-# CAVEATS
+# NOTES
+# - Amounts where target_currency matches the currency
+#   selected for parameter_target_currency is defined in this view.
 # - View appears in Explore as Sales Orders Daily Agg: Item Categories.
 # - This table includes both ORDER and RETURN lines. Use line_category_code to pick which to include.
-# - All of the OTC dashboards focus on ORDERS and exclude RETURNS from dashboards.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
-# - When field name is duplicated in header (like is_open), the sql property is restated to use the ${TABLE} reference.
+# - When field name is duplicated in header sales_orders_daily_agg, the sql property is restated to use the ${TABLE} reference.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #
 #########################################################}
@@ -63,6 +63,7 @@ view: +sales_orders_daily_agg__lines {
     full_suggestions: yes
     }
 
+#--> category_id, category_description and category_group_name are extended from another view so can hide this one
   dimension: item_category_id {
     hidden: yes
     primary_key: no
@@ -71,6 +72,7 @@ view: +sales_orders_daily_agg__lines {
   dimension: line_category_code {
     hidden: no
     sql:  COALESCE(${TABLE}.LINE_CATEGORY_CODE,IF(${sales_orders_daily_agg.order_category_code}='MIXED','Unknown',${sales_orders_daily_agg.order_category_code})) ;;
+    full_suggestions: yes
   }
 
   dimension: is_sales_order {
@@ -84,6 +86,7 @@ view: +sales_orders_daily_agg__lines {
   dimension: item_organization_id {
     hidden:no
     sql: COALESCE(${TABLE}.ITEM_ORGANIZATION_ID,-1) ;;
+    full_suggestions: yes
   }
 
   dimension: item_organization_name {
@@ -198,8 +201,8 @@ view: +sales_orders_daily_agg__lines {
   measure: average_cycle_time_days {
     hidden: no
     type: number
-    description: "Average number of days from order to fulfillment per order line. Item Category must be in query or compution will return null."
-    sql: {% if item_category_id._is_selected or category_description._is_selected%}SAFE_DIVIDE(${sum_total_cycle_time_days},${total_num_fulfilled_order_lines}){%else%}sum(null){%endif%} ;;
+    description: "Average number of days from order to fulfillment per order line. Item Category must be in query or computation will return null."
+    sql: {%- if item_category_id._is_selected or category_description._is_selected -%}SAFE_DIVIDE(${sum_total_cycle_time_days},${total_num_fulfilled_order_lines}){%- else -%}SUM(NULL){%- endif -%} ;;
     value_format_name: decimal_2
   }
 
@@ -246,7 +249,7 @@ view: +sales_orders_daily_agg__lines {
     type: max
     description: "Provides a note in html when a source currency could not be converted to target currency. Add this measure to a table or single value visualization to alert users that amounts in target currency may be understated."
     sql: ${is_incomplete_conversion} ;;
-    html: {% if value == true %}For timeframe and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
+    html: {% if value == true %}<span style='color: red; font-size: 16px;'>&#9888; </span> For timeframe and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
   }
 #} end misc
 
@@ -273,7 +276,7 @@ view: +sales_orders_daily_agg__lines {
 
 #########################################################
 # SETS
-
+#{
   set: backlog_by_customer {
     fields: [sales_orders_daily_agg.selected_customer_number, sales_orders_daily_agg.selected_customer_name, total_backlog_amount_target_currency]
   }

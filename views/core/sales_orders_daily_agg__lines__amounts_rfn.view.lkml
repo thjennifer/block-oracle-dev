@@ -1,3 +1,28 @@
+#########################################################{
+# PURPOSE
+# UNNESTED view of Repeated STRUCT amounts found in sales_orders_daily_agg__lines table.
+# Provides amounts by target_currency_code and is_incomplete_conversion
+#
+# SOURCES
+# Refines View sales_orders_daily_agg__lines__amounts (defined in /views/base folder)
+# Extends View:
+#   sales_orders_common_amount_measures_ext
+#
+# REFERENCED BY
+# not used but could optionally be added to sales_orders_daily_agg explore
+#
+# EXTENDED FIELDS
+#    total_sales_amount_target_currency, total_booking_amount_target_currency, and other amounts
+#
+# NOTES
+# - Amounts where target currency matches the currency
+#   selected for parameter_target_currency is pulled into sales_orders_daily_agg__lines
+#   so this view is not used
+# - Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
+#
+#########################################################}
+
 include: "/views/base/sales_orders_daily_agg__lines__amounts.view"
 include: "/views/core/sales_orders_common_amount_measures_ext.view"
 
@@ -13,7 +38,7 @@ view: +sales_orders_daily_agg__lines__amounts {
   }
 
   dimension: target_currency_code {
-    hidden: yes
+    hidden: no
     label: "Currency (Target)"
     full_suggestions: yes
     sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
@@ -21,7 +46,7 @@ view: +sales_orders_daily_agg__lines__amounts {
 
   dimension: is_incomplete_conversion {
     hidden: no
-    description: "Yes, if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies."
+    description: "Yes if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies."
     sql: COALESCE(${TABLE}.IS_INCOMPLETE_CONVERSION,FALSE) ;;
   }
 
@@ -32,7 +57,7 @@ view: +sales_orders_daily_agg__lines__amounts {
   }
 
 #########################################################
-# DIMENSION: Amounts
+# DIMENSIONS: Amounts
 #{
 # Dimensions hidden from Explore as Measures are shown instead
 
@@ -74,6 +99,11 @@ view: +sales_orders_daily_agg__lines__amounts {
 
 #} end amounts as dimensions
 
+#########################################################
+# MEASURES: Amounts
+#{
+# updates measures extended from sales_orders_common_amount_measures_ext
+# or adds new measures
 
   measure: average_ordered_amount_per_order_target_currency {
     hidden: no
@@ -84,5 +114,6 @@ view: +sales_orders_daily_agg__lines__amounts {
     #value format defined in sales_orders_common_amount_measures_ext
   }
 
+#} end measures
 
  }

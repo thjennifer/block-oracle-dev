@@ -21,17 +21,15 @@
 # Extends common count and percent of sales orders measures:
 #    e.g., cancelled_sales_order_percent, fulfilled_sales_order_percent, etc...
 #
-# CAVEATS
-# - This view includes both ORDERS and RETURNS. Use order_category_code to pick which to include.
-# - All of the order-related dashboards focus on ORDERS and exclude RETURNS from reported KPIs.
-# - Fields hidden by default. Update field's 'hidden' property to show/hide.
-# - Includes fields which reference CURRENCY_CONVERSION_SDT so this view must be included in the
-#   Sales Orders Explore
-#
 # REPEATED STRUCTS
 # - Also includes Repeated Struct for LINES. See view sales_orders__lines for
 #   order line dimensions and measures.
 #
+# NOTES
+# - This view includes both ORDERS and RETURNS. Use order_category_code to pick which to include.
+# - Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - Includes fields which reference CURRENCY_CONVERSION_SDT so this view must be included in the
+#   Sales Orders Explore.
 #########################################################}
 
 
@@ -402,7 +400,7 @@ view: +sales_orders {
   dimension: is_incomplete_conversion {
     hidden: no
     type: yesno
-    group_label: "Amounts"
+    group_label: "Currency Conversion"
     sql: ${currency_code} <> ${target_currency_code} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 
@@ -597,22 +595,6 @@ view: +sales_orders {
     #description defined in sales_orders_common_count_measures_ext
     filters: [is_open: "Yes"]
     # drill_fields: [header_details*]
-  }
-
-  measure: percent_of_sales_orders {
-    hidden: no
-    type: percent_of_total
-    description: "Column Percent of Sales Orders"
-    direction: "column"
-    sql: ${sales_order_count} ;;
-  }
-
-  measure: percent_of_orders {
-    hidden: no
-    type: percent_of_total
-    description: "Column Percent of Orders"
-    direction: "column"
-    sql: ${order_count} ;;
   }
 
 #} end counts

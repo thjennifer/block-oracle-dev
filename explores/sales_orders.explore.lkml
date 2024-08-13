@@ -16,7 +16,7 @@
 # CATEGORY SET NAME
 #   - This Explore will show only 1 Category Set Name based on the value in the user attribute
 #     cortex_oracle_ebs_category_set_name.
-#   - Users can set the value for the user attribute through Account properties. Or an Admin can set the value for a group of users.
+#       * Users can set the value for the user attribute through Account properties. Or an Admin can set the value for a group of users.
 #   - This filter condition is defined in two spots:
 #     1. the JOIN properties for optional view sales_orders__lines__item_categories
 #     2. in the view sales_order__lines for the category_description, category_id and category_name_group dimensions
@@ -24,9 +24,9 @@
 # LANGUAGE
 #   - This Explore will show only 1 Language for item descriptions and cancel reasons based on the value in
 #     parameter parameter_language.
-#   - Users can change the parameter value in the provided LookML dashboards or Explore.
-#   - In the provided LookML dashboards the, the default value for this parameter is based on the value in
-#     the user attribute cortex_oracle_ebs_default_language.
+#       * Users can change the parameter value in the provided LookML dashboards or Explore.
+#       * In the provided LookML dashboards the, the default value for this parameter is based on the value in
+#         the user attribute cortex_oracle_ebs_default_language.
 #   - This filter condition is defined in two spots:
 #    1. the JOIN properties for optional views sales_orders__lines__item_descriptions and sales_orders__lines__cancel_reason
 #    2. in the view sales_orders__lines for the item_descriptions, language_code, and cancel_reason dimensions

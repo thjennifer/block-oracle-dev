@@ -7,7 +7,6 @@
 # SOURCES
 # Refines View sales_orders__lines__return_line_ids (defined in /views/base folder)
 #
-#
 # REFERENCED BY
 # Explore sales_orders
 #

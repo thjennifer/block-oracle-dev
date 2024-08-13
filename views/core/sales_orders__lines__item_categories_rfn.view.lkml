@@ -9,16 +9,15 @@
 #   otc_common_item_descriptions_ext
 #
 # REFERENCED BY
-# View sales_orders__lines
+# not used but could optionally be added to Explore sales_orders
 #
 # EXTENDED FIELDS
 #    category_id, category_description, category_name_code
 #
 # NOTES
-# - Single category_id and description for the category_set_name matching
+# - A single category_id and description for the category_set_name matching
 #   value in user attribute cortex_oracle_ebs_default_category_set_name is
-#   pulled into sales_orders__lines.
-# - Could optionally include this view in Explore Sales Orders.
+#   pulled into sales_orders__lines so this view is not used.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #

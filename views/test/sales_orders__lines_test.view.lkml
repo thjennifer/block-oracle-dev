@@ -266,4 +266,12 @@ view: +sales_orders__lines {
     } # NOTE the &pivots=
   }
 
+  measure: sum_total_cycle_time_days {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: sum
+    sql: ${cycle_time_days} ;;
+  }
+
+
    }
