@@ -707,9 +707,21 @@ view: +sales_orders__lines {
     sql: ${total_ordered_quantity_by_item} - ${total_fulfilled_quantity_by_item} ;;
     value_format_name: decimal_0
     html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
+#--> returns a table listing order lines sorted in descending order by difference between ordered and fulfilled quantity, ordered amount and ordered date
     link: {
-      label: "Show Fulfillment Details"
-      url: "{{dummy_drill_fulfillment_details._link}}&sorts=sales_orders__lines.difference_ordered_fulfilled_quantity+desc"
+      label: "Show Order Line Details"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign header_drill = 'sales_orders.order_number, sales_orders.ordered_date' %}
+      {% assign line_drill = 'sales_orders__lines.line_id, sales_orders__lines.line_number, sales_orders__lines.line_status, sales_orders__lines.item_part_number, sales_orders__lines.item_description, sales_orders__lines.ordered_quantity, sales_orders__lines.ordered_amount_target_currency' %}
+      {% assign cycle_drill = 'sales_orders__lines.fulfilled_quantity, sales_orders__lines.difference_ordered_fulfilled_quantity, sales_orders__lines.fulfilled_amount_target_currency, sales_orders__lines.fulfillment_date,sales_orders__lines.cycle_time_days' %}
+      {% assign drill_fields = header_drill | append: ',' | append: line_drill | append: ',' | append: cycle_drill %}
+      {% assign default_filters = 'sales_orders__lines.is_cancelled=No' %}
+      {% assign sorts = 'sales_orders__lines.difference_ordered_fulfilled_quantity+desc,sales_orders__lines.ordered_amount_target_currency+desc,sales_orders.ordered_date+desc' %}
+      @{link_vis_table}
+      @{link_generate_explore_url}
+      "
     }
   }
 
@@ -742,9 +754,21 @@ view: +sales_orders__lines {
     sql: @{is_item_or_category_selected}${cycle_time_days}{%- else -%}NULL{%- endif -%};;
     value_format_name: decimal_2
     filters: [is_cancelled: "No", is_fulfilled: "Yes"]
+#--> returns a table listing fulfilled order lines sorted in descending order by cycle_time_days
     link: {
       label: "Show Fulfillment Details"
-      url: "{{dummy_drill_fulfillment_details._link}}&sorts=sales_orders__lines.cycle_time_days+desc"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign header_drill = 'sales_orders.order_number, sales_orders.ordered_date' %}
+      {% assign line_drill = 'sales_orders__lines.line_id, sales_orders__lines.line_number, sales_orders__lines.line_status, sales_orders__lines.item_part_number, sales_orders__lines.item_description, sales_orders__lines.ordered_quantity, sales_orders__lines.ordered_amount_target_currency' %}
+      {% assign cycle_drill = 'sales_orders__lines.fulfilled_quantity, sales_orders__lines.difference_ordered_fulfilled_quantity, sales_orders__lines.fulfilled_amount_target_currency, sales_orders__lines.fulfillment_date,sales_orders__lines.cycle_time_days' %}
+      {% assign drill_fields = header_drill | append: ',' | append: line_drill | append: ',' | append: cycle_drill %}
+      {% assign default_filters = 'sales_orders__lines.is_cancelled=No, sales_orders__lines.is_fulfilled=Yes' %}
+      {% assign sorts = 'sales_orders__lines.cycle_time_days+desc' %}
+      @{link_vis_table}
+      @{link_generate_explore_url}
+      "
     }
   }
 
@@ -838,18 +862,8 @@ view: +sales_orders__lines {
 #########################################################
 # MEASURES: Amounts in Target Currency
 #{
-# measures extended from sales_orders_common_amount_measures_ext
-# and edited here for links and/or sql property
-
-  # measure: average_sales_amount_per_order_target_currency {
-  #   hidden: no
-  #   type: number
-  #   #group label defined in sales_orders_common_amount_measures_ext
-  #   #label defined in sales_orders_common_amount_measures_ext
-  #   #description defined in sales_orders_common_amount_measures_ext
-  #   sql: SAFE_DIVIDE(${total_sales_amount_target_currency},${sales_orders.non_cancelled_sales_order_count})  ;;
-  #   # value_format defined in sales_orders_common_amount_measures_ext
-  # }
+# updates to measures extended from sales_orders_common_amount_measures_ext
+# and/or new measures
 
   measure: average_ordered_amount_per_order_target_currency {
     hidden: no
@@ -859,13 +873,6 @@ view: +sales_orders__lines {
     #description defined in sales_orders_common_amount_measures_ext
     sql: SAFE_DIVIDE(${total_ordered_amount_target_currency},${sales_orders.non_cancelled_order_count})  ;;
     # value_format defined in sales_orders_common_amount_measures_ext
-  }
-
-  measure: total_backlog_amount_target_currency_formatted {
-    link: {
-      label: "Show Customers with Highest Backlog"
-      url: "{{dummy_backlog_by_customer._link}}"
-    }
   }
 
   measure: total_backordered_amount_target_currency {
@@ -878,49 +885,23 @@ view: +sales_orders__lines {
     type: number
     sql: ${total_backordered_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
+#--> returns table of 50 items including category sorted in descending order by total backordered amount
     link: {
-      label: "Show Items with Highest Amount on Backorder"
-      url: "{{dummy_backordered_by_item._link}}&f[sales_orders__lines.line_category_code]=ORDER"
+      label: "Show Top 50 Items with Highest Amount on Backorder"
+      url: "
+          @{link_generate_variable_defaults}
+          {% assign link = link_generator._link %}
+          {% assign drill_fields = 'sales_orders__lines.item_part_number, sales_orders__lines.item_description, sales_orders__lines.category_description, sales_orders__lines.total_backordered_amount_target_currency' %}
+          {% assign limit = 50 %}
+          {% assign default_filters = 'sales_orders__lines.line_category_code=ORDER,sales_orders__lines.is_backordered=Yes' %}
+          @{link_vis_table}
+          @{link_generate_explore_url}
+      "
     }
-
   }
 
 #} end amounts target currency
 
-#########################################################
-# MEASURES: Helper
-#{
-# used to support links and drills; hidden from explore
-
-  measure: dummy_backlog_by_customer {
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [backlog_by_customer*]
-  }
-
-  measure: dummy_backlog_by_item {
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [backlog_by_item*]
-  }
-
-  measure: dummy_backordered_by_item {
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [backordered_by_item*]
-  }
-
-  measure: dummy_drill_fulfillment_details {
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [drill_fulfillment_details*]
-  }
-
-  #} end helper measures
 
 #########################################################
 # SETS
@@ -928,22 +909,6 @@ view: +sales_orders__lines {
 
   set: order_line_details {
     fields: [sales_orders.order_number, sales_orders.ordered_date, line_id, line_number, line_status, item_part_number, sales_orders__lines.item_description, ordered_quantity, ordered_amount_target_currency]
-  }
-
-  set: backlog_by_customer {
-    fields: [sales_orders.selected_customer_number, sales_orders.selected_customer_name, total_backlog_amount_target_currency]
-  }
-
-  set: backlog_by_item {
-    fields: [item_part_number, item_description, category_description, total_backlog_amount_target_currency]
-  }
-
-  set: backordered_by_item {
-    fields: [item_part_number, item_description, category_description, total_backordered_amount_target_currency]
-  }
-
-  set: drill_fulfillment_details {
-    fields: [order_line_details*,fulfilled_quantity, difference_ordered_fulfilled_quantity, fulfilled_amount_target_currency, fulfillment_date,cycle_time_days]
   }
 
 #}

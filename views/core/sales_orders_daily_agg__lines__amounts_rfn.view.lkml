@@ -102,9 +102,10 @@ view: +sales_orders_daily_agg__lines__amounts {
 #########################################################
 # MEASURES: Amounts
 #{
-# updates measures extended from sales_orders_common_amount_measures_ext
-# or adds new measures
+# updates to measures extended from sales_orders_common_amount_measures_ext
+# and/or new measures
 
+#--> Returns NULL if Category or Item Organization is in query as order counts cannot be summed across categories
   measure: average_ordered_amount_per_order_target_currency {
     hidden: no
     type: number

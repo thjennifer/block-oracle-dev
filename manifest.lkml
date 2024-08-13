@@ -115,8 +115,7 @@ constant: view_label_for_dashboard_navigation {
 #.  }
 
 # _in_query returns true if the field you ask for is selected and therefore included in the query,
-# or is included in a filter for a query,
-# or is included in a query using the required_fields parameter.
+# or is included in a filter for a query, or is included in a query using the required_fields parameter.
 constant: is_agg_category_in_query {
   value: "{% if sales_orders_daily_agg__lines.category_id._in_query or
                 sales_orders_daily_agg__lines.category_description._in_query or

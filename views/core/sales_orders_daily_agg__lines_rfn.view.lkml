@@ -198,14 +198,14 @@ view: +sales_orders_daily_agg__lines {
     sql: ${total_cycle_time_days} ;;
   }
 
+#--> Category to be selected as a dimension in query or returns NULL
   measure: average_cycle_time_days {
     hidden: no
     type: number
     description: "Average number of days from order to fulfillment per order line. Item Category must be in query or computation will return null."
-    sql: {%- if item_category_id._is_selected or category_description._is_selected -%}SAFE_DIVIDE(${sum_total_cycle_time_days},${total_num_fulfilled_order_lines}){%- else -%}SUM(NULL){%- endif -%} ;;
+    sql: {%- if category_id._is_selected or category_description._is_selected -%}SAFE_DIVIDE(${sum_total_cycle_time_days},${total_num_fulfilled_order_lines}){%- else -%}SUM(NULL){%- endif -%} ;;
     value_format_name: decimal_2
   }
-
 
 
 #} end non-amount measures
@@ -213,23 +213,10 @@ view: +sales_orders_daily_agg__lines {
 #########################################################
 # MEASURES: Amounts
 #{
-  measure: total_backlog_amount_target_currency_formatted {
-    link: {
-      label: "Show Customers with Highest Backlog"
-      url: "{{dummy_backlog_by_customer._link}}"
-      # url: "@{link_generate_variable_defaults}
-      # {% assign link = link_generator._link %}
-      # {% assign drill_fields = 'sales_orders_daily_agg.selected_customer_number,sales_orders_daily_agg.selected_customer_name,sales_orders_dialy_agg__lines.total_backlog_amount_target_currency'%}
-      # {% assign measure = 'sales_orders_dialy_agg__lines.total_backlog_amount_target_currency' %}
-      # @{link_generate_explore_url}
-      # "
-    }
-    link: {
-      label: "Show Categories with Highest Backlog"
-      url: "{{dummy_backlog_by_category._link}}"
-      }
-  }
+# updates to measures extended from sales_orders_common_amount_measures_ext
+# and/or new measures
 
+#--> Returns NULL if Category or Item Organization is in query as order counts cannot be summed across categories
   measure: average_ordered_amount_per_order_target_currency {
     hidden: no
     type: number
@@ -253,37 +240,6 @@ view: +sales_orders_daily_agg__lines {
   }
 #} end misc
 
-#########################################################
-# MEASURES: Helper
-#{
-# used to support links and drills; hidden from explore
 
-  measure: dummy_backlog_by_customer {
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [backlog_by_customer*]
-  }
-
-  measure: dummy_backlog_by_category {
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [backlog_by_category*]
-  }
-
-#} end helper measures
-
-#########################################################
-# SETS
-#{
-  set: backlog_by_customer {
-    fields: [sales_orders_daily_agg.selected_customer_number, sales_orders_daily_agg.selected_customer_name, total_backlog_amount_target_currency]
-  }
-
-  set: backlog_by_category {
-    fields: [category_description, total_backlog_amount_target_currency]
-  }
-#} end sets
 
 }

@@ -139,6 +139,7 @@ view: sales_orders_common_count_measures_ext {
     description: "The percentage of orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
     sql: SAFE_DIVIDE(${fulfilled_order_count},${order_count}) ;;
     value_format_name: percent_1
+#--> link to order line details dashboards with filter for is_fulfilled = Yes
     link: {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
@@ -163,6 +164,7 @@ view: sales_orders_common_count_measures_ext {
     description: "The percentage of orders that are on-time (all lines fulfilled by requested delivery date)."
     sql: SAFE_DIVIDE(${fulfilled_by_request_date_order_count},${order_count}) ;;
     value_format_name: percent_1
+#--> link to order line details dashboards with filter for is_fulfilled_by_request_date = Yes
     link: {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
@@ -171,7 +173,6 @@ view: sales_orders_common_count_measures_ext {
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
       {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
-
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_fulfilled_by_request_date=Yes'%}
@@ -188,6 +189,22 @@ view: sales_orders_common_count_measures_ext {
     description: "The percentage of orders with at least one item backordered."
     sql: SAFE_DIVIDE(${has_backorder_order_count},${order_count}) ;;
     value_format_name: percent_1
+#--> link to order line details dashboards with filter for is_backordered = Yes
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters='is_backordered=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
   }
 
   measure: has_return_sales_order_percent {
@@ -197,6 +214,22 @@ view: sales_orders_common_count_measures_ext {
     description: "The percentage of sales orders with at least one item returned."
     sql: SAFE_DIVIDE(${has_return_sales_order_count},${sales_order_count}) ;;
     value_format_name: percent_1
+#--> link to order line details dashboards with filter for has_return = Yes
+    link: {
+      label: "Order Line Details"
+      icon_url: "/favicon.ico"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign qualify_filter_names = false %}
+      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign model = _model._name %}
+      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      {% assign default_filters='has_return=Yes'%}
+      {% assign default_filters_override = false %}
+      @{link_generate_dashboard_url}
+      "
+    }
   }
 
   measure: no_holds_order_percent {

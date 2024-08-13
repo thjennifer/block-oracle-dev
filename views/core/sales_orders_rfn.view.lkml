@@ -505,13 +505,30 @@ view: +sales_orders {
     #label defined in sales_orders_common_count_measures_ext
     #description defined in sales_orders_common_count_measures_ext
     filters: [is_blocked: "Yes"]
+#--> returns table showing blocked order count and percent of total by has_backorder and is_held
     link: {
-      label: "Source of Block"
-      url: "{{dummy_drill_block_order_source._link}}&f[sales_orders.is_blocked]=Yes"
+      label: "Show Sources of Blocks"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign drill_fields = 'sales_orders.has_backorder, sales_orders.is_held, sales_orders.sales_order_count, sales_orders.percent_of_sales_orders' %}
+      {% assign default_filters = 'sales_orders.is_blocked=Yes' %}
+      @{link_vis_table}
+      @{link_generate_explore_url}
+      "
     }
+#--> returns table of blocked orders
     link: {
       label: "Show Blocked Orders"
-      url: "{{ dummy_drill_orders_with_block._link}}&sorts=sales_orders.total_sales_amount_target_currency+desc&f[sales_orders.is_blocked]=Yes"
+      url: "
+      @{link_generate_variable_defaults}
+      {% assign link = link_generator._link %}
+      {% assign drill_fields = 'sales_orders.order_number, sales_orders.order_catgory_code, sales_orders.header_status, sales_orders.ordered_date, sales_orders.selected_customer_name, sales_orders.total_sales_amount_target_currency, sales_orders.has_backorder, sales_orders.is_held' %}
+      {% assign default_filters = 'sales_orders.is_blocked=Yes' %}
+      {% assign sorts = 'sales_orders.total_sales_amount_target_currency+desc' %}
+      @{link_vis_table}
+      @{link_generate_explore_url}
+      "
     }
   }
 
@@ -605,25 +622,17 @@ view: +sales_orders {
 # measures defined in and extended from sales_orders_common_count_measures_ext
 # updates for Explore-specific links
   measure: has_backorder_order_percent {
+#--> returns table of 50 items including category sorted in descending order by total backordered amount
     link: {
-      label: "Show Top 20 Items with Highest Amount on Backorder"
-      url: "{{dummy_backordered_by_item._link}}&f[sales_orders__lines.total_backordered_amount_target_currency]=%3E0&limit=20&f[sales_orders__lines.line_category_code]=ORDER"
-    }
-
-    link: {
-      label: "Order Line Details"
-      icon_url: "/favicon.ico"
+      label: "Show Top 50 Items with Highest Amount on Backorder"
       url: "
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
-
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
-      {% assign default_filters='is_backordered=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign drill_fields = 'sales_orders__lines.item_part_number, sales_orders__lines.item_description, sales_orders__lines.category_description, sales_orders__lines.total_backordered_amount_target_currency' %}
+      {% assign limit = 50 %}
+      {% assign default_filters = 'sales_orders__lines.line_category_code=ORDER,sales_orders__lines.is_backordered=Yes' %}
+      @{link_vis_table}
+      @{link_generate_explore_url}
       "
     }
   }
@@ -631,23 +640,17 @@ view: +sales_orders {
   measure: has_return_sales_order_percent {
     link: {
       label: "Show Orders and Lines with Returns"
-      url: "{{ dummy_drill_orders_with_return._link}}&f[sales_orders.has_return_line]=Yes"
-    }
-
-    link: {
-      label: "Order Line Details"
-      icon_url: "/favicon.ico"
       url: "
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
-
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
-      {% assign default_filters='has_return=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign header_drill = 'sales_orders.order_number, sales_orders.order_category_code, sales_orders.header_status, sales_orders.ordered_date, sales_orders.selected_customer_name, sales_orders.total_sales_amount_target_currency' %}
+      {% assign line_drill = 'sales_orders__lines.line_id, sales_orders__lines.line_number,sales_orders__lines.item_part_number, sales_orders__lines.item_description,sales_orders__lines.ordered_quantity, sales_orders__lines.quantity_uom,sales_orders__lines.ordered_amount_target_currency,sales_orders__lines.has_return' %}
+      {% assign return_drill = 'sales_orders__lines__return_line_ids.return_line_id'%}
+      {% assign drill_fields = header_drill | append: ',' | append: line_drill | append: ',' | append: return_drill %}
+      {% assign default_filters = 'sales_orders.has_return_line=Yes' %}
+      {% assign sorts='sales_orders.order_number, sales_orders__lines.line_number' %}
+      @{link_vis_table}
+      @{link_generate_explore_url}
       "
     }
   }
@@ -667,55 +670,6 @@ view: +sales_orders {
 #} end misc
 
 #########################################################
-# MEASURES: Helper measures
-#{
-# hidden measures used to support drills and links
-
-
-  measure: dummy_drill_monthly_orders {
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [drill_monthly_orders*]
-  }
-
-  measure: dummy_drill_block_order_source {
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [drill_block_order_source*]
-  }
-
-  measure: dummy_drill_orders_with_block {
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [drill_orders_with_block*]
-  }
-
-  measure: dummy_drill_orders_with_return{
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [drill_orders_with_return*]
-  }
-
-  measure: dummy_backordered_by_item {
-    hidden: yes
-    type: number
-    sql: 1 ;;
-    drill_fields: [backordered_by_item*]
-  }
-
-  measure: max_open_closed_cancelled {
-    hidden: yes
-    type: max
-    sql: ${open_closed_cancelled} ;;
-  }
-
- #} end helper
-
-#########################################################
 # SETS
 #{
 
@@ -727,36 +681,12 @@ view: +sales_orders {
     fields: [order_number, order_category_code, header_status, ordered_date, selected_customer_name, total_sales_amount_target_currency]
   }
 
-  set: drill_orders_with_block {
-    fields: [header_drill_from_dash*,has_backorder,is_held]
-  }
-
-  set: drill_monthly_orders {
-    fields: [ordered_month, sales_order_count]
-  }
-
-  set: drill_block_order_source {
-    fields: [has_backorder,is_held,sales_order_count,percent_of_sales_orders]
-  }
-
   set: line_drill_from_dash {
     fields: [sales_orders__lines.line_id, sales_orders__lines.line_number,
             sales_orders__lines.item_part_number, sales_orders__lines.item_description,
             sales_orders__lines.ordered_quantity, sales_orders__lines.quantity_uom,
             sales_orders__lines.ordered_amount_target_currency,
             sales_orders__lines.has_return]
-  }
-
-  set: return_order_lines {
-    fields: [sales_orders__lines__return_line_ids.return_line_id]
-  }
-
-  set: drill_orders_with_return {
-    fields: [header_drill_from_dash*,line_drill_from_dash*,return_order_lines*]
-  }
-
-  set: backordered_by_item {
-    fields: [sales_orders__lines.item_part_number, sales_orders__lines.item_description, sales_orders__lines.category_description, sales_orders__lines.total_backordered_amount_target_currency]
   }
 
 #} end sets

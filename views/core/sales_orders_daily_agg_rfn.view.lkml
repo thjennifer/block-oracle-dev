@@ -33,7 +33,7 @@
 #
 # CAVEATS
 # - Aggregates by Order Category Code (ORDER, RETURN, MIXED) so should filter on this dimension to exclude returns.
-# - Order Counts in this view cannot be aggregated across categories and are defined to return warning message
+# - Order Counts in this view cannot be aggregated across or filtered by categories and are defined to return warning message
 #   if categories are included in the query. If you need order counts by category (or filtered by category)
 #   use the sales_orders view and Explore.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
