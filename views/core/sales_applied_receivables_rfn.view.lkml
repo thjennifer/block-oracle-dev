@@ -1,9 +1,9 @@
 include: "/views/base/sales_applied_receivables.view"
-include: "/views/core/otc_fiscal_gl_dates_ext.view"
+include: "/views/core/otc_common_fiscal_gl_dates_ext.view"
 
 view: +sales_applied_receivables {
 
-  extends: [otc_fiscal_gl_dates_ext]
+  extends: [otc_common_fiscal_gl_dates_ext]
 
   # dimension: key {
   #   hidden: yes

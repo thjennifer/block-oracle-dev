@@ -395,6 +395,7 @@ view: +sales_orders {
     group_label: "Currency Conversion"
     description: "Exchange rate between source and target currency for a specific date."
     sql: IF(${currency_code} = ${target_currency_code}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    value_format_name: decimal_4
   }
 
   dimension: is_incomplete_conversion {

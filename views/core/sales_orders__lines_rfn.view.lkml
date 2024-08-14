@@ -6,15 +6,15 @@
 # SOURCES
 # Refines View sales_orders__lines (defined in /views/base folder)
 # Extends Views:
-#   otc_common_item_categories_ext
 #   otc_common_item_descriptions_ext
+#   otc_common_item_categories_ext
 #   sales_orders_common_amount_measures_ext
 #
 # REFERENCED BY
 # Explore sales_orders
 #
 # EXTENDED FIELDS
-#    item_description, language_code,
+#    item_description, language_code
 #    category_id, category_description, category_name_code
 #    total_sales_amount_target_currency, total_booking_amount_target_currency, and other amounts
 #
@@ -105,12 +105,13 @@ view: +sales_orders__lines {
     label: "Item ID"
     description: "Unique identifier for inventory item."
     value_format_name: id
+    full_suggestions: yes
   }
 
   dimension: item_part_number {
     hidden: no
-    full_suggestions: yes
     value_format_name: id
+    full_suggestions: yes
   }
 
   dimension: item_organization_id {

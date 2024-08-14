@@ -1,10 +1,10 @@
 include: "/views/base/sales_payments.view"
-include: "/views/core/otc_fiscal_gl_dates_ext.view"
+include: "/views/core/otc_common_fiscal_gl_dates_ext.view"
 include: "/views/core/sales_payments_common_fields_ext.view"
 
 view: +sales_payments {
 
-  extends: [otc_fiscal_gl_dates_ext,sales_payments_common_fields_ext]
+  extends: [otc_common_fiscal_gl_dates_ext,sales_payments_common_fields_ext]
 
 
   dimension: payment_schedule_id {
@@ -111,7 +111,7 @@ view: +sales_payments {
 
 #########################################################
 # Dates
-# Fiscal Dates extended from otc_fiscal_gl_dates_ext and grouped under Ledger Date
+# Fiscal Dates extended from otc_common_fiscal_gl_dates_ext and grouped under Ledger Date
 #{
   dimension_group: transaction {}
 

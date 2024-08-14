@@ -1,6 +1,29 @@
+#########################################################{
+# PURPOSE
+# The SalesInvoices table and its corresponding View sales_invoices
+# captures invoice details by invoice_id
+#
+# SOURCES
+# Refines View sales_invoices
+#
+# REFERENCED BY
+# Explore sales_invoices
+#
+# REPEATED STRUCTS
+# - Also includes Repeated Struct for LINES. See view sales_invoices__lines for
+#   invoice line dimensions and measures.
+#
+# NOTES
+# - Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - Includes fields which reference view CURRENCY_CONVERSION_SDT so this view must be included in the
+#   Sales Invoices Explore.
+#########################################################}
+
 include: "/views/base/sales_invoices.view"
 
 view: +sales_invoices {
+
+  fields_hidden_by_default: yes
 
   dimension: invoice_id {
     hidden: no
@@ -10,78 +33,71 @@ view: +sales_invoices {
   }
 
   dimension: invoice_number {
+    hidden: no
     description: "Invoice number. Note, this is a string data type and may not be a unique value."
   }
 
-  dimension: invoice_type {
-    group_label: "Invoice Type"
-    label: "Invoice Type Code"
-  }
-
-  dimension: invoice_type_id {
-    group_label: "Invoice Type"
+  dimension: business_unit_id {
+    hidden: no
     value_format_name: id
   }
 
-  dimension: invoice_type_name {
-    group_label: "Invoice Type"
-    description: "Name or description of invoice type."
+  dimension: business_unit_name {
+    hidden: no
+    sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CONCAT("Business Unit ID: ",${business_unit_id})) ;;
   }
 
-  dimension: invoice_type_id_and_name {
-    group_label: "Invoice Type"
-    description: "Combination of ID and Name in form of 'ID: Name' "
-    sql: CONCAT(${invoice_type_id},": ",${invoice_type_name}) ;;
+  dimension: ledger_id {
+    hidden: no
+    description: "ID of ledger or set of books."
+    value_format_name: id
   }
+
+  dimension: ledger_name {
+    hidden: no
+    description: "Name of ledger or set of books."
+  }
+
+#########################################################
+# DIMENSIONS: Customer
+#{
 
   dimension: bill_to_site_use_id {
+    hidden: no
     group_label: "Bill to Customer"
     value_format_name: id
   }
 
   dimension: bill_to_customer_number {
+    hidden: no
     group_label: "Bill to Customer"
     value_format_name: id
   }
 
   dimension: bill_to_customer_name {
+    hidden: no
     group_label: "Bill to Customer"
-    sql: COALESCE(COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CONCAT("Bill To Customer Number: ",${bill_to_customer_number})),"Unknown") ;;
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,"Unknown") ;;
   }
 
   dimension: bill_to_customer_country {
+    hidden: no
     group_label: "Bill to Customer"
     sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_COUNTRY,"Unknown") ;;
   }
 
-  dimension: business_unit_name {
-    sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CONCAT("Business Unit ID: ",${business_unit_id})) ;;
-  }
-
-  dimension: ledger_id {
-    value_format_name: id
-  }
-
-  dimension: is_complete {
-    hidden: no
-    description: "Yes if invoice is complete else No."
-  }
-
-  dimension: is_complete_with_symbols {
-    hidden: no
-    description: "✅ if invoice is complete."
-    sql: COALESCE(${is_complete},false) ;;
-    html: @{symbols_for_yes} ;;
-  }
+#} end customer dimensions
 
 #########################################################
-# Dates
+# DIMENSIONS: Dates
 #{
 
   dimension_group: invoice {
-    timeframes: [raw, date, week, month, quarter, year]
+    hidden: no
   }
 
+#--> invoice month_num, quarter_num and year_num in table so
+#--> adding to Invoice Date group label to appear with other dates
   dimension: invoice_month_num {
     hidden: no
     group_label: "Invoice Date"
@@ -104,7 +120,10 @@ view: +sales_invoices {
     value_format_name: id
   }
 
-  dimension_group: exchange {}
+  dimension_group: exchange {
+    hidden: no
+    description: "Date the exchange rate is calculated. If missing, invoice date is used."
+  }
 
   dimension_group: creation_ts {
     hidden: no
@@ -123,105 +142,160 @@ view: +sales_invoices {
 #} end dates
 
 #########################################################
-# Invoice Total Amounts as Dimensions and with Currency Conversion
-#
+# DIMENSIONS: Invoice Type & Status
 #{
 
+  dimension: invoice_type {
+    hidden: no
+    group_label: "Invoice Type"
+    label: "Invoice Type Code"
+  }
+
+  dimension: invoice_type_id {
+    hidden: no
+    group_label: "Invoice Type"
+    value_format_name: id
+  }
+
+  dimension: invoice_type_name {
+    hidden: no
+    group_label: "Invoice Type"
+    description: "Name or description of invoice type."
+  }
+
+  dimension: invoice_type_id_and_name {
+    hidden: no
+    group_label: "Invoice Type"
+    description: "Combination of ID and Name in form of 'ID: Name' "
+    sql: CONCAT(${invoice_type_id},": ",${invoice_type_name}) ;;
+  }
+
+  dimension: is_complete {
+    hidden: no
+    description: "Yes if invoice is complete else No."
+  }
+
+  dimension: is_complete_with_symbols {
+    hidden: no
+    description: "✅ if invoice is complete."
+    sql: COALESCE(${is_complete},false) ;;
+    html: @{symbols_for_yes} ;;
+  }
+
+#} end invoice type and status
+
+#########################################################
+# DIMENSIONS: Currency Conversion
+#{
 
   dimension: currency_code {
-    group_label: "Amounts"
-    label: "Currency Code (Source)"
-    description: "Currency code of the invoice transaction."
+    hidden: no
+    group_label: "Currency Conversion"
+    label: "Currency (Source)"
+    description: "Currency of the invoice transaction."
   }
 
   dimension: target_currency_code {
-    type: string
-    group_label: "Amounts"
-    label: "Currency Code (Target)"
+    hidden: no
+    group_label: "Currency Conversion"
+    label: "Currency (Target)"
+    description: "Converted target currency of the invoice from the source currency."
     sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
   }
 
   dimension: currency_conversion_rate {
-    type: number
-    group_label: "Amounts"
+    hidden: no
+    group_label: "Currency Conversion"
+    description: "Exchange rate between source and target currency for a specific date."
     sql: IF(${currency_code} = ${target_currency_code}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    value_format_name: decimal_4
   }
 
   dimension: is_incomplete_conversion {
+    hidden: no
     type: yesno
-    group_label: "Amounts"
+    group_label: "Currency Conversion"
     sql: ${currency_code} <> ${target_currency_code} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 
+#} end currency conversion
+
+#########################################################
+# DIMENSIONS: Invoices Totals
+#{
+
   dimension: total_revenue_amount {
-    group_label: "Amounts"
+    hidden: no
+    group_label: "Invoice Totals"
     label: "Invoice Revenue Amount (Source Currency)"
+    value_format_name: decimal_2
   }
 
   dimension: total_tax_amount {
-    group_label: "Amounts"
+    hidden: no
+    group_label: "Invoice Totals"
     label: "Invoice Tax Amount (Source Currency)"
+    value_format_name: decimal_2
   }
 
   dimension: total_transaction_amount {
-    group_label: "Amounts"
+    hidden: no
+    group_label: "Invoice Totals"
     label: "Invoice Amount (Source Currency)"
+    value_format_name: decimal_2
   }
 
   dimension: total_revenue_amount_target_currency {
     hidden: no
     type: number
-    group_label: "Amounts"
-    label: "{% if _field._is_selected %}Invoice Net Revenue Amount (@{label_get_target_currency}){%else%}Invoice Net Revenue Amount (Target Currency){%endif%}"
+    group_label: "Invoice Totals"
+    label: "{% if _field._is_selected %}Invoice Revenue Amount (@{label_get_target_currency}){%else%}Invoice Revenue Amount (Target Currency){%endif%}"
     description: "Total amount recognized as revenue for accounting purposes for the entire invoice (in target currency)."
     sql: ${total_revenue_amount} * ${currency_conversion_rate}  ;;
-    value_format_name: decimal_2
-  }
-
-  dimension: total_transaction_amount_target_currency {
-    hidden: no
-    type: number
-    group_label: "Amounts"
-    label: "{% if _field._is_selected %}Invoice Amount (@{label_get_target_currency}){%else%}Invoice Amount (Target Currency){%endif%}"
-    description: "Total transaction amount of invoice in target currency."
-    sql: ${total_transaction_amount} * ${currency_conversion_rate}   ;;
     value_format_name: decimal_2
   }
 
   dimension: total_tax_amount_target_currency {
     hidden: no
     type: number
-    group_label: "Amounts"
+    group_label: "Invoice Totals"
     label: "{% if _field._is_selected %}Invoice Tax Amount (@{label_get_target_currency}){%else%}Invoice Tax Amount (Target Currency){%endif%}"
     description: "Total tax amount of invoice in target currency."
     sql: ${total_tax_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
-#} end invoice amounts as dimensions
+  dimension: total_transaction_amount_target_currency {
+    hidden: no
+    type: number
+    group_label: "Invoice Totals"
+    label: "{% if _field._is_selected %}Invoice Amount (@{label_get_target_currency}){%else%}Invoice Amount (Target Currency){%endif%}"
+    description: "Total transaction amount of invoice in target currency."
+    sql: ${total_transaction_amount} * ${currency_conversion_rate}   ;;
+    value_format_name: decimal_2
+  }
 
-
+#} end invoice totals as dimensions
 
 #########################################################
-# Measures
-#
+# MEASURES: Counts
 #{
 
-  measure: count {
-    hidden: yes
-  }
-
   measure: invoice_count {
+    hidden: no
     type: count
     drill_fields: [invoice_header_details*]
   }
 
+#--> format as Large Number for dashboard display
   measure: invoice_count_formatted {
-    hidden: yes
-    type: count
-    group_label: "Formatted for Large Numbers"
+    hidden: no
+    type: number
+    sql: ${invoice_count} ;;
+    # group_label: "Formatted for Large Numbers"
     value_format_name: format_large_numbers_d1
     drill_fields: [invoice_header_details*]
+#--> link to Invoice Line Details dashboard
     link: {
       label: "Invoice Line Details"
       icon_url: "/favicon.ico"
@@ -230,17 +304,21 @@ view: +sales_invoices {
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
       {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}'%}
-
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
-
       {% assign default_filters_override = false %}
       @{link_generate_dashboard_url}
       "
     }
   }
 
-  # dummy field used for dynamic drill links
+#} end count measures
+
+#########################################################
+# MEASURES: Helper
+#{
+# used to support links and drills; hidden from explore
+
   measure: link_generator {
     hidden: yes
     type: number
@@ -248,10 +326,11 @@ view: +sales_invoices {
     drill_fields: [link_generator]
   }
 
+#} end helper measures
 
-
-#} end measures
-
+#########################################################
+# SETS
+#{
   set: invoice_header_details {
     fields: [ invoice_id,
               invoice_number,
@@ -260,6 +339,6 @@ view: +sales_invoices {
               total_transaction_amount_target_currency,
               total_tax_amount_target_currency]
   }
-
+#} end sets
 
 }

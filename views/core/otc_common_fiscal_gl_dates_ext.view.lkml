@@ -1,5 +1,36 @@
-view: otc_fiscal_gl_dates_ext {
+#########################################################{
+# PURPOSE
+# Provides consistent labels/descriptions for Fiscal GL Dates
+# based on Ledger Date and used in:
+#    sales_invoices__lines
+#    sales_payments
+#    sales_applied_receivables
+#
+# Defines labels & dsecriptions for:
+#   fiscal_period_name
+#   fiscal_period_set_name
+#   fiscal_period_type
+#   fiscal_gl_period_num
+#   fiscal_gl_quarter_num
+#   fiscal_gl_year_num
+#
+# Defines dimension:
+#   fiscal_gl_year_period
+#
+#########################################################}
+
+view: otc_common_fiscal_gl_dates_ext {
   extension: required
+
+  dimension: fiscal_period_name {
+    group_label: "Ledger Date"
+  }
+  dimension: fiscal_period_set_name {
+    group_label: "Ledger Date"
+  }
+  dimension: fiscal_period_type {
+    group_label: "Ledger Date"
+  }
 
   dimension: fiscal_gl_period_num {
     group_label: "Ledger Date"
@@ -28,14 +59,6 @@ view: otc_fiscal_gl_dates_ext {
     sql: CONCAT(CAST(${fiscal_gl_year_num} AS STRING),"-",LPAD(CAST(${fiscal_gl_period_num} AS STRING),3,'0'));;
   }
 
-  dimension: fiscal_period_name {
-    group_label: "Ledger Date"
-  }
-  dimension: fiscal_period_set_name {
-    group_label: "Ledger Date"
-  }
-  dimension: fiscal_period_type {
-    group_label: "Ledger Date"
-  }
+
 
    }

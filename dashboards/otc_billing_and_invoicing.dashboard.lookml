@@ -258,8 +258,8 @@
       fields: [sales_invoices.bill_to_site_use_id, sales_invoices.bill_to_customer_name,
         sales_invoices.invoice_count, sales_invoices__lines.average_percent_discount_when_taken_formatted,
         sales_invoices__lines.invoice_line_count, sales_invoices__lines.total_discount_amount_target_currency,
-        sales_invoices__lines.discount_invoice_line_percent_formatted, sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link,
-        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link]
+        sales_invoices__lines.discount_invoice_line_percent_formatted, sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
+        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency]
       hidden_fields: [sales_invoices.bill_to_site_use_id, sales_invoices.invoice_count,
         sales_invoices__lines.invoice_line_count, sales_invoices__lines.total_discount_amount_target_currency]
       filters:
@@ -291,10 +291,10 @@
         options:
           steps: 5
           reverse: false
-      y_axes: [{label: 'Avg Unit Prices when Discount', orientation: left, series: [{axisId: sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link,
-              id: sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link,
-              name: Average Unit List Price when Discount}, {axisId: sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link,
-              id: sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link,
+      y_axes: [{label: 'Avg Unit Prices when Discount', orientation: left, series: [{axisId: sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
+              id: sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
+              name: Average Unit List Price when Discount}, {axisId: sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency,
+              id: sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency,
               name: Average Unit Selling Price when Discount}], showLabels: true,
           showValues: true, valueFormat: "#,###", unpinAxis: false, tickDensity: default, type: linear},
         {label: 'Discount percentages', orientation: right, series: [{axisId: sales_invoices__lines.average_percent_discount_when_taken_formatted,
@@ -311,16 +311,16 @@
         first_last: first
         num_rows: '5'
       series_types:
-        sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link: column
-        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link: column
+        sales_invoices__lines.average_unit_list_price_when_discount_target_currency: column
+        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency: column
       series_labels:
         sales_invoices__lines.average_percent_discount_when_taken_formatted: "Average Discount %"
         sales_invoices__lines.discount_invoice_line_percent_formatted: "Discount Frequency (% of Invoice Lines)"
-        sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link: "Average Unit List Price"
-        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link: "Average Gross Unit Selling Price"
+        sales_invoices__lines.average_unit_list_price_when_discount_target_currency: "Average Unit List Price"
+        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency: "Average Gross Unit Selling Price"
       series_colors:
-        sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link: "#76b5c5"
-        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency_with_drill_link: "#e28743"
+        sales_invoices__lines.average_unit_list_price_when_discount_target_currency: "#76b5c5"
+        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency: "#e28743"
         sales_invoices__lines.discount_invoice_line_percent_formatted: "#192d54"
         sales_invoices__lines.average_percent_discount_when_taken_formatted: "#873e23"
       series_point_styles:
@@ -361,7 +361,7 @@
               dashStyle: "dash",
             },
             {
-              id: 'sales_invoices__lines.average_unit_list_price_when_discount_target_currency_with_drill_link',
+              id: 'sales_invoices__lines.average_unit_list_price_when_discount_target_currency',
               dataLabels: {
                 enabled: false,
               },
@@ -373,7 +373,7 @@
               },
             },
             {
-              id: 'sales_invoices__lines.average_unit_selling_price_when_discount_target_currency_with_drill_link',
+              id: 'sales_invoices__lines.average_unit_selling_price_when_discount_target_currency',
               dataLabels: {
                 enabled: false,
               },

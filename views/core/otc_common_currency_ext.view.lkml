@@ -9,6 +9,14 @@ view: otc_common_currency_ext {
     description: "Currency of the order."
   }
 
+#--> sales_invoices
+  # dimension: currency_code {
+  #   hidden: no
+  #   group_label: "Currency Conversion"
+  #   label: "Currency (Source)"
+  #   description: "Currency of the invoice transaction."
+  # }
+
 #--> sales_orders & sales_orders_daily_agg__lines
   dimension: target_currency_code {
     hidden: no
@@ -17,6 +25,15 @@ view: otc_common_currency_ext {
     description: "Converted target currency of the order from the source currency."
     sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
   }
+
+#--> sales_invoices
+  # dimension: target_currency_code {
+  #   hidden: no
+  #   group_label: "Currency Conversion"
+  #   label: "Currency (Target)"
+  #   description: "Converted target currency of the invoice from the source currency."
+  #   sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
+  # }
 
 #--> sales_orders_daily_agg__lines__amounts
   # dimension: target_currency_code {
@@ -27,15 +44,16 @@ view: otc_common_currency_ext {
   # }
 
 
-#--> sales_orders
+#--> sales_orders, sales_invoices
   dimension: currency_conversion_rate {
     hidden: no
     group_label: "Currency Conversion"
     description: "Exchange rate between source and target currency for a specific date."
     sql: IF(${currency_code} = ${target_currency_code}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
+    value_format_name: decimal_4
   }
 
-#--> sales_orders
+#--> sales_orders, sales_invoices
   dimension: is_incomplete_conversion {
     hidden: no
     type: yesno
