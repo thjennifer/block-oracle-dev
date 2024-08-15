@@ -26,7 +26,7 @@ view: otc_common_currency_ext {
     sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
   }
 
-#--> sales_invoices
+#--> sales_invoices & sales_invoices_daily_agg
   # dimension: target_currency_code {
   #   hidden: no
   #   group_label: "Currency Conversion"
@@ -35,13 +35,14 @@ view: otc_common_currency_ext {
   #   sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
   # }
 
-#--> sales_orders_daily_agg__lines__amounts
+#--> sales_orders_daily_agg__lines__amounts, sales_invoices_daily_agg__amounts
   # dimension: target_currency_code {
-  #   hidden: yes
+  #   hidden: no
   #   label: "Currency (Target)"
   #   full_suggestions: yes
   #   sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
   # }
+
 
 
 #--> sales_orders, sales_invoices
@@ -69,7 +70,15 @@ view: otc_common_currency_ext {
   #   sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
   # }
 
-#--> sales_orders_daily_agg__lines__amounts
+#--> sales_invoices_daily_agg
+  # dimension: is_incomplete_conversion {
+  #   hidden: no
+  #   type: yesno
+  #   group_label: "Currency Conversion"
+  #   sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
+  # }
+
+#--> sales_orders_daily_agg__lines__amounts, sales_invoics_daily_agg__amounts
   # dimension: is_incomplete_conversion {
   #   hidden: no
   #   description: "Yes, if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies."

@@ -19,10 +19,10 @@
 #   - This filter condition is defined in the JOIN properties for view sales_orders_daily_agg__lines.
 #
 # TARGET CURRENCY CODE
-#   - This Explore shows only 1 Target Currency at a time based on the value in parameter named
+#   - This Explore shows only 1 Target Currency at a time based on the value in
 #     parameter_target_currency.
 #       * Users can change value of parameter on provided LookML dashboards or Explore.
-#       * In the provided LookML dashboards the, the default value for this parameter is based on the value in
+#       * In the provided LookML dashboards, the default value for this parameter is based on the value in
 #         the user attribute cortex_oracle_ebs_default_currency.
 #   - This filter condition is defined in two spots:
 #     1. the JOIN properties for optional view sales_orders_daily_agg__lines__amounts
@@ -54,10 +54,7 @@ include: "/views/core/sales_orders_daily_agg__lines_rfn.view"
 include: "/views/core/otc_common_parameters_xvw.view"
 include: "/views/core/otc_dashboard_navigation_ext.view"
 
-#--> optional
-#--> joins to these views are defined below for reference but not actually
-#--> included in the Explore because key fields from these are defined
-#--> in sales_orders_daily_agg__lines_rfn.view
+#--> optional (uncomment JOIN statement if needed)
 include: "/views/core/sales_orders_daily_agg__lines__amounts_rfn.view"
 
 

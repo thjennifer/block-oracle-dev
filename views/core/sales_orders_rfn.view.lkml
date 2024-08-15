@@ -87,7 +87,7 @@ view: +sales_orders {
 
   dimension: order_source_name {
     hidden: no
-    sql: COALESCE(${TABLE}.ORDER_SOURCE_NAME,COALESCE(CAST(NULLIF(${order_source_id},-1) AS STRING),"Unknown")) ;;
+    sql: COALESCE(${TABLE}.ORDER_SOURCE_NAME,"Unknown") ;;
   }
 
 

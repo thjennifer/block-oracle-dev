@@ -15,8 +15,8 @@
 #    category_id, category_description, category_name_code
 #
 # NOTES
-# - A single category_id and description for the category_set_name matching
-#   value in user attribute cortex_oracle_ebs_default_category_set_name is
+# - Catgory IDs and descriptions for the category_set_name matching the
+#   value of user attribute cortex_oracle_ebs_default_category_set_name are
 #   pulled into sales_orders__lines so this view is not used.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.

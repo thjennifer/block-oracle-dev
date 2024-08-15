@@ -56,10 +56,7 @@ include: "/views/core/currency_conversion_sdt.view"
 include: "/views/core/otc_common_parameters_xvw.view"
 include: "/views/core/otc_dashboard_navigation_ext.view"
 
-#--> optional
-#--> joins to these views are defined below for reference but not actually
-#--> included in the Explore because key fields from these are defined
-#--> in sales_orders__lines_rfn.view
+#--> optional (uncomment joins below if needed)
 include: "/views/core/sales_orders__lines__item_categories_rfn.view"
 include: "/views/core/sales_orders__lines__item_descriptions_rfn.view"
 include: "/views/core/sales_orders__lines__cancel_reason_rfn.view"

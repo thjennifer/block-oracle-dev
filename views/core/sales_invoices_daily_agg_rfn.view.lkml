@@ -1,3 +1,37 @@
+#########################################################{
+# PURPOSE
+# The SalesInvoicesDailyAgg table and its corresponding Looker view sales_invoices_daily_agg reflect
+# an aggregation of invoices by the following dimensions:
+#   Invoice Date
+#   Business Unit ID
+#   Bill To Site ID
+#   Invoice Type Code
+#   Order Source ID
+#   Item Category Set ID
+#   Category ID
+#
+# SOURCES
+#   Refines base view sales_invoices_daily_agg
+#   Extends view otc_common_item_categories_ext
+#   Extends view sales_invoices_common_amount_measures_ext
+#
+# REFERENCED BY
+#   Explore sales_invoices_daily_agg
+#
+# EXTENDED FIELDS
+#    category_id, category_description, category_name_code
+#    total_transaction_amount_target_currency, total_tax_amount_target_currency, and other amounts
+#
+# REPEATED STRUCTS
+# Includes repeated structs AMOUNTS (defined in separate views for unnesting):
+#     sales_invoices_daily_agg__amounts - provides Total Amounts converted to Target Currencies by Item Categories & Item Organization
+#
+# CAVEATS
+# - Amounts where target_currency matches the value
+#   in parameter_target_currency are defined in this view.
+# - Fields hidden by default. Update field's 'hidden' property to show/hide.
+#########################################################}
+
 include: "/views/base/sales_invoices_daily_agg.view"
 include: "/views/core/otc_common_item_categories_ext.view"
 include: "/views/core/sales_invoices_common_amount_measures_ext.view"
@@ -11,12 +45,9 @@ view: +sales_invoices_daily_agg {
   dimension: key {
     hidden: yes
     primary_key: yes
-    sql: CONCAT(${invoice_raw},${business_unit_id},${bill_to_site_use_id},${invoice_type_id},${order_source_id}D,${item_category_set_id},${item_category_id}) ;;
+    sql: CONCAT(${invoice_raw},${business_unit_id},${bill_to_site_use_id},${invoice_type_id},${order_source_id},${category_set_id},${category_id}) ;;
   }
 
-#########################################################
-# Key Dimensions
-#{
   dimension: business_unit_id {
     hidden: no
   }
@@ -25,6 +56,21 @@ view: +sales_invoices_daily_agg {
     hidden: no
     sql: COALESCE(${TABLE}.BUSINESS_UNIT_NAME,CONCAT("Business Unit ID: ",${business_unit_id})) ;;
   }
+
+  dimension: order_source_id {
+    hidden: no
+    sql: COALESCE(${TABLE}.ORDER_SOURCE_ID,-1) ;;
+    value_format_name: id
+  }
+
+  dimension: order_source_name {
+    hidden: no
+    sql: COALESCE(${TABLE}.ORDER_SOURCE_NAME,"Unknown") ;;
+  }
+
+#########################################################
+# DIMENSIONS: Customer
+#{
 
   dimension: bill_to_site_use_id {
     hidden: no
@@ -41,7 +87,7 @@ view: +sales_invoices_daily_agg {
   dimension: bill_to_customer_name {
     hidden: no
     group_label: "Bill to Customer"
-    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,CONCAT("Bill To Customer Number: ",${bill_to_customer_number})) ;;
+    sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_NAME,"Unknown") ;;
   }
 
   dimension: bill_to_customer_country {
@@ -50,16 +96,11 @@ view: +sales_invoices_daily_agg {
     sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_COUNTRY,"Unknown") ;;
   }
 
-  dimension: item_category_set_id {
-    hidden: yes
-    sql: COALESCE(${TABLE}.ITEM_CATEGORY_ID,-1) ;;
-    value_format_name: id
-  }
+#} end customer dimensions
 
-  dimension: item_category_set_name {
-    hidden: yes
-    sql: COALESCE(${TABLE}.ITEM_CATEGORY_SET_NAME,"Unknown") ;;
-  }
+#########################################################
+# DIMENSIONS: Invoice Type & Status
+#{
 
   dimension: invoice_type_id {
     hidden: no
@@ -86,16 +127,35 @@ view: +sales_invoices_daily_agg {
     sql: CONCAT(${invoice_type_id},": ",${invoice_type_name}) ;;
   }
 
-#TEMPORARILY hide until available in table
-  # dimension: category_description {
-  #   hidden: yes
-  # }
-
-
-#} end key dimensions
+#} end invoice type dimensions
 
 #########################################################
-# Dates
+# DIMENSION: Item Categories
+#{
+# category_id, category_description and category_name_code extended from otc_common_item_categories_ext
+
+  dimension: category_set_id {
+    sql:  COALESCE(${TABLE}.ITEM_CATEGORY_SET_ID,-1) ;;
+    value_format_name:  id
+  }
+
+  dimension: category_set_name {
+    sql: COALESCE(${TABLE}.ITEM_CATEGORY_SET_NAME,"Unknown") ;;
+  }
+
+  dimension: item_organization_id {
+    hidden: no
+  }
+
+  dimension: item_organization_name {
+    hidden: no
+    sql: COALESCE(${TABLE}.ITEM_ORGANIZATION_NAME,CAST(${item_organization_id} AS STRING)) ;;
+  }
+#} end item categories
+
+
+#########################################################
+# DIMENSIONS: Dates
 #{
 
   dimension_group: invoice {
@@ -127,36 +187,45 @@ view: +sales_invoices_daily_agg {
 
 #} end dates
 
-#########################################################
-# Amounts in Target Currency as dimensions
-#{
 
+#########################################################
+# DIMENSIONS: Currency Conversion
+#{
   dimension: target_currency_code {
     hidden: no
     type: string
-    group_label: "Amounts"
+    group_label: "Currency Conversion"
     label: "Currency (Target)"
+    description: "Converted target currency of the invoice from the source currency."
     sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
   }
 
   dimension: is_incomplete_conversion {
     hidden: no
     type: yesno
-    group_label: "Amounts"
+    group_label: "Currency Conversion"
+    description: "Yes, if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies."
     sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
   }
 
+#} end currency conversion dimensions
+
+#########################################################
+# DIMENSIONS: Amounts in Target Currency
+#{
+# amounts hidden as measures are shown instead
+
   dimension: revenue_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Net Revenue Amount (@{label_get_target_currency}){%else%}Net Revenue Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     sql: (select SUM(TOTAL_REVENUE) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
 
   dimension: transaction_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "{% if _field._is_selected %}Invoice Amount (@{label_get_target_currency}){%else%}Invoice Amount (Target Currency){%endif%}"
@@ -165,7 +234,7 @@ view: +sales_invoices_daily_agg {
   }
 
   dimension: tax_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -174,7 +243,7 @@ view: +sales_invoices_daily_agg {
   }
 
   dimension: discount_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -182,12 +251,9 @@ view: +sales_invoices_daily_agg {
     value_format_name: decimal_2
   }
 
-
 #} end amount dimensions
 
-  measure: row_count {
-    type: count
-  }
+
 
 
 }

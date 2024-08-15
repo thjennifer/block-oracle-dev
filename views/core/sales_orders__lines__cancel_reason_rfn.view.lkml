@@ -10,8 +10,7 @@
 # not used but could optionally be added to Explore sales_orders
 #
 # NOTES
-# - A single reason where language matches the language selected
-#   for parameter_language is pulled into sales_orders__lines
+# - Cancel Reasons where language matches value of parameter_language are pulled into sales_orders__lines
 #   so this view is not used.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #

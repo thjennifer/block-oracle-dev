@@ -15,9 +15,10 @@
 #    total_sales_amount_target_currency, total_booking_amount_target_currency, and other amounts
 #
 # NOTES
-# - Amounts where target currency matches the currency
-#   selected for parameter_target_currency is pulled into sales_orders_daily_agg__lines
-#   so this view is not used
+# - Amounts where target currency matches value of parameter_target_currency are
+#   pulled into sales_orders_daily_agg__lines so this view is not used
+# - Original fields TOTAL_ORDERED, etc... replaced with dimensions like ordered_amount_target_currency to
+#   faciltate extending order amount measures across multiple views.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #
@@ -40,20 +41,22 @@ view: +sales_orders_daily_agg__lines__amounts {
   dimension: target_currency_code {
     hidden: no
     label: "Currency (Target)"
-    full_suggestions: yes
     sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+    full_suggestions: yes
   }
 
   dimension: is_incomplete_conversion {
     hidden: no
     description: "Yes if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies."
     sql: COALESCE(${TABLE}.IS_INCOMPLETE_CONVERSION,FALSE) ;;
+    full_suggestions: yes
   }
 
   dimension: is_sales_order {
     hidden: yes
     type: yesno
     sql: ${sales_orders_daily_agg__lines.line_category_code} = 'ORDER' ;;
+    full_suggestions: yes
   }
 
 #########################################################

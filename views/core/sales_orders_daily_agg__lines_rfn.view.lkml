@@ -26,8 +26,7 @@
 #     sales_orders_daily_agg__lines__amounts - provides Total Amounts converted to Target Currencies by Item Categories & Item Organization
 #
 # NOTES
-# - Amounts where target_currency matches the currency
-#   selected for parameter_target_currency is defined in this view.
+# - Amounts where target_currency matches value of parameter_target_currency are defined in this view.
 # - View appears in Explore as Sales Orders Daily Agg: Item Categories.
 # - This table includes both ORDER and RETURN lines. Use line_category_code to pick which to include.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
@@ -53,22 +52,6 @@ view: +sales_orders_daily_agg__lines {
     sql: CONCAT(${sales_orders_daily_agg.key},${category_set_id},${category_id},${item_organization_id},${line_category_code}) ;;
   }
 
-  dimension: category_set_id {
-    sql:  COALESCE(${TABLE}.ITEM_CATEGORY_SET_ID,-1) ;;
-    full_suggestions: yes
-  }
-
-  dimension: category_set_name {
-    sql: COALESCE(${TABLE}.ITEM_CATEGORY_SET_NAME,"Unknown") ;;
-    full_suggestions: yes
-    }
-
-#--> category_id, category_description and category_group_name are extended from another view so can hide this one
-  dimension: item_category_id {
-    hidden: yes
-    primary_key: no
-  }
-
   dimension: line_category_code {
     hidden: no
     sql:  COALESCE(${TABLE}.LINE_CATEGORY_CODE,IF(${sales_orders_daily_agg.order_category_code}='MIXED','Unknown',${sales_orders_daily_agg.order_category_code})) ;;
@@ -84,16 +67,39 @@ view: +sales_orders_daily_agg__lines {
   }
 
   dimension: item_organization_id {
-    hidden:no
-    sql: COALESCE(${TABLE}.ITEM_ORGANIZATION_ID,-1) ;;
+    hidden: no
     full_suggestions: yes
   }
 
   dimension: item_organization_name {
     hidden: no
-    sql: COALESCE(${TABLE}.ITEM_ORGANIZATION_NAME,CAST(NULLIF(${item_organization_id},-1) AS STRING)) ;;
+    sql: COALESCE(${TABLE}.ITEM_ORGANIZATION_NAME,CAST(${item_organization_id} AS STRING)) ;;
     full_suggestions: yes
   }
+
+
+#########################################################
+# DIMENSION: Item Categories
+#{
+# category_id, category_description and category_name_code extended from otc_common_item_categories_ext
+
+  dimension: category_set_id {
+    sql:  COALESCE(${TABLE}.ITEM_CATEGORY_SET_ID,-1) ;;
+    full_suggestions: yes
+  }
+
+  dimension: category_set_name {
+    sql: COALESCE(${TABLE}.ITEM_CATEGORY_SET_NAME,"Unknown") ;;
+    full_suggestions: yes
+    }
+
+#--> category_id used instead so can hide this one and remove as primary key
+  dimension: item_category_id {
+    hidden: yes
+    primary_key: no
+  }
+
+#} end item categories
 
 #########################################################
 # DIMENSION: Amounts

@@ -15,8 +15,8 @@
 #    item_description, language_code
 #
 # NOTES
-# - A single item description where language_code matches the language
-#   selected for parameter_language is pulled into sales_orders__lines
+# - Item descriptions where language_code matches the value
+#   of parameter_language are pulled into sales_orders__lines
 #   so this view is not used.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.

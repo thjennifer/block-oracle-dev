@@ -1,6 +1,6 @@
 #########################################################{
 # PURPOSE
-# The SalesOrderDailyAgg table and its corresponding Looker view sales_order_daily_agg reflect
+# The SalesOrdersDailyAgg table and its corresponding Looker view sales_orders_daily_agg reflect
 # an aggregation of orders by the following dimensions:
 #   Ordered Date
 #   Business Unit ID
@@ -11,7 +11,7 @@
 #   Bill To Site ID
 #
 # SOURCES
-# Refines base view sales_order_daily_agg
+# Refines base view sales_orders_daily_agg
 # Extends view sales_orders_common_dimensions_ext
 # Extends view sales_orders_common_count_measures_ext
 #
@@ -117,7 +117,7 @@ view: +sales_orders_daily_agg {
 
   dimension: order_source_name {
     hidden: no
-    sql: COALESCE(${TABLE}.ORDER_SOURCE_NAME,COALESCE(CAST(NULLIF(${order_source_id},-1) AS STRING),"Unknown")) ;;
+    sql: COALESCE(${TABLE}.ORDER_SOURCE_NAME,"Unknown") ;;
   }
 
 #} end business unit and order source
@@ -125,7 +125,7 @@ view: +sales_orders_daily_agg {
 #########################################################
 # DIMENSIONS: Customer
 #{
-# selected_customer_name, _country and _type extebded from sales_orders_common_dimensions_ext
+# selected_customer_name, _country and _type extended from sales_orders_common_dimensions_ext
 
   dimension: bill_to_customer_name {
     hidden: no

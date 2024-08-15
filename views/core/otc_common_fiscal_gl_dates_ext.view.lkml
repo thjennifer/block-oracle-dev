@@ -23,28 +23,34 @@ view: otc_common_fiscal_gl_dates_ext {
   extension: required
 
   dimension: fiscal_period_name {
+    hidden: no
     group_label: "Ledger Date"
   }
   dimension: fiscal_period_set_name {
+    hidden: no
     group_label: "Ledger Date"
   }
   dimension: fiscal_period_type {
+    hidden: no
     group_label: "Ledger Date"
   }
 
   dimension: fiscal_gl_period_num {
+    hidden: no
     group_label: "Ledger Date"
     label: "Fiscal GL Period Number"
     description: "Fiscal GL period of the ledger date as an integer."
   }
 
   dimension: fiscal_gl_quarter_num {
+    hidden: no
     group_label: "Ledger Date"
     label: "Fiscal GL Quarter Number"
     description: "Fiscal GL Quarter of the ledger date as an integer."
   }
 
   dimension: fiscal_gl_year_num {
+    hidden: no
     group_label: "Ledger Date"
     label: "Fiscal GL Year Number"
     description: "Fiscal GL Year of ledger date as an integer."
@@ -52,6 +58,7 @@ view: otc_common_fiscal_gl_dates_ext {
   }
 
   dimension: fiscal_gl_year_period {
+    hidden: no
     type: string
     group_label: "Ledger Date"
     label: "Fiscal GL Year-Period (YYYY-PPP)"

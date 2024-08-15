@@ -1,3 +1,29 @@
+#########################################################{
+# PURPOSE
+# UNNESTED view of Repeated STRUCT amounts found in sales_invoices_daily_agg table.
+# Provides amounts by target_currency_code and is_incomplete_conversion
+#
+# SOURCES
+#   Refines View sales_invoices_daily_agg__amounts
+#   Extends View:
+#     sales_invoices_common_amount_measures_ext
+#
+# REFERENCED BY
+# not used but could optionally be added to sales_invoices_daily_agg explore
+#
+# EXTENDED FIELDS
+#    total_transaction_amount_target_currency, total_tax_amount_target_currency, and other amounts
+#
+# NOTES
+# - Amounts where target currency matches the value of parameter_target_currency are pulled into
+#   sales_invoices_daily_agg so this view is not used
+# - Original fields TOTAL_REVENUE, etc... replaced with dimensions like revenue_amount_target_currency to
+#   faciltate extending invoice amount measures across multiple views.
+# - Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
+#
+#########################################################}
+
 include: "/views/base/sales_invoices_daily_agg__amounts.view"
 include: "/views/core/sales_invoices_common_amount_measures_ext.view"
 
@@ -12,43 +38,32 @@ view: +sales_invoices_daily_agg__amounts {
     sql: CONCAT(${sales_invoices_daily_agg.key},${target_currency_code},${is_incomplete_conversion}) ;;
   }
 
-  #HIDE ORIGINAL TOTAL_ fields and rename to match sales_invoices_lines to share descriptions and labels
-
-  dimension: currency_target {
+  dimension: target_currency_code {
     hidden: no
     type: string
-    group_label: "Amounts"
     label: "Currency (Target)"
-    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
+    sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+    full_suggestions: yes
   }
 
   dimension: is_incomplete_conversion {
     hidden: no
-    group_label: "Amounts"
+    sql: COALESCE(${TABLE}.IS_INCOMPLETE_CONVERSION,FALSE) ;;
+    full_suggestions: yes
   }
 
   dimension: revenue_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Net Revenue Amount (@{label_get_target_currency}){%else%}Net Revenue Amount (Target Currency){%endif%}"
+    label: "@{label_build}"
     description: "Amount in target currency recognized as revenue for accounting purposes."
     sql: ${total_revenue} ;;
     value_format_name: decimal_2
   }
 
-  # dimension: gross_revenue_amount_target_currency {
-  #   hidden: no
-  #   type: number
-  #   group_label: "Amounts"
-  #   label: "{% if _field._is_selected %}@{derive_currency_label}Gross Revenue Amount ({{currency}}){%else%}Gross Revenue Amount (Target Currency){%endif%}"
-  #   description: "Amount in target currency recognized as revenue for accounting purposes."
-  #   sql: ${revenue_amount} * IF(${sales_invoices.currency_code} = {% parameter otc_common_parameters_xvw.parameter_target_currency %}, 1, ${currency_conversion_sdt.conversion_rate})  ;;
-  #   value_format_name: decimal_2
-  # }
-
   dimension: transaction_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "{% if _field._is_selected %}Invoice Amount (@{label_get_target_currency}){%else%}Invoice Amount (Target Currency){%endif%}"
@@ -58,7 +73,7 @@ view: +sales_invoices_daily_agg__amounts {
   }
 
   dimension: tax_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -67,7 +82,7 @@ view: +sales_invoices_daily_agg__amounts {
   }
 
   dimension: discount_amount_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
