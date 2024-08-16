@@ -1,9 +1,9 @@
 include: "/views/base/sales_payments_daily_agg__amounts.view"
-include: "/views/core/sales_payments_common_fields_ext.view"
+include: "/views/core/sales_payments_common_amount_measures_ext.view"
 
 view: +sales_payments_daily_agg__amounts {
 
-  extends: [sales_payments_common_fields_ext]
+  extends: [sales_payments_common_amount_measures_ext]
 
   fields_hidden_by_default: yes
 

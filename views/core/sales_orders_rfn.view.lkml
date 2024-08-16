@@ -57,10 +57,14 @@ view: +sales_orders {
 
   dimension: ledger_id {
     hidden: no
+    description: "ID of ledger or set of books."
     value_format_name: id
-    }
+  }
 
-  dimension: ledger_name {hidden: no}
+  dimension: ledger_name {
+    hidden: no
+    description: "Name of ledger or set of books."
+  }
 
   dimension: sales_rep {hidden: no}
 

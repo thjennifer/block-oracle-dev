@@ -788,7 +788,6 @@ view: +sales_orders__lines {
     sql: {%- if sales_orders.currency_code._is_selected -%}${ordered_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_0
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
-
   }
 
   measure: total_sales_amount_in_source_currency {

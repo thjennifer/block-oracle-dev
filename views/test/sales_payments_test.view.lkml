@@ -282,6 +282,73 @@ dimension: test_target_date  {
     sql: SAFE_DIVIDE(${dso_90_payments},${dso_90_invoices})*90 ;;
     value_format_name: decimal_1
   }
+#   total_amount_adjusted_target_currency
+#   total_amount_applied_target_currency
+#   total_amount_credited_target_currency
+#   total_amount_discounted_target_currency
+#   total_amount_due_original_target_currency
+#   total_amount_due_remaining_target_currency
+#   total_tax_original_target_currency
+#   total_tax_remaining_target_currency
+#   total_receivables_target_currency
+#   total_overdue_receivables_target_currency
+#   total_doubtful_receivables_target_currency
+
+
+  measure:  min_doubtful_receivables_target_currency {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: min
+    sql: ${doubtful_receivables_target_currency} ;;
+  }
+
+  measure:  min_tax_remaining_target_currency {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: min
+    sql: ${tax_remaining_target_currency} ;;
+  }
+
+  measure:  min_amount_adjusted_target_currency{
+    hidden: no
+    view_label: "TEST STUFF"
+    type: min
+    sql: ${amount_adjusted_target_currency} ;;
+  }
+
+  measure:  min_amount_applied_target_currency {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: min
+    sql: ${amount_applied_target_currency} ;;
+  }
+
+  measure:  min_amount_credited_target_currency {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: min
+    sql: ${amount_credited_target_currency} ;;
+  }
+
+  measure:  min_amount_discounted_target_currency {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: min
+    sql: ${amount_discounted_target_currency} ;;
+  }
+
+  measure:  min_amount_due_original_target_currency {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: min
+    sql: ${amount_due_original_target_currency} ;;
+  }
+  measure:  min_tax_original_target_currency {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: min
+    sql: ${tax_original_target_currency} ;;
+  }
 
 
 #}

@@ -38,6 +38,29 @@ constant: REPORTING_DATASET {
 #   value: "{% assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" %}"
 # }
 
+constant: format_big_numbers {
+  value: "
+  {%- if value < 0 -%}
+    {%- assign abs_value = value | times: -1.0 -%}
+    {%- assign pos_neg = '-' -%}
+  {%- else -%}
+    {%- assign abs_value = value | times: 1.0 -%}
+    {%- assign pos_neg = '' -%}
+  {%- endif -%}
+
+  {%- if abs_value >=1000000000 -%}
+    {{pos_neg}}{{ abs_value | divided_by: 1000000000.0 | round: 1 }}B
+  {%- elsif abs_value >=1000000 -%}
+    {{pos_neg}}{{ abs_value | divided_by: 1000000.0 | round: 1 }}M
+  {%- elsif abs_value >=1000 -%}
+    {{pos_neg}}{{ abs_value | divided_by: 1000.0 | round: 1 }}K
+  {%- else -%}
+    {{pos_neg}}{{ abs_value }}
+  {%- endif -%}
+
+  "
+}
+
 constant: label_get_target_currency {
   value: "{% assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" %}{{currency}}"
 }
@@ -77,6 +100,10 @@ constant: label_build_minus_total {
   value: "@{label_derive_field_name_minus_total}{%- if _field._is_selected -%}{{field_name}} (@{label_get_target_currency}){%- else -%}{{field_name}} (Target Currency){%- endif -%}"
 }
 
+constant: label_build_minus_total_formatted {
+  value: "@{label_derive_field_name_minus_total}{%- if _field._is_selected -%}{{field_name}} (@{label_get_target_currency}){%- else -%}{{field_name}} (Target Currency) Formatted {%- endif -%}"
+}
+
 
 
 
@@ -99,6 +126,10 @@ constant: view_label_for_filters {
 
 constant: view_label_for_dashboard_navigation {
   value: "🛠 Dashboard Navigation"
+}
+
+constant: html_message_source_currency {
+  value: "{%- if currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%}"
 }
 
 # Constant is_agg_category_in_query

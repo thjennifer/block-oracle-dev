@@ -26,6 +26,8 @@ view: otc_common_currency_ext {
     sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
   }
 
+  # try new description:  The target currency code represents the currency into which the order's source currency is converted."
+
 #--> sales_invoices & sales_invoices_daily_agg
   # dimension: target_currency_code {
   #   hidden: no
@@ -43,9 +45,17 @@ view: otc_common_currency_ext {
   #   sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
   # }
 
+#--> sales_payments
+  # dimension: target_currency_code {
+  #   hidden: no
+  #   type: string
+  #   group_label: "Currency Conversion"
+  #   label: "Currency (Target)"
+  #   sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
+  # }
 
 
-#--> sales_orders, sales_invoices
+#--> sales_orders, sales_invoices, sales_payments
   dimension: currency_conversion_rate {
     hidden: no
     group_label: "Currency Conversion"
@@ -54,7 +64,9 @@ view: otc_common_currency_ext {
     value_format_name: decimal_4
   }
 
-#--> sales_orders, sales_invoices
+
+
+#--> sales_orders, sales_invoices, sales_payments
   dimension: is_incomplete_conversion {
     hidden: no
     type: yesno
