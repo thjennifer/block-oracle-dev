@@ -1,6 +1,6 @@
-include: "/views/core/sales_payments_daily_agg_sample_pdt.view"
+include: "/views/core/sales_payments_daily_agg_test_data_pdt.view"
 
-view: +sales_payments_daily_agg_sample_pdt {
+view: +sales_payments_daily_agg_test_data_pdt {
 
     derived_table: {
       sql:

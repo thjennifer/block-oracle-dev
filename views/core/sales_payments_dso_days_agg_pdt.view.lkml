@@ -1,3 +1,29 @@
+#########################################################{
+# PURPOSE
+# Generate a daily PDT that compute DSO values for each
+# Target Currency and DSO # days combination.
+#
+# Possible DSO days are: 30, 90 or 365 as defined in query below--see line with ARRAY[30,90,365].
+#
+# DSO Start and End Date are derived based on either:
+#     current_date
+#     target date if test data set (see constant default_target_date)
+#
+# SOURCES
+#   `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg`
+#
+# REFERENCED BY
+#   Explore sales_payments_dso_days_agg_pdt
+#   LookML dashboard otc_billing_accounts_receivable
+#
+# NOTES
+# - Only Invoice rows are used in DSO calc (IS_PAYMENT_TRANSACTION = false)
+# - An alternative to using the PDT is defined in view dso_dynamic_days_sdt
+#   which calculates DSO dyanmically based on user-provided value for
+#   parameter_dso_number_of_days._parameter_value. This view is part of
+#   the sales_payments Explore.
+#########################################################}
+
 include: "/views/core/dso_days_sdt.view"
 
 view: sales_payments_dso_days_agg_pdt {
@@ -21,7 +47,15 @@ view: sales_payments_dso_days_agg_pdt {
         SUM(TOTAL_ORIGINAL) AS TOTAL_ORIGINAL,
         SUM(TOTAL_REMAINING) AS TOTAL_REMAINING,
         MAX(IS_INCOMPLETE_CONVERSION) AS IS_INCOMPLETE_CONVERSION
-      FROM ${dso_days_sdt.SQL_TABLE_NAME} dso
+      FROM (
+            SELECT
+              DSO_DAYS,
+              DATE_SUB(DATE(@{default_target_date}) - 1, INTERVAL DSO_DAYS DAY) AS DSO_START_DATE,
+              @{default_target_date} - 1 AS DSO_END_DATE
+            FROM
+            --update with additional DSO days as necessary
+              UNNEST(ARRAY[30,90,365]) AS DSO_DAYS
+            ) dso
        JOIN
         `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg` hdr
          ON
@@ -122,14 +156,12 @@ view: sales_payments_dso_days_agg_pdt {
       sql: ${TABLE}.IS_INCOMPLETE_CONVERSION ;;
     }
 
-
     measure: total_amount_original_target_currency {
       hidden: no
       type: sum
       label: "Amount Original (Target Currency)"
       sql: ${total_original} ;;
-      # value_format_name: format_large_numbers_d1
-      value_format_name: decimal_0
+      value_format_name: decimal_2
     }
 
     measure: total_amount_due_remaining_target_currency {
@@ -137,15 +169,14 @@ view: sales_payments_dso_days_agg_pdt {
       type: sum
       label: "Amount Due Remaining (Target Currency)"
       sql: ${total_remaining} ;;
-      # value_format_name: format_large_numbers_d1
-      value_format_name: decimal_0
+      value_format_name: decimal_2
     }
 
     measure: days_sales_outstanding {
       type: number
       sql: SAFE_DIVIDE(${total_amount_due_remaining_target_currency},${total_amount_original_target_currency}) * ANY_VALUE(${dso_days}) ;;
       value_format_name: decimal_1
-      required_fields: [dso_days,target_currency_code]
+      # required_fields: [dso_days,target_currency_code]
       drill_fields: [dso_details*]
     }
 

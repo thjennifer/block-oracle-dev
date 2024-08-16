@@ -1,5 +1,21 @@
-view: sales_payments_daily_agg_sample_pdt {
+#########################################################{
+# PURPOSE
+# One time build of a PDT for sales_payments_daily_agg that
+# re-computes TOTAL_OVERDUE_REMAINING & TOTAL_DOUBTFUL_REMAINING
+# based on the test data's target end date (rather than current date).
+#
+# REFERENCED BY
+#   view sales_payments_daily_agg
+#
+# NOTES
+# - Used for sql_table_name property of view sales_payments_daily_agg
+#   if the value for user attribute cortex_oracle_ebs_use_test_data = Yes
+#
+#########################################################}
+
+view: sales_payments_daily_agg_test_data_pdt {
  derived_table: {
+  datagroup_trigger: one_time
    sql:
   SELECT
   TRANSACTION_DATE,

@@ -37,7 +37,7 @@ view: otc_common_currency_ext {
   #   sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
   # }
 
-#--> sales_orders_daily_agg__lines__amounts, sales_invoices_daily_agg__amounts
+#--> sales_orders_daily_agg__lines__amounts, sales_invoices_daily_agg__amounts, sales_payments_daily_agg__amounts
   # dimension: target_currency_code {
   #   hidden: no
   #   label: "Currency (Target)"
@@ -88,6 +88,15 @@ view: otc_common_currency_ext {
   #   type: yesno
   #   group_label: "Currency Conversion"
   #   sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
+  # }
+
+#--> sales_payments_daily_agg
+  # dimension: is_incomplete_conversion {
+  #   hidden: no
+  #   type: yesno
+  #   group_label: "Currency Conversion"
+  #   description: "Yes, if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies."
+  #   sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
   # }
 
 #--> sales_orders_daily_agg__lines__amounts, sales_invoics_daily_agg__amounts

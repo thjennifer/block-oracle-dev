@@ -23,7 +23,15 @@ view: +sales_payments_dso_days_agg_pdt {
           SUM(TOTAL_ORIGINAL) AS TOTAL_ORIGINAL,
           SUM(TOTAL_REMAINING) AS TOTAL_REMAINING,
           MAX(IS_INCOMPLETE_CONVERSION) AS IS_INCOMPLETE_CONVERSION
-        FROM ${dso_days_sdt.SQL_TABLE_NAME} dso
+        FROM (
+            SELECT
+              DSO_DAYS,
+              DATE_SUB(DATE(@{default_target_date}) - 1, INTERVAL DSO_DAYS DAY) AS DSO_START_DATE,
+              @{default_target_date} - 1 AS DSO_END_DATE
+            FROM
+            --update with additional DSO days as necessary
+              UNNEST(ARRAY[30,90,365]) AS DSO_DAYS
+            ) dso
          JOIN
           `@{GCP_PROJECT_ID}.{{t}}.SalesPaymentsDailyAgg` hdr
            ON

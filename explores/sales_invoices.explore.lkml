@@ -61,10 +61,9 @@ explore: sales_invoices {
   }
 
   join: currency_conversion_sdt {
-    view_label: "Sales Invoices: Lines Currency Conversion"
     type: left_outer
-    sql_on:  COALESCE(${sales_invoices.exchange_raw},${sales_invoices.invoice_raw}) = ${currency_conversion_sdt.conversion_date} AND
-            ${sales_invoices.currency_code} = ${currency_conversion_sdt.from_currency} ;;
+    sql_on:  ${sales_invoices.exchange_raw} = ${currency_conversion_sdt.conversion_date} AND
+             ${sales_invoices.currency_code} = ${currency_conversion_sdt.from_currency} ;;
     relationship: many_to_one
     # no fields from currency conversion needed as all relevant fields are in sales_invoices
     fields: []

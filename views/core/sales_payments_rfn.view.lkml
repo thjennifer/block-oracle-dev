@@ -8,17 +8,13 @@
 # Refines View sales_payments
 # Extends Views:
 #   otc_common_fiscal_gl_dates_ext
-#   sales_payments_common_amounts_measures_ext
+#   sales_payments_common_amount_measures_ext
 #
 # REFERENCED BY
-# Explore sales_payments
+#   Explore sales_payments
 #
 # EXTENDED FIELDS
-# Extends common dimensions:
-#
-# REPEATED STRUCTS
-# - Also includes Repeated Struct for AMOUNTS. See view sales_invoices__amounts for
-#   dimensions and measures.
+#   total_amount_adjusted_target_currency, total_amount_applied_target_currency, etc...
 #
 # NOTES
 # - This view includes Payments related to Cash Receipts and Invoices.
@@ -195,6 +191,12 @@ view: +sales_payments {
     sql: ${amount_due_remaining} > 0 ;;
   }
 
+  dimension: is_closed {
+    hidden: no
+    type: yesno
+    sql: ${payment_close_date} IS NOT NULL ;;
+  }
+
 #--> if test data is used, re-compute using the target end date of the test dataset.
   dimension: is_open_and_overdue {
     hidden: no
@@ -224,35 +226,34 @@ view: +sales_payments {
 
 #} end status dimensions
 
-
 #########################################################
 # DIMENSIONS: Days
 #{
+# Hidden from explore because measures for each are defined.
 
 #--> if test data is used, re-compute using the target end date of the test dataset.
   dimension: days_overdue {
-    hidden: no
+    hidden: yes
     description: "If open and overdue, number of days past due date."
     sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
          {% if test_data == 'YES' %}
-             DATE_DIFF(DATE(@{default_target_date}), ${due_raw}, DAY)
+             IF(${is_open_and_overdue},DATE_DIFF(DATE(@{default_target_date}), ${due_raw}, DAY),NULL)
          {% else %}${TABLE}.DAYS_OVERDUE
          {% endif%} ;;
   }
 
   dimension: days_late {
-    hidden: no
+    hidden: yes
     description: "If payment was closed late, number of days after the due date the payment closed."
   }
 
   dimension: days_to_payment {
     hidden: no
-    description: "Number of days between payment close date and invoice date."
+    description: "For payment class code = INV, the number of days between payment close date and invoice date."
   }
 
 
 #} end days dimensions
-
 
 #########################################################
 # DIMENSIONS: Currency Conversion
@@ -437,7 +438,7 @@ view: +sales_payments {
   }
 
   dimension: doubtful_receivables_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -450,11 +451,64 @@ view: +sales_payments {
 #########################################################
 # MEASURES: Non-Amounts
 #{
-
   measure: transaction_count {
     hidden: no
     type: count
     drill_fields: [payment_details*]
+  }
+
+  measure: closed_transaction_count {
+    hidden: no
+    type: count
+    filters: [is_closed: "Yes"]
+    drill_fields: [payment_details*]
+  }
+
+  measure: invoice_closed_transaction_count {
+    hidden: no
+    type: count
+    description: "For Invoice payment class code, the number of closed payments."
+    filters: [is_closed: "Yes",payment_class_code: "INV"]
+    drill_fields: [payment_details*]
+  }
+
+  measure: average_days_overdue {
+    hidden: no
+    type: average
+    description: "If open and overdue, average number of days past due date."
+    sql: ${days_overdue} ;;
+    value_format_name: decimal_1
+  }
+
+  measure: average_days_late {
+    hidden: no
+    type: average
+    description: "If payment was closed late, average number of days after the due date the payment closed."
+    sql: ${days_late} ;;
+    value_format_name: decimal_1
+  }
+
+  measure: average_days_to_payment {
+    hidden: no
+    type: average
+    description: "Average umber of days between payment close date and invoice date."
+    sql: ${days_to_payment} ;;
+    filters: [payment_class_code: "INV"]
+    value_format_name: decimal_1
+  }
+
+  measure: sum_days_to_payment {
+    hidden: no
+    type: sum
+    sql: ${days_to_payment} ;;
+  }
+
+  measure: test_average_days_to_payment {
+    hidden: no
+    type: number
+    description: "Average umber of days between payment close date and invoice date."
+    sql: SAFE_DIVIDE(${sum_days_to_payment},${closed_transaction_count}) ;;
+    value_format_name: decimal_1
   }
 
 #} end non-amount measures

@@ -1,12 +1,38 @@
+#########################################################{
+# PURPOSE
+# based on user inputs for bucket size and number of buckets,
+# create a table dynamically with fields:
+#   aging_bucket_number
+#   aging_bucket_name
+#   start_days
+#   end_days
+#
+# SOURCES
+#   none
+#
+# REFERENCED BY
+#   Explore sales_payments
+#
+# NOTES
+# - join to Explore sales_payments using:
+#       sales_payments.days_overdue BETWEEN start_days and end_days
+# - A "Current" bucket will always be generated in addition to the # of Ranges the user specifies.
+#   For instance, if the aging bucket size is 30 days and the number of ranges is 3, 4 buckets will
+#   be created. The first bucket will be called
+#   '30 Days Past Due' and will include invoices that are between 1 and 30 days old. The following bucket will be called
+#   '60 Days Past Due' and will include invoices that are between 31 and 60 days old. And the third bucket will be called
+#   '61+ Days Past Due' and will include invoices greater than or equal to 61 days old.
+#   A 'Current' bucket where age is <=0 days will be added.
+#
+#########################################################}
+
 view: sales_payments_dynamic_aging_bucket_sdt {
-
-
   derived_table: {
-    sql: {% assign bucket_size = parameter_aging_bucket_size._parameter_value %}{%assign bucket_count = parameter_aging_bucket_count._parameter_value | minus: 1 %}
-         {% assign max = bucket_size | times: bucket_count %}{% assign tag = ' Days Past Due' %}
+    sql: {%- assign bucket_size = parameter_aging_bucket_size._parameter_value -%}
+         {%- assign bucket_count = parameter_aging_bucket_count._parameter_value | minus: 1 -%}
+         {%- assign max = bucket_size | times: bucket_count -%}{%- assign tag = ' Days Past Due' -%}
         SELECT
           aging_bucket_number,
-          --IF(end_days = 0,'CURRENT',CONCAT(end_days," PAST DUE" )) AS aging_bucket_name,
           IF(end_days = 0,'CURRENT',CONCAT(end_days,"{{tag}}" )) AS aging_bucket_name,
           IF(end_days = 0,-9999999,LAG(end_days) OVER(ORDER BY end_days)+1) AS start_days,
           end_days
@@ -17,10 +43,8 @@ view: sales_payments_dynamic_aging_bucket_sdt {
           SELECT
           {{bucket_count | plus: 1 }} AS aging_bucket_number,
           '{{max | plus: 1 | append:'+ ' | append: tag}}' as aging_bucket_name,
-         -- '121+ PAST DUE' AS aging_bucket_name,
-          {{max | plus: 1}} AS start_days,
+           {{max | plus: 1}} AS start_days,
           9999999 AS end_days
-
     ;;
   }
 
@@ -70,12 +94,14 @@ view: sales_payments_dynamic_aging_bucket_sdt {
     sql: ${TABLE}.end_days ;;
   }
 
+#--> hidden dimensions used for dashboard slide filter
   dimension: dummy_bucket_count {
     hidden: yes
     type: number
     sql: 4 ;;
   }
 
+#--> hidden dimensions used for dashboard slide filter
   dimension: dummy_bucket_size {
     hidden: yes
     type: number

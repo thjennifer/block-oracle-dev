@@ -33,12 +33,4 @@ view: dso_days_sdt {
     sql: ${TABLE}.DSO_END_DATE ;;
   }
 
-  # dimension: test_constant {
-  #   # sql: {% if _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase == 'YES' %}
-  #   #       {% assign td = '2024-03-28' %} {%else%}
-  #         # {% assign td = now | date: '%Y-%m-%d' %}{%endif%}{{td}} ;;
-  #         # sql: {% assign td = 'now' | date: '%Y-%m-%d' %}'{{td}}' ;;
-  #         sql: @{default_target_date} ;;
-  # }
-
 }

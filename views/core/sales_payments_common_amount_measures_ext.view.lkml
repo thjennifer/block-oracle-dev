@@ -156,11 +156,13 @@ view: sales_payments_common_amount_measures_ext {
   }
 
   measure: percent_of_total_receivables {
+    hidden: no
     type: percent_of_total
     sql: ${total_receivables_target_currency} ;;
   }
 
   measure: cumulative_total_receivables {
+    hidden: no
     type: running_total
     group_label: "Amounts"
     sql: ${total_receivables_target_currency} ;;
@@ -173,7 +175,7 @@ view: sales_payments_common_amount_measures_ext {
 #########################################################
 # MEASURES: Formatted Amounts
 #{
-# Formatted as large numbers. Use html formatting defined
+# Formatted as large numbers. Also use html formatting defined
 # in constant format_big_numbers to handle negative totals
 
   measure: total_amount_adjusted_target_currency_formatted {
@@ -182,6 +184,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "@{label_build_minus_total_formatted}"
     sql: ${total_amount_adjusted_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -191,6 +194,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "@{label_build_minus_total_formatted}"
     sql: ${total_amount_applied_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -200,6 +204,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "@{label_build_minus_total_formatted}"
     sql: ${total_amount_credited_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -209,6 +214,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "@{label_build_minus_total_formatted}"
     sql: ${total_amount_discounted_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -218,6 +224,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "@{label_build_minus_total_formatted}"
     sql: ${total_amount_due_original_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -227,6 +234,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "@{label_build_minus_total_formatted}"
     sql: ${total_amount_due_remaining_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -236,6 +244,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "{%- if _field._is_selected -%}Tax Amount Original (@{label_get_target_currency}){%- else -%}Tax Amount Original (Target Currency) Formatted {%- endif -%}"
     sql: ${total_tax_original_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -245,6 +254,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "{%- if _field._is_selected -%}Tax Amount Remaining (@{label_get_target_currency}){%- else -%}Tax Amount Remaining (Target Currency) Formatted {%- endif -%}"
     sql: ${total_tax_remaining_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -254,6 +264,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "@{label_build_formatted}"
     sql: ${total_receivables_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -263,6 +274,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "{%- if _field._is_selected -%}Total Original Invoice Amount (@{label_get_target_currency}){%- else -%}Total Original Invoice Amount (Target Currency) Formatted {%- endif -%}"
     sql: ${total_amount_original_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -272,6 +284,7 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "{%- if _field._is_selected -%}Past Due Receivables (@{label_get_target_currency}){%- else -%}Past Due Receivables (Target Currency) Formatted {%- endif -%}"
     sql: ${total_overdue_receivables_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
@@ -281,13 +294,16 @@ view: sales_payments_common_amount_measures_ext {
     group_label: "Amounts with Large Number Format"
     label: "@{label_build_minus_total_formatted}"
     sql: ${total_doubtful_receivables_target_currency} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 
   measure: cumulative_total_receivables_formatted {
+    hidden: no
     type: number
     group_label: "Amounts with Large Number Format"
     sql: ${cumulative_total_receivables} ;;
+    value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;
   }
 

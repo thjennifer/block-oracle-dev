@@ -1,3 +1,29 @@
+#########################################################{
+# PURPOSE
+# UNNESTED view of Repeated STRUCT amounts found in sales_payments_daily_agg table.
+# Provides amounts by target_currency_code and is_incomplete_conversion.
+#
+# SOURCES
+#   Refines View sales_payments_daily_agg__amounts
+#   Extends View:
+#     sales_payments_common_amount_measures_ext
+#
+# REFERENCED BY
+#   not used but could optionally be added to sales_payments_daily_agg explore
+#
+# EXTENDED FIELDS
+#   total_amount_adjusted_target_currency, total_amount_applied_target_currency, etc...
+#
+# NOTES
+# - Amounts where target currency matches the value of parameter_target_currency are pulled into
+#   sales_payments_daily_agg so this view is not used
+# - Original fields TOTAL_AMOUNT_ADJUSTED, etc... replaced with dimensions like amount_adjusted_target_currency to
+#   faciltate extending payment amount measures across multiple views.
+# - Fields hidden by default. Update field's 'hidden' property to show/hide.
+# - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
+#
+#########################################################}
+
 include: "/views/base/sales_payments_daily_agg__amounts.view"
 include: "/views/core/sales_payments_common_amount_measures_ext.view"
 
@@ -13,10 +39,19 @@ view: +sales_payments_daily_agg__amounts {
     sql: CONCAT(${sales_payments_daily_agg.key},${target_currency_code},${is_incomplete_conversion}) ;;
   }
 
-  dimension: is_incomplete_conversion {
+  dimension: target_currency_code {
     hidden: no
+    label: "Currency (Target)"
+    sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
+    full_suggestions: yes
   }
 
+  dimension: is_incomplete_conversion {
+    hidden: no
+    full_suggestions: yes
+  }
+
+#--> hidden field referenced by extended measures
   dimension: payment_class_code {
     hidden: yes
     type: string
@@ -24,7 +59,7 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: amount_adjusted_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -33,7 +68,7 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: amount_applied_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -42,7 +77,7 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: amount_credited_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -51,7 +86,7 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: amount_discounted_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -60,7 +95,7 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: amount_due_original_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -69,7 +104,7 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: amount_due_remaining_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"
@@ -78,7 +113,7 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: tax_original_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "{% if _field._is_selected %}Tax Amount Original (@{label_get_target_currency}){%else%}Tax Amount Original (Target Currency){%endif%}"
@@ -87,7 +122,7 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: tax_remaining_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "{% if _field._is_selected %}Tax Amount Remaining (@{label_get_target_currency}){%else%}Tax Amount Remaining (Target Currency){%endif%}"
@@ -96,7 +131,7 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: overdue_receivables_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "{% if _field._is_selected %}Past Due Receivables (@{label_get_target_currency}){%else%}Past Due Receivables (Target Currency){%endif%}"
@@ -105,7 +140,7 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: doubtful_receivables_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_build}"

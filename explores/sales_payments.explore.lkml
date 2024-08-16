@@ -11,10 +11,9 @@ explore: sales_payments {
   fields: [ALL_FIELDS*,-otc_common_parameters_xvw.parameter_language]
 
   join: currency_conversion_sdt {
-    view_label: "Sales Payments: Lines Currency Conversion"
     type: left_outer
-    sql_on:  COALESCE(${sales_payments.exchange_raw},${sales_payments.transaction_raw}) = ${currency_conversion_sdt.conversion_date} AND
-      ${sales_payments.currency_code} = ${currency_conversion_sdt.from_currency} ;;
+    sql_on:  ${sales_payments.exchange_raw} = ${currency_conversion_sdt.conversion_date} AND
+             ${sales_payments.currency_code} = ${currency_conversion_sdt.from_currency} ;;
     relationship: many_to_one
     # no fields from currency conversion needed as all relevant fields are in sales_order__lines
     fields: []
@@ -42,7 +41,6 @@ explore: sales_payments {
     type: left_outer
     relationship: many_to_one
     sql_on: ${sales_payments.transaction_date} between ${dso_dynamic_days_sdt.dso_start_date} and ${dso_dynamic_days_sdt.dso_end_date} ;;
-    # fields: [dso_dynamic_days_sdt.parameter_dso_number_of_days]
   }
 
 

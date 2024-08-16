@@ -100,11 +100,11 @@
     title: Total Receivables
     explore: sales_payments_daily_agg
     type: single_value
-    fields: [sales_payments_daily_agg.total_receivables_target_currency,
-            sales_payments_daily_agg.total_overdue_receivables_target_currency,
-            sales_payments_daily_agg.total_doubtful_receivables_target_currency]
-    hidden_fields: [sales_payments_daily_agg.total_overdue_receivables_target_currency,
-            sales_payments_daily_agg.total_doubtful_receivables_target_currency]
+    fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,
+            sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted,
+            sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
+    hidden_fields: [sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted,
+            sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -130,10 +130,10 @@
     title: Total Past Due Receivables
     explore: sales_payments_daily_agg
     type: single_value
-    fields: [sales_payments_daily_agg.total_receivables_target_currency,
-             sales_payments_daily_agg.total_overdue_receivables_target_currency,
-             sales_payments_daily_agg.total_doubtful_receivables_target_currency]
-    hidden_fields: [sales_payments_daily_agg.total_receivables_target_currency,sales_payments_daily_agg.total_doubtful_receivables_target_currency]
+    fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,
+             sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted,
+             sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
+    hidden_fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -158,11 +158,11 @@
     title: Total Doubtful Receivables
     explore: sales_payments_daily_agg
     type: single_value
-    fields: [sales_payments_daily_agg.total_receivables_target_currency,
-              sales_payments_daily_agg.total_overdue_receivables_target_currency,
-              sales_payments_daily_agg.total_doubtful_receivables_target_currency]
-    hidden_fields: [sales_payments_daily_agg.total_receivables_target_currency,
-              sales_payments_daily_agg.total_overdue_receivables_target_currency]
+    fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,
+              sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted,
+              sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
+    hidden_fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,
+              sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -220,7 +220,7 @@
     title: Past Due Receivables by Age
     explore: sales_payments
     type: looker_bar
-    fields: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_overdue_receivables_target_currency]
+    fields: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_overdue_receivables_target_currency_formatted]
     pivots: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     filters:
       sales_payments.is_open_and_overdue: 'Yes'
@@ -284,7 +284,7 @@
     explore: sales_payments_daily_agg
     type: looker_bar
     fields: [sales_payments_daily_agg.bill_to_customer_number, sales_payments_daily_agg.bill_to_customer_name,
-      sales_payments_daily_agg.total_receivables_target_currency, sales_payments_daily_agg.cumulative_total_receivables]
+      sales_payments_daily_agg.total_receivables_target_currency_formatted, sales_payments_daily_agg.cumulative_total_receivables]
     hidden_fields: [sales_payments_daily_agg.bill_to_customer_number, sales_payments_daily_agg.cumulative_total_receivables]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
@@ -292,14 +292,14 @@
     series_types:
       cumulative_percent_of_total_receivables: line
     series_colors:
-      sales_payments_daily_agg.total_receivables_target_currency: "#2596be"
+      sales_payments_daily_agg.total_receivables_target_currency_formatted: "#2596be"
       cumulative_percent_of_total_receivables: "#000"
     limit: 10
     total: true
     # Use Table Calculations for Cumulative Percent of Total Receivables
     dynamic_fields:
     - category: table_calculation
-      expression: "(${sales_payments_daily_agg.cumulative_total_receivables} / ${sales_payments_daily_agg.total_receivables_target_currency:total} )*100"
+      expression: "(${sales_payments_daily_agg.cumulative_total_receivables} / ${sales_payments_daily_agg.total_receivables_target_currency_formatted:total} )*100"
       label: Cumulative Percent of Total Receivables
       value_format:
       value_format_name: decimal_0
@@ -321,8 +321,8 @@
     show_null_labels: false
     show_totals_labels: false
     show_silhouette: false
-    y_axes: [{label: '', orientation: top, series: [{axisId: sales_payments_daily_agg.total_receivables_target_currency,
-            id: sales_payments_daily_agg.total_receivables_target_currency, name: Total Receivables
+    y_axes: [{label: '', orientation: top, series: [{axisId: sales_payments_daily_agg.total_receivables_target_currency_formatted,
+            id: sales_payments_daily_agg.total_receivables_target_currency_formatted, name: Total Receivables
               (USD)}], showLabels: false, showValues: false, unpinAxis: false, tickDensity: default,
         tickDensityCustom: 5, type: linear}, {label: !!null '', orientation: bottom,
         series: [{axisId: cumulative_percent_of_total_receivables, id: cumulative_percent_of_total_receivables,
@@ -391,7 +391,7 @@
     explore: sales_payments
     type: looker_bar
     fields: [sales_payments.bill_to_customer_number, sales_payments.bill_to_customer_name,
-      sales_payments.total_overdue_receivables_target_currency, sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
+      sales_payments.total_overdue_receivables_target_currency_formatted, sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     pivots: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     hidden_fields: [sales_payments.bill_to_customer_number]
     hidden_pivots:
@@ -400,7 +400,7 @@
     filters:
       sales_payments.is_open_and_overdue: 'Yes'
       sales_payments.payment_class_code: '-PMT'
-    sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_receivables_target_currency
+    sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_receivables_target_currency_formatted
         desc 4]
     limit: 5000
     row_total: right
