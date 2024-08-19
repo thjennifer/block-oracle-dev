@@ -6,7 +6,7 @@ view: +sales_payments_dso_days_agg_pdt {
       # datagroup_trigger: once_a_day_at_5
 
       sql:
-        {% assign p = otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value %}
+        {% assign p = "demo" %}
         {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
         {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}
         SELECT

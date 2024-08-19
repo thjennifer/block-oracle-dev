@@ -209,7 +209,7 @@
         business_unit: sales_payments_dso_days_agg_pdt.business_unit_name
         customer_country: sales_payments_dso_days_agg_pdt.bill_to_customer_country
         customer_name: sales_payments_dso_days_agg_pdt.bill_to_customer_name
-        target_currency: otc_common_parameters_xvw.parameter_target_currency
+        target_currency: sales_payments_dso_days_agg_pdt.target_currency_code
         dso_days: sales_payments_dso_days_agg_pdt.dso_days_string
     row: 4
     col: 5
