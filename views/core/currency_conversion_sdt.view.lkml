@@ -1,11 +1,22 @@
-######################
-# select from CurrencyConversion for given:
-#   - Client ID
-#   - Exchange Rate Type
-#   - Target Currency (from parameter select_target_currency)
-#   - Conversion Date Range (from filter partition_date_filter)
-######################
-
+#########################################################{
+# PURPOSE
+# SQL Derived Table (SDT) which selects a subset of CurrencyConversion
+# where TO_CURRENCY matches the value in parameter_target_currency.
+#
+# Must be joined to an Explore that includes the view:
+#   otc_common_parameters_xvw
+#
+# SOURCE
+#   `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.CurrencyRateMD`
+#
+# REFERENCED BY
+#   Explores & Views:
+#     sales_orders
+#     sales_invoices
+#     sales_payments
+#     sales_applied_receivables
+#
+#########################################################}
 
 view: currency_conversion_sdt {
   derived_table: {
@@ -50,15 +61,6 @@ view: currency_conversion_sdt {
     sql: ${TABLE}.CONVERSION_RATE ;;
     value_format_name: decimal_4
   }
-
-  dimension: conversion_rate2 {
-    type: number
-    sql: ${TABLE}.CONVERSION_RATE ;;
-    value_format_name: decimal_4
-  }
-
-
-
 
 
 }

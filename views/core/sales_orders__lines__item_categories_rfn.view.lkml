@@ -6,7 +6,7 @@
 # SOURCES
 # Refines View sales_orders__lines__item_categories (defined in /views/base folder)
 # Extends View:
-#   otc_common_item_descriptions_ext
+#   otc_common_item_categories_ext
 #
 # REFERENCED BY
 # not used but could optionally be added to Explore sales_orders

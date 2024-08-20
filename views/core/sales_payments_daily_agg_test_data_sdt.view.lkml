@@ -13,7 +13,7 @@
 #
 #########################################################}
 
-view: sales_payments_daily_agg_test_data_pdt {
+view: sales_payments_daily_agg_test_data_sdt {
  derived_table: {
   # datagroup_trigger: one_time
    sql:

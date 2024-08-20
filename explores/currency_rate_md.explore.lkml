@@ -1,6 +1,14 @@
 #########################################################{
 # PURPOSE
-# Hidden Explore used solely as suggest dimension for paramter_target_currency
+# Hidden Explore used as suggest dimension for
+# parameter_target_currency and dashboard filter
+#
+# SOURCE
+#   base view: currency_rate_md
+#
+# REFERENCED BY
+#   View otc_common_parameters_xvw
+#   LookML Dashboard otc_template_core
 #
 #########################################################}
 

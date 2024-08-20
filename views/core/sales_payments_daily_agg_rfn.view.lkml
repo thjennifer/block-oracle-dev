@@ -12,7 +12,7 @@
 #   Extends views:
 #     otc_common_currency_fields_ext
 #     sales_payments_common_amount_measures_ext
-#   References sales_payments_daily_agg_test_data_pdt if test data is used
+#   References sales_payments_daily_agg_test_data_sdt if test data is used
 #
 # REFERENCED BY
 #   Explore sales_payments_daily_agg
@@ -29,7 +29,7 @@
 # - This view includes Payments related to Invoices, Cash Receipts, etc...
 #   Use payment_class_code (e.g., 'INV' vs. 'PMT') or is_payment_transaction to pick which to include.
 # - Amounts where target_currency matches value of parameter_target_currency are defined in this view.
-# - If test data is used, references sales_payments_daily_agg_test_data_pdt instead of table sales_payments_daily_agg.
+# - If test data is used, references sales_payments_daily_agg_test_data_sdt instead of table sales_payments_daily_agg.
 #   so that doubtful receivables can be re-calculated using the test data target end date. See sql_table_name property.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 #
@@ -38,14 +38,14 @@
 include: "/views/base/sales_payments_daily_agg.view"
 include: "/views/core/otc_common_currency_fields_ext.view"
 include: "/views/core/sales_payments_common_amount_measures_ext.view"
-include: "/views/core/sales_payments_daily_agg_test_data_pdt.view"
+include: "/views/core/sales_payments_daily_agg_test_data_sdt.view"
 
 
 view: +sales_payments_daily_agg {
   extends: [otc_common_currency_fields_ext, sales_payments_common_amount_measures_ext]
   fields_hidden_by_default: yes
 
-  sql_table_name: {%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}{%- if test_data == 'YES' -%}${sales_payments_daily_agg_test_data_pdt.SQL_TABLE_NAME}{%- else -%}`@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg`{%- endif -%} ;;
+  sql_table_name: {%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}{%- if test_data == 'YES' -%}${sales_payments_daily_agg_test_data_sdt.SQL_TABLE_NAME}{%- else -%}`@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg`{%- endif -%} ;;
 
   dimension: key {
     hidden: yes
