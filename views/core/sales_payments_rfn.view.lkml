@@ -8,12 +8,14 @@
 # Refines View sales_payments
 # Extends Views:
 #   otc_common_fiscal_gl_dates_ext
+#   otc_common_currency_fields_ext
 #   sales_payments_common_amount_measures_ext
 #
 # REFERENCED BY
 #   Explore sales_payments
 #
 # EXTENDED FIELDS
+#   target_currency_code, is_incomplete_conversion, alert_note_for_incomplete_currency_conversion,
 #   total_amount_adjusted_target_currency, total_amount_applied_target_currency, etc...
 #
 # NOTES
@@ -28,10 +30,12 @@
 
 include: "/views/base/sales_payments.view"
 include: "/views/core/otc_common_fiscal_gl_dates_ext.view"
+include: "/views/core/otc_common_currency_fields_ext.view"
 include: "/views/core/sales_payments_common_amount_measures_ext.view"
 
+
 view: +sales_payments {
-  extends: [otc_common_fiscal_gl_dates_ext,sales_payments_common_amount_measures_ext]
+  extends: [otc_common_fiscal_gl_dates_ext,otc_common_currency_fields_ext,sales_payments_common_amount_measures_ext]
   fields_hidden_by_default: yes
 
   dimension: payment_schedule_id {
@@ -263,22 +267,14 @@ view: +sales_payments {
 #########################################################
 # DIMENSIONS: Currency Conversion
 #{
+# target_currency_code and is_incomplete_conversion extended from
+# otc_common_currency_fields_ext
 
   dimension: currency_code {
     hidden: no
-    type: string
     group_label: "Currency Conversion"
     label: "Currency (Source)"
-    description: "Currency of the payment transaction."
-  }
-
-  dimension: target_currency_code {
-    hidden: no
-    type: string
-    group_label: "Currency Conversion"
-    label: "Currency (Target)"
-    description: "The currency into which the order's source currency is converted."
-    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
+    description: "{%- assign v = _view._name | split: '_' -%}Currency of the {{v[1] | remove: 's' | append: '.'}}"
   }
 
   dimension: currency_conversion_rate {
@@ -290,10 +286,7 @@ view: +sales_payments {
   }
 
   dimension: is_incomplete_conversion {
-    hidden: no
-    type: yesno
-    group_label: "Currency Conversion"
-    description: "Yes, if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies."
+    # label, group_label, description defined in otc_common_currency_fields_ext
     sql: ${currency_code} <> ${target_currency_code} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 

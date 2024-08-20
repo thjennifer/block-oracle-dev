@@ -10,15 +10,18 @@
 #
 # SOURCES
 # Refines base view sales_order_daily_agg__lines
-# Extends view otc_common_item_categories_ext
-# Extends view sales_orders_common_amount_measures_ext
+# Extends views:
+#   otc_common_item_categories_ext
+#   otc_common_currency_fields_ext
+#   sales_orders_common_amount_measures_ext
 #
 # REFERENCED BY
 # Explore sales_orders_daily_agg
 #
 # EXTENDED FIELDS
 #    item_description, language_code,
-#    category_id, category_description, category_name_code
+#    category_id, category_description, category_name_code,
+#    target_currency_code, is_incomplete_conversion, alert_note_for_incomplete_currency_conversion,
 #    total_sales_amount_target_currency, total_booking_amount_target_currency, and other amounts
 #
 # REPEATED STRUCTS
@@ -38,13 +41,15 @@
 
 include: "/views/base/sales_orders_daily_agg__lines.view"
 include: "/views/core/otc_common_item_categories_ext.view"
+include: "/views/core/otc_common_currency_fields_ext.view"
 include: "/views/core/sales_orders_common_amount_measures_ext.view"
+
 
 
 view: +sales_orders_daily_agg__lines {
   fields_hidden_by_default: yes
   label: "Sales Orders Daily Agg: Item Categories"
-  extends: [otc_common_item_categories_ext,sales_orders_common_amount_measures_ext]
+  extends: [otc_common_item_categories_ext, otc_common_currency_fields_ext, sales_orders_common_amount_measures_ext]
 
   dimension: key {
     hidden: yes
@@ -107,18 +112,13 @@ view: +sales_orders_daily_agg__lines {
 # Pulls amounts from AMOUNTS Repeated Struct so that a separate view
 # does not have to be included in Explore.
 #
+# Target Currency Coce and Is Incomplete Conversion extended from
+# otc_common_currency_fields_ext
+#
 # Only the Amount for the Target Currency Code that matches the value
 # in otc_common_parameters_xvw.parameter_target_currency is returned.
 #
 # Dimensions hidden from Explore as Measures are shown instead
-
-  dimension: target_currency_code {
-    hidden: no
-    type: string
-    # group_label: "Amounts"
-    label: "Currency (Target)"
-    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
-  }
 
   dimension: ordered_amount_target_currency {
     hidden: yes
@@ -166,13 +166,6 @@ view: +sales_orders_daily_agg__lines {
     group_label: "Amounts"
     sql: (select SUM(TOTAL_INVOICED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code} ) ;;
     value_format_name: decimal_2
-  }
-
-  dimension: is_incomplete_conversion {
-    hidden: no
-    type: yesno
-    # group_label: "Amounts"
-    sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
   }
 
 #} end amount dimensions
@@ -233,18 +226,6 @@ view: +sales_orders_daily_agg__lines {
   }
 
 #} end amounts
-
-#########################################################
-# MEASURES: Misc
-#{
-  measure: alert_note_for_incomplete_currency_conversion {
-    hidden: no
-    type: max
-    description: "Provides a note in html when a source currency could not be converted to target currency. Add this measure to a table or single value visualization to alert users that amounts in target currency may be understated."
-    sql: ${is_incomplete_conversion} ;;
-    html: {% if value == true %}<span style='color: red; font-size: 16px;'>&#9888; </span> For timeframe and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
-  }
-#} end misc
 
 
 

@@ -6,6 +6,7 @@
 # SOURCES
 # Refines View sales_orders (defined in /views/base folder)
 # Extends Views:
+#   otc_common_currency_fields_ext
 #   sales_orders_common_dimensions_ext
 #   sales_orders_common_count_measures_ext
 #
@@ -13,13 +14,11 @@
 # Explore sales_orders
 #
 # EXTENDED FIELDS
-# Extends common dimensions:
-#    parameter_customer_type, selected_customer_number, selected_customer_name,
-#    selected_customer_country plus bill_to_customer_*, ship_to_customer_*,
-#    and sold_to_customer_* dimensions
-#
-# Extends common count and percent of sales orders measures:
-#    e.g., cancelled_sales_order_percent, fulfilled_sales_order_percent, etc...
+#   target_currency_code, is_incomplete_conversion, alert_note_for_incomplete_currency_conversion
+#   parameter_customer_type, selected_customer_number, selected_customer_name,
+#   selected_customer_country plus bill_to_customer_*, ship_to_customer_*,
+#     and sold_to_customer_* dimensions
+#   cancelled_sales_order_percent, fulfilled_sales_order_percent, etc...
 #
 # REPEATED STRUCTS
 # - Also includes Repeated Struct for LINES. See view sales_orders__lines for
@@ -34,12 +33,13 @@
 
 
 include: "/views/base/sales_orders.view"
+include: "/views/core/otc_common_currency_fields_ext.view"
 include: "/views/core/sales_orders_common_dimensions_ext.view"
 include: "/views/core/sales_orders_common_count_measures_ext.view"
 
 
 view: +sales_orders {
-  extends: [sales_orders_common_dimensions_ext,sales_orders_common_count_measures_ext]
+  extends: [otc_common_currency_fields_ext, sales_orders_common_dimensions_ext, sales_orders_common_count_measures_ext]
 
   fields_hidden_by_default: yes
 
@@ -378,20 +378,14 @@ view: +sales_orders {
 #########################################################
 # DIMENSIONS: Currency Conversion
 #{
+# target_currency_code and is_incomplete_conversion extended
+# from otc_common_currency_fields_ext
 
   dimension: currency_code {
     hidden: no
     group_label: "Currency Conversion"
     label: "Currency (Source)"
-    description: "Currency of the order."
-  }
-
-  dimension: target_currency_code {
-    hidden: no
-    group_label: "Currency Conversion"
-    label: "Currency (Target)"
-    description: "Converted target currency of the order from the source currency."
-    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
+    description: "{%- assign v = _view._name | split: '_' -%}Currency of the {{v[1] | remove: 's' | append: '.'}}"
   }
 
   dimension: currency_conversion_rate {
@@ -403,9 +397,6 @@ view: +sales_orders {
   }
 
   dimension: is_incomplete_conversion {
-    hidden: no
-    type: yesno
-    group_label: "Currency Conversion"
     sql: ${currency_code} <> ${target_currency_code} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 
@@ -662,17 +653,6 @@ view: +sales_orders {
 
 #} end percent of sales orders
 
-#########################################################
-# MEASURES: Misc
-#{
-  measure: alert_note_for_incomplete_currency_conversion {
-    hidden: no
-    type: max
-    description: "Provides a note in html when a source currency could not be converted to target currency. Add this measure to a table or single value visualization to alert users that amounts in target currency may be understated."
-    sql: ${is_incomplete_conversion} ;;
-    html: {% if value == true %}For timeframe and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
-  }
-#} end misc
 
 #########################################################
 # SETS

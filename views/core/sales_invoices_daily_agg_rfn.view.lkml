@@ -13,6 +13,7 @@
 # SOURCES
 #   Refines base view sales_invoices_daily_agg
 #   Extends view otc_common_item_categories_ext
+#   Extends view otc_common_currency_fields_ext
 #   Extends view sales_invoices_common_amount_measures_ext
 #
 # REFERENCED BY
@@ -20,6 +21,7 @@
 #
 # EXTENDED FIELDS
 #    category_id, category_description, category_name_code
+#    target_currency_code, is_incomplete_conversion, alert_note_for_incomplete_currency_conversion
 #    total_transaction_amount_target_currency, total_tax_amount_target_currency, and other amounts
 #
 # REPEATED STRUCTS
@@ -34,13 +36,14 @@
 
 include: "/views/base/sales_invoices_daily_agg.view"
 include: "/views/core/otc_common_item_categories_ext.view"
+include: "/views/core/otc_common_currency_fields_ext.view"
 include: "/views/core/sales_invoices_common_amount_measures_ext.view"
 
 view: +sales_invoices_daily_agg {
 
   fields_hidden_by_default: yes
 
-  extends: [otc_common_item_categories_ext,sales_invoices_common_amount_measures_ext]
+  extends: [otc_common_item_categories_ext,otc_common_currency_fields_ext,sales_invoices_common_amount_measures_ext]
 
   dimension: key {
     hidden: yes
@@ -187,28 +190,6 @@ view: +sales_invoices_daily_agg {
 
 #} end dates
 
-
-#########################################################
-# DIMENSIONS: Currency Conversion
-#{
-  dimension: target_currency_code {
-    hidden: no
-    type: string
-    group_label: "Currency Conversion"
-    label: "Currency (Target)"
-    description: "Converted target currency of the invoice from the source currency."
-    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
-  }
-
-  dimension: is_incomplete_conversion {
-    hidden: no
-    type: yesno
-    group_label: "Currency Conversion"
-    description: "Yes, if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies."
-    sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-  }
-
-#} end currency conversion dimensions
 
 #########################################################
 # DIMENSIONS: Amounts in Target Currency

@@ -5,9 +5,13 @@
 #
 # SOURCES
 # Refines View sales_invoices
+# Extends view otc_common_currency_fields_ext.view
 #
 # REFERENCED BY
 # Explore sales_invoices
+#
+# EXTENDED FIELDS
+#    target_currency_code, is_incomplete_conversion, alert_note_for_incomplete_currency_conversion
 #
 # REPEATED STRUCTS
 # - Also includes Repeated Struct for LINES. See view sales_invoices__lines for
@@ -20,10 +24,13 @@
 #########################################################}
 
 include: "/views/base/sales_invoices.view"
+include: "/views/core/otc_common_currency_fields_ext.view"
 
 view: +sales_invoices {
 
   fields_hidden_by_default: yes
+
+  extends: [otc_common_currency_fields_ext]
 
   dimension: invoice_id {
     hidden: no
@@ -187,20 +194,14 @@ view: +sales_invoices {
 #########################################################
 # DIMENSIONS: Currency Conversion
 #{
+# target_currency_code and is_incomplete_conversion extended from
+# otc_common_currency_fields_ext
 
   dimension: currency_code {
     hidden: no
     group_label: "Currency Conversion"
     label: "Currency (Source)"
-    description: "Currency of the invoice transaction."
-  }
-
-  dimension: target_currency_code {
-    hidden: no
-    group_label: "Currency Conversion"
-    label: "Currency (Target)"
-    description: "Converted target currency of the invoice from the source currency."
-    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
+    description: "{%- assign v = _view._name | split: '_' -%}Currency of the {{v[1] | remove: 's' | append: '.'}}"
   }
 
   dimension: currency_conversion_rate {
@@ -212,9 +213,7 @@ view: +sales_invoices {
   }
 
   dimension: is_incomplete_conversion {
-    hidden: no
-    type: yesno
-    group_label: "Currency Conversion"
+    # type, label, group_label, description defined in otc_common_currency_fields_ext
     sql: ${currency_code} <> ${target_currency_code} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 

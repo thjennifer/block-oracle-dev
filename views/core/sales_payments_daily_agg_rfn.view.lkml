@@ -9,13 +9,16 @@
 #
 # SOURCES
 #   Refines base view sales_payments_daily_agg
-#   Extends view sales_payments_common_amount_measures_ext
+#   Extends views:
+#     otc_common_currency_fields_ext
+#     sales_payments_common_amount_measures_ext
 #   References sales_payments_daily_agg_test_data_pdt if test data is used
 #
 # REFERENCED BY
 #   Explore sales_payments_daily_agg
 #
 # EXTENDED FIELDS
+#   target_currency_code, is_incomplete_conversion, alert_note_for_incomplete_currency_conversion,
 #   total_amount_adjusted_target_currency, total_amount_applied_target_currency, etc...
 #
 # REPEATED STRUCTS
@@ -33,13 +36,13 @@
 #########################################################}
 
 include: "/views/base/sales_payments_daily_agg.view"
+include: "/views/core/otc_common_currency_fields_ext.view"
 include: "/views/core/sales_payments_common_amount_measures_ext.view"
 include: "/views/core/sales_payments_daily_agg_test_data_pdt.view"
 
 
-
 view: +sales_payments_daily_agg {
-  extends: [sales_payments_common_amount_measures_ext]
+  extends: [otc_common_currency_fields_ext, sales_payments_common_amount_measures_ext]
   fields_hidden_by_default: yes
 
   sql_table_name: {%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}{%- if test_data == 'YES' -%}${sales_payments_daily_agg_test_data_pdt.SQL_TABLE_NAME}{%- else -%}`@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg`{%- endif -%} ;;
@@ -133,27 +136,6 @@ view: +sales_payments_daily_agg {
 
 #} end date dimensions
 
-#########################################################
-# DIMENSIONS: Currency Conversion
-#{
-  dimension: target_currency_code {
-    hidden: no
-    type: string
-    group_label: "Currency Conversion"
-    label: "Currency (Target)"
-    description:  "The target currency code represents the currency into which the order's source currency is converted."
-    sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
-  }
-
-  dimension: is_incomplete_conversion {
-    hidden: no
-    type: yesno
-    group_label: "Currency Conversion"
-    description: "Yes, if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies."
-    sql: (select MAX(IS_INCOMPLETE_CONVERSION) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-  }
-
-#} end currency conversion dimensions
 
 #########################################################
 # DIMENSIONS: Amounts

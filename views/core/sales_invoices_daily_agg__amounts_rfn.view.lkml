@@ -5,14 +5,16 @@
 #
 # SOURCES
 #   Refines View sales_invoices_daily_agg__amounts
-#   Extends View:
+#   Extends Views:
+#     otc_common_currency_fields_ext
 #     sales_invoices_common_amount_measures_ext
 #
 # REFERENCED BY
 # not used but could optionally be added to sales_invoices_daily_agg explore
 #
 # EXTENDED FIELDS
-#    total_transaction_amount_target_currency, total_tax_amount_target_currency, and other amounts
+#   target_currency_code, is_incomplete_conversion, alert_note_for_incomplete_currency_conversion
+#   total_transaction_amount_target_currency, total_tax_amount_target_currency, and other amounts
 #
 # NOTES
 # - Amounts where target currency matches the value of parameter_target_currency are pulled into
@@ -25,12 +27,13 @@
 #########################################################}
 
 include: "/views/base/sales_invoices_daily_agg__amounts.view"
+include: "/views/core/otc_common_currency_fields_ext.view"
 include: "/views/core/sales_invoices_common_amount_measures_ext.view"
 
 view: +sales_invoices_daily_agg__amounts {
 
   fields_hidden_by_default: yes
-  extends: [sales_invoices_common_amount_measures_ext]
+  extends: [otc_common_currency_fields_ext, sales_invoices_common_amount_measures_ext]
 
   dimension: key {
     hidden: yes
@@ -39,15 +42,13 @@ view: +sales_invoices_daily_agg__amounts {
   }
 
   dimension: target_currency_code {
-    hidden: no
-    type: string
-    label: "Currency (Target)"
+    # type, label, description defined in otc_common_currency_fields_ext
     sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
     full_suggestions: yes
   }
 
   dimension: is_incomplete_conversion {
-    hidden: no
+    # type, label, description defined in otc_common_currency_fields_ext
     sql: COALESCE(${TABLE}.IS_INCOMPLETE_CONVERSION,FALSE) ;;
     full_suggestions: yes
   }

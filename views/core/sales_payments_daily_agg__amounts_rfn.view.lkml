@@ -6,12 +6,14 @@
 # SOURCES
 #   Refines View sales_payments_daily_agg__amounts
 #   Extends View:
+#     otc_common_currency_fields_ext
 #     sales_payments_common_amount_measures_ext
 #
 # REFERENCED BY
 #   not used but could optionally be added to sales_payments_daily_agg explore
 #
 # EXTENDED FIELDS
+#   target_currency_code, is_incomplete_conversion, alert_note_for_incomplete_currency_conversion,
 #   total_amount_adjusted_target_currency, total_amount_applied_target_currency, etc...
 #
 # NOTES
@@ -25,11 +27,13 @@
 #########################################################}
 
 include: "/views/base/sales_payments_daily_agg__amounts.view"
+include: "/views/core/otc_common_currency_fields_ext.view"
 include: "/views/core/sales_payments_common_amount_measures_ext.view"
+
 
 view: +sales_payments_daily_agg__amounts {
 
-  extends: [sales_payments_common_amount_measures_ext]
+  extends: [otc_common_currency_fields_ext, sales_payments_common_amount_measures_ext]
   fields_hidden_by_default: yes
 
   dimension: key {
@@ -39,14 +43,14 @@ view: +sales_payments_daily_agg__amounts {
   }
 
   dimension: target_currency_code {
-    hidden: no
-    label: "Currency (Target)"
+    #label: defined in otc_common_currency_fields_ext
     sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
     full_suggestions: yes
   }
 
   dimension: is_incomplete_conversion {
-    hidden: no
+    #label: defined in otc_common_currency_fields_ext
+    sql: COALESCE(${TABLE}.IS_INCOMPLETE_CONVERSION,FALSE) ;;
     full_suggestions: yes
   }
 

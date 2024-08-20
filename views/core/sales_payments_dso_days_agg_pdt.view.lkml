@@ -12,10 +12,14 @@
 #
 # SOURCES
 #   `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg`
+#   Extends view otc_common_currency_fields_ext.view
 #
 # REFERENCED BY
 #   Explore sales_payments_dso_days_agg_pdt
 #   LookML dashboard otc_billing_accounts_receivable
+#
+# EXTENDED FIELDS
+#   target_currency_code, is_incomplete_conversion, alert_note_for_incomplete_currency_conversion,
 #
 # NOTES
 # - Only Invoice rows are used in DSO calc (IS_PAYMENT_TRANSACTION = false)
@@ -23,10 +27,13 @@
 #   even if not included in query. If query returns more rows than expected, add these two dimensions
 #   to the query or filter to single value for each.
 #########################################################}
+include: "/views/core/otc_common_currency_fields_ext.view"
 
 view: sales_payments_dso_days_agg_pdt {
 
     label: "Sales Payments DSO Days Agg"
+
+    extends: [otc_common_currency_fields_ext]
 
     derived_table: {
       datagroup_trigger: sales_payments_daily_agg_change
@@ -136,7 +143,7 @@ view: sales_payments_dso_days_agg_pdt {
     }
 
     dimension: target_currency_code {
-      type: string
+      #type, label and description defined in otc_common_currency_fields_ext
       sql: ${TABLE}.TARGET_CURRENCY_CODE ;;
     }
 
@@ -153,7 +160,7 @@ view: sales_payments_dso_days_agg_pdt {
     }
 
     dimension: is_incomplete_conversion {
-      type: yesno
+      #type, label and description defined in otc_common_currency_fields_ext
       sql: ${TABLE}.IS_INCOMPLETE_CONVERSION ;;
     }
 
