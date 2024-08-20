@@ -1,7 +1,7 @@
 #########################################################{
 # PURPOSE
 # based on user inputs for bucket size and number of buckets,
-# create a table dynamically with fields:
+# creates a table dynamically with fields:
 #   aging_bucket_number
 #   aging_bucket_name
 #   start_days
@@ -22,7 +22,7 @@
 #   '30 Days Past Due' and will include invoices that are between 1 and 30 days old. The following bucket will be called
 #   '60 Days Past Due' and will include invoices that are between 31 and 60 days old. And the third bucket will be called
 #   '61+ Days Past Due' and will include invoices greater than or equal to 61 days old.
-#   A 'Current' bucket where age is <=0 days will be added.
+#   A 'Current' bucket where age is <=0 days will also be included.
 #
 #########################################################}
 

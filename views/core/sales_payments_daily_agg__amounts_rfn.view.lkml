@@ -16,9 +16,9 @@
 #
 # NOTES
 # - Amounts where target currency matches the value of parameter_target_currency are pulled into
-#   sales_payments_daily_agg so this view is not used
+#   sales_payments_daily_agg so this view is not used.
 # - Original fields TOTAL_AMOUNT_ADJUSTED, etc... replaced with dimensions like amount_adjusted_target_currency to
-#   faciltate extending payment amount measures across multiple views.
+#   facilitate extending payment amount measures across multiple views.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #
@@ -30,7 +30,6 @@ include: "/views/core/sales_payments_common_amount_measures_ext.view"
 view: +sales_payments_daily_agg__amounts {
 
   extends: [sales_payments_common_amount_measures_ext]
-
   fields_hidden_by_default: yes
 
   dimension: key {
@@ -147,9 +146,6 @@ view: +sales_payments_daily_agg__amounts {
     sql: ${total_doubtful_remaining}   ;;
     value_format_name: decimal_2
   }
-
-
-
 
 
 }

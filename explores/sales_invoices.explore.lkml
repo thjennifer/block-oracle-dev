@@ -29,6 +29,14 @@
 #    1. the JOIN properties for optional view sales_invoices__lines__item_descriptions
 #    2. in the view sales_invoices__lines for the item_description and language_code dimensions
 #
+# TARGET CURRENCY CODE
+#   - This Explore shows only 1 Target Currency at a time based on the value in
+#     parameter_target_currency.
+#       * Users can change value of parameter on provided LookML dashboards or Explore.
+#       * In the provided LookML dashboards, the default value for this parameter is the value in
+#         the user attribute cortex_oracle_ebs_default_currency.
+#   - This filter condition is applied in the view currency_conversion_sdt.
+#
 # OTHER NOTES
 #   - The view definitions for sales_invoices and sales_invoices__lines include a subset of the available fields.
 #     To include/exclude additional fields in the Explore, refer to the view definitions and

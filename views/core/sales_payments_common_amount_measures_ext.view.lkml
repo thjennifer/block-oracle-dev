@@ -165,6 +165,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: running_total
     group_label: "Amounts"
+    label: "@{label_build}"
     sql: ${total_receivables_target_currency} ;;
     direction: "column"
     value_format_name: decimal_2
@@ -302,6 +303,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: number
     group_label: "Amounts with Large Number Format"
+    label: "@{label_build_formatted}"
     sql: ${cumulative_total_receivables} ;;
     value_format_name: format_large_numbers_d1
     html: @{format_big_numbers} ;;

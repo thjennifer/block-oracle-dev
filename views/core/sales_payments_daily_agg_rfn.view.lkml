@@ -24,10 +24,10 @@
 #
 # CAVEATS
 # - This view includes Payments related to Invoices, Cash Receipts, etc...
-#   Use payment_class_code to pick which to include (e.g., 'INV' vs. 'PMT').
+#   Use payment_class_code (e.g., 'INV' vs. 'PMT') or is_payment_transaction to pick which to include.
 # - Amounts where target_currency matches value of parameter_target_currency are defined in this view.
-# - If test data is used, references sales_payments_daily_agg_test_data_pdt instad of table sales_payments_daily_agg.
-#   so that doubtful receivables can be re-calculated using test data target end date. See sql_table_name property.
+# - If test data is used, references sales_payments_daily_agg_test_data_pdt instead of table sales_payments_daily_agg.
+#   so that doubtful receivables can be re-calculated using the test data target end date. See sql_table_name property.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 #
 #########################################################}
@@ -35,6 +35,7 @@
 include: "/views/base/sales_payments_daily_agg.view"
 include: "/views/core/sales_payments_common_amount_measures_ext.view"
 include: "/views/core/sales_payments_daily_agg_test_data_pdt.view"
+
 
 
 view: +sales_payments_daily_agg {
@@ -49,9 +50,16 @@ view: +sales_payments_daily_agg {
     sql: CONCAT(${transaction_raw},${bill_to_site_use_id},${business_unit_id},${payment_class_code}) ;;
   }
 
-  dimension: payment_class_code {
+   dimension: payment_class_code {
     hidden: no
+    description: "Class of payment including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee, BR - Bills Receivable, CB - Chargeback, PMT - cash receipts,"
   }
+
+  dimension: is_payment_transaction {
+    hidden: no
+    description: "Yes if Payment Class Code = 'PMT' else No."
+  }
+
   dimension: business_unit_id {
     hidden: no
     value_format_name: id

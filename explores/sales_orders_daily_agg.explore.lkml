@@ -44,7 +44,7 @@
 #     sales_orders_daily_agg__lines__amounts does not need to be included in the Explore.
 #     However, you can optionally include by uncommenting the join statement below.
 #
-#   - The parameter named parameter_language is not used in this explore so the FIELDS property excludes it.
+#   - The common parameter named parameter_language is not used in this explore so the FIELDS property excludes it.
 #
 #########################################################}
 

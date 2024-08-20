@@ -56,8 +56,8 @@
     ui_config:
       type: button_toggles
       display: inline
-    explore: dso_days_sdt
-    field: dso_days_sdt.dso_days_string
+    explore: sales_payments_dso_days_agg_pdt
+    field: sales_payments_dso_days_agg_pdt.dso_days_string
 
   elements:
   - name: dashboard_navigation

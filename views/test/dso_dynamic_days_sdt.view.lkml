@@ -4,8 +4,8 @@ view: dso_dynamic_days_sdt {
     sql: {% assign d = parameter_dso_number_of_days._parameter_value %}
     SELECT
     {{d}} AS DSO_DAYS,
-    DATE_SUB(DATE(@{default_target_date}) - 1, INTERVAL {{d}} DAY) AS DSO_START_DATE,
-    @{default_target_date} - 1 AS DSO_END_DATE
+    DATE(DATE_SUB(DATE(@{default_target_date}) - 1, INTERVAL {{d}} DAY)) AS DSO_START_DATE,
+    DATE(@{default_target_date} - 1) AS DSO_END_DATE
     ;;
   }
 
@@ -41,6 +41,7 @@ view: dso_dynamic_days_sdt {
     group_label: "DSO Attributes"
     label: "DSO Start Date"
     sql: ${TABLE}.DSO_START_DATE ;;
+    convert_tz: no
   }
 
   dimension: dso_end_date {
@@ -48,18 +49,36 @@ view: dso_dynamic_days_sdt {
     group_label: "DSO Attributes"
     label: "DSO End Date"
     sql: ${TABLE}.DSO_END_DATE ;;
+    convert_tz: no
+  }
+
+  measure: dso_period_receivables {
+    hidden: yes
+    type: sum
+    label: "DSO Period Total Receivables (Target Currency)"
+    sql: ${sales_payments_daily_agg.amount_due_remaining_target_currency};;
+    filters: [dso_dynamic_days_sdt.dso_days: ">0",sales_payments_daily_agg.payment_class_code: "-PMT"]
+  }
+
+  measure: dso_period_amount_original {
+    hidden: yes
+    type: sum
+    label: "DSO Period Total Amount Original (Target Currency)"
+    sql: ${sales_payments_daily_agg.amount_due_original_target_currency};;
+    filters: [dso_dynamic_days_sdt.dso_days: ">0",sales_payments_daily_agg.payment_class_code: "-PMT"]
   }
 
   measure: days_sales_outstanding {
+    hidden: no
     type: number
     label: "@{label_build}"
-    sql: SAFE_DIVIDE(${sales_payments.total_receivables_target_currency},${sales_payments.total_amount_original_target_currency}) * ANY_VALUE(${dso_days}) ;;
+    sql: SAFE_DIVIDE(${dso_period_receivables},${dso_period_amount_original}) * ANY_VALUE(${dso_dynamic_days_sdt.dso_days}) ;;
     value_format_name: decimal_1
     drill_fields: [dso_details*]
   }
 
-  set: dso_details{
-    fields: [sales_payments.bill_to_customer_name,sales_payments.bill_to_customer_country,days_sales_outstanding]
+  set: dso_details {
+    fields: [sales_payments_daily_agg.bill_to_customer_name,sales_payments_daily_agg.bill_to_customer_country,days_sales_outstanding]
   }
 
    }

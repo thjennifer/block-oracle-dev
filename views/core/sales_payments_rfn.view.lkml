@@ -18,8 +18,9 @@
 #
 # NOTES
 # - This view includes Payments related to Cash Receipts and Invoices.
-#   Use payment_class_code to pick which to include. Cash Receipt ID will be populated
-#   when payment_class_code = PMT. Invoice ID will be populated when payment_class_code <> 'PMT'.
+#   Use payment_class_code or is_payment_transaction to pick which to include.
+# - Cash Receipt ID will be populated when payment_class_code = PMT.
+#   Invoice ID will be populated when payment_class_code <> 'PMT'.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - Includes fields which reference CURRENCY_CONVERSION_SDT so this view must be included in the
 #   Sales Orders Explore.
@@ -193,6 +194,7 @@ view: +sales_payments {
 
   dimension: is_closed {
     hidden: no
+    group_label: "Payment Status"
     type: yesno
     sql: ${payment_close_date} IS NOT NULL ;;
   }
@@ -200,6 +202,7 @@ view: +sales_payments {
 #--> if test data is used, re-compute using the target end date of the test dataset.
   dimension: is_open_and_overdue {
     hidden: no
+    group_label: "Payment Status"
     description: "Yes if due date < current date and amount due remaining > 0 else No."
     sql:  {%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}
           {%- if test_data == 'YES' -%}
@@ -211,6 +214,7 @@ view: +sales_payments {
 #--> if test data is used, re-compute days overdue using the target end date of the test dataset.
   dimension: is_doubtful {
     hidden: no
+    group_label: "Payment Status"
     description: "Yes if 'Is Open and Overdue' = Yes and 'Days Overdue' > 90 else No."
     sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
          {% if test_data == 'YES' %}
@@ -221,6 +225,7 @@ view: +sales_payments {
 
   dimension: was_closed_late {
     hidden: no
+    group_label: "Payment Status"
     description: "Yes if payment is closed (amount due remaining = 0) and Due < Payment Close Date else No."
   }
 
@@ -248,7 +253,7 @@ view: +sales_payments {
   }
 
   dimension: days_to_payment {
-    hidden: no
+    hidden: yes
     description: "For payment class code = INV, the number of days between payment close date and invoice date."
   }
 
@@ -494,20 +499,6 @@ view: +sales_payments {
     description: "Average umber of days between payment close date and invoice date."
     sql: ${days_to_payment} ;;
     filters: [payment_class_code: "INV"]
-    value_format_name: decimal_1
-  }
-
-  measure: sum_days_to_payment {
-    hidden: no
-    type: sum
-    sql: ${days_to_payment} ;;
-  }
-
-  measure: test_average_days_to_payment {
-    hidden: no
-    type: number
-    description: "Average umber of days between payment close date and invoice date."
-    sql: SAFE_DIVIDE(${sum_days_to_payment},${closed_transaction_count}) ;;
     value_format_name: decimal_1
   }
 

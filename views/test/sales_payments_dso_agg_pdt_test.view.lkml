@@ -1,5 +1,4 @@
 include: "/views/core/sales_payments_dso_days_agg_pdt.view"
-include: "/views/test/dso_days_sdt_test.view"
 
 view: +sales_payments_dso_days_agg_pdt {
    derived_table: {

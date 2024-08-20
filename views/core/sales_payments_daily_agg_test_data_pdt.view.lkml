@@ -15,7 +15,7 @@
 
 view: sales_payments_daily_agg_test_data_pdt {
  derived_table: {
-  # datagroup_trigger: one_time
+  datagroup_trigger: one_time
    sql:
   SELECT
   TRANSACTION_DATE,

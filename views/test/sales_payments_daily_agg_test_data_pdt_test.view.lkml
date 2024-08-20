@@ -4,7 +4,7 @@ view: +sales_payments_daily_agg_test_data_pdt {
 
     derived_table: {
       sql:
-      {% assign p = otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value %}
+      {% assign p = "demo" %}
       {% if p == "test" %}{%assign t = 'CORTEX_ORACLE_EBS_REPORTING_VISION' %}
       {% else %}{% assign t = 'CORTEX_ORACLE_EBS_REPORTING' %}{% endif %}
         SELECT

@@ -1,9 +1,10 @@
 #########################################################{
 # PURPOSE
-# Generate a daily PDT that compute DSO values for each
+# Generate a daily PDT that computes DSO values for each
 # Target Currency and DSO # days combination.
 #
-# Possible DSO days are: 30, 90 or 365 as defined in query below--see line with ARRAY[30,90,365].
+# Possible DSO days are: 30, 90 or 365 as defined in query below.
+# To change this, edit SQL line containing ARRAY[30,90,365].
 #
 # DSO Start and End Date are derived based on either:
 #     current_date
@@ -18,57 +19,54 @@
 #
 # NOTES
 # - Only Invoice rows are used in DSO calc (IS_PAYMENT_TRANSACTION = false)
-# - An alternative to using the PDT is defined in view dso_dynamic_days_sdt
-#   which calculates DSO dyanmically based on user-provided value for
-#   parameter_dso_number_of_days._parameter_value. This view is part of
-#   the sales_payments Explore.
+# - The dimensions dso_days and target_currency_code will be included in days_sales_outstanding calculation
+#   even if not included in query. If query returns more rows than expected, add these two dimensions
+#   to the query or filter to single value for each.
 #########################################################}
-
-include: "/views/core/dso_days_sdt.view"
 
 view: sales_payments_dso_days_agg_pdt {
 
     label: "Sales Payments DSO Days Agg"
 
     derived_table: {
-      datagroup_trigger: once_a_day_at_5
+      datagroup_trigger: sales_payments_daily_agg_change
 
       sql: SELECT
-        DSO_DAYS,
-        ANY_VALUE(dso.DSO_START_DATE) AS DSO_START_DATE,
-        ANY_VALUE(dso.DSO_END_DATE) AS DSO_END_DATE,
-        hdr.BILL_TO_SITE_USE_ID,
-        ANY_VALUE(hdr.BILL_TO_CUSTOMER_NUMBER) AS BILL_TO_CUSTOMER_NUMBER,
-        ANY_VALUE(hdr.BILL_TO_CUSTOMER_NAME) AS BILL_TO_CUSTOMER_NAME,
-        ANY_VALUE(hdr.BILL_TO_CUSTOMER_COUNTRY) AS BILL_TO_CUSTOMER_COUNTRY,
-        hdr.BUSINESS_UNIT_ID,
-        ANY_VALUE(hdr.BUSINESS_UNIT_NAME) AS BUSINESS_UNIT_NAME,
-        amt.TARGET_CURRENCY_CODE,
-        SUM(TOTAL_ORIGINAL) AS TOTAL_ORIGINAL,
-        SUM(TOTAL_REMAINING) AS TOTAL_REMAINING,
-        MAX(IS_INCOMPLETE_CONVERSION) AS IS_INCOMPLETE_CONVERSION
-      FROM (
-            SELECT
               DSO_DAYS,
-              DATE_SUB(DATE(@{default_target_date}) - 1, INTERVAL DSO_DAYS DAY) AS DSO_START_DATE,
-              @{default_target_date} - 1 AS DSO_END_DATE
-            FROM
-            --update with additional DSO days as necessary
-              UNNEST(ARRAY[30,90,365]) AS DSO_DAYS
-            ) dso
-       JOIN
-        `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg` hdr
-         ON
-        hdr.TRANSACTION_DATE BETWEEN dso.DSO_START_DATE
-        AND dso.DSO_END_DATE
-      LEFT JOIN
-        UNNEST(AMOUNTS) AS amt
-      WHERE IS_PAYMENT_TRANSACTION = FALSE
-      GROUP BY
-        DSO_DAYS,
-        BILL_TO_SITE_USE_ID,
-        BUSINESS_UNIT_ID,
-        TARGET_CURRENCY_CODE  ;;
+              ANY_VALUE(dso.DSO_START_DATE) AS DSO_START_DATE,
+              ANY_VALUE(dso.DSO_END_DATE) AS DSO_END_DATE,
+              hdr.BILL_TO_SITE_USE_ID,
+              ANY_VALUE(hdr.BILL_TO_CUSTOMER_NUMBER) AS BILL_TO_CUSTOMER_NUMBER,
+              ANY_VALUE(hdr.BILL_TO_CUSTOMER_NAME) AS BILL_TO_CUSTOMER_NAME,
+              ANY_VALUE(hdr.BILL_TO_CUSTOMER_COUNTRY) AS BILL_TO_CUSTOMER_COUNTRY,
+              hdr.BUSINESS_UNIT_ID,
+              ANY_VALUE(hdr.BUSINESS_UNIT_NAME) AS BUSINESS_UNIT_NAME,
+              amt.TARGET_CURRENCY_CODE,
+              SUM(TOTAL_ORIGINAL) AS TOTAL_ORIGINAL,
+              SUM(TOTAL_REMAINING) AS TOTAL_REMAINING,
+              MAX(IS_INCOMPLETE_CONVERSION) AS IS_INCOMPLETE_CONVERSION
+            FROM (
+                  SELECT
+                    DSO_DAYS,
+                    DATE_SUB(DATE(@{default_target_date}) - 1, INTERVAL DSO_DAYS DAY) AS DSO_START_DATE,
+                    @{default_target_date} - 1 AS DSO_END_DATE
+                  FROM
+                  --update with additional DSO days as necessary
+                    UNNEST(ARRAY[30,90,365]) AS DSO_DAYS
+                  ) dso
+             JOIN
+              `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg` hdr
+               ON
+              hdr.TRANSACTION_DATE BETWEEN dso.DSO_START_DATE
+              AND dso.DSO_END_DATE
+            LEFT JOIN
+              UNNEST(AMOUNTS) AS amt
+            WHERE IS_PAYMENT_TRANSACTION = FALSE
+            GROUP BY
+              DSO_DAYS,
+              BILL_TO_SITE_USE_ID,
+              BUSINESS_UNIT_ID,
+              TARGET_CURRENCY_CODE  ;;
     }
 
     dimension: key {
@@ -79,15 +77,18 @@ view: sales_payments_dso_days_agg_pdt {
     }
 
     dimension: dso_days {
+      hidden: yes
       type: number
       label: "DSO Days"
       sql: ${TABLE}.DSO_DAYS ;;
     }
 
     dimension: dso_days_string {
-      hidden: yes
+      hidden: no
+      label: "DSO Days"
       type: string
       sql: CAST(${dso_days} AS STRING) ;;
+      order_by_field: dso_days
     }
 
     dimension: dso_start_date {
@@ -172,16 +173,19 @@ view: sales_payments_dso_days_agg_pdt {
       value_format_name: decimal_2
     }
 
+#--> The dimensions dso_days and target_currency_code will be included in days_sales_outstanding calculation even
+#--> if not included in query. If query returns more rows than expected, add these two dimensions to the query
+#--> or filter to single value for each.
     measure: days_sales_outstanding {
       type: number
       sql: SAFE_DIVIDE(${total_amount_due_remaining_target_currency},${total_amount_original_target_currency}) * ANY_VALUE(${dso_days}) ;;
       value_format_name: decimal_1
-      # required_fields: [dso_days,target_currency_code]
+      required_fields: [dso_days,target_currency_code]
       drill_fields: [dso_details*]
     }
 
     set: dso_details{
-      fields: [bill_to_customer_name,bill_to_customer_country,days_sales_outstanding]
+      fields: [dso_days, bill_to_customer_name,bill_to_customer_country,days_sales_outstanding]
     }
 
 
