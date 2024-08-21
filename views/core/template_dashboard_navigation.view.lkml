@@ -9,29 +9,29 @@
 # STYLES
 # This template provides three styles for the html links. Pick which one to use
 # with parameter_navigation_style
-#   1. Buttons
+#   1. buttons
 #          parameter label: "Buttons"
 #          parameter value: "buttons"
 #   2. tabbed
 #          parameter label: "Tabs"
 #          parameter value: "tabs"
-#   3. small text with links only (no image or unique formatting)
+#   3. plan hyperlink
 #          parameter label: "Plain Hyperlinks"
 #          parameter value:  "plain"
 #
-# To add or modify styles, edit the Constant  section in the navigation dimension
+# To add or modify styles, edit or add related Constants in the Manifest file
 #
 # FILTERS
 # This template allows a dasboard to pass up to 20 possible filters. The dimensions are
 # named filter1 to filter20 and hidden by default.
-# Modify this template if to add more filter dimensions as needed.
+# Modify this template to add more filter dimensions as needed.
 #
 #
 # STEPS TO EXTEND THIS TEMPLATE {
 # When extending this template, make the REQUIRED customizations by following these steps:
 # 1. Create new view
-# 2. Add "extend: template_dashboard_navigation" parameter (use name of this view)
-# 3. Edit map_filter_numbers_to_dashboard_filter_names dimension.
+# 2. Add "extend: template_dashboard_navigation" property (use name of this view)
+# 3. Edit dimension map_filter_numbers_to_dashboard_filter_names.
 #     - Update the "sql" property with the mapping of filter numbers to dashboard filter names.
 #     - For each filter that needs to be passed between dashboards, assign a generic filter number 1 to N.
 #     - This can be a broad list of filters that do not need to appear on every dashboard but should appear on at least 2 dashboards.
@@ -40,11 +40,11 @@
 #     - Use || between each filter
 #     - Note if dashboard filter name contains a space use + to represent the space (e.g. Order Date should be entered as Order+Date)
 #     - You will specifiy the specific set of filters used in a dashboard in the dimension dash_bindings
-#     - For example:
+#     - An example for 4 dashboard filters:
 #           sql: '1|date||2|business_unit||3|customer_type||4|customer_country' ;;
 #
 # 4. Edit dash_bindings dimension
-#    - Update the "sql" property with properties of each dashboard:
+#    - Update the "sql" property with ID, Link Text and Filter Set of each dashboard:
 #       ID - For UDD dashboards use numeric id. For LookML dashboards use dashboard name with or without model name.
 #           131
 #           model_name::dashboard_name1
@@ -56,16 +56,16 @@
 #         Use numbers as specified in dimension map_filter_numbers_to_dashboard_filter_names
 #
 #     - Use | between each dashboard property.
-#     - Use || between each dashboard set
-#     - For example:
+#     - Use || between each dashboard set.
+#     - Examples:
 #       sql: '131|Dashboard 1 Link Text|1,2||132|Dashboard 2 Link Text|1,2,3,4' ;;
 #       sql: 'dashboard_name1|Dashboard 1|1,2||dashboard_name2|Dashboard 2|1,2,3,4';;
 #       sql: 'model_name::dashboard_name1|Dashboard 1|1,2||model_name::dashboard_name2|Dashboard 2|1,2,3,4';;
 #
-# 5. Update parameter_tab_focus with the extra allowed values needed to match the number of dashboards.
+# 5. Update parameter_tab_focus with any extra values needed to match the number of dashboards.
 #    Note, when extending, allowed values are additive, so only add values beyond 2.
 #
-# 6. Edit filter1 to filterN (up to 20) dimensions to set the type, unhide and label.
+# 6. Edit filter1 to filterN (up to 20) dimensions to set the type, unhide and/or label.
 #    Make sure filter dimension's type matches the field it is mapped to. For example, if filter1 is linked to a date field,
 #    change the type to date. The filter dimensions are string by default.
 #    Note if only using in LookML dashboards, the filter dimensions can remain hidden.
@@ -73,41 +73,40 @@
 #}
 #
 # USING IN A DASHBOARD {
-# 1. Once the extending view has been created, modified, add to an Explore using a bare join:
-#       explore: sales_order {
+# 1. Once the extending view has been created and modified, add to an Explore using a bare join:
+#       explore: sales_orders {
 #           join: otc_dashboard_navigation_ext {
-#           view_label: "🔍 Filters & 🛠 Tools"
+#           view_label: "🛠 Dashboard Navigation"
 #           relationship: one_to_one
 #           sql:  ;;
 #       }
 #       }
-# 2. Open the Explore and add "navigation" dimension to a Single Value Visualization
-# 3. Add the navigation parameters as filters and set to desired values
-#           navigation_style = "Hyperlinks - Left Aligned - No Border - Small font"
-#           navigation_tab_focus = 1 for Dashboard 1. Set to 2 for Dashboard 2 and so on
-# 4. Add Visualization to each of the dashboards and map dashboard filters to pass values
-#    to Filters 1 to N accordingly
+# 2. Open the Explore and add "Dashboard Links" dimension to a Single Value Visualization
+# 3. Add the navigation parameters to visualization and set to desired values
+#           Navigation Style = "Buttons"
+#           Navigation Focus Page = 1 for Dashboard 1. Set to 2 for Dashboard 2 and so on
+# 4. Add navigation filters to the visualization. These filters will "listen" to the dashboard filters.
+# 5. Add Visualization to dashboard and edit dashboard to pass the dashboard filters
+#    to Filters 1 to N accordingly.
 #
-#    LookML example of the dashboard element is below:
-#     - title: navigation
-#       name: navigation
-#       explore: profit_and_loss
-#       type: single_value
-#       fields: [profit_and_loss_navigation_ext.navigation]
-#       filters:
-#         profit_and_loss_navigation_ext.navigation_focus_page: '1'
-#         profit_and_loss_navigation_ext.navigation_style: 'small'
-#       show_single_value_title: false
-#       show_comparison: false
-#       listen:
-#         Hierarchy: profit_and_loss_navigation_ext.filter1
-#         Display Timeframe: profit_and_loss_navigation_ext.filter2
-#         Select Fiscal Timeframe: profit_and_loss_navigation_ext.filter3
-#         Target Currency: profit_and_loss_navigation_ext.filter4
-#         Company Code: profit_and_loss_navigation_ext.filter5
-#         Ledger Name: profit_and_loss_navigation_ext.filter6
-#         Top Hierarchy Level to Display: profit_and_loss_navigation_ext.filter7
-#         Combine Selected Timeframes?: profit_and_loss_navigation_ext.filter8
+#    Alternatively, you can edit the dashboard LookML and the "listen" property as shown in
+#    the LookML example below:
+#       - name: navigation
+#         explore: sales_orders
+#         type: single_value
+#         fields: [otc_dashboard_navigation_ext.navigation_links]
+#         filters:
+#           otc_dashboard_navigation_ext.parameter_navigation_focus_page: '1'
+#           otc_dashboard_navigation_ext.parameter_navigation_style: 'buttons'
+#         show_single_value_title: false
+#         show_comparison: false
+#         listen:
+#           date: otc_dashboard_navigation_ext.filter1
+#           business_unit: otc_dashboard_navigation_ext.filter2
+#           customer_type: otc_dashboard_navigation_ext.filter3
+#           customer_country: otc_dashboard_navigation_ext.filter4
+#           customer_name: otc_dashboard_navigation_ext.filter5
+#           target_currency: otc_dashboard_navigation_ext.filter6
 #}
 #########################################################}
 

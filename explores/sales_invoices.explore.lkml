@@ -4,7 +4,8 @@
 # header-level attributes and line-item details.
 #
 # SOURCES
-# see include: statements
+# base view: sales_invoices
+# other views: see "include" statements
 #
 # REFERENCED BY
 #   LookML dashboards:
