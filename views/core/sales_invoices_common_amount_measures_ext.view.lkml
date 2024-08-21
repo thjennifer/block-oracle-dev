@@ -32,7 +32,7 @@ view: sales_invoices_common_amount_measures_ext {
     type: sum
     label: "{% if _field._is_selected %}Total Invoice Amount (@{label_get_target_currency}){%else%}Total Invoice Amount (Target Currency){%endif%}"
     sql: ${transaction_amount_target_currency} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: total_revenue_amount_target_currency {
@@ -40,7 +40,7 @@ view: sales_invoices_common_amount_measures_ext {
     type: sum
     label: "@{label_build}"
     sql: ${revenue_amount_target_currency} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: total_tax_amount_target_currency {
@@ -48,7 +48,7 @@ view: sales_invoices_common_amount_measures_ext {
     type: sum
     label: "@{label_build}"
     sql: ${tax_amount_target_currency} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: total_discount_amount_target_currency {
@@ -56,7 +56,7 @@ view: sales_invoices_common_amount_measures_ext {
     type: sum
     label: "@{label_build}"
     sql: ${discount_amount_target_currency} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
 #} end amount measures

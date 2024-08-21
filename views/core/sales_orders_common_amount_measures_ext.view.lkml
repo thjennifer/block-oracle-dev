@@ -46,7 +46,7 @@ view: sales_orders_common_amount_measures_ext {
   measure: average_ordered_amount_per_order_target_currency {
     group_label: "Amounts"
     label: "{% if _field._is_selected %}Average Amount per Order (@{label_get_target_currency}){%else%}Average Amount per Order (Target Currency){%endif%}"
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
 #} end labls & descriptions
@@ -62,7 +62,7 @@ view: sales_orders_common_amount_measures_ext {
     label: "@{label_build}"
     description: "Sum of ordered amount in target currency."
     sql: ${ordered_amount_target_currency} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: total_sales_amount_target_currency {
@@ -73,7 +73,7 @@ view: sales_orders_common_amount_measures_ext {
     description: "Sum of sales in target currency."
     sql: ${ordered_amount_target_currency} ;;
     filters: [is_sales_order: "Yes"]
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: total_booking_amount_target_currency {
@@ -83,7 +83,7 @@ view: sales_orders_common_amount_measures_ext {
     label: "@{label_build}"
     description: "Sum of booking amount in target currency."
     sql: ${booking_amount_target_currency} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: total_backlog_amount_target_currency {
@@ -93,7 +93,7 @@ view: sales_orders_common_amount_measures_ext {
     label: "@{label_build}"
     description: "Sum of backlog amount in target currency."
     sql: ${backlog_amount_target_currency} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: total_fulfilled_amount_target_currency {
@@ -103,7 +103,7 @@ view: sales_orders_common_amount_measures_ext {
     label: "@{label_build}"
     description: "Sum of fulfilled amount in target currency."
     sql: ${fulfilled_amount_target_currency} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: total_shipped_amount_target_currency {
@@ -113,7 +113,7 @@ view: sales_orders_common_amount_measures_ext {
     label: "@{label_build}"
     description: "Sum of shipped amount in target currency."
     sql: ${shipped_amount_target_currency} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: total_invoiced_amount_target_currency {
@@ -123,7 +123,7 @@ view: sales_orders_common_amount_measures_ext {
     label: "{% if _field._is_selected %}Total Billed Amount (@{label_get_target_currency}){%else%}Total Billed Amount (Target Currency){%endif%}"
     description: "Sum of billed or invoiced amount in target currency."
     sql: ${invoiced_amount_target_currency} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: cumulative_sales_amount_target_currency {
@@ -133,7 +133,7 @@ view: sales_orders_common_amount_measures_ext {
     label: "@{label_build}"
     sql: ${total_sales_amount_target_currency} ;;
     direction: "column"
-    value_format_name: decimal_0
+    value_format_name: decimal_2
   }
 
   measure: percent_of_total_sales {

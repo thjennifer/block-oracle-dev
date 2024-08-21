@@ -786,7 +786,7 @@ view: +sales_orders__lines {
     label: "Total Ordered Amount in Source Currency"
     description: "Sum of ordered amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if sales_orders.currency_code._is_selected -%}${ordered_amount}{%- else -%}NULL{%- endif -%} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
   }
 
@@ -798,7 +798,7 @@ view: +sales_orders__lines {
     description: "Sum of ordered amount where line_category_code = 'ORDER' in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if sales_orders.currency_code._is_selected -%}${ordered_amount}{%- else -%}NULL{%- endif -%} ;;
     filters: [line_category_code: "ORDER"]
-    value_format_name: decimal_0
+    value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
   }
 
@@ -809,7 +809,7 @@ view: +sales_orders__lines {
     label: "Total Booking Amount in Source Currency"
     description: "Sum of booking amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if sales_orders.currency_code._is_selected -%}${booking_amount}{%- else -%}NULL{%- endif -%} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
   }
 
@@ -820,7 +820,7 @@ view: +sales_orders__lines {
     label: "Total Backlog Amount in Source Currency"
     description: "Sum of backlog amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if sales_orders.currency_code._is_selected -%}${backlog_amount}{%- else -%}NULL{%- endif -%} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
   }
 
@@ -831,7 +831,7 @@ view: +sales_orders__lines {
     label: "Total Fulfilled Amount in Source Currency"
     description: "Sum of fulfilled amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if sales_orders.currency_code._is_selected -%}${fulfilled_amount}{%- else -%}NULL{%- endif -%} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
   }
 
@@ -842,7 +842,7 @@ view: +sales_orders__lines {
     label: "Total Shipped Amount in Source Currency"
     description: "Sum of shipped amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if sales_orders.currency_code._is_selected -%}${shipped_amount}{%- else -%}NULL{%- endif -%} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
   }
 
@@ -853,7 +853,7 @@ view: +sales_orders__lines {
     label: "Total Billed Amount in Source Currency"
     description: "Sum of invoiced amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: ${invoiced_amount} ;;
-    value_format_name: decimal_0
+    value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
   }
 
