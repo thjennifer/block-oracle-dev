@@ -134,21 +134,21 @@ view: +sales_payments {
   dimension: transaction_month_num {
     hidden: no
     group_label: "Transaction Date"
-    group_item_label: "Month Num"
+    group_item_label: "Month Number"
     description: "Transaction Month as Number 1 to 12"
   }
 
   dimension: transaction_quarter_num {
     hidden: no
     group_label: "Transaction Date"
-    group_item_label: "Quarter Num"
+    group_item_label: "Quarter Number"
     description: "Transaction Quarter as Number 1 to 4"
   }
 
   dimension: transaction_year_num {
     hidden: no
     group_label: "Transaction Date"
-    group_item_label: "Year Num"
+    group_item_label: "Year Number"
     description: "Transaction Year as Integer"
     value_format_name: id
   }

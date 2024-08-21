@@ -108,21 +108,21 @@ view: +sales_invoices {
   dimension: invoice_month_num {
     hidden: no
     group_label: "Invoice Date"
-    group_item_label: "Month Num"
+    group_item_label: "Month Number"
     description: "Invoice Month as Number 1 to 12"
   }
 
   dimension: invoice_quarter_num {
     hidden: no
     group_label: "Invoice Date"
-    group_item_label: "Quarter Num"
+    group_item_label: "Quarter Number"
     description: "Invoice Quarter as Number 1 to 4"
   }
 
   dimension: invoice_year_num {
     hidden: no
     group_label: "Invoice Date"
-    group_item_label: "Year Num"
+    group_item_label: "Year Number"
     description: "Invoice Year as Integer"
     value_format_name: id
   }

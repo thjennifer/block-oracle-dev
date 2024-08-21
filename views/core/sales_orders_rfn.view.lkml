@@ -141,21 +141,21 @@ view: +sales_orders {
   dimension: ordered_month_num {
     hidden: no
     group_label: "Ordered Date"
-    group_item_label: "Month Num"
+    group_item_label: "Month Number"
     description: "Ordered Month as Number 1 to 12"
   }
 
   dimension: ordered_quarter_num {
     hidden: no
     group_label: "Ordered Date"
-    group_item_label: "Quarter Num"
+    group_item_label: "Quarter Number"
     description: "Ordered Quarter as Number 1 to 4"
   }
 
   dimension: ordered_year_num {
     hidden: no
     group_label: "Ordered Date"
-    group_item_label: "Year Num"
+    group_item_label: "Year Number"
     description: "Ordered Year as Integer"
     value_format_name: id
   }
@@ -176,6 +176,7 @@ view: +sales_orders {
   dimension: fiscal_period_num {
     hidden: no
     group_label: "Fiscal Date"
+    group_item_label: "Fiscal Period Number"
    }
 
   dimension: fiscal_period_name {
@@ -193,10 +194,12 @@ view: +sales_orders {
   dimension: fiscal_quarter_num {
     hidden: no
     group_label: "Fiscal Date"
+    group_item_label: "Fiscal Quarter Number"
   }
   dimension: fiscal_year_num {
     hidden: no
     group_label: "Fiscal Date"
+    group_item_label: "Fiscal Year Number"
     value_format_name: id
   }
 
