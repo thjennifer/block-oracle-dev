@@ -15,7 +15,7 @@
 # Explore sales_invoices
 #
 # EXTENDED FIELDS
-#    fiscal_gl_date, fiscal_gl_quarter_num, fiscal_period_name, etc...
+#    fiscal_gl_date, fiscal_gl_quarter_num, fiscal_gl_period_name, etc...
 #    item_description, language_code
 #    category_id, category_description, category_name_code
 #    total_transaction_amount_target_currency, total_tax_amount_target_currency, and other amounts
@@ -65,7 +65,7 @@ view: +sales_invoices__lines {
 
   dimension: is_intercompany {
     hidden: no
-    description: "Yes indicates transaction was internal within the company."
+    description: "Yes indicates transaction was internal within the company"
     full_suggestions: yes
   }
 
@@ -141,7 +141,7 @@ view: +sales_invoices__lines {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"
-    description: "Creation timestamp of record in Oracle source table."
+    description: "Creation timestamp of record in Oracle source table"
     sql: ${TABLE}.CREATION_TS ;;
   }
 
@@ -149,7 +149,7 @@ view: +sales_invoices__lines {
     hidden: no
     timeframes: [raw, date, time]
     label: "Last Update"
-    description: "Last update timestamp of record in Oracle source table."
+    description: "Last update timestamp of record in Oracle source table"
     sql: ${TABLE}.LAST_UPDATE_TS ;;
   }
 
@@ -165,7 +165,7 @@ view: +sales_invoices__lines {
   dimension: inventory_item_id {
     hidden: no
     label: "Item ID"
-    description: "Unique identifier for inventory item."
+    description: "Unique identifier for inventory item"
     value_format_name: id
     full_suggestions: yes
   }
@@ -228,7 +228,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: number
     group_label: "Quantities"
-    description: "Invoiced Quantity when value is positive. Credited Quantity when value is negative."
+    description: "Invoiced Quantity when value is positive. Credited Quantity when value is negative"
     sql: COALESCE(${invoiced_quantity},${credited_quantity}) ;;
     value_format_name: decimal_2
     full_suggestions: yes
@@ -246,7 +246,7 @@ view: +sales_invoices__lines {
     group_label: "Item Prices and Discounts"
     label: "Unit List Price (Source Currency)"
     # sql: ROUND(${TABLE}.UNIT_LIST_PRICE,2) ;;
-    description: "Post-tax list price of item."
+    description: "Post-tax list price of item"
     value_format_name: decimal_2
   }
 
@@ -254,7 +254,7 @@ view: +sales_invoices__lines {
     hidden: no
     group_label: "Item Prices and Discounts"
     label: "Unit Selling Price (Source Currency)"
-    description: "Actual price charged to customer, pre-tax."
+    description: "Actual price charged to customer, pre-tax"
     # sql: ROUND(${TABLE}.UNIT_SELLING_PRICE,2) ;;
     value_format_name: decimal_2
   }
@@ -263,7 +263,7 @@ view: +sales_invoices__lines {
     hidden: no
     group_label: "Item Prices and Discounts"
     label: "Gross Unit Selling Price (Source Currency)"
-    description: "Actual price charged to customer, post-tax."
+    description: "Actual price charged to customer, post-tax"
     # sql: ROUND(${TABLE}.GROSS_UNIT_SELLING_PRICE,2) ;;
     value_format_name: decimal_2
   }
@@ -272,7 +272,7 @@ view: +sales_invoices__lines {
     hidden: no
     group_label: "Item Prices and Discounts"
     label: "Unit Discount Amount (Source Currency)"
-    description: "Post-tax unit list price minus post-tax unit selling price."
+    description: "Post-tax unit list price minus post-tax unit selling price"
     # sql: ROUND(${TABLE}.UNIT_DISCOUNT_PRICE,2) ;;
     value_format_name: decimal_2
   }
@@ -282,7 +282,7 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Item Prices and Discounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
-    description: "Post-tax list price of item converted to target currency."
+    description: "Post-tax list price of item converted to target currency"
     sql: ${unit_list_price} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -292,7 +292,7 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Item Prices and Discounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
-    description: "Actual pre-tax price charged to customer converted to target currency."
+    description: "Actual pre-tax price charged to customer converted to target currency"
     sql: ${unit_selling_price} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -302,7 +302,7 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Item Prices and Discounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
-    description: "Actual post-tax price charged to customer converted to target currency."
+    description: "Actual post-tax price charged to customer converted to target currency"
     sql: ${gross_unit_selling_price} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -311,7 +311,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: number
     group_label: "Item Prices and Discounts"
-    description: "Post-tax unit list price minus post-tax unit selling price. Reported in target currency."
+    description: "Post-tax unit list price minus post-tax unit selling price. Reported in target currency"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${unit_discount_price} * ${sales_invoices.currency_conversion_rate} ;;
     value_format_name: decimal_2
@@ -321,7 +321,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: yesno
     group_label: "Item Prices and Discounts"
-    description: "Yes if line item was sold at a discounted price."
+    description: "Yes if line item was sold at a discounted price"
     sql: ${unit_discount_price} <> 0 ;;
     full_suggestions: yes
   }
@@ -330,7 +330,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: string
     group_label: "Item Prices and Discounts"
-    description: "✅ if line item was sold at a discounted price."
+    description: "✅ if line item was sold at a discounted price"
     sql: ${is_discount_selling_price} ;;
     html: @{html_symbols_for_yes} ;;
     full_suggestions: yes
@@ -340,7 +340,7 @@ view: +sales_invoices__lines {
     hidden: yes
     type: number
     group_label: "Item Prices and Discounts"
-    description: "Perecent discount off unit list price."
+    description: "Perecent discount off unit list price"
     sql: 1 - SAFE_DIVIDE(${gross_unit_selling_price},${unit_list_price}) ;;
     value_format_name: percent_1
   }
@@ -353,15 +353,15 @@ view: +sales_invoices__lines {
 # amounts hidden as measures are shown instead
   dimension: revenue_amount {
     group_label: "Amounts"
-    label: "Net Revenue Amount (Source Currency)"
-    description: "Amount in source currency recognized as revenue for accounting purposes."
+    label: "Revenue Amount (Source Currency)"
+    description: "Amount in source currency recognized as revenue for accounting purposes"
     value_format_name: decimal_2
   }
 
   dimension: gross_transaction_amount {
     group_label: "Amounts"
     label: "Gross Invoice Amount (Source Currency)"
-    description: "Item Invoiced/Credited Quantity * Unit List Price."
+    description: "Item Invoiced/Credited Quantity * Unit List Price. Amount with taxes and before any discounts"
     sql: COALESCE(${invoiced_quantity},${credited_quantity})*${unit_list_price} ;;
     value_format_name: decimal_2
   }
@@ -369,20 +369,21 @@ view: +sales_invoices__lines {
   dimension: transaction_amount {
     group_label: "Amounts"
     label: "Invoice Amount (Source Currency)"
-    description: "Invoice line amount in source currency."
+    description: "Invoice line amount in source currency"
     value_format_name: decimal_2
   }
 
   dimension: tax_amount {
     group_label: "Amounts"
     label: "Tax Amount (Source Currency)"
+    description: "Tax amount associated with the transaction line"
     value_format_name: decimal_2
   }
 
   dimension: discount_amount {
     group_label: "Amounts"
     label: "Discount Amount (Source Currency)"
-    description: "Item Invoiced Quantity * Unit Discount Price."
+    description: "Item Invoiced Quantity * Unit Discount Price"
     sql: ${invoiced_quantity}*${unit_discount_price} ;;
     value_format_name: decimal_2
   }
@@ -390,8 +391,8 @@ view: +sales_invoices__lines {
   dimension: revenue_amount_target_currency {
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}{%- assign field_name = 'Net Revenue Amount' -%}@{label_currency_if_selected}"
-     description: "Amount in target currency recognized as revenue for accounting purposes."
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    description: "Amount in target currency recognized as revenue for accounting purposes"
     sql: ${revenue_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -400,7 +401,7 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign field_name = 'Gross Invoice Amount' -%}@{label_currency_if_selected}"
-    description: "Gross invoice transaction amount with taxes and before any discounts in target currency."
+    description: "Gross transaction amount with taxes and before any discounts in target currency"
     sql: ${gross_transaction_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -409,7 +410,7 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
-    description: "Invoice line pre-tax transaction amount in target currency."
+    description: "Invoice line pre-tax transaction amount in target currency"
     sql: ${transaction_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -419,6 +420,7 @@ view: +sales_invoices__lines {
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${tax_amount} * ${sales_invoices.currency_conversion_rate}  ;;
+    description: "Tax amount in target currency associated with the transaction line"
     value_format_name: decimal_2
   }
 
@@ -427,6 +429,7 @@ view: +sales_invoices__lines {
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${discount_amount} * ${sales_invoices.currency_conversion_rate}  ;;
+    description: "Item Invoiced Quantity * Unit Discount Price in target currency"
     value_format_name: decimal_2
   }
 
@@ -486,7 +489,7 @@ view: +sales_invoices__lines {
     type: average
     group_label: "Average Unit Prices & Discounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
-    description: "Average post-tax unit list price in target currency."
+    description: "Average post-tax unit list price in target currency"
     sql: ${unit_list_price_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -496,7 +499,7 @@ view: +sales_invoices__lines {
     type: average
     group_label: "Average Unit Prices & Discounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
-    description: "Average pre-tax unit price charged to customer in target currency."
+    description: "Average pre-tax unit price charged to customer in target currency"
     sql: ${unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -506,7 +509,7 @@ view: +sales_invoices__lines {
     type: average
     group_label: "Average Unit Prices & Discounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
-    description: "Average post-tax unit price charged to customer in target currency."
+    description: "Average post-tax unit price charged to customer in target currency"
     sql: ${gross_unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -516,7 +519,7 @@ view: +sales_invoices__lines {
     type: average
     group_label: "Average Unit Prices & Discounts"
     label: "@{label_defaults}{%- assign field_name = 'Average Unit List Price when Discount' -%}@{label_currency_if_selected}"
-    description: "Average post-tax unit list price in target currency across invoice lines when there is a discount."
+    description: "Average post-tax unit list price in target currency across invoice lines when there is a discount"
     sql: ${unit_list_price_target_currency} ;;
     filters: [is_discount_selling_price: "Yes"]
     value_format_name: decimal_2
@@ -543,7 +546,7 @@ view: +sales_invoices__lines {
     type: average
     group_label: "Average Unit Prices & Discounts"
     label: "@{label_defaults}{%- assign field_name = 'Average Unit Selling Price when Discount' -%}@{label_currency_if_selected}"
-    description: "Average pre-tax unit price charged to customer in target currency when there is a discount."
+    description: "Average pre-tax unit price charged to customer in target currency when there is a discount"
     sql: ${unit_selling_price_target_currency} ;;
     filters: [is_discount_selling_price: "Yes"]
     value_format_name: decimal_2
@@ -570,7 +573,7 @@ view: +sales_invoices__lines {
     type: average
     group_label: "Average Unit Prices & Discounts"
     label: "@{label_defaults}{%- assign field_name = 'Average Gross Unit Selling Price when Discount' -%}@{label_currency_if_selected}"
-    description: "Average post-tax unit price charged to customer in target currency when there is a discount."
+    description: "Average post-tax unit price charged to customer in target currency when there is a discount"
     sql: ${gross_unit_selling_price_target_currency} ;;
     filters: [is_discount_selling_price: "Yes"]
     value_format_name: decimal_2
@@ -595,7 +598,7 @@ view: +sales_invoices__lines {
   measure: discount_invoice_line_count {
     type: count
     group_label: "Average Unit Prices & Discounts"
-    description: "Count of invoice lines when there is a discount."
+    description: "Count of invoice lines when there is a discount"
     filters: [is_discount_selling_price: "Yes"]
   }
 
@@ -604,7 +607,7 @@ view: +sales_invoices__lines {
     group_label: "Average Unit Prices & Discounts"
     label: "Percent of Invoice Lines with Discount"
     type: number
-    description: "Frequency of discounts computed as invoice lines with discount divided by total invoice lines."
+    description: "Frequency of discounts computed as invoice lines with discount divided by total invoice lines"
     sql: SAFE_DIVIDE(${discount_invoice_line_count},${invoice_line_count});;
     value_format_name: percent_1
   }
@@ -614,7 +617,7 @@ view: +sales_invoices__lines {
     type: average
     group_label: "Average Unit Prices & Discounts"
     label: "Average % Discount"
-    description: "Average percent discount off list price per invoice line (all lines even if there is no discount)."
+    description: "Average percent discount off list price per invoice line (all lines even if there is no discount)"
     sql: ${percent_discount};;
     value_format_name: percent_1
   }
@@ -624,7 +627,7 @@ view: +sales_invoices__lines {
     type: average
     group_label: "Average Unit Prices & Discounts"
     label: "Average % Discount when Discount Taken"
-    description: "For invoice lines with a discount, average percent discount off list price."
+    description: "For invoice lines with a discount, average percent discount off list price"
     sql: ${percent_discount};;
     filters: [is_discount_selling_price: "Yes"]
     value_format_name: percent_1

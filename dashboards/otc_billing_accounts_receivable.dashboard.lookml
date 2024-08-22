@@ -30,7 +30,7 @@
 
 - dashboard: otc_billing_accounts_receivable
   title: Accounts Receivable
-  description: "Analysis of receivables, encompassing both current and overdue amounts. Identification of customers with the highest outstanding receivables, along with an assessment of the duration of their overdue payments."
+  description: "Analysis of receivables, encompassing both current and overdue amounts. Identification of customers with the highest outstanding receivables, along with an assessment of the duration of their overdue payments"
 
   extends: otc_template_billing
 

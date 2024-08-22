@@ -119,9 +119,9 @@ view: sales_applied_receivables {
     type: number
     sql: ${TABLE}.FISCAL_GL_YEAR_NUM ;;
   }
-  dimension: fiscal_period_name {
+  dimension: fiscal_gl_period_name {
     type: string
-    sql: ${TABLE}.FISCAL_PERIOD_NAME ;;
+    sql: ${TABLE}.FISCAL_GL_PERIOD_NAME ;;
   }
   dimension: fiscal_period_set_name {
     type: string
@@ -222,7 +222,7 @@ view: sales_applied_receivables {
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [
-      fiscal_period_name,
+      fiscal_gl_period_name,
       ledger_name,
       business_unit_name,
       bill_to_customer_name,

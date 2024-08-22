@@ -70,7 +70,7 @@ view: +sales_orders__lines {
 
   dimension: return_line_ids {
     primary_key: no
-    description: "Array of IDs of all return lines that reference this order line. An order line may have multiple returns."
+    description: "Array of IDs of all return lines that reference this order line. An order line may have multiple returns"
   }
 
 
@@ -85,7 +85,7 @@ view: +sales_orders__lines {
     type: unquoted
     view_label: "@{view_label_for_filters}"
     label: "Display Categories or Items"
-    description: "Select whether to display categories or items in report. Use with dimensions Selected Product Dimension ID and Selected Product Dimension Description."
+    description: "Select whether to display categories or items in report. Use with dimensions Selected Product Dimension ID and Selected Product Dimension Description"
     allowed_value: {label: "Category" value: "Category"}
     allowed_value: {label: "Item" value: "Item"}
     default_value: "Category"
@@ -103,7 +103,7 @@ view: +sales_orders__lines {
   dimension: inventory_item_id {
     hidden: no
     label: "Item ID"
-    description: "Unique identifier for inventory item."
+    description: "Unique identifier for inventory item"
     value_format_name: id
     full_suggestions: yes
   }
@@ -130,7 +130,7 @@ view: +sales_orders__lines {
     label: "{% if _field._is_selected %}
                 {% if parameter_display_product_level._parameter_value == 'Item' %}Item{%else%}Category{%endif%}
             {%else%}Selected Product Dimension Description{%endif%}"
-    description: "Values are either Item Description or Item Category Description based on user selection for Parameter Display Categories or Items."
+    description: "Values are either Item Description or Item Category Description based on user selection for Parameter Display Categories or Items"
     sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${item_description}{%else%}${category_description}{%endif%} ;;
     can_filter: yes
   }
@@ -142,7 +142,7 @@ view: +sales_orders__lines {
     label: "{% if _field._is_selected %}
               {% if parameter_display_product_level._parameter_value == 'Item' %}Inventory Item ID{%else%}Category ID{%endif%}
             {%else%}Selected Product Dimension ID{%endif%}"
-    description: "Values are either Item Inventory ID or Item Category ID based on user selection for Parameter Display Categories or Items."
+    description: "Values are either Item Inventory ID or Item Category ID based on user selection for Parameter Display Categories or Items"
     sql: {% if parameter_display_product_level._parameter_value == 'Item' %}${inventory_item_id}{%else%}${category_id}{%endif%} ;;
     can_filter: yes
     value_format_name: id
@@ -164,7 +164,7 @@ view: +sales_orders__lines {
   dimension_group: request_date {
     hidden: no
     label: "Request"
-    description: "Requested delivery date for the order line."
+    description: "Requested delivery date for the order line"
     sql:${TABLE}.REQUEST_DATE ;;
   }
 
@@ -172,17 +172,17 @@ view: +sales_orders__lines {
   dimension_group: promise_date {
     hidden: no
     label: "Promise"
-    description: "Promised delivery date."
+    description: "Promised delivery date"
   }
 
   dimension_group: actual_ship {
     hidden: no
-    description: "Actual ship date of order line."
+    description: "Actual ship date of order line"
   }
 
   dimension_group: schedule_ship {
     hidden: no
-    description: "Scheduled ship date of order line."
+    description: "Scheduled ship date of order line"
   }
 
 #--> limiting timeframe options for this timestamp
@@ -191,7 +191,7 @@ view: +sales_orders__lines {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"
-    description: "Creation timestamp of record in Oracle source table."
+    description: "Creation timestamp of record in Oracle source table"
     sql: ${TABLE}.CREATION_TS ;;
   }
 
@@ -201,7 +201,7 @@ view: +sales_orders__lines {
     hidden: no
     timeframes: [raw, date, time]
     label: "Last Update"
-    description: "Last update timestamp of record in Oracle source table."
+    description: "Last update timestamp of record in Oracle source table"
     sql: ${TABLE}.LAST_UPDATE_TS ;;
   }
 
@@ -223,14 +223,14 @@ view: +sales_orders__lines {
   dimension: is_backlog {
     hidden: no
     group_label: "Line Status"
-    description: "Yes if line is not in ENTERED, BOOKED, CLOSED or CANCELLED statuses."
+    description: "Yes if line is not in ENTERED, BOOKED, CLOSED or CANCELLED statuses"
     full_suggestions: yes
   }
 
   dimension: is_backlog_with_symbols {
     hidden: no
     group_label: "Line Status with Symbols"
-    description: "✅ if line is not in ENTERED, BOOKED, CLOSED or CANCELLED statuses."
+    description: "✅ if line is not in ENTERED, BOOKED, CLOSED or CANCELLED statuses"
     sql: COALESCE(${is_backlog},false) ;;
     can_filter: no
     html: @{html_symbols_for_yes} ;;
@@ -239,7 +239,7 @@ view: +sales_orders__lines {
   dimension: is_backordered {
     hidden: no
     group_label: "Line Status"
-    description: "Yes if line cannot be fulfilled with the current inventory."
+    description: "Yes if line cannot be fulfilled with the current inventory"
     full_suggestions: yes
     sql: ${TABLE}.IS_BACKORDERED ;;
   }
@@ -247,7 +247,7 @@ view: +sales_orders__lines {
   dimension: is_backordered_with_symbols {
     hidden: no
     group_label: "Line Status with Symbols"
-    description: "✅ if line cannot be fulfilled with the current inventory."
+    description: "✅ if line cannot be fulfilled with the current inventory"
     sql: COALESCE(${is_backordered},false) ;;
     can_filter: no
     html: @{html_symbols_for_yes} ;;
@@ -256,7 +256,7 @@ view: +sales_orders__lines {
   dimension: is_booked {
     hidden: no
     group_label: "Line Status"
-    description: "Yes if line is in or past the BOOKED phase."
+    description: "Yes if line is in or past the BOOKED phase"
     full_suggestions: yes
     sql: ${TABLE}.IS_BOOKED ;;
   }
@@ -264,14 +264,14 @@ view: +sales_orders__lines {
   dimension: is_booking {
     hidden: no
     group_label: "Line Status"
-    description: "Yes if line is in ENTERED or BOOKED statuses. Unlike IS_BOOKED, this will be No once it passes the booking phase."
+    description: "Yes if line is in ENTERED or BOOKED statuses. Unlike IS_BOOKED, this will be No once it passes the booking phase"
     full_suggestions: yes
   }
 
   dimension: is_booking_with_symbols {
     hidden: no
     group_label: "Line Status with Symbols"
-    description: "✅ if line is in ENTERED or BOOKED statuses."
+    description: "✅ if line is in ENTERED or BOOKED statuses"
     sql: COALESCE(${is_booking},false) ;;
     can_filter: no
     html: @{html_symbols_for_yes} ;;
@@ -339,7 +339,7 @@ view: +sales_orders__lines {
     hidden: no
     type: yesno
     group_label: "Line Status"
-    description: "Yes if shipped quantity > 0."
+    description: "Yes if shipped quantity > 0"
     sql: ${shipped_quantity} > 0 ;;
   }
 
@@ -347,7 +347,7 @@ view: +sales_orders__lines {
     hidden: no
     type: yesno
     group_label: "Line Status"
-    description: "Yes if invoiced quantity <> 0."
+    description: "Yes if invoiced quantity <> 0"
     sql: ${invoiced_quantity} <> 0 ;;
   }
 
@@ -380,7 +380,7 @@ view: +sales_orders__lines {
   dimension: cancel_reason_language_code {
     hidden: no
     group_label: "Cancel Reasons"
-    description: "Language in which to display cancel reasons."
+    description: "Language in which to display cancel reasons"
     sql: (SELECT d.LANGUAGE FROM UNNEST(CANCEL_REASON) AS d WHERE d.LANGUAGE = {% parameter otc_common_parameters_xvw.parameter_language %} ) ;;
     full_suggestions: yes
   }
@@ -395,14 +395,14 @@ view: +sales_orders__lines {
   dimension: fulfillment_days_after_promise_date {
     hidden: yes
     label: "Fulfillment Days after Promise Date"
-    description: "Number of days between Fulfillment Date and Delivery Promise Date."
+    description: "Number of days between Fulfillment Date and Delivery Promise Date"
   }
 
 # shown in Explore as measure average_days_from_request_to_fulfillment
   dimension: fulfillment_days_after_request_date {
     hidden: yes
     label: "Fulfillment Days after Request Date"
-    description: "Number of days between Fulfillment Date and Delivery Request Date."
+    description: "Number of days between Fulfillment Date and Delivery Request Date"
   }
 
 # shown in Explore as measure average_cycle_time_days
@@ -537,7 +537,7 @@ view: +sales_orders__lines {
   dimension: unit_discount_amount_target_currency {
     hidden: no
     group_label: "Item Prices and Cost"
-    description: "Pre-tax unit list price minus pre-tax unit selling price. Reported in target currency."
+    description: "Pre-tax unit list price minus pre-tax unit selling price. Reported in target currency"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${unit_list_price_target_currency} - ${unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
@@ -664,7 +664,7 @@ view: +sales_orders__lines {
     hidden: no
     type: sum
     label: "Total Ordered Quantity by Item"
-    description: "Sum of order quantity by item. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned."
+    description: "Sum of order quantity by item. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned"
     sql: @{is_item_selected}${ordered_quantity}{%- else -%}NULL {%- endif -%} ;;
     html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
     value_format_name: decimal_0
@@ -674,7 +674,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     label: "Total Ordered Quantity by Item Formatted"
-    description: "Sum of order quantity by item formatted as large number. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned."
+    description: "Sum of order quantity by item formatted as large number. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned"
     sql: ${total_ordered_quantity_by_item} ;;
     html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
     value_format_name: format_large_numbers_d1
@@ -684,7 +684,7 @@ view: +sales_orders__lines {
     hidden: no
     type: sum
     label: "Total Fulfilled Quantity by Item"
-    description: "Sum of fulfilled quantity by item. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned."
+    description: "Sum of fulfilled quantity by item. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned"
     sql: @{is_item_selected}${fulfilled_quantity}{%- else -%}NULL {%- endif -%} ;;
     html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
     value_format_name: decimal_0
@@ -694,7 +694,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     label: "Total Fulfilled Quantity by Item Formatted"
-    description: "Sum of fulfilled quantity by item formatted as large number. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned."
+    description: "Sum of fulfilled quantity by item formatted as large number. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned"
     sql: ${total_fulfilled_quantity_by_item} ;;
     html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
     value_format_name: format_large_numbers_d1
@@ -704,7 +704,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     label: "Difference between Ordered and Fulfilled Quantity by Item"
-    description: "Ordered minus fulfilled quantity by item. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned."
+    description: "Ordered minus fulfilled quantity by item. Item ID, Part Number or Description must be included as dimension in query to avoid summing across multiple Unit of Measures. If item is not included, a warning message is returned"
     sql: ${total_ordered_quantity_by_item} - ${total_fulfilled_quantity_by_item} ;;
     value_format_name: decimal_0
     html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
@@ -735,7 +735,7 @@ view: +sales_orders__lines {
   measure: average_fulfillment_days_after_promise_date {
     hidden: no
     type: average
-    description: "Average number of days between fulfillment date and promised delivery date per order line. Positive values indicate fulfillment occurred after requested delivery date."
+    description: "Average number of days between fulfillment date and promised delivery date per order line. Positive values indicate fulfillment occurred after requested delivery date"
     sql: ${fulfillment_days_after_promise_date} ;;
     value_format_name: decimal_2
   }
@@ -751,7 +751,7 @@ view: +sales_orders__lines {
   measure: average_cycle_time_days {
     hidden: no
     type: average
-    description: "Average number of days from order to fulfillment per order line. Item Category or ID must be in query or computation will return null."
+    description: "Average number of days from order to fulfillment per order line. Item Category or ID must be in query or computation will return null"
     sql: @{is_item_or_category_selected}${cycle_time_days}{%- else -%}NULL{%- endif -%};;
     value_format_name: decimal_2
     filters: [is_cancelled: "No", is_fulfilled: "Yes"]
@@ -784,7 +784,7 @@ view: +sales_orders__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Ordered Amount in Source Currency"
-    description: "Sum of ordered amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of ordered amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned"
     sql: {%- if sales_orders.currency_code._is_selected -%}${ordered_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
@@ -795,7 +795,7 @@ view: +sales_orders__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Sales Amount in Source Currency"
-    description: "Sum of ordered amount where line_category_code = 'ORDER' in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of ordered amount where line_category_code = 'ORDER' in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned"
     sql: {%- if sales_orders.currency_code._is_selected -%}${ordered_amount}{%- else -%}NULL{%- endif -%} ;;
     filters: [line_category_code: "ORDER"]
     value_format_name: decimal_2
@@ -807,7 +807,7 @@ view: +sales_orders__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Booking Amount in Source Currency"
-    description: "Sum of booking amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of booking amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned"
     sql: {%- if sales_orders.currency_code._is_selected -%}${booking_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
@@ -818,7 +818,7 @@ view: +sales_orders__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Backlog Amount in Source Currency"
-    description: "Sum of backlog amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of backlog amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned"
     sql: {%- if sales_orders.currency_code._is_selected -%}${backlog_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
@@ -829,7 +829,7 @@ view: +sales_orders__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Fulfilled Amount in Source Currency"
-    description: "Sum of fulfilled amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of fulfilled amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned"
     sql: {%- if sales_orders.currency_code._is_selected -%}${fulfilled_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
@@ -840,7 +840,7 @@ view: +sales_orders__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Shipped Amount in Source Currency"
-    description: "Sum of shipped amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of shipped amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned"
     sql: {%- if sales_orders.currency_code._is_selected -%}${shipped_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
@@ -851,7 +851,7 @@ view: +sales_orders__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Billed Amount in Source Currency"
-    description: "Sum of invoiced amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of invoiced amounts in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned"
     sql: ${invoiced_amount} ;;
     value_format_name: decimal_2
     html: {%- if sales_orders.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;

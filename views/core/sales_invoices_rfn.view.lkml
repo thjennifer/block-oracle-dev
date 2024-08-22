@@ -35,13 +35,13 @@ view: +sales_invoices {
   dimension: invoice_id {
     hidden: no
     primary_key: yes
-    description: "Distinct ID of invoice."
+    description: "Distinct ID of invoice"
     value_format_name: id
   }
 
   dimension: invoice_number {
     hidden: no
-    description: "Invoice number. Note, this is a string data type and may not be a unique value."
+    description: "Invoice number. Note, this is a string data type and may not be a unique value"
   }
 
   dimension: business_unit_id {
@@ -56,13 +56,13 @@ view: +sales_invoices {
 
   dimension: ledger_id {
     hidden: no
-    description: "ID of ledger or set of books."
+    description: "ID of ledger or set of books"
     value_format_name: id
   }
 
   dimension: ledger_name {
     hidden: no
-    description: "Name of ledger or set of books."
+    description: "Name of ledger or set of books"
   }
 
 #########################################################
@@ -129,21 +129,21 @@ view: +sales_invoices {
 
   dimension_group: exchange {
     hidden: no
-    description: "Date the exchange rate is calculated. If missing, invoice date is used."
+    description: "Date the exchange rate is calculated. If missing, invoice date is used"
   }
 
   dimension_group: creation_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"
-    description: "Creation timestamp of record in Oracle source table."
+    description: "Creation timestamp of record in Oracle source table"
   }
 
   dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Last Update"
-    description: "Last update timestamp of record in Oracle source table."
+    description: "Last update timestamp of record in Oracle source table"
   }
 
 #} end dates
@@ -167,7 +167,7 @@ view: +sales_invoices {
   dimension: invoice_type_name {
     hidden: no
     group_label: "Invoice Type"
-    description: "Name or description of invoice type."
+    description: "Name or description of invoice type"
   }
 
   dimension: invoice_type_id_and_name {
@@ -179,12 +179,12 @@ view: +sales_invoices {
 
   dimension: is_complete {
     hidden: no
-    description: "Yes if invoice is complete else No."
+    description: "Yes if invoice is complete else No"
   }
 
   dimension: is_complete_with_symbols {
     hidden: no
-    description: "✅ if invoice is complete."
+    description: "✅ if invoice is complete"
     sql: COALESCE(${is_complete},false) ;;
     html: @{html_symbols_for_yes} ;;
   }
@@ -207,7 +207,7 @@ view: +sales_invoices {
   dimension: currency_conversion_rate {
     hidden: no
     group_label: "Currency Conversion"
-    description: "Exchange rate between source and target currency for a specific date."
+    description: "Exchange rate between source and target currency for a specific date"
     sql: IF(${currency_code} = ${target_currency_code}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
     value_format_name: decimal_4
   }
@@ -249,7 +249,7 @@ view: +sales_invoices {
     type: number
     group_label: "Invoice Totals"
     label: "@{label_defaults}{%- assign field_name = 'Invoice Revenue Amount' -%}@{label_currency_if_selected}"
-    description: "Total amount recognized as revenue for accounting purposes for the entire invoice (in target currency)."
+    description: "Total amount recognized as revenue for accounting purposes for the entire invoice (in target currency)"
     sql: ${total_revenue_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -259,7 +259,7 @@ view: +sales_invoices {
     type: number
     group_label: "Invoice Totals"
     label: "@{label_defaults}{%- assign field_name = 'Invoice Tax Amount' -%}@{label_currency_if_selected}"
-    description: "Total tax amount of invoice in target currency."
+    description: "Total tax amount of invoice in target currency"
     sql: ${total_tax_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -269,7 +269,7 @@ view: +sales_invoices {
     type: number
     group_label: "Invoice Totals"
     label: "@{label_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
-    description: "Total transaction amount of invoice in target currency."
+    description: "Total transaction amount of invoice in target currency"
     sql: ${total_transaction_amount} * ${currency_conversion_rate}   ;;
     value_format_name: decimal_2
   }

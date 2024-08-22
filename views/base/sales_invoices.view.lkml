@@ -149,9 +149,9 @@ view: sales_invoices {
 #     type: number
 #     sql: FISCAL_GL_YEAR ;;
 #   }
-#   dimension: fiscal_period_name {
+#   dimension: fiscal_gl_period_name {
 #     type: string
-#     sql: FISCAL_PERIOD_NAME ;;
+#     sql: FISCAL_GL_PERIOD_NAME ;;
 #   }
 #   dimension: fiscal_period_set_name {
 #     type: string

@@ -100,7 +100,7 @@ view: sales_orders_common_dimensions_ext {
     type: unquoted
     view_label: "@{view_label_for_filters}"
     label: "Customer Type"
-    description: "Select customer type to use for Customer Name and Country to display and filter by."
+    description: "Select customer type to use for Customer Name and Country to display and filter by"
     allowed_value: {label: "Bill To" value: "bill" }
     allowed_value: {label: "Sold To" value: "sold" }
     allowed_value: {label: "Ship To" value: "ship" }

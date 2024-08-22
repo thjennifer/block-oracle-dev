@@ -178,7 +178,7 @@ view: +sales_orders_daily_agg__lines {
     hidden: yes
     type: sum
     label: "Total Order Lines"
-    description: "Total number of order lines."
+    description: "Total number of order lines"
     sql: ${num_order_lines} ;;
   }
 
@@ -186,14 +186,14 @@ view: +sales_orders_daily_agg__lines {
     hidden: yes
     type: sum
     label: "Total Fulfilled Order Lines"
-    description: "Total number of fulfilled order lines."
+    description: "Total number of fulfilled order lines"
     sql: ${num_fulfilled_order_lines} ;;
   }
 
   measure: sum_total_cycle_time_days {
     hidden: yes
     type: sum
-    description: "Total cycle time days of non-cancelled order lines."
+    description: "Total cycle time days of non-cancelled order lines"
     sql: ${total_cycle_time_days} ;;
   }
 
@@ -201,7 +201,7 @@ view: +sales_orders_daily_agg__lines {
   measure: average_cycle_time_days {
     hidden: no
     type: number
-    description: "Average number of days from order to fulfillment per order line. Item Category must be in query or computation will return null."
+    description: "Average number of days from order to fulfillment per order line. Item Category must be in query or computation will return null"
     sql: {%- if category_id._is_selected or category_description._is_selected -%}SAFE_DIVIDE(${sum_total_cycle_time_days},${total_num_fulfilled_order_lines}){%- else -%}SUM(NULL){%- endif -%} ;;
     value_format_name: decimal_2
   }

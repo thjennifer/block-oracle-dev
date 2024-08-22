@@ -57,13 +57,13 @@ view: +sales_orders {
 
   dimension: ledger_id {
     hidden: no
-    description: "ID of ledger or set of books."
+    description: "ID of ledger or set of books"
     value_format_name: id
   }
 
   dimension: ledger_name {
     hidden: no
-    description: "Name of ledger or set of books."
+    description: "Name of ledger or set of books"
   }
 
   dimension: sales_rep {hidden: no}
@@ -177,44 +177,63 @@ view: +sales_orders {
     hidden: no
     group_label: "Fiscal Date"
     group_item_label: "Fiscal Period Number"
+    description: "Accounting period based on the ordered date"
    }
 
   dimension: fiscal_period_name {
     hidden: no
     group_label: "Fiscal Date"
+    description: "Accounting period name"
   }
+
   dimension: fiscal_period_set_name {
     hidden: no
     group_label: "Fiscal Date"
+    description: "Accounting calendar name"
   }
+
   dimension: fiscal_period_type {
     hidden: no
     group_label: "Fiscal Date"
+    description: "Accounting period type"
   }
+
   dimension: fiscal_quarter_num {
     hidden: no
     group_label: "Fiscal Date"
     group_item_label: "Fiscal Quarter Number"
+    description: "Accounting quarter based on the ordered date"
   }
+
   dimension: fiscal_year_num {
     hidden: no
     group_label: "Fiscal Date"
     group_item_label: "Fiscal Year Number"
+    description: "Accounting year based on the ordered date"
     value_format_name: id
+  }
+
+  dimension: fiscal_gl_year_period {
+    hidden: no
+    type: string
+    group_label: "Fiscal Date"
+    label: "Fiscal Year-Period (YYYY-PPP)"
+    description: "Fiscal Year-Period of the ordered date formatted as YYYY-PPP string"
+    sql: CONCAT(CAST(${fiscal_year_num} AS STRING),"-",LPAD(CAST(${fiscal_period_num} AS STRING),3,'0'));;
   }
 
   dimension_group: creation_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"
-    description: "Creation timestamp of record in Oracle source table."
+    description: "Creation timestamp of record in Oracle source table"
   }
 
   dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Last Update"
-    description: "Last update timestamp of record in Oracle source table."
+    description: "Last update timestamp of record in Oracle source table"
   }
 
 #} end dates
@@ -233,26 +252,26 @@ view: +sales_orders {
     hidden: no
     group_label: "Order Status"
     label: "Has Backorder"
-    description: "Yes, if at least one order line does not enough available inventory to fill."
+    description: "Yes if at least one order line does not enough available inventory to fill"
   }
 
   dimension: has_cancelled {
     hidden: no
     group_label: "Order Status"
-    description: "At least one order line was cancelled. Use IS_CANCELLED to check if the entire order is cancelled."
+    description: "At least one order line was cancelled. Use IS_CANCELLED to check if the entire order is cancelled"
   }
 
   dimension: has_hold {
     hidden: no
     group_label: "Order Status"
     label: "Has Been On Hold"
-    description: "Order has been held at some point in process flow. Use Is Held to identify if order is currently on hold."
+    description: "Order has been held at some point in process flow. Use Is Held to identify if order is currently on hold"
   }
 
   dimension: has_return_line {
     hidden: no
     group_label: "Order Status"
-    description: "Yes if sales order has at least 1 line with a return."
+    description: "Yes if sales order has at least 1 line with a return"
   }
 
   dimension: has_return_line_with_symbols {
@@ -267,7 +286,7 @@ view: +sales_orders {
     hidden: no
     type: yesno
     group_label: "Order Status"
-    description: "Yes if order is either held or has an item on backorder."
+    description: "Yes if order is either held or has an item on backorder"
     sql: ${has_backorder} OR ${is_held} ;;
   }
 
@@ -282,13 +301,13 @@ view: +sales_orders {
   dimension: is_booked {
     hidden: no
     group_label: "Order Status"
-    description: "The header is in or past the booked phase."
+    description: "The header is in or past the booked phase"
   }
 
   dimension: is_cancelled {
     hidden: no
     group_label: "Order Status"
-    description: "Entire order is cancelled."
+    description: "Entire order is cancelled"
   }
 
 #--> not displayed in Explore but used in filtered measure Fillable Sales Order Count
@@ -296,7 +315,7 @@ view: +sales_orders {
     hidden: yes
     type: yesno
     group_label: "Order Status"
-    description: "Yes, if sales order can be met with available inventory (no items are backordered)."
+    description: "Yes, if sales order can be met with available inventory (no items are backordered)"
 #--> did not use ${is_backordered} = No becuase would count orders where ${TABLE}.IS_BACKORDERED = NULL
     sql: ${TABLE}.HAS_BACKORDER = FALSE ;;
   }
@@ -304,7 +323,7 @@ view: +sales_orders {
   dimension: is_fulfilled {
     hidden: no
     group_label: "Order Status"
-    description: "Yes if all order lines are fulfilled (inventory is reserved and ready to be shipped)."
+    description: "Yes if all order lines are fulfilled (inventory is reserved and ready to be shipped)"
     # derived as LOGICAL_AND(Lines.IS_FULFILLED)
   }
 
@@ -322,7 +341,7 @@ view: +sales_orders {
     type: yesno
     group_label: "Order Status"
     label: "Is On-Time & In-Full (OTIF)"
-    description: "Yes if all lines of order are fulfilled by requested delivery date."
+    description: "Yes if all lines of order are fulfilled by requested delivery date"
     sql: ${num_lines} > 0 AND ${num_lines} = ${num_lines_fulfilled_by_request_date} ;;
   }
 
@@ -331,7 +350,7 @@ view: +sales_orders {
     type: yesno
     group_label: "Order Status"
     label: "Is Fulfilled by Promise Date"
-    description: "Yes if all lines of order are fulfilled by promised delivery date."
+    description: "Yes if all lines of order are fulfilled by promised delivery date"
     sql: ${num_lines} > 0 AND ${num_lines} = ${num_lines_fulfilled_by_promise_date} ;;
   }
 
@@ -344,7 +363,7 @@ view: +sales_orders {
   dimension: is_intercompany {
     hidden: no
     group_label: "Order Status"
-    description: "Yes indicates transaction was internal within the company."
+    description: "Yes indicates transaction was internal within the company"
   }
 
   dimension: is_open {
@@ -356,7 +375,7 @@ view: +sales_orders {
     hidden: no
     type: string
     group_label: "Order Status"
-    description: "Order is either open, closed or cancelled."
+    description: "Order is either open, closed or cancelled"
     sql: CASE WHEN ${header_status} in ("CLOSED","CANCELLED") THEN INITCAP(${header_status})
               WHEN ${is_open} THEN "Open"
               WHEN ${is_open} = false THEN 'Closed' END;;
@@ -366,7 +385,7 @@ view: +sales_orders {
     group_label: "Order Status with Symbols"
     hidden: no
     type: string
-    description: "Order status is indicated with colored symbol and text: 〇 (open), ◉ (closed) or X (cancelled)."
+    description: "Order status is indicated with colored symbol and text: 〇 (open), ◉ (closed) or X (cancelled)"
     sql: ${open_closed_cancelled} ;;
     html: {% if value == "Open" %}{%assign sym = "〇" %}{% assign color = "#4CBB17" %}
           {% elsif value == "Closed" %}{%assign sym = "◉"%}{% assign color = "#BFBDC1" %}
@@ -394,7 +413,7 @@ view: +sales_orders {
   dimension: currency_conversion_rate {
     hidden: no
     group_label: "Currency Conversion"
-    description: "Exchange rate between source and target currency for a specific date."
+    description: "Exchange rate between source and target currency for a specific date"
     sql: IF(${currency_code} = ${target_currency_code}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
     value_format_name: decimal_4
   }
@@ -413,7 +432,7 @@ view: +sales_orders {
     hidden: no
     group_label: "Order Totals"
     label: "Total Ordered Amount (Source Currency)"
-    description: "Total amount for an order in source currency."
+    description: "Total amount for an order in source currency"
     value_format_name: decimal_2
   }
 
@@ -421,7 +440,7 @@ view: +sales_orders {
     hidden: no
     group_label: "Order Totals"
     label: "Total Sales Amount (Source Currency)"
-    description: "Total sales amount for an order in source currency. Includes only lines with line category code of 'ORDER'."
+    description: "Total sales amount for an order in source currency. Includes only lines with line category code of 'ORDER'"
     value_format_name: decimal_2
     }
 
@@ -430,7 +449,7 @@ view: +sales_orders {
     type: number
     group_label: "Order Totals"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
-    description: "Total amount for an order in target currency."
+    description: "Total amount for an order in target currency"
     sql: COALESCE(${total_ordered_amount},0) * ${currency_conversion_rate} ;;
     value_format_name: decimal_2
   }
@@ -542,7 +561,7 @@ view: +sales_orders {
   measure: fillable_order_count {
     hidden: no
     type: count
-    description: "Number of sales orders that can be met with the available inventory (none of items are backordered)."
+    description: "Number of sales orders that can be met with the available inventory (none of items are backordered)"
     filters: [is_fillable: "Yes"]
   }
 

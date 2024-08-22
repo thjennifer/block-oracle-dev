@@ -58,7 +58,7 @@ view: +sales_invoices_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
-    description: "Amount in target currency recognized as revenue for accounting purposes."
+    description: "Amount in target currency recognized as revenue for accounting purposes"
     sql: ${total_revenue} ;;
     value_format_name: decimal_2
   }
@@ -68,7 +68,7 @@ view: +sales_invoices_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
-    description: "Invoice line amount in target currency."
+    description: "Invoice line amount in target currency"
     sql: ${total_transaction};;
     value_format_name: decimal_2
   }

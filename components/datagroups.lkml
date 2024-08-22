@@ -20,5 +20,5 @@ datagroup: once_a_day_at_5 {
 
 datagroup: sales_payments_daily_agg_change {
   sql_trigger: SELECT MAX(transaction_date) FROM `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg` ;;
-  description: "Triggers when max(transaction_date) in SalesPaymentsDailyAgg changes."
+  description: "Triggers when max(transaction_date) in SalesPaymentsDailyAgg changes"
 }

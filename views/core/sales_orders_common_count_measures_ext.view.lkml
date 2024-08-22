@@ -40,19 +40,19 @@ view: sales_orders_common_count_measures_ext {
 #{
 
   measure: order_count {
-    description: "Count of all orders regardless of category."
+    description: "Count of all orders regardless of category"
   }
 
   measure: sales_order_count {
-    description: "Count of orders with category code not equal to RETURN."
+    description: "Count of orders with category code not equal to RETURN"
   }
 
   measure: return_order_count {
-    description: "Count of orders with category code of RETURN."
+    description: "Count of orders with category code of RETURN"
   }
 
   measure: blocked_order_count {
-    description: "Number of orders that are blocked (backordered or held)."
+    description: "Number of orders that are blocked (backordered or held)"
     link: {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
@@ -72,49 +72,49 @@ view: sales_orders_common_count_measures_ext {
   }
 
   measure: cancelled_order_count {
-    description: "Number of orders completely cancelled (all lines cancelled)."
+    description: "Number of orders completely cancelled (all lines cancelled)"
   }
 
   measure: fillable_order_count {
-    description: "Number of orders that can be met with the available inventory (none of items are backordered)."
+    description: "Number of orders that can be met with the available inventory (none of items are backordered)"
   }
 
   measure: fulfilled_order_count {
     label: "In-Full Order Count"
-    description: "Number of orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
+    description: "Number of orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)"
   }
 
   measure: fulfilled_by_request_date_order_count {
     label: "On-Time & In-Full Order Count"
-    description: "Number of orders that are fulfilled on-time (all lines fulfilled by requested delivery date)."
+    description: "Number of orders that are fulfilled on-time (all lines fulfilled by requested delivery date)"
   }
 
   measure: fulfilled_by_promise_date_order_count {
     label: "Fulfilled by Promise Date Order Count"
-    description: "Number of orders that are fulfilled on-time (all lines fulfilled by promised delivery date)."
+    description: "Number of orders that are fulfilled on-time (all lines fulfilled by promised delivery date)"
   }
 
   measure: has_backorder_order_count {
-    description: "Number of orders with at least one item backordered."
+    description: "Number of orders with at least one item backordered"
   }
 
   measure: has_return_sales_order_count {
     label: "Has a Return Sales Order Count"
-    description: "Number of sales orders with at least one item returned (regardless of when returned)."
+    description: "Number of sales orders with at least one item returned (regardless of when returned)"
   }
 
   measure: no_holds_order_count {
     label: "One Touch Order Count"
-    description: "Count of orders without any holds."
+    description: "Count of orders without any holds"
   }
 
   measure: non_cancelled_order_count {
     label: "Non-Cancelled Order Count"
-    description: "Number of orders that have not been cancelled. Used in calculation of Average Amount per Order because cancelled orders do not have any sales amounts associated with them."
+    description: "Number of orders that have not been cancelled. Used in calculation of Average Amount per Order because cancelled orders do not have any sales amounts associated with them"
   }
 
   measure: open_order_count {
-    description: "Number of orders that are open."
+    description: "Number of orders that are open"
   }
 
 #} end labels/descriptions
@@ -127,7 +127,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: no
     type: number
     label: "Cancelled Percent"
-    description: "The percentage of orders that have been cancelled (all lines cancelled)."
+    description: "The percentage of orders that have been cancelled (all lines cancelled)"
     sql: SAFE_DIVIDE(${cancelled_order_count},${order_count}) ;;
     value_format_name: percent_1
   }
@@ -136,7 +136,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: no
     type: number
     label: "In-Full Percent"
-    description: "The percentage of orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
+    description: "The percentage of orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)"
     sql: SAFE_DIVIDE(${fulfilled_order_count},${order_count}) ;;
     value_format_name: percent_1
 #--> link to order line details dashboards with filter for is_fulfilled = Yes
@@ -161,7 +161,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: no
     type: number
     label: "On-Time & In-Full Percent"
-    description: "The percentage of orders that are on-time (all lines fulfilled by requested delivery date)."
+    description: "The percentage of orders that are on-time (all lines fulfilled by requested delivery date)"
     sql: SAFE_DIVIDE(${fulfilled_by_request_date_order_count},${order_count}) ;;
     value_format_name: percent_1
 #--> link to order line details dashboards with filter for is_fulfilled_by_request_date = Yes
@@ -186,7 +186,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: no
     type: number
     label: "Has Backorder Percent"
-    description: "The percentage of orders with at least one item backordered."
+    description: "The percentage of orders with at least one item backordered"
     sql: SAFE_DIVIDE(${has_backorder_order_count},${order_count}) ;;
     value_format_name: percent_1
 #--> link to order line details dashboards with filter for is_backordered = Yes
@@ -211,7 +211,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: no
     type: number
     label: "Has a Return Percent"
-    description: "The percentage of sales orders with at least one item returned."
+    description: "The percentage of sales orders with at least one item returned"
     sql: SAFE_DIVIDE(${has_return_sales_order_count},${sales_order_count}) ;;
     value_format_name: percent_1
 #--> link to order line details dashboards with filter for has_return = Yes
@@ -236,7 +236,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: no
     type: number
     label: "One Touch Percent"
-    description: "The percentage of orders that never had a hold during processing."
+    description: "The percentage of orders that never had a hold during processing"
     sql: SAFE_DIVIDE(${no_holds_order_count},${order_count}) ;;
     value_format_name: percent_1
   }
@@ -304,7 +304,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: yes
     type: number
     label: "In-Full Percent"
-    description: "The percentage of orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)."
+    description: "The percentage of orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)"
     sql: ${fulfilled_order_percent} * 100 ;;
     value_format_name: decimal_1
     html: {{rendered_value}}% ;;
@@ -331,7 +331,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: yes
     type: number
     label: "On-Time & In-Full Percent"
-    description: "The percentage of sales orders that are on-time (all lines fulfilled by requested delivery date)."
+    description: "The percentage of sales orders that are on-time (all lines fulfilled by requested delivery date)"
     sql: ${fulfilled_by_request_date_order_percent} * 100 ;;
     value_format_name: decimal_1
     html: {{rendered_value}}% ;;

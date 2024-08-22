@@ -60,7 +60,7 @@ view: +sales_payments_daily_agg {
 
   dimension: is_payment_transaction {
     hidden: no
-    description: "Yes if Payment Class Code = 'PMT' else No."
+    description: "Yes if Payment Class Code = 'PMT' else No"
   }
 
   dimension: business_unit_id {
@@ -254,7 +254,7 @@ view: +sales_payments_daily_agg {
   measure: invoice_closed_transaction_count {
     hidden: no
     type: sum
-    description: "For Invoice payment class code, the number of closed payments."
+    description: "For Invoice payment class code, the number of closed payments"
     sql: ${num_closed_payments} ;;
     filters: [payment_class_code: "INV"]
     value_format_name: decimal_0
@@ -278,7 +278,7 @@ view: +sales_payments_daily_agg {
   measure: average_days_to_payment {
     hidden: no
     type: number
-    description: "For Invoice payment class code, the average umber of days between payment close date and invoice date."
+    description: "For Invoice payment class code, the average umber of days between payment close date and invoice date"
     sql: SAFE_DIVIDE(${invoice_total_days_to_payment},${invoice_closed_transaction_count}) ;;
     value_format_name: decimal_1
   }

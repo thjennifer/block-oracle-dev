@@ -120,7 +120,7 @@ view: +sales_invoices_daily_agg {
   dimension: invoice_type_name {
     hidden: no
     group_label: "Invoice Type"
-    description: "Name or description of invoice type."
+    description: "Name or description of invoice type"
   }
 
   dimension: invoice_type_id_and_name {

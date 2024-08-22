@@ -163,26 +163,26 @@ view: template_dashboard_navigation {
 
   # ** if using to build UDD dashboards, override hidden and label accordingly **
   # ** Add more as required, currently supports 20 **
-  filter: filter1 { hidden: yes group_label: "Navigation Filters" label: "filter1" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter2 { hidden: yes group_label: "Navigation Filters" label: "filter2" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter3 { hidden: yes group_label: "Navigation Filters" label: "filter3" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter4 { hidden: yes group_label: "Navigation Filters" label: "filter4" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter5 { hidden: yes group_label: "Navigation Filters" label: "filter5" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter6 { hidden: yes group_label: "Navigation Filters" label: "filter6" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter7 { hidden: yes group_label: "Navigation Filters" label: "filter7" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter8 { hidden: yes group_label: "Navigation Filters" label: "filter8" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter9 { hidden: yes group_label: "Navigation Filters" label: "filter9" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter10 { hidden: yes group_label: "Navigation Filters" label: "filter10" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter11 { hidden: yes group_label: "Navigation Filters" label: "filter11" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter12 { hidden: yes group_label: "Navigation Filters" label: "filter12" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter13 { hidden: yes group_label: "Navigation Filters" label: "filter13" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter14 { hidden: yes group_label: "Navigation Filters" label: "filter14" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter15 { hidden: yes group_label: "Navigation Filters" label: "filter15" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter16 { hidden: yes group_label: "Navigation Filters" label: "filter16" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter17 { hidden: yes group_label: "Navigation Filters" label: "filter17" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter18 { hidden: yes group_label: "Navigation Filters" label: "filter18" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter19 { hidden: yes group_label: "Navigation Filters" label: "filter19" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
-  filter: filter20 { hidden: yes group_label: "Navigation Filters" label: "filter20" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards."}
+  filter: filter1 { hidden: yes group_label: "Navigation Filters" label: "filter1" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter2 { hidden: yes group_label: "Navigation Filters" label: "filter2" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter3 { hidden: yes group_label: "Navigation Filters" label: "filter3" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter4 { hidden: yes group_label: "Navigation Filters" label: "filter4" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter5 { hidden: yes group_label: "Navigation Filters" label: "filter5" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter6 { hidden: yes group_label: "Navigation Filters" label: "filter6" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter7 { hidden: yes group_label: "Navigation Filters" label: "filter7" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter8 { hidden: yes group_label: "Navigation Filters" label: "filter8" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter9 { hidden: yes group_label: "Navigation Filters" label: "filter9" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter10 { hidden: yes group_label: "Navigation Filters" label: "filter10" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter11 { hidden: yes group_label: "Navigation Filters" label: "filter11" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter12 { hidden: yes group_label: "Navigation Filters" label: "filter12" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter13 { hidden: yes group_label: "Navigation Filters" label: "filter13" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter14 { hidden: yes group_label: "Navigation Filters" label: "filter14" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter15 { hidden: yes group_label: "Navigation Filters" label: "filter15" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter16 { hidden: yes group_label: "Navigation Filters" label: "filter16" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter17 { hidden: yes group_label: "Navigation Filters" label: "filter17" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter18 { hidden: yes group_label: "Navigation Filters" label: "filter18" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter19 { hidden: yes group_label: "Navigation Filters" label: "filter19" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
+  filter: filter20 { hidden: yes group_label: "Navigation Filters" label: "filter20" description: "Add to visualization with navigation links to 'listen' to this filter and pass between dashboards"}
 
 #} end optional overrides
 
@@ -250,7 +250,7 @@ view: template_dashboard_navigation {
 #   type: string
 #   hidden: no
 #   label: "Test Navigation Parts"
-#   description: "Add to Single Value Visualization. Defined HTML styling will be shown."
+#   description: "Add to Single Value Visualization. Defined HTML styling will be shown"
 #   sql:  '' ;;
 #   html:
 

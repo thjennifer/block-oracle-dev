@@ -78,18 +78,18 @@ view: +sales_payments {
 
   dimension: invoice_number {
     hidden: no
-    description: "Invoice number associated with transaction."
+    description: "Invoice number associated with transaction"
   }
 
   dimension: ledger_id {
     hidden: no
-    description: "ID of ledger or set of books."
+    description: "ID of ledger or set of books"
     value_format_name: id
   }
 
   dimension: ledger_name {
     hidden: no
-    description: "Name of ledger or set of books."
+    description: "Name of ledger or set of books"
   }
 
 
@@ -174,14 +174,14 @@ view: +sales_payments {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"
-    description: "Creation timestamp of record in Oracle source table."
+    description: "Creation timestamp of record in Oracle source table"
   }
 
   dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Last Update"
-    description: "Last update timestamp of record in Oracle source table."
+    description: "Last update timestamp of record in Oracle source table"
   }
 
 #} end dates
@@ -207,7 +207,7 @@ view: +sales_payments {
   dimension: is_open_and_overdue {
     hidden: no
     group_label: "Payment Status"
-    description: "Yes if due date < current date and amount due remaining > 0 else No."
+    description: "Yes if due date < current date and amount due remaining > 0 else No"
     sql:  {%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}
           {%- if test_data == 'YES' -%}
              ${due_raw} < DATE(@{default_target_date}) AND ${is_open}
@@ -219,7 +219,7 @@ view: +sales_payments {
   dimension: is_doubtful {
     hidden: no
     group_label: "Payment Status"
-    description: "Yes if 'Is Open and Overdue' = Yes and 'Days Overdue' > 90 else No."
+    description: "Yes if 'Is Open and Overdue' = Yes and 'Days Overdue' > 90 else No"
     sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
          {% if test_data == 'YES' %}
             ${days_overdue} > 90 AND ${is_open}
@@ -230,7 +230,7 @@ view: +sales_payments {
   dimension: was_closed_late {
     hidden: no
     group_label: "Payment Status"
-    description: "Yes if payment is closed (amount due remaining = 0) and Due < Payment Close Date else No."
+    description: "Yes if payment is closed (amount due remaining = 0) and Due < Payment Close Date else No"
   }
 
 #} end status dimensions
@@ -243,7 +243,7 @@ view: +sales_payments {
 #--> if test data is used, re-compute using the target end date of the test dataset.
   dimension: days_overdue {
     hidden: yes
-    description: "If open and overdue, number of days past due date."
+    description: "If open and overdue, number of days past due date"
     sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
          {% if test_data == 'YES' %}
              IF(${is_open_and_overdue},DATE_DIFF(DATE(@{default_target_date}), ${due_raw}, DAY),NULL)
@@ -253,12 +253,12 @@ view: +sales_payments {
 
   dimension: days_late {
     hidden: yes
-    description: "If payment was closed late, number of days after the due date the payment closed."
+    description: "If payment was closed late, number of days after the due date the payment closed"
   }
 
   dimension: days_to_payment {
     hidden: yes
-    description: "For payment class code = INV, the number of days between payment close date and invoice date."
+    description: "For payment class code = INV, the number of days between payment close date and invoice date"
   }
 
 
@@ -280,7 +280,7 @@ view: +sales_payments {
   dimension: currency_conversion_rate {
     hidden: no
     group_label: "Currency Conversion"
-    description: "Exchange rate between source and target currency for a specific date."
+    description: "Exchange rate between source and target currency for a specific date"
     sql: IF(${currency_code} = ${target_currency_code}, 1, ${currency_conversion_sdt.conversion_rate}) ;;
     value_format_name: decimal_4
   }
@@ -302,6 +302,7 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Adjusted (Source Currency)"
+    description: "Amount adjusted"
     value_format_name: decimal_2
   }
 
@@ -309,6 +310,7 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Applied (Source Currency)"
+    description: "Amount applied"
     value_format_name: decimal_2
   }
 
@@ -316,6 +318,7 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Credited (Source Currency)"
+    description: "Amount credited"
     value_format_name: decimal_2
   }
 
@@ -323,6 +326,7 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Discounted (Source Currency)"
+    description: "Amount discounted"
     value_format_name: decimal_2
   }
 
@@ -330,6 +334,7 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Due Original (Source Currency)"
+    description: "Amount due originally"
     value_format_name: decimal_2
   }
 
@@ -337,6 +342,7 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Due Remaining (Source Currency)"
+    description: "Amount due remaining"
     value_format_name: decimal_2
   }
 
@@ -344,6 +350,7 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Tax Amount Original (Source Currency)"
+    description: "Original tax amount charged on the transaction"
     value_format_name: decimal_2
   }
 
@@ -351,6 +358,7 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Tax Amount Remaining (Source Currency)"
+    description: "Remaining tax amount charged on the transaction"
     value_format_name: decimal_2
   }
 
@@ -359,6 +367,7 @@ view: +sales_payments {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    description: "Amount adjusted in target currency"
     sql: ${amount_adjusted} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -368,6 +377,7 @@ view: +sales_payments {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    description: "Amount applied in target currency"
     sql: ${amount_applied} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -377,6 +387,7 @@ view: +sales_payments {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    description: "Amount credited in target currency"
     sql: ${amount_credited} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -386,6 +397,7 @@ view: +sales_payments {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    description: "Amount discounted in target currency"
     sql: ${amount_discounted} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -396,6 +408,7 @@ view: +sales_payments {
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_due_original} * ${currency_conversion_rate}  ;;
+    description: "Amount due originally in target currency"
     value_format_name: decimal_2
   }
 
@@ -404,6 +417,7 @@ view: +sales_payments {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    description: "Amount due remaining in target currency"
     sql: ${amount_due_remaining} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -413,6 +427,7 @@ view: +sales_payments {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign field_name = 'Tax Amount Original' -%}@{label_currency_if_selected}"
+    description: "Original tax amount charged on the transaction in target currency"
     sql: ${tax_original} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -422,6 +437,7 @@ view: +sales_payments {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign field_name = 'Tax Amount Remaining' -%}@{label_currency_if_selected}"
+    description: "Remaining tax amount charged on the transaction in target currency"
     sql: ${tax_remaining} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -431,6 +447,7 @@ view: +sales_payments {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign field_name = 'Past Due Receivables' -%}@{label_currency_if_selected}"
+    description: "Amount in target currency still remaining for open and overdue invoice"
     sql: IF(${is_payment_transaction}=FALSE AND ${is_open_and_overdue},${amount_due_remaining_target_currency},0)   ;;
     value_format_name: decimal_2
   }
@@ -440,6 +457,7 @@ view: +sales_payments {
     type: number
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    description: "Amount in target currency still remaining for invoice more than 90 days overdue"
     sql: IF(${is_payment_transaction}=FALSE AND ${is_doubtful},${amount_due_remaining_target_currency},0)   ;;
     value_format_name: decimal_2
   }
@@ -465,7 +483,7 @@ view: +sales_payments {
   measure: invoice_closed_transaction_count {
     hidden: no
     type: count
-    description: "For Invoice payment class code, the number of closed payments."
+    description: "For Invoice payment class code, the number of closed payments"
     filters: [is_closed: "Yes",payment_class_code: "INV"]
     drill_fields: [payment_details*]
   }
@@ -473,7 +491,7 @@ view: +sales_payments {
   measure: average_days_overdue {
     hidden: no
     type: average
-    description: "If open and overdue, average number of days past due date."
+    description: "If open and overdue, average number of days past due date"
     sql: ${days_overdue} ;;
     value_format_name: decimal_1
   }
@@ -481,7 +499,7 @@ view: +sales_payments {
   measure: average_days_late {
     hidden: no
     type: average
-    description: "If payment was closed late, average number of days after the due date the payment closed."
+    description: "If payment was closed late, average number of days after the due date the payment closed"
     sql: ${days_late} ;;
     value_format_name: decimal_1
   }
@@ -489,7 +507,7 @@ view: +sales_payments {
   measure: average_days_to_payment {
     hidden: no
     type: average
-    description: "Average umber of days between payment close date and invoice date."
+    description: "Average umber of days between payment close date and invoice date"
     sql: ${days_to_payment} ;;
     filters: [payment_class_code: "INV"]
     value_format_name: decimal_1
@@ -505,7 +523,7 @@ view: +sales_payments {
     hidden: no
     type: sum
     group_label: "Amounts in Source Currency"
-    label: "Total Amount Adjusted in Source Currency"
+    label: "Amount Adjusted in Source Currency"
     description: "Sum of amount adjusted in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_adjusted}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
@@ -516,7 +534,7 @@ view: +sales_payments {
     hidden: no
     type: sum
     group_label: "Amounts in Source Currency"
-    label: "Total Amount Applied in Source Currency"
+    label: "Amount Applied in Source Currency"
     description: "Sum of amount applied in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_applied}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
@@ -527,7 +545,7 @@ view: +sales_payments {
     hidden: no
     type: sum
     group_label: "Amounts in Source Currency"
-    label: "Total Amount Credited in Source Currency"
+    label: "Amount Credited in Source Currency"
     description: "Sum of amount credited in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_credited}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
@@ -538,7 +556,7 @@ view: +sales_payments {
     hidden: no
     type: sum
     group_label: "Amounts in Source Currency"
-    label: "Total Amount Discounted in Source Currency"
+    label: "Amount Discounted in Source Currency"
     description: "Sum of amount discounted in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_discounted}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
@@ -549,7 +567,7 @@ view: +sales_payments {
     hidden: no
     type: sum
     group_label: "Amounts in Source Currency"
-    label: "Total Amount Due Original in Source Currency"
+    label: "Amount Due Original in Source Currency"
     description: "Sum of amount due original in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_due_original}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
@@ -560,7 +578,7 @@ view: +sales_payments {
     hidden: no
     type: sum
     group_label: "Amounts in Source Currency"
-    label: "Total Amount Due Remaining in Source Currency"
+    label: "Amount Due Remaining in Source Currency"
     description: "Sum of amount due remaining in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_due_remaining}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
@@ -571,7 +589,7 @@ view: +sales_payments {
     hidden: no
     type: sum
     group_label: "Amounts in Source Currency"
-    label: "Total Tax Original in Source Currency"
+    label: "Tax Original in Source Currency"
     description: "Sum of tax original in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${tax_original}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
@@ -582,7 +600,7 @@ view: +sales_payments {
     hidden: no
     type: sum
     group_label: "Amounts in Source Currency"
-    label: "Total Tax Remaining in Source Currency"
+    label: "Tax Remaining in Source Currency"
     description: "Sum of tax remaining in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${tax_remaining}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2

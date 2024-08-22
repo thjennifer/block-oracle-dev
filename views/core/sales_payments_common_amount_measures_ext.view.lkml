@@ -50,6 +50,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total mount adjusted in target currency"
     sql: ${amount_adjusted_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -59,6 +60,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount applied in target currency. Note, the total includes credit memo amounts added as positive values instead of negative ones"
     sql: ${amount_applied_target_currency} * if(${payment_class_code} = 'CM',-1,1) ;;
     value_format_name: decimal_2
   }
@@ -68,6 +70,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount credited in target currency"
     sql: ${amount_credited_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -77,6 +80,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount discounted in target currency"
     sql: ${amount_discounted_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -86,6 +90,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount due originally in target currency"
     sql: ${amount_due_original_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -95,6 +100,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount due remaining in target currency"
     sql: ${amount_due_remaining_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -104,6 +110,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign field_name = 'Tax Amount Original' -%}@{label_currency_if_selected}"
+    description: "Total original tax amount charged in target currency"
     sql: ${tax_original_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -113,6 +120,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign field_name = 'Tax Amount Remaining' -%}@{label_currency_if_selected}"
+    description: "Total of remaining tax amount charged on the transaction in target currency"
     sql: ${tax_remaining_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -121,7 +129,8 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount due remaining in target currency where payment class code <> 'PMT'"
     sql: ${amount_due_remaining_target_currency} ;;
     filters: [payment_class_code: "-PMT"]
     value_format_name: decimal_2
@@ -132,6 +141,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign field_name = 'Total Original Invoice Amount' -%}@{label_currency_if_selected}"
+    description: "Total amount due originally in target currency where payment class code <> 'PMT'"
     sql: ${amount_due_original_target_currency} ;;
     filters: [payment_class_code: "-PMT"]
     value_format_name: decimal_2
@@ -142,6 +152,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign field_name = 'Past Due Receivables' -%}@{label_currency_if_selected}"
+    description: "Total amount in target currency still remaining for open and overdue invoices"
     sql: ${overdue_receivables_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -151,6 +162,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount in target currency still remaining for invoice more than 90 days overdue"
     sql: ${doubtful_receivables_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -166,6 +178,7 @@ view: sales_payments_common_amount_measures_ext {
     type: running_total
     group_label: "Amounts"
     label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    description: "Cumulative total of receivables (amount due remaining)"
     sql: ${total_receivables_target_currency} ;;
     direction: "column"
     value_format_name: decimal_2
@@ -184,6 +197,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total mount adjusted in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_amount_adjusted_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -194,6 +208,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount applied in target currency. Note, the total includes credit memo amounts added as positive values instead of negative ones. Formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_amount_applied_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -204,6 +219,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount credited in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_amount_credited_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -214,6 +230,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount discounted in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_amount_discounted_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -224,6 +241,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount due originally in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_amount_due_original_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -234,6 +252,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount due remaining in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_amount_due_remaining_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -244,6 +263,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign add_formatted = true -%}{%- assign field_name = 'Tax Amount Original' -%}@{label_currency_if_selected}"
+    description: "Total original tax amount charged in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_tax_original_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -254,6 +274,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign add_formatted = true -%}{%- assign field_name = 'Tax Amount Remaining' -%}@{label_currency_if_selected}"
+    description: "Total remaining tax amount charged in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_tax_remaining_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -264,6 +285,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount due remaining in target currency where payment class code <> 'PMT'. Formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_receivables_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -274,6 +296,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign add_formatted = true -%}{%- assign field_name = 'Total Original Invoice Amount' -%}@{label_currency_if_selected}"
+    description: "Total amount due originally in target currency where payment class code <> 'PMT'. Formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_amount_original_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -284,6 +307,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign add_formatted = true -%}{%- assign field_name = 'Past Due Receivables' -%}@{label_currency_if_selected}"
+    description: "Total amount in target currency still remaining for open and overdue invoices. Formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_overdue_receivables_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -294,6 +318,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Total amount in target currency still remaining for invoice more than 90 days overdue and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_doubtful_receivables_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
@@ -304,6 +329,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    description: "Cumulative total of receivables (amount due remaining). Formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${cumulative_total_receivables} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;
