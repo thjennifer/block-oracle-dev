@@ -260,7 +260,7 @@ view: +sales_orders {
     group_label: "Order Status with Symbols"
     description: "✅ if sales order has at least 1 line with a return."
     sql: COALESCE(${has_return_line},false) ;;
-    html: @{symbols_for_yes} ;;
+    html: @{html_symbols_for_yes} ;;
   }
 
   dimension: is_blocked {
@@ -313,7 +313,7 @@ view: +sales_orders {
     group_label: "Order Status with Symbols"
     description: "✅ if all order lines are fulfilled (inventory is reserved and ready to be shipped)."
     sql: COALESCE(${is_fulfilled},false) ;;
-    html: @{symbols_for_yes};;
+    html: @{html_symbols_for_yes};;
   }
 
 
@@ -429,7 +429,7 @@ view: +sales_orders {
     hidden: no
     type: number
     group_label: "Order Totals"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     description: "Total amount for an order in target currency."
     sql: COALESCE(${total_ordered_amount},0) * ${currency_conversion_rate} ;;
     value_format_name: decimal_2
@@ -439,7 +439,7 @@ view: +sales_orders {
     hidden: no
     type: number
     group_label: "Order Totals"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     description: "Total sales amount for an order in target currency. Includes only lines with line category code of 'ORDER'"
     sql: COALESCE(${total_sales_ordered_amount},0) * ${currency_conversion_rate} ;;
     value_format_name: decimal_2

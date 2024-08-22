@@ -146,7 +146,7 @@ view: +sales_payments_daily_agg {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: (select SUM(TOTAL_ADJUSTED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -155,7 +155,7 @@ view: +sales_payments_daily_agg {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: (select SUM(TOTAL_APPLIED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -164,7 +164,7 @@ view: +sales_payments_daily_agg {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: (select SUM(TOTAL_CREDITED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -173,7 +173,7 @@ view: +sales_payments_daily_agg {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: (select SUM(TOTAL_DISCOUNTED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -182,7 +182,7 @@ view: +sales_payments_daily_agg {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: (select SUM(TOTAL_ORIGINAL) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -191,7 +191,7 @@ view: +sales_payments_daily_agg {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: (select SUM(TOTAL_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -200,7 +200,7 @@ view: +sales_payments_daily_agg {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Tax Amount Original (@{label_get_target_currency}){%else%}Tax Amount Original (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Tax Amount Original'-%}@{label_currency_if_selected}"
     sql: (select SUM(TOTAL_TAX_ORIGINAL) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -209,7 +209,7 @@ view: +sales_payments_daily_agg {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Tax Amount Remaining (@{label_get_target_currency}){%else%}Tax Amount Remaining (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Tax Amount Remaining'-%}@{label_currency_if_selected}"
     sql: (select SUM(TOTAL_TAX_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -218,7 +218,7 @@ view: +sales_payments_daily_agg {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Past Due Receivables (@{label_get_target_currency}){%else%}Past Due Receivables (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Past Due Receivables'-%}@{label_currency_if_selected}"
     sql: (select SUM(TOTAL_OVERDUE_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -227,7 +227,7 @@ view: +sales_payments_daily_agg {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: (select SUM(TOTAL_DOUBTFUL_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }

@@ -194,18 +194,31 @@ view: +sales_orders__lines {
   }
 
 
-
-
-  dimension: test_unit_list_price_target_currency {
+  dimension: xxx_total_unit_list_price_target_currency_formatted {
     hidden: no
     type: string
     view_label: "TEST STUFF"
-    label: "@{label_build}"
-    # label: "{% if _field._is_selected %}@{label_derive_field_name}{{field_name}} (@{label_get_target_currency}){%else%}{{field_name}} (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'XXX Something Different' -%}@{label_currency_if_selected}"
     sql: '1'  ;;
-
-
   }
+
+
+  dimension: yyyy_total_unit_list_price_target_currency_formatted {
+    hidden: no
+    type: string
+    view_label: "TEST STUFF"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    sql: '1'  ;;
+  }
+
+  dimension: zzzz_total_unit_list_price_target_currency_formatted {
+    hidden: no
+    type: string
+    view_label: "TEST STUFF"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    sql: '1' ;;
+  }
+
 #(% for w in fname_array %}
           #     {% assign field_name = field_name | append: w %}
           # {% endfor %}

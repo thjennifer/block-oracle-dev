@@ -233,7 +233,7 @@ view: +sales_orders__lines {
     description: "✅ if line is not in ENTERED, BOOKED, CLOSED or CANCELLED statuses."
     sql: COALESCE(${is_backlog},false) ;;
     can_filter: no
-    html: @{symbols_for_yes} ;;
+    html: @{html_symbols_for_yes} ;;
   }
 
   dimension: is_backordered {
@@ -250,7 +250,7 @@ view: +sales_orders__lines {
     description: "✅ if line cannot be fulfilled with the current inventory."
     sql: COALESCE(${is_backordered},false) ;;
     can_filter: no
-    html: @{symbols_for_yes} ;;
+    html: @{html_symbols_for_yes} ;;
   }
 
   dimension: is_booked {
@@ -274,7 +274,7 @@ view: +sales_orders__lines {
     description: "✅ if line is in ENTERED or BOOKED statuses."
     sql: COALESCE(${is_booking},false) ;;
     can_filter: no
-    html: @{symbols_for_yes} ;;
+    html: @{html_symbols_for_yes} ;;
   }
 
 #--> also in sales_orders so adding ${TABLE} reference
@@ -304,7 +304,7 @@ view: +sales_orders__lines {
     hidden: no
     group_label: "Line Status with Symbols"
     sql: COALESCE(${has_return},false) ;;
-    html: @{symbols_for_yes} ;;
+    html: @{html_symbols_for_yes} ;;
   }
 
   dimension: is_sales_order {
@@ -520,7 +520,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Item Prices and Cost"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${unit_list_price} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -529,7 +529,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Item Prices and Cost"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${unit_selling_price} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -538,7 +538,7 @@ view: +sales_orders__lines {
     hidden: no
     group_label: "Item Prices and Cost"
     description: "Pre-tax unit list price minus pre-tax unit selling price. Reported in target currency."
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${unit_list_price_target_currency} - ${unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -597,7 +597,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${ordered_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -606,7 +606,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${booking_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -615,7 +615,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${backlog_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -624,7 +624,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${fulfilled_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -633,7 +633,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${shipped_amount} * ${sales_orders.currency_conversion_rate} ;;
     value_format_name: decimal_2
   }
@@ -642,7 +642,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${invoiced_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }

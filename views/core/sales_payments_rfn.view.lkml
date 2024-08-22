@@ -358,7 +358,7 @@ view: +sales_payments {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_adjusted} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -367,7 +367,7 @@ view: +sales_payments {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_applied} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -376,7 +376,7 @@ view: +sales_payments {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_credited} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -385,7 +385,7 @@ view: +sales_payments {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_discounted} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -394,7 +394,7 @@ view: +sales_payments {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_due_original} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -403,7 +403,7 @@ view: +sales_payments {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_due_remaining} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -412,7 +412,7 @@ view: +sales_payments {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Tax Amount Original (@{label_get_target_currency}){%else%}Tax Amount Original (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Tax Amount Original' -%}@{label_currency_if_selected}"
     sql: ${tax_original} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -421,7 +421,7 @@ view: +sales_payments {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Tax Amount Remaining (@{label_get_target_currency}){%else%}Tax Amount Remaining (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Tax Amount Remaining' -%}@{label_currency_if_selected}"
     sql: ${tax_remaining} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -430,7 +430,7 @@ view: +sales_payments {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Past Due Receivables (@{label_get_target_currency}){%else%}Past Due Receivables (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Past Due Receivables' -%}@{label_currency_if_selected}"
     sql: IF(${is_payment_transaction}=FALSE AND ${is_open_and_overdue},${amount_due_remaining_target_currency},0)   ;;
     value_format_name: decimal_2
   }
@@ -439,7 +439,7 @@ view: +sales_payments {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: IF(${is_payment_transaction}=FALSE AND ${is_doubtful},${amount_due_remaining_target_currency},0)   ;;
     value_format_name: decimal_2
   }

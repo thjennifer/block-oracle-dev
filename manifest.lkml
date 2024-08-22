@@ -25,20 +25,23 @@ constant: REPORTING_DATASET {
 #   export: override_required
 # }
 
-# Constant derive_currency_label
-# captures and formats selected Target Currency for use in 'labels' property
+#########################################################
+# HTML FORMATS
+#{
+# formatting values using html property
+
+
+# Constant html_format_big_numbers
+#{
+# Formats positive and negative numbers by appending B, M, K, or no suffix based on magnitude.
 # example use:
 #   measure: sum_ordered_amount {
 #     type: sum
-#     label: "@{derive_currency_label}Total Sales ({{currency}})"
 #     sql: ${ordered_amount_target_currency} ;;
-#     }
+#     html: @{html_format_big_numbers} ;;
+#   }
 
-# constant: derive_currency_label {
-#   value: "{% assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" %}"
-# }
-
-constant: format_big_numbers {
+constant: html_format_big_numbers {
   value: "
   {%- if value < 0 -%}
     {%- assign abs_value = value | times: -1.0 -%}
@@ -47,7 +50,6 @@ constant: format_big_numbers {
     {%- assign abs_value = value | times: 1.0 -%}
     {%- assign pos_neg = '' -%}
   {%- endif -%}
-
   {%- if abs_value >=1000000000 -%}
     {{pos_neg}}{{ abs_value | divided_by: 1000000000.0 | round: 1 }}B
   {%- elsif abs_value >=1000000 -%}
@@ -60,66 +62,54 @@ constant: format_big_numbers {
 
   "
 }
+#}
 
-constant: label_get_target_currency {
-  value: "{% assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" %}{{currency}}"
-}
-
-constant: label_derive_field_name {
-  value: "{%- assign fname = _field._name | split: '.' | last | remove: '_target_currency' | remove: '_formatted' -%}
-          {%- assign field_name = '' -%}
-          {%- assign fname_array = fname | split: '_' -%}
-          {%- for word in fname_array -%}
-            {%- assign cap = word | capitalize -%}
-            {%- assign field_name = field_name | append: cap -%}
-            {%- unless forloop.last -%}{%- assign field_name = field_name | append: ' ' -%}{%- endunless -%}
-          {%- endfor -%}
-          "
-}
-
-constant: label_derive_field_name_minus_total {
-  value: "{%- assign fname = _field._name | split: '.' | last | remove: '_target_currency' | remove: '_formatted' | remove: 'total_' -%}
-          {%- assign field_name = '' -%}
-          {%- assign fname_array = fname | split: '_' -%}
-          {%- for word in fname_array -%}
-            {%- assign cap = word | capitalize -%}
-            {%- assign field_name = field_name | append: cap -%}
-            {%- unless forloop.last -%}{%- assign field_name = field_name | append: ' ' -%}{%- endunless -%}
-          {%- endfor -%}"
-}
-
-constant: label_build {
-  value: "@{label_derive_field_name}{%- if _field._is_selected -%}{{field_name}} (@{label_get_target_currency}){%- else -%}{{field_name}} (Target Currency){%- endif -%}"
-}
-
-constant: label_build_formatted {
-  value: "@{label_derive_field_name}{%- if _field._is_selected -%}{{field_name}} (@{label_get_target_currency}){%- else -%}{{field_name}} (Target Currency) Formatted {%- endif -%}"
-}
-
-constant: label_build_minus_total {
-  value: "@{label_derive_field_name_minus_total}{%- if _field._is_selected -%}{{field_name}} (@{label_get_target_currency}){%- else -%}{{field_name}} (Target Currency){%- endif -%}"
-}
-
-constant: label_build_minus_total_formatted {
-  value: "@{label_derive_field_name_minus_total}{%- if _field._is_selected -%}{{field_name}} (@{label_get_target_currency}){%- else -%}{{field_name}} (Target Currency) Formatted {%- endif -%}"
-}
-
-
-
-
-constant: symbols_for_yes_no {
+# Use Symbols for yesno type fields
+# assign symbol for Yes values only, No values only or both Yes/No values
+#{
+# For yes/no type fields, displays symbols instead of Yes/No values.
+# example use:
+#   dimension: is_fulfilled {
+#     type: yesno
+#     html: @{html_symbols_for_yes_no} ;;
+#   }
+constant: html_symbols_for_yes_no {
   value: "{% if value == true %}✅ {% else %}❌{% endif %}"
 }
 
-constant: symbols_for_yes {
+constant: html_symbols_for_yes {
   value: "{% if value == true %}✅
   {% else %}  {% endif %}"
 }
 
-constant: symbols_for_no {
+constant: html_symbols_for_no {
   value: "{% if value == false %}❌{% else %}  {% endif %}"
 }
+#}
 
+# Warning messages
+#{
+# For measures in source currency, returns a warning message if currency_code field is missing
+# from query.
+# example use:
+# measure: total_amount_adjusted_in_source_currency {
+#   type: sum
+#   sql: {%- if currency_code._is_selected -%}${amount_adjusted}{%- else -%}NULL{%- endif -%} ;;
+#   html: @{html_message_source_currency} ;;
+# }
+constant: html_message_source_currency {
+  value: "{%- if currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%}"
+}
+#}
+#} end formats
+
+
+#########################################################
+# LABELS: Views
+#{
+# define view labels to use in Explores
+
+# View labels
 constant: view_label_for_filters {
   value: "🔍 Filters"
 }
@@ -128,9 +118,121 @@ constant: view_label_for_dashboard_navigation {
   value: "🛠 Dashboard Navigation"
 }
 
-constant: html_message_source_currency {
-  value: "{%- if currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%}"
+#}
+
+#########################################################
+# LABELS: Target Currency Fields
+#{
+# For fields using target currency, derive the label to use
+# when the field is selected in a chart and when the field is shown
+# in the Explore.
+#
+# For example, for a dimension named total_ordered_amount_target_currency
+# and selected currency of USD, you will see:
+#     Total Ordered Amount (USD) in a table/chart
+#     Total Ordered Amount (Target Currency) when listed in the Explore
+#
+# Assumes the target_currency fields follow a specific naming convention.
+#
+# Example Use Cases:
+#{
+# Example use with defaults:
+#   measure: total_amount_adjusted_target_currency {
+#     label: @{label_defaults}@{label_field_name}@{label_currency_if_selected}
+#   }
+#   Total Amount Adjusted (USD)
+#   Total Amount Adjusted (Target Currency)
+#
+# Example use with removal of total_ prefix:
+#   measure: total_amount_adjusted_target_currency {
+#     label: @{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}
+#   }
+#   Amount Adjusted (USD)
+#   Amount Adjusted (Target Currency)
+#
+# Example use with addition of Formatted to Explore label:
+#   measure: total_amount_adjusted_target_currency_formatted {
+#     label: @{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}
+#   }
+#   Total Amount Adjusted (USD)
+#   Total Amount Adjusted (Target Currency) Formatted
+#
+# Example use custom value provided for field_name:
+#   measure: total_amount_adjusted_target_currency {
+#     label: @{label_defaults}{%- assign field_name = 'Adjusted Amount' -%}@{label_currency_if_selected}
+#   }
+#   Adjusted Amount (USD)
+#   Adjusted Amount (Target Currency)
+#}
+#
+# label_defaults
+#   - Initial values for liquid variables that will be used to create the label.
+#     currency = value in parameter_target_currency that will be appended to label when field is selected.
+#     field_name = blank
+#     remove_words = '_target_currency, _formatted' meaning these words will not be in label.
+#     remove_total_prefix = false. When true 'total_' will also be removed from label.
+#     add_words = ' (Target Currency)' will be appended to field_name and displayed in the Explore
+#     add_formatted = false. When true, ' Formatted' will be added to label displayed in the Explore
+#   - These defaults can be overridden when defining the label property.
+constant: label_defaults {
+  value: "{%- assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" -%}
+  {%- assign field_name = '' -%}
+  {%- assign remove_words = '_target_currency,_formatted' -%}
+  {%- assign remove_total_prefix = false -%}
+  {%- assign add_words = ' (Target Currency)' -%}
+  {%- assign add_formatted = false -%}
+  "
 }
+
+# label_field_name
+#   - Creates liquid variable {{ field_name }} for use in 'label' property.
+#   - Captures _field._name and removes words defined in liquid variable remove_words and remove_total_prefix.
+#   - Capitalizes remaining words.
+#   - For example, a dimension named total_ordered_amount_target_currency will return
+#     Total Ordered Amount
+constant: label_field_name {
+  value: "{%- assign fname = _field._name | split: '.' | last -%}
+  {%- if remove_total_prefix == true -%}{% assign remove_words = remove_words | append: ',total_'-%}{%- endif -%}
+  {%- assign remove_words = remove_words | split: ','%}
+  {%- for remove_word in remove_words -%}
+    {%- assign fname = fname | remove: remove_word -%}
+  {%- endfor -%}
+  {%- assign fname_array = fname | split: '_' -%}
+  {%- for word in fname_array -%}
+    {%- assign cap = word | capitalize -%}
+    {%- assign field_name = field_name | append: cap -%}
+    {%- unless forloop.last -%}{%- assign field_name = field_name | append: ' ' -%}{%- endunless -%}
+  {%- endfor -%}
+  "
+}
+
+# label_currency_if_selected
+#   - Builds label to use when a field is selected for a chart and when it is listed in Explore.
+#   - Derives from field name itself with some unnecessary words removed.
+#   - If field is selected for a query, appends the target currency value else appends phrase ' (Target Currency)' to the field
+#   - For example, for a dimension named total_ordered_amount_target_currency and a selected currency of USD, you will see:
+#       Total Ordered Amount (USD) when shown in chart and
+#       Total Ordered Amount (Target Currency) when shown in the Explore
+constant: label_currency_if_selected {
+  value: "
+  {%- if add_formatted == true -%}{%- assign add_words = add_words | append: ' Formatted' -%}{%- endif -%}
+  {%- if _field._is_selected -%}
+  {{field_name}} ({{currency}})
+  {%- else -%}{{field_name | append: add_words}}
+  {%- endif -%}"
+}
+
+
+
+#} end constants for labels
+
+
+
+
+
+
+
+
 
 # Constant is_agg_category_in_query
 # provides first part of liquid IF statement to check if any of these category fields from

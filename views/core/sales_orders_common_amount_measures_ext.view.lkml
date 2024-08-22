@@ -45,7 +45,7 @@ view: sales_orders_common_amount_measures_ext {
 
   measure: average_ordered_amount_per_order_target_currency {
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Average Amount per Order (@{label_get_target_currency}){%else%}Average Amount per Order (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Average Amount per Order' -%}@{label_currency_if_selected}"
     value_format_name: decimal_2
   }
 
@@ -59,7 +59,7 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of ordered amount in target currency."
     sql: ${ordered_amount_target_currency} ;;
     value_format_name: decimal_2
@@ -69,7 +69,7 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of sales in target currency."
     sql: ${ordered_amount_target_currency} ;;
     filters: [is_sales_order: "Yes"]
@@ -80,7 +80,7 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of booking amount in target currency."
     sql: ${booking_amount_target_currency} ;;
     value_format_name: decimal_2
@@ -90,7 +90,7 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of backlog amount in target currency."
     sql: ${backlog_amount_target_currency} ;;
     value_format_name: decimal_2
@@ -100,7 +100,7 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of fulfilled amount in target currency."
     sql: ${fulfilled_amount_target_currency} ;;
     value_format_name: decimal_2
@@ -110,7 +110,7 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of shipped amount in target currency."
     sql: ${shipped_amount_target_currency} ;;
     value_format_name: decimal_2
@@ -120,7 +120,7 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Total Billed Amount (@{label_get_target_currency}){%else%}Total Billed Amount (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Total Billed Amount' -%}@{label_currency_if_selected}"
     description: "Sum of billed or invoiced amount in target currency."
     sql: ${invoiced_amount_target_currency} ;;
     value_format_name: decimal_2
@@ -130,7 +130,7 @@ view: sales_orders_common_amount_measures_ext {
     hidden: no
     type: running_total
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${total_sales_amount_target_currency} ;;
     direction: "column"
     value_format_name: decimal_2
@@ -155,8 +155,8 @@ view: sales_orders_common_amount_measures_ext {
   measure: total_ordered_amount_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of ordered amount in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_ordered_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
@@ -165,8 +165,8 @@ view: sales_orders_common_amount_measures_ext {
   measure: total_sales_amount_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of sales in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_sales_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
@@ -210,8 +210,8 @@ view: sales_orders_common_amount_measures_ext {
   measure: total_booking_amount_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of booking amount in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_booking_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
@@ -236,8 +236,8 @@ view: sales_orders_common_amount_measures_ext {
   measure: total_backlog_amount_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of backlog amount in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_backlog_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
@@ -294,8 +294,8 @@ view: sales_orders_common_amount_measures_ext {
   measure: total_fulfilled_amount_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of fulfilled amount in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_fulfilled_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
@@ -304,8 +304,8 @@ view: sales_orders_common_amount_measures_ext {
   measure: total_shipped_amount_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     description: "Sum of shipped amount in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_shipped_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
@@ -314,17 +314,18 @@ view: sales_orders_common_amount_measures_ext {
   measure: total_invoiced_amount_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "{% if _field._is_selected %}Total Billed Amount (@{label_get_target_currency}){%else%}Total Billed Amount (Target Currency) Formatted {%endif%}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}{%- assign field_name = 'Total Billed Amount' -%}@{label_currency_if_selected}"
     description: "Sum of billed or invoiced amount in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_invoiced_amount_target_currency} ;;
     value_format_name: format_large_numbers_d1
   }
 
   measure: average_ordered_amount_per_order_target_currency_formatted {
+    hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "{% if _field._is_selected %}Average Amount per Order (@{label_get_target_currency}){%else%}Average Amount per Order (Target Currency){%endif%}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}{%- assign field_name = 'Average Amount per Order' -%}@{label_currency_if_selected}"
     value_format_name: format_large_numbers_d1
     sql: ${average_ordered_amount_per_order_target_currency} ;;
     link: {
@@ -358,6 +359,15 @@ view: sales_orders_common_amount_measures_ext {
       @{link_generate_dashboard_url}
       "
     }
+  }
+
+  measure: cumulative_sales_amount_target_currency_formatted {
+    hidden: no
+    type: number
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    sql: ${cumulative_sales_amount_target_currency} ;;
+    value_format_name: format_large_numbers_d1
   }
 
 #} end formatted measures

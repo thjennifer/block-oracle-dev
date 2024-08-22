@@ -71,7 +71,7 @@ view: dso_dynamic_days_sdt {
   measure: days_sales_outstanding {
     hidden: no
     type: number
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: SAFE_DIVIDE(${dso_period_receivables},${dso_period_amount_original}) * ANY_VALUE(${dso_dynamic_days_sdt.dso_days}) ;;
     value_format_name: decimal_1
     drill_fields: [dso_details*]

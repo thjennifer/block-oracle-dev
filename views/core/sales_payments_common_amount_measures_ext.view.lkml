@@ -49,7 +49,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build_minus_total}"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_adjusted_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -58,7 +58,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build_minus_total}"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_applied_target_currency} * if(${payment_class_code} = 'CM',-1,1) ;;
     value_format_name: decimal_2
   }
@@ -67,7 +67,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build_minus_total}"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_credited_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -76,7 +76,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build_minus_total}"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_discounted_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -85,7 +85,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build_minus_total}"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_due_original_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -94,7 +94,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build_minus_total}"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_due_remaining_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -103,7 +103,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Tax Amount Original (@{label_get_target_currency}){%else%}Tax Amount Original (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Tax Amount Original' -%}@{label_currency_if_selected}"
     sql: ${tax_original_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -112,7 +112,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Tax Amount Remaining (@{label_get_target_currency}){%else%}Tax Amount Remaining (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Tax Amount Remaining' -%}@{label_currency_if_selected}"
     sql: ${tax_remaining_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -121,7 +121,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${amount_due_remaining_target_currency} ;;
     filters: [payment_class_code: "-PMT"]
     value_format_name: decimal_2
@@ -131,7 +131,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Total Original Invoice Amount (@{label_get_target_currency}){%else%}Total Original Invoice Amount (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Total Original Invoice Amount' -%}@{label_currency_if_selected}"
     sql: ${amount_due_original_target_currency} ;;
     filters: [payment_class_code: "-PMT"]
     value_format_name: decimal_2
@@ -141,7 +141,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "{% if _field._is_selected %}Past Due Receivables (@{label_get_target_currency}){%else%}Past Due Receivables (Target Currency){%endif%}"
+    label: "@{label_defaults}{%- assign field_name = 'Past Due Receivables' -%}@{label_currency_if_selected}"
     sql: ${overdue_receivables_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -150,7 +150,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: sum
     group_label: "Amounts"
-    label: "@{label_build_minus_total}"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${doubtful_receivables_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -165,7 +165,7 @@ view: sales_payments_common_amount_measures_ext {
     hidden: no
     type: running_total
     group_label: "Amounts"
-    label: "@{label_build}"
+    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
     sql: ${total_receivables_target_currency} ;;
     direction: "column"
     value_format_name: decimal_2
@@ -177,136 +177,136 @@ view: sales_payments_common_amount_measures_ext {
 # MEASURES: Formatted Amounts
 #{
 # Formatted as large numbers. Also use html formatting defined
-# in constant format_big_numbers to handle negative totals
+# in constant html_format_big_numbers to handle negative totals
 
   measure: total_amount_adjusted_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_minus_total_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${total_amount_adjusted_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_amount_applied_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_minus_total_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${total_amount_applied_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_amount_credited_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_minus_total_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${total_amount_credited_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_amount_discounted_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_minus_total_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${total_amount_discounted_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_amount_due_original_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_minus_total_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${total_amount_due_original_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_amount_due_remaining_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_minus_total_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${total_amount_due_remaining_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_tax_original_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "{%- if _field._is_selected -%}Tax Amount Original (@{label_get_target_currency}){%- else -%}Tax Amount Original (Target Currency) Formatted {%- endif -%}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}{%- assign field_name = 'Tax Amount Original' -%}@{label_currency_if_selected}"
     sql: ${total_tax_original_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_tax_remaining_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "{%- if _field._is_selected -%}Tax Amount Remaining (@{label_get_target_currency}){%- else -%}Tax Amount Remaining (Target Currency) Formatted {%- endif -%}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}{%- assign field_name = 'Tax Amount Remaining' -%}@{label_currency_if_selected}"
     sql: ${total_tax_remaining_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_receivables_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${total_receivables_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_amount_original_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "{%- if _field._is_selected -%}Total Original Invoice Amount (@{label_get_target_currency}){%- else -%}Total Original Invoice Amount (Target Currency) Formatted {%- endif -%}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}{%- assign field_name = 'Total Original Invoice Amount' -%}@{label_currency_if_selected}"
     sql: ${total_amount_original_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_overdue_receivables_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "{%- if _field._is_selected -%}Past Due Receivables (@{label_get_target_currency}){%- else -%}Past Due Receivables (Target Currency) Formatted {%- endif -%}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}{%- assign field_name = 'Past Due Receivables' -%}@{label_currency_if_selected}"
     sql: ${total_overdue_receivables_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: total_doubtful_receivables_target_currency_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_minus_total_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${total_doubtful_receivables_target_currency} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
   measure: cumulative_total_receivables_formatted {
     hidden: no
     type: number
-    group_label: "Amounts with Large Number Format"
-    label: "@{label_build_formatted}"
+    group_label: "Amounts Formatted as Large Numbers"
+    label: "@{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
     sql: ${cumulative_total_receivables} ;;
     value_format_name: format_large_numbers_d1
-    html: @{format_big_numbers} ;;
+    html: @{html_format_big_numbers} ;;
   }
 
 #} end formatted amounts
