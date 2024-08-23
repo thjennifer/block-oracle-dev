@@ -1,4 +1,5 @@
 include: "/views/core/sales_orders_daily_agg_rfn.view"
+include: "/views/test/otc_common_item_categories_ext_test.view"
 
 view: +sales_orders_daily_agg {
 

@@ -14,7 +14,7 @@
 #
 # CATEGORY SET NAME
 #   - This Explore will show only 1 Category Set Name based on the value in the user attribute
-#     cortex_oracle_ebs_category_set_name.
+#     cortex_oracle_ebs_category_set_name (see constant category_set in Manifest file).
 #   - Users can set the value for the user attribute through Account properties. Or an Admin can set the value for a group of users.
 #   - This filter condition is defined in the JOIN properties for view sales_orders_daily_agg__lines.
 #
@@ -72,7 +72,7 @@ explore: sales_orders_daily_agg {
   join: sales_orders_daily_agg__lines {
     view_label: "Sales Orders Daily Agg: Item Categories"
     sql: LEFT JOIN UNNEST(${sales_orders_daily_agg.lines}) as sales_orders_daily_agg__lines ;;
-    sql_where: @{get_category_set} ${sales_orders_daily_agg__lines.category_set_name} in ("Unknown",'{{ category_set }}') ;;
+    sql_where: ${sales_orders_daily_agg__lines.category_set_name} in ('Unknown',@{category_set}) ;;
     relationship: one_to_many
   }
 

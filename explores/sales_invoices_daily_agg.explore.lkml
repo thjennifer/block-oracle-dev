@@ -12,7 +12,7 @@
 #
 # CATEGORY SET NAME
 #   - This Explore will show only 1 Category Set Name based on the value in the user attribute
-#     cortex_oracle_ebs_category_set_name.
+#     cortex_oracle_ebs_category_set_name (see constant category_set in Manifest file).
 #   - Users can set the value for the user attribute through Account properties. Or an Admin can set the value for a group of users.
 #   - This filter condition is defined in the SQL_ALWAYS_WHERE statement of the Explore.
 #
@@ -48,7 +48,7 @@ include: "/views/core/sales_invoices_daily_agg__amounts_rfn.view"
 explore: sales_invoices_daily_agg {
   hidden: no
 
-  sql_always_where: @{get_category_set} COALESCE(ITEM_CATEGORY_SET_NAME,'Unknown') in ("Unknown",'{{ category_set }}') ;;
+  sql_always_where: COALESCE(ITEM_CATEGORY_SET_NAME,'Unknown') in ('Unknown',@{category_set}) ;;
 
   fields: [ALL_FIELDS*,-otc_common_parameters_xvw.parameter_language]
 

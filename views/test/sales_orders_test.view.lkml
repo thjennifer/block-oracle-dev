@@ -200,8 +200,8 @@ view: +sales_orders {
     #     {% else %} ''
     #     {% endif %}
     # ;;
-    sql:  @{link_sales_orders_to_details_dashboard_extra_mapping}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+    sql:  @{link_map_sales_orders_to_order_details_extra_mapping}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% if append_extra_mapping == true %}
         {% assign filters_mapping = filters_mapping | append: extra_mapping %}
        {% endif %}'{{filters_mapping}}' ;;

@@ -193,9 +193,9 @@ view: sales_orders_common_amount_measures_ext {
       {% assign append_extra_mapping = false %}
       {% assign expl = _explore._name %}
       {% if expl == 'sales_orders' %}
-        @{link_sales_orders_to_details_dashboard_extra_mapping}
+        @{link_map_sales_orders_to_order_details_extra_mapping}
       {% endif %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% if append_extra_mapping == true %}
         {% assign filters_mapping = filters_mapping | append: extra_mapping %}
       {% endif %}
@@ -222,7 +222,7 @@ view: sales_orders_common_amount_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
@@ -280,7 +280,7 @@ view: sales_orders_common_amount_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
@@ -348,8 +348,8 @@ view: sales_orders_common_amount_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      @{link_sales_orders_to_details_dashboard_extra_mapping}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      @{link_map_sales_orders_to_order_details_extra_mapping}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% if append_extra_mapping == true %}
       {% assign filters_mapping = filters_mapping | append: extra_mapping %}
       {% endif %}

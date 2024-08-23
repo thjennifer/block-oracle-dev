@@ -60,7 +60,7 @@ view: sales_orders_common_count_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
@@ -147,7 +147,7 @@ view: sales_orders_common_count_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_fulfilled=Yes'%}
@@ -172,7 +172,7 @@ view: sales_orders_common_count_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_fulfilled_by_request_date=Yes'%}
@@ -197,7 +197,7 @@ view: sales_orders_common_count_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_backordered=Yes'%}
@@ -222,7 +222,7 @@ view: sales_orders_common_count_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='has_return=Yes'%}
@@ -289,7 +289,7 @@ view: sales_orders_common_count_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters_override = false %}
@@ -315,7 +315,7 @@ view: sales_orders_common_count_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_fulfilled=Yes'%}
@@ -342,7 +342,7 @@ view: sales_orders_common_count_measures_ext {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}

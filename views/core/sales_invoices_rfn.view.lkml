@@ -302,7 +302,7 @@ view: +sales_invoices {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}'%}
+      {% assign filters_mapping = '@{link_map_sales_invoices_to_invoice_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
       {% assign default_filters_override = false %}

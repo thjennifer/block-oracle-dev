@@ -1,50 +1,51 @@
 include: "/views/core/sales_invoices__lines_rfn.view"
 include: "/views/test/sales_invoices_common_amount_measures_ext_test.view"
+include: "/views/test/otc_common_item_categories_ext_test.view"
 
 view: +sales_invoices__lines {
 
-  measure: average_unit_list_price_when_discount_target_currency_with_drill_link {
-    hidden: yes
-    type: number
-    sql: ${average_unit_list_price_when_discount_target_currency} ;;
-    value_format_name: decimal_2
-    link: {
-      label: "Invoice Line Details"
-      icon_url: "/favicon.ico"
-      url: "
-      @{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
+  # measure: average_unit_list_price_when_discount_target_currency_with_drill_link {
+  #   hidden: yes
+  #   type: number
+  #   sql: ${average_unit_list_price_when_discount_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   link: {
+  #     label: "Invoice Line Details"
+  #     icon_url: "/favicon.ico"
+  #     url: "
+  #     @{link_generate_variable_defaults}
+  #     {% assign link = link_generator._link %}
+  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
 
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
-      {% assign default_filters='is_discounted=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
-      "
-    }
-  }
+  #     {% assign model = _model._name %}
+  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
+  #     {% assign default_filters='is_discounted=Yes'%}
+  #     {% assign default_filters_override = false %}
+  #     @{link_generate_dashboard_url}
+  #     "
+  #   }
+  # }
 
-  measure: average_unit_selling_price_when_discount_target_currency_with_drill_link {
-    hidden: yes
-    type: number
-    sql: ${average_unit_selling_price_when_discount_target_currency} ;;
-    value_format_name: decimal_2
-    link: {
-      label: "Invoice Line Details"
-      icon_url: "/favicon.ico"
-      url: "
-      @{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
-      {% assign default_filters='is_discounted=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
-      "
-    }
-  }
+  # measure: average_unit_selling_price_when_discount_target_currency_with_drill_link {
+  #   hidden: yes
+  #   type: number
+  #   sql: ${average_unit_selling_price_when_discount_target_currency} ;;
+  #   value_format_name: decimal_2
+  #   link: {
+  #     label: "Invoice Line Details"
+  #     icon_url: "/favicon.ico"
+  #     url: "
+  #     @{link_generate_variable_defaults}
+  #     {% assign link = link_generator._link %}
+  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
+  #     {% assign model = _model._name %}
+  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
+  #     {% assign default_filters='is_discounted=Yes'%}
+  #     {% assign default_filters_override = false %}
+  #     @{link_generate_dashboard_url}
+  #     "
+  #   }
+  # }
 
 
 
@@ -53,59 +54,59 @@ view: +sales_invoices__lines {
 
 
 
-  measure: total_transaction_amount_target_currency_formatted {
-    link: {
-      label: "Invoice Line Details"
-      icon_url: "/favicon.ico"
-      url: "
-      @{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
+  # measure: total_transaction_amount_target_currency_formatted {
+  #   link: {
+  #     label: "Invoice Line Details"
+  #     icon_url: "/favicon.ico"
+  #     url: "
+  #     @{link_generate_variable_defaults}
+  #     {% assign link = link_generator._link %}
+  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
+  #     {% assign model = _model._name %}
+  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
-      "
-    }
-  }
+  #     {% assign default_filters_override = false %}
+  #     @{link_generate_dashboard_url}
+  #     "
+  #   }
+  # }
 
-  measure: total_discount_amount_target_currency_formatted {
-    link: {
-      label: "Invoice Line Details"
-      icon_url: "/favicon.ico"
-      url: "
-      @{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
+  # measure: total_discount_amount_target_currency_formatted {
+  #   link: {
+  #     label: "Invoice Line Details"
+  #     icon_url: "/favicon.ico"
+  #     url: "
+  #     @{link_generate_variable_defaults}
+  #     {% assign link = link_generator._link %}
+  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
+  #     {% assign model = _model._name %}
+  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
-      "
-    }
-  }
+  #     {% assign default_filters_override = false %}
+  #     @{link_generate_dashboard_url}
+  #     "
+  #   }
+  # }
 
-  measure: total_tax_amount_target_currency_formatted {
-    link: {
-      label: "Invoice Line Details"
-      icon_url: "/favicon.ico"
-      url: "
-      @{link_generate_variable_defaults}
-      {% assign link = link_generator._link %}
-      {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
+  # measure: total_tax_amount_target_currency_formatted {
+  #   link: {
+  #     label: "Invoice Line Details"
+  #     icon_url: "/favicon.ico"
+  #     url: "
+  #     @{link_generate_variable_defaults}
+  #     {% assign link = link_generator._link %}
+  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
+  #     {% assign model = _model._name %}
+  #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
-      "
-    }
-  }
+  #     {% assign default_filters_override = false %}
+  #     @{link_generate_dashboard_url}
+  #     "
+  #   }
+  # }
 
 
   dimension: is_null_invoice_line {
@@ -289,7 +290,7 @@ view: +sales_invoices__lines {
       @{link_generate_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign qualify_filter_names = false %}
-      {% assign filters_mapping = '@{link_sales_invoices_to_target_dashboard}'  | append: '||is_discount_selling_price|is_discounted||is_intercompany|is_intercompany' %}
+      {% assign filters_mapping = '@{link_map_sales_invoices_to_invoice_details}'  | append: '||is_discount_selling_price|is_discounted||is_intercompany|is_intercompany' %}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}

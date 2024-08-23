@@ -35,7 +35,7 @@ view: otc_common_item_categories_ext {
       {%- elsif group_b contains v -%}
         COALESCE(${TABLE}.ID,-1)
       {%- elsif group_c contains v -%}
-        COALESCE((SELECT c.ID FROM UNNEST(${TABLE}.ITEM_CATEGORIES) AS c WHERE c.CATEGORY_SET_NAME =  '@{category_set}' ), -1 )
+        COALESCE((SELECT c.ID FROM UNNEST(${TABLE}.ITEM_CATEGORIES) AS c WHERE c.CATEGORY_SET_NAME =  @{category_set} ), -1 )
       {%- endif -%}
       ;;
     full_suggestions: yes
@@ -58,7 +58,7 @@ view: otc_common_item_categories_ext {
       {%- elsif group_b contains v -%}
         COALESCE(${TABLE}.CATEGORY_NAME,'Unknown')
       {%- elsif group_c contains v -%}
-        COALESCE((SELECT c.CATEGORY_NAME FROM UNNEST(${TABLE}.ITEM_CATEGORIES) AS c WHERE c.CATEGORY_SET_NAME =  '@{category_set}' ), 'Unknown' )
+        COALESCE((SELECT c.CATEGORY_NAME FROM UNNEST(${TABLE}.ITEM_CATEGORIES) AS c WHERE c.CATEGORY_SET_NAME =  @{category_set} ), 'Unknown' )
       {%- endif -%}
       ;;
     full_suggestions: yes
@@ -79,8 +79,8 @@ view: otc_common_item_categories_ext {
       {%- elsif group_b contains v -%}
         COALESCE(${TABLE}.DESCRIPTION,COALESCE(CAST(${TABLE}.ID AS STRING),'Unknown'))
       {%- elsif group_c contains v -%}
-        COALESCE((SELECT c.DESCRIPTION FROM UNNEST(${TABLE}.ITEM_CATEGORIES) AS c WHERE c.CATEGORY_SET_NAME =  '@{category_set}' ),
-        COALESCE(CAST((SELECT c.ID FROM UNNEST(${TABLE}.ITEM_CATEGORIES) AS c WHERE c.CATEGORY_SET_NAME =  '@{category_set}' ) AS STRING),'Unknown'))
+        COALESCE((SELECT c.DESCRIPTION FROM UNNEST(${TABLE}.ITEM_CATEGORIES) AS c WHERE c.CATEGORY_SET_NAME =  @{category_set} ),
+        COALESCE(CAST((SELECT c.ID FROM UNNEST(${TABLE}.ITEM_CATEGORIES) AS c WHERE c.CATEGORY_SET_NAME =  @{category_set} ) AS STRING),'Unknown'))
       {%- endif -%}
       ;;
     full_suggestions: yes

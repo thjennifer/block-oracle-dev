@@ -1,4 +1,5 @@
 include: "/views/core/sales_orders__lines_rfn.view"
+include: "/views/test/otc_common_item_categories_ext_test.view"
 
 view: +sales_orders__lines {
 
@@ -230,10 +231,10 @@ view: +sales_orders__lines {
     hidden: no
     view_label: "TEST STUFF"
     sql: max(1);;
-    # html: @{link_sales_orders_to_details_dashboard_extra_mapping}{{extra_mapping}};;
+    # html: @{link_map_sales_orders_to_order_details_extra_mapping}{{extra_mapping}};;
     html: {% assign expl = _explore._name %}{{expl}} ;;
-    # html: @{link_sales_orders_to_details_dashboard_extra_mapping}
-    #   {% assign filters_mapping = '@{link_sales_orders_to_details_dashboard}'%}
+    # html: @{link_map_sales_orders_to_order_details_extra_mapping}
+    #   {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
     #   {% if append_extra_mapping == true %}
     #     {% assign filters_mapping = filters_mapping | append: extra_mapping %}
     #   {% endif %}{{filters_mapping}}

@@ -14,7 +14,7 @@
 #
 # CATEGORY SET NAME
 #   - This Explore will show only 1 Category Set Name based on the value in the user attribute
-#     cortex_oracle_ebs_category_set_name.
+#     cortex_oracle_ebs_category_set_name (see constant category_set in Manifest file).
 #       * Users can set the value for the user attribute through Account properties. Or an Admin can set the value for a group of users.
 #   - This filter condition is defined in two spots:
 #     1. the JOIN properties for optional view sales_invoices__lines__item_categories
@@ -91,7 +91,7 @@ explore: sales_invoices {
   # join: sales_invoices__lines__item_categories {
   #   view_label: "Sales Invoices: Lines Item Categories"
   #   sql: LEFT JOIN UNNEST(${sales_invoices__lines.item_categories}) as sales_invoices__lines__item_categories ;;
-  #   sql_where: ${sales_invoices__lines__item_categories.category_set_name} in ("Unknown",'{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}') ;;
+  #   sql_where: ${sales_invoices__lines__item_categories.category_set_name} in ("Unknown",@{category_set}) ;;
   #   relationship: one_to_many
   # }
 

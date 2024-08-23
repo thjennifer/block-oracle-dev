@@ -26,12 +26,32 @@ constant: REPORTING_DATASET {
 # }
 
 #########################################################
+# CATEGORY SET and DEFAULT TARGET DATE
+#{
+# define values for category set and default target date based
+# on user attribute values
+
+constant: category_set {
+  value: "{% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}'{{category_set}}'"
+}
+
+# if usng test data set target date to 3/28/2024 to match dates in that dataset otherwise use current date
+constant: default_target_date {
+  value:  "{%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}
+  {%- if test_data == 'YES' -%}
+  {%- assign td = '2024-03-28' -%} {%- else -%}
+  {%- assign td = 'now' | date: '%Y-%m-%d' -%}{%- endif -%}'{{td}}'"
+}
+
+#} end constants for category set and target date
+
+#########################################################
 # HTML FORMATS
 #{
 # formatting values using html property
 
 
-# Constant html_format_big_numbers
+# html_format_big_numbers
 #{
 # Formats positive and negative numbers by appending B, M, K, or no suffix based on magnitude.
 # example use:
@@ -101,8 +121,7 @@ constant: html_message_source_currency {
   value: "{%- if currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%}"
 }
 #}
-#} end formats
-
+#} end constants for html formats
 
 #########################################################
 # LABELS: Views
@@ -118,7 +137,7 @@ constant: view_label_for_dashboard_navigation {
   value: "🛠 Dashboard Navigation"
 }
 
-#}
+#} end constants for view labels
 
 #########################################################
 # LABELS: Target Currency Fields
@@ -167,12 +186,12 @@ constant: view_label_for_dashboard_navigation {
 #
 # label_defaults
 #   - Initial values for liquid variables that will be used to create the label.
-#     currency = value in parameter_target_currency that will be appended to label when field is selected.
-#     field_name = blank
-#     remove_words = '_target_currency, _formatted' meaning these words will not be in label.
-#     remove_total_prefix = false. When true 'total_' will also be removed from label.
-#     add_words = ' (Target Currency)' will be appended to field_name and displayed in the Explore
-#     add_formatted = false. When true, ' Formatted' will be added to label displayed in the Explore
+#       currency = value in parameter_target_currency that will be appended to label when field is selected.
+#       field_name = blank
+#       remove_words = '_target_currency, _formatted' meaning these words will not be in label.
+#       remove_total_prefix = false. When true 'total_' will also be removed from label.
+#       add_words = ' (Target Currency)' will be appended to field_name and displayed in the Explore
+#       add_formatted = false. When true, ' Formatted' will be added to label displayed in the Explore
 #   - These defaults can be overridden when defining the label property.
 constant: label_defaults {
   value: "{%- assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" -%}
@@ -222,44 +241,58 @@ constant: label_currency_if_selected {
   {%- endif -%}"
 }
 
+#} end constants for target currency labels
 
-
-#} end constants for labels
-
-
-
-
-
-
-
-
-
-# Constant is_agg_category_in_query
-# provides first part of liquid IF statement to check if any of these category fields from
-# sales_orders_agg__lines are in the query (either selected dimension or filter):
-#     category_id, category_description, category_name,
-#     item_organization_id, item_orgranization_name
+#########################################################
+# IS_SELECTED or IN_QUERY
+#{
+# _is_selected returns true if the field you ask for:
+#     - is included in the query as a selected field
+#     - is included in the query using the required_fields parameter
 #
-# when used, must complete the rest of the statement (what to return when true and false
+# _in_query returns true if the field you ask for:
+#     - is included in the query as a selected field
+#     - is included in the query as a filter
+#     - is included in the query using the required_fields parameter
+#
+# These constants check if fields are selected or queried.
+# Actions can be taken based on true or false. For example,
+# in sales_orders_daily_agg, order counts can't be summed
+# across filtered categories. If categories are queried,
+# return a warning or null for Order Count measures.
+#
+# is_agg_category_in_query
+# returns true if any of these category fields from
+# sales_orders_agg__lines is in the query:
+#     category_id, category_description, category_name_code,
+#     item_organization_id, item_orgranization_name
+# To use this constant, complete the rest of the statement (what to return when true and false).
 # For example:
-#   measure: order_count {
-#     type: sum
-#     sql: @{is_agg_category_selected}NULL {%else} ${num_orders} {% endif %} ;;
-#.  }
-
-# _in_query returns true if the field you ask for is selected and therefore included in the query,
-# or is included in a filter for a query, or is included in a query using the required_fields parameter.
+#     measure: order_count {
+#       type: sum
+#       sql: @{is_agg_category_selected}NULL {%else} ${num_orders} {% endif %} ;;
+#     }
 constant: is_agg_category_in_query {
   value: "{% if sales_orders_daily_agg__lines.category_id._in_query or
                 sales_orders_daily_agg__lines.category_description._in_query or
-                sales_orders_daily_agg__lines.category_name._in_query or
+                sales_orders_daily_agg__lines.category_name_code._in_query or
                 sales_orders_daily_agg__lines.item_organization_id._in_query or
                 sales_orders_daily_agg__lines.item_organization_name._in_query
                 %}"
 }
 
-# _is_selected returns true if the field you ask for is selected and therefore included in the query
-# or is included in the query using the required_fields parameter
+
+# is_item_or_category_selected
+# returns true if any of these item or category fields is selected:
+#     category_id, category_description, category_name_code,
+#     inventory_item_id, item_part_number, item_description,
+#     selected_product_dimension_id, selected_product_dimension_description
+# To use this constant, complete the rest of the statement (what to return when true and false).
+# For example:
+#     measure: average_cycle_time_days {
+#       type: average
+#       sql: @{is_item_or_category_selected}${cycle_time_days}{%- else -%}NULL{%- endif -%};;
+#     }
 constant: is_item_or_category_selected {
   value: "{%- if inventory_item_id._is_selected or
                  item_part_number._is_selected or
@@ -272,93 +305,161 @@ constant: is_item_or_category_selected {
           -%}"
 }
 
+
+# is_item_selected
+# - returns true if any of these item or category fields is selected:
+#     inventory_item_id, item_part_number, item_description
+# - returns true if Item is displayed usng parameter_display_product_level and
+#   either selected_product_dimension_id or selected_product_dimension_description is selected.
+# To use this constant, complete the rest of the statement (what to return when true and false).
+# For example:
+#     measure: total_ordered_quantity_by_item {
+#       sql: @{is_item_selected}${ordered_quantity}{%- else -%}NULL {%- endif -%} ;;
+#       html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
+#     }
 constant: is_item_selected {
   value: "{%- if inventory_item_id._is_selected or
-  item_part_number._is_selected or
-  item_description._is_selected or
-  (parameter_display_product_level._parameter_value == 'Item' and
-  (selected_product_dimension_description._is_selected or selected_product_dimension_id._is_selected)
-  )
-  -%}"
+                 item_part_number._is_selected or
+                 item_description._is_selected or
+                (
+                parameter_display_product_level._parameter_value == 'Item' and
+                (selected_product_dimension_description._is_selected or selected_product_dimension_id._is_selected)
+                )
+          -%}"
 }
 
-constant: get_category_set_test {
-  value: "{% assign d = otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value %}
-          {% if d == 'test' %}{% assign category_set = 'Purchasing' %}{%elsif d == 'demo' %}
-          {% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
-          {% else %} {% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
-          {% endif %}"
-}
-
-constant: get_category_set {
-  value: "{% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}"
-}
-
-constant: category_set {
-  value: "{% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}{{category_set}}"
-}
-
-constant: default_target_date {
-  value:  "{%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}
-           {%- if test_data == 'YES' -%}
-           {%- assign td = '2024-03-28' -%} {%- else -%}
-           {%- assign td = 'now' | date: '%Y-%m-%d' -%}{%- endif -%}'{{td}}'"
-  }
-
-constant: sample_target_date {
-  value:  "'2024-03-28'"
-}
-
-constant: default_target_date_test {
-  value: "{% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
-          {% if test_data == 'YES' %}
-               {% if otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value == 'demo' %}
-                      {% assign td = '2024-03-28' %} {%else%} {% assign td = '2010-10-12' %}
-               {% endif %}
-          {%else%}{% assign td = now | date: '%Y-%m-%d' %}{%endif%}'{{td}}'"
-}
-
-constant: sample_target_date_test {
-  value: "{% if otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value == 'demo' %}
-          {% assign td = '2024-03-28' %} {%else%} {% assign td = '2010-10-12' %}
-          {% endif %}'{{td}}'"
-}
+#} end constants for is_selected or in_query
 
 
-#####Need to remove reference to test_or_demo
-constant: link_sales_invoices_source_to_target_dashboard_filters {
-  value: "sales_invoices.invoice_date|date||sales_invoices.business_unit_name|business_unit||sales_invoices.bill_to_customer_country|customer_country||sales_invoices.bill_to_customer_name|customer_name||sales_invoices__lines.order_source_name|order_source||sales_invoices__lines.category_description|item_category||otc_common_parameters_xvw.parameter_target_currency|target_currency||otc_common_parameters_xvw.parameter_use_demo_or_test_data|test_or_demo"
-}
+# measure: average_gross_unit_selling_price_when_discount_target_currency {
+# #--> opens Invoice Line Details dashboard with filter is_discounted = Yes
+#   link: {
+#     label: "Invoice Line Details"
+#     icon_url: "/favicon.ico"
+#     url: "
+#     @{link_generate_variable_defaults}
+#     {% assign link = link_generator._link %}
+#     {% assign qualify_filter_names = false %}
+#     {% assign filters_mapping = '@{link_map_sales_invoices_to_invoice_details}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
+#     {% assign model = _model._name %}
+#     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
+#     {% assign default_filters='is_discounted=Yes'%}
+#     {% assign default_filters_override = false %}
+#     @{link_generate_dashboard_url}
+#     "
+#   }
+# }
 
-constant: link_sales_invoices_daily_agg_source_to_target_dashboard_filters {
-  value: "sales_invoices_daily_agg.invoice_date|date||sales_invoices_daily_agg.business_unit_name|business_unit||sales_invoices_daily_agg.bill_to_customer_country|customer_country||sales_invoices_daily_agg.bill_to_customer_name|customer_name||sales_invoices_daily_agg.order_source_name|order_source||sales_invoices_daily_agg.category_description|item_category||otc_common_parameters_xvw.parameter_target_currency|target_currency||otc_common_parameters_xvw.parameter_use_demo_or_test_data|test_or_demo"
-}
+# measure: total_booking_amount_target_currency_formatted {
+#   link: {
+#     label: "Order Line Details"
+#     icon_url: "/favicon.ico"
+#     url: "
+#     @{link_generate_variable_defaults}
+#     {% assign link = link_generator._link %}
+#     {% assign qualify_filter_names = false %}
+#     {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 
-constant: link_sales_invoices_to_target_dashboard {
+#     {% assign model = _model._name %}
+#     {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+#     {% assign default_filters='is_booking=Yes'%}
+#     {% assign default_filters_override = false %}
+#     @{link_generate_dashboard_url}
+#     "
+#   }
+# }
+
+#########################################################
+# LINK_MAP: Map explore fields to dashboard filters
+#{
+#--> Constants with the link_map prefix are used to create
+#    dashboard url links defined in a field's link: property
+#    by mapping fields in an explore/view to dashboard filters
+#--> Use | between field and filter
+#    Use || between each mapped pair
+#--> When specifying the field name use view_name.field_name although
+#    view name is optional when link build also includes
+#    liquid variable qualify_filter_names = false
+#--> Example syntanx:
+#       value: "invoice_date|date||business_unit_name|business_unit"
+#    In this example, any filters for invoice_date will be passed to
+#    the dashboard filter named date. Any filters for field business_unit_name
+#    will be passed to the dashboard filter named business unit.
+#--> Additional fields can be appended to these constants when defining
+#    the link property
+#--> Example use that will add link to Booking Amount to open the Order Line Details dashboard:
+#       measure: total_booking_amount_target_currency_formatted {
+#           link: {
+#             label: "Order Line Details"
+#             icon_url: "/favicon.ico"
+#             url: "
+#                @{link_generate_variable_defaults}
+#               {% assign link = link_generator._link %}
+#               {% assign qualify_filter_names = false %}
+#               {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
+#               {% assign model = _model._name %}
+#               {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+#               {% assign default_filters='is_booking=Yes'%}
+#               {% assign default_filters_override = false %}
+#               @{link_generate_dashboard_url}
+#               "
+#             }
+#         }
+
+# link_map_sales_invoices_to_invoice_details
+#{ Maps fields found in explores sales_invoices and sales_invoices_daily_agg
+#  to dashboard filters on dashboard otc_billing_invoice_line_details
+constant: link_map_sales_invoices_to_invoice_details {
   value: "invoice_date|date||business_unit_name|business_unit||bill_to_customer_country|customer_country||bill_to_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency"
 }
+#}
 
-constant: link_sales_orders_to_details_dashboard {
+# link_map_sales_orders_to_order_details
+#{ Maps fields found in explores sales_orders and sales_orders_daily_agg
+#  to dashboard filters on dashboard otc_order_line_item_details
+constant: link_map_sales_orders_to_order_details {
   value: "ordered_date|date||business_unit_name|business_unit||parameter_customer_type|customer_type||selected_customer_country|customer_country||selected_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_language|item_language||open_closed_cancelled|order_status||order_category_code|order_category_code||line_category_code|line_category_code"
 }
+#}
 
-constant: link_invoices_to_orders_details_dashboard {
+# link_map_sales_orders_to_order_details_extra_mapping
+#{
+#--> The field selected_product_dimension_description can represent either
+#    an item_description or a category_description depending on the value
+#    in parameter_display_product_level.
+#--> This constant will map selected_product_dimension_description to the
+#    correct dashboard filter either item_description or item_category.
+constant: link_map_sales_orders_to_order_details_extra_mapping {
+  value: "{%- assign extra_mapping = '' -%}
+          {%- if sales_orders__lines.selected_product_dimension_description._in_query -%}
+              {%- assign append_extra_mapping = true -%}
+              {%- assign pl = sales_orders__lines.parameter_display_product_level._parameter_value -%}
+              {%- if pl == 'Category' -%}
+                    {%- assign target_filter = 'item_category' -%}
+              {%- elsif pl == 'Item' -%}
+                    {%- assign target_filter = 'item_description' -%}
+              {%- endif -%}
+          {%- assign extra_mapping = '||selected_product_dimension_description|' | append: target_filter -%}
+          {%- else -%}
+              {%- assign append_extra_mapping = false -%}
+          {%- endif -%}"
+}
+#}
+
+# link_map_invoices_to_order_details
+#{ Maps fields found in explores sales_invoices and sales_invoices_daily_agg
+#  to dashboard filters on dashboard otc_order_line_item_details
+constant: link_map_invoices_to_order_details {
   value: "parameter_target_currency|target_currency||parameter_language|item_language||order_header_number|order_number"
 }
+#}
 
-constant: link_sales_orders_to_details_dashboard_extra_mapping {
-  value: "{% assign extra_mapping = ''%}
-         {% if sales_orders__lines.selected_product_dimension_description._in_query %}
-          {% assign append_extra_mapping = true %}
-          {% assign pl = sales_orders__lines.parameter_display_product_level._parameter_value %}
-            {% if pl == 'Category' %}
-               {% assign target_filter = 'item_category'%}
-            {% elsif pl == 'Item' %} {% assign target_filter = 'item_description'%}
-            {% endif%}
-          {% assign extra_mapping = '||selected_product_dimension_description|' | append: target_filter %}
-          {% else %}{% assign append_extra_mapping = false %}
-         {% endif %}"
-}
+#} end constants for link maps
+
+
+
+
+
 
 # test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
 
@@ -866,3 +967,31 @@ constant: link_unselected_button_style {
   color: #000000;
   font-weight: normal;"
 }
+
+
+
+
+#########################################################
+# TEST or DEMO DATA SPECIFIC CONSTANTS
+#{
+# design to toggle between test dataset or demo dataset
+# TO BE REMOVED FROM PRODUCTION
+
+constant: category_set_test {
+  value: "{%- if otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value == 'test' -%}
+  {% assign category_set = 'Purchasing' %}
+  {%- else -%}{% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
+  {%- endif -%}'{{category_set}}'"
+}
+
+
+constant: default_target_date_test {
+  value: "{% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
+  {% if test_data == 'YES' %}
+  {% if otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value == 'demo' %}
+  {% assign td = '2024-03-28' %} {%else%} {% assign td = '2010-10-12' %}
+  {% endif %}
+  {%else%}{% assign td = now | date: '%Y-%m-%d' %}{%endif%}'{{td}}'"
+}
+
+#} end constants for test or demo data

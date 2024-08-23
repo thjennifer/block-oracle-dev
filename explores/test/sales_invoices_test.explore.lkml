@@ -17,7 +17,7 @@ explore: +sales_invoices {
   join: sales_invoices__lines__item_categories {
     view_label: "Sales Invoices: Lines Item Categories"
     sql: LEFT JOIN UNNEST(${sales_invoices__lines.item_categories}) as sales_invoices__lines__item_categories ;;
-    sql_where: ${sales_invoices__lines__item_categories.category_set_name} in ("Unknown",'{{ _user_attributes['cortex_oracle_ebs_category_set_name'] }}') ;;
+    sql_where: ${sales_invoices__lines__item_categories.category_set_name} in ("Unknown",@{category_set_test}) ;;
     relationship: one_to_many
   }
 
