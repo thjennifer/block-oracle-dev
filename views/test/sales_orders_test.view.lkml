@@ -282,7 +282,7 @@ view: +sales_orders {
       {% assign measure = 'test3_sales_count' | prepend: v %}
       {% assign m = 'ordered_month' | prepend: v %}
       {% assign drill_fields =  m | append: ',' | append: measure %}
-      @{link_line_chart_1_date_1_measure}
+      @{link_vis_line_chart_1_date_1_measure}
       @{link_generate_explore_url}
       "
     }
@@ -308,7 +308,7 @@ view: +sales_orders {
       {% assign drill_fields = 'sales_orders.ordered_month,sales_orders.sales_order_count'%}
       {% assign measure = sales_orders.sales_order_count %}
 
-      <!-- start target link_line_chart_1_date_1_measure -->
+      <!-- start target link_vis_line_chart_1_date_1_measure -->
       {% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#CE642D\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}
 
       <br> vis_config: {{vis_config}}

@@ -179,7 +179,7 @@ view: sales_orders_common_amount_measures_ext {
       {% assign measure = 'total_sales_amount_target_currency' | prepend: v %}
       {% assign m = 'ordered_month' | prepend: e %}
       {% assign drill_fields =  m | append: ',' | append: measure %}
-      @{link_line_chart_1_date_1_measure}
+      @{link_vis_line_chart_1_date_1_measure}
       @{link_generate_explore_url}
       "
     }
@@ -337,7 +337,7 @@ view: sales_orders_common_amount_measures_ext {
       {% assign measure = 'average_ordered_amount_per_order_target_currency' | prepend: v %}
       {% assign m = 'ordered_month' | prepend: e %}
       {% assign drill_fields =  m | append: ',' | append: measure %}
-      @{link_line_chart_1_date_1_measure}
+      @{link_vis_line_chart_1_date_1_measure}
       @{link_generate_explore_url}
       "
     }

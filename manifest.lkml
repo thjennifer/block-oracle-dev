@@ -331,44 +331,6 @@ constant: is_item_selected {
 #} end constants for is_selected or in_query
 
 
-# measure: average_gross_unit_selling_price_when_discount_target_currency {
-# #--> opens Invoice Line Details dashboard with filter is_discounted = Yes
-#   link: {
-#     label: "Invoice Line Details"
-#     icon_url: "/favicon.ico"
-#     url: "
-#     @{link_generate_variable_defaults}
-#     {% assign link = link_generator._link %}
-#     {% assign qualify_filter_names = false %}
-#     {% assign filters_mapping = '@{link_map_sales_invoices_to_invoice_details}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
-#     {% assign model = _model._name %}
-#     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
-#     {% assign default_filters='is_discounted=Yes'%}
-#     {% assign default_filters_override = false %}
-#     @{link_generate_dashboard_url}
-#     "
-#   }
-# }
-
-# measure: total_booking_amount_target_currency_formatted {
-#   link: {
-#     label: "Order Line Details"
-#     icon_url: "/favicon.ico"
-#     url: "
-#     @{link_generate_variable_defaults}
-#     {% assign link = link_generator._link %}
-#     {% assign qualify_filter_names = false %}
-#     {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
-
-#     {% assign model = _model._name %}
-#     {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
-#     {% assign default_filters='is_booking=Yes'%}
-#     {% assign default_filters_override = false %}
-#     @{link_generate_dashboard_url}
-#     "
-#   }
-# }
-
 #########################################################
 # LINK_MAP: Map explore fields to dashboard filters
 #{
@@ -457,11 +419,14 @@ constant: link_map_invoices_to_order_details {
 #} end constants for link maps
 
 
+#########################################################
+# LINK_VIS: Set config properties
+#{
+#--> Constants with the link_vis prefix are used to create
+#    dashboard url links defined in a field's link: property
+#    by defining config values for select visualization types
+#    and patterns
 
-
-
-
-# test_or_demo: otc_common_parameters_xvw.parameter_use_demo_or_test_data
 
 constant: link_vis_table {
   value: "{% assign vis_config = '{\"type\":\"looker_grid\"}' | url_encode | prepend: '&vis_config=' %}"
@@ -494,14 +459,14 @@ constant: link_vis_pie {
 constant: link_vis_single {
   value: "{% assign vis_config = '{\"type\":\"single_value\"}' | url_encode | prepend: '&vis_config=' %}"
 }
-#CE642D\
-constant: link_line_chart_1_date_1_measure {
+
+constant: link_vis_line_chart_1_date_1_measure {
   #Required
   #measure
   value: "{% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#468faf\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}"
 }
 
-
+#} end constanst for link vis
 
 constant: link_generate_variable_defaults {
   value: "
@@ -893,7 +858,6 @@ constant: link_generate_dashboard_nav_style {
   {% endcase %}"
 }
 
-# test version
 constant: link_derive_dashboard_nav_style {
   value: "{% assign nav_style = navigation_style._parameter_value %}
           {% case nav_style %}
