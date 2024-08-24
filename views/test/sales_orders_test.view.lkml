@@ -276,7 +276,7 @@ view: +sales_orders {
     link: {
       label: "Show Sales Orders by Month (Common)"
       # url: "{{dummy_drill_monthly_orders._link}}"
-      url: "@{link_generate_variable_defaults}
+      url: "@{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign v = _view._name | append: '.' %}
       {% assign measure = 'test3_sales_count' | prepend: v %}
@@ -300,7 +300,7 @@ view: +sales_orders {
 
     <div>
               <!-- initialize variables used in following steps-->
-                @{link_generate_variable_defaults}
+                @{link_action_set_variable_defaults}
 
       <!-- capture the full url of the dashboard including filters -->
       {% assign link = link_generator._link %}.
@@ -324,14 +324,14 @@ view: +sales_orders {
       <br> link_query: {{link_query}} <br>
       <br> drill_fields: {{drill_fields}} <br>
 
-      {% if different_explore == false %}
+      {% if use_different_explore == false %}
       {% assign target_model = link_path[1] %}
       {% assign target_explore = link_path[2] %}
       {% endif %}
       <br> target_model: {{target_model}} <br>
       <br> target_explore: {{target_explore}} <br>
 
-      <!-- start link_extract_context -->
+      <!-- start link_action_extract_context -->
       {% assign filters_array = '' %}
       {% for parameter in link_query_parameters %}
       {% assign parameter_key = parameter | split:'=' | first %}
@@ -359,8 +359,8 @@ view: +sales_orders {
 
       <br> filters_array: {{filters_array}} <br>
 
-      {% if different_explore %}
-      @{link_match_filters_to_destination}
+      {% if use_different_explore %}
+      @{link_action_match_filters_to_destination}
       {% else %}
       {% assign filters_array_destination = filters_array %}
       {% endif %}
@@ -402,12 +402,12 @@ view: +sales_orders {
       <br> filters_string: {{filter_string}} <br>
 
       {% if default_filters != '' %}
-      @{link_build_default_filter_string}
+      @{link_action_build_default_filter_string}
       {% endif %}
 
-      {% if default_filters_override == true and default_filters != '' %}
+      {% if use_override_for_default_filters == true and default_filters != '' %}
       {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string | prepend:'&' %}
-      {% elsif default_filters_override == false and default_filters != '' %}
+      {% elsif use_override_for_default_filters == false and default_filters != '' %}
       {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string | prepend:'&' %}
       {% else %}
       {% assign target_content_filters = filter_string | prepend:'&' %}

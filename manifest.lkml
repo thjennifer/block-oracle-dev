@@ -51,7 +51,7 @@ constant: default_target_date {
 # formatting values using html property
 
 
-# html_format_big_numbers
+#--> html_format_big_numbers
 #{
 # Formats positive and negative numbers by appending B, M, K, or no suffix based on magnitude.
 # example use:
@@ -84,7 +84,7 @@ constant: html_format_big_numbers {
 }
 #}
 
-# Use Symbols for yesno type fields
+#--> symbols for yesno type fields
 # assign symbol for Yes values only, No values only or both Yes/No values
 #{
 # For yes/no type fields, displays symbols instead of Yes/No values.
@@ -107,10 +107,11 @@ constant: html_symbols_for_no {
 }
 #}
 
-# Warning messages
+#--> warning messages
 #{
-# For measures in source currency, returns a warning message if currency_code field is missing
-# from query.
+# For measures in source currency, returns a warning message
+# if currency_code field is missing from query.
+#
 # example use:
 # measure: total_amount_adjusted_in_source_currency {
 #   type: sum
@@ -126,9 +127,9 @@ constant: html_message_source_currency {
 #########################################################
 # LABELS: Views
 #{
-# define view labels to use in Explores
+# define view labels which impact Explore readability
 
-# View labels
+#--> view labels
 constant: view_label_for_filters {
   value: "🔍 Filters"
 }
@@ -183,8 +184,8 @@ constant: view_label_for_dashboard_navigation {
 #   Adjusted Amount (USD)
 #   Adjusted Amount (Target Currency)
 #}
-#
-# label_defaults
+
+#--> label_defaults
 #   - Initial values for liquid variables that will be used to create the label.
 #       currency = value in parameter_target_currency that will be appended to label when field is selected.
 #       field_name = blank
@@ -203,7 +204,7 @@ constant: label_defaults {
   "
 }
 
-# label_field_name
+#--> label_field_name
 #   - Creates liquid variable {{ field_name }} for use in 'label' property.
 #   - Captures _field._name and removes words defined in liquid variable remove_words and remove_total_prefix.
 #   - Capitalizes remaining words.
@@ -225,7 +226,7 @@ constant: label_field_name {
   "
 }
 
-# label_currency_if_selected
+#--> label_currency_if_selected
 #   - Builds label to use when a field is selected for a chart and when it is listed in Explore.
 #   - Derives from field name itself with some unnecessary words removed.
 #   - If field is selected for a query, appends the target currency value else appends phrase ' (Target Currency)' to the field
@@ -260,8 +261,8 @@ constant: label_currency_if_selected {
 # in sales_orders_daily_agg, order counts can't be summed
 # across filtered categories. If categories are queried,
 # return a warning or null for Order Count measures.
-#
-# is_agg_category_in_query
+
+#--> is_agg_category_in_query
 # returns true if any of these category fields from
 # sales_orders_agg__lines is in the query:
 #     category_id, category_description, category_name_code,
@@ -282,7 +283,7 @@ constant: is_agg_category_in_query {
 }
 
 
-# is_item_or_category_selected
+#--> is_item_or_category_selected
 # returns true if any of these item or category fields is selected:
 #     category_id, category_description, category_name_code,
 #     inventory_item_id, item_part_number, item_description,
@@ -306,7 +307,7 @@ constant: is_item_or_category_selected {
 }
 
 
-# is_item_selected
+#--> is_item_selected
 # - returns true if any of these item or category fields is selected:
 #     inventory_item_id, item_part_number, item_description
 # - returns true if Item is displayed usng parameter_display_product_level and
@@ -330,45 +331,104 @@ constant: is_item_selected {
 
 #} end constants for is_selected or in_query
 
+#########################################################
+# LINK
+#{
+# The next set of constants with the link_ prefix support the building of url links whether tied to a
+# field's link property or designed to display in a single value visualization.
+#
+# There are constants defined to support defining styles, mapping Explore fields to dashboard filters,
+# capturing and parsing urls plus generating filter strings and a new url path.
+#
+# Liquid has a parameter called {{link}}. This parameter is most useful only
+# on measures because it actually contains the the full URL (including pivots) of
+# where the user clicked in the data/visualization pane.
+#
+# Using a dummy measure called link_generator, when a user clicks on a measure in an Explore or Dashboard,
+# these constants will capture the full url, parse it to get the applied filters and then build a new url link to desired target:
+#   - a drill modal with table or visulization
+#   - an Explore page with a new visualization
+#   - another Dashboard
+
+
+#########################################################
+# LINK_STYLE
+#{
+# defines different styles for url link
+
+#--> link_style_dashboard_navigation
+# Defines the multiple styles available for dashboard links:
+#     buttons, tabs or plain
+# The options here should match the allowed values in parameter_navigation_style
+# found in template_dashboard_navigation.
+#
+# Generates liquid variables for click_style and non_click_style.
+# These styles will be applied when displaying the dashboard urls in
+# a single value visualization. See the html property
+# of the dimension template_dashboard_navigation.navigation_links.
+constant: link_style_dashboard_navigation {
+  value: "{% assign nav_style = parameter_navigation_style._parameter_value %}
+  {% case nav_style %}
+    {% when 'buttons' %}
+        {% assign core_style = 'border-collapse: separate; border-radius: 6px; border: 2px solid #dcdcdc; margin-left: 5px; margin-bottom: 5px; padding: 6px 10px; line-height: 1.5; user-select: none; font-size: 12px; font-style: tahoma; text-align: center; text-decoration: none; letter-spacing: 0px; white-space: normal; float: left;' %}
+        {% assign non_click_style = core_style | append: 'background-color: #ffffff; color: #000000; font-weight: normal;' %}
+        {% assign click_style = core_style | append: 'background-color: #dbe8fb; color: #000000; font-weight: medium;' %}
+        {% assign div_style = 'text-align: center; display: inline-block; height: 40px;' %}
+        {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 40px;' %}
+    {% when 'tabs' %}
+        {% assign core_style = 'font-color: #4285F4; padding: 5px 10px; border-style: solid; border-radius: 5px 5px 0 0; float: left; line-height: 20px;'%}
+        {% assign non_click_style = core_style | append: 'border-width: 1px; border-color: #D3D3D3;' %}
+        {% assign click_style = core_style | append: 'border-width: 3px; border-color: #808080 #808080 #F5F5F5 #808080; font-weight: bold; background-color: #F5F5F5;' %}
+        {% assign div_style = 'border-bottom: solid 2px #808080; padding: 4px 10px 0px 10px; height: 38px;' %}
+        {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 38px;' %}
+    {% when 'plain' %}
+        {% assign non_click_style = 'color: #0059D6; padding: 5px 15px; float: left; line-height: 40px;' %}
+        {% assign click_style = non_click_style | append: 'font-weight:bold;font-size: 12px;' %}
+        {% assign div_style = 'float: left;' %}
+        {% assign span_style = 'font-size: 10px; display: table; margin:0 auto;' %}
+  {% endcase %}"
+}
+
+#} end constants for link style
 
 #########################################################
 # LINK_MAP: Map explore fields to dashboard filters
 #{
-#--> Constants with the link_map prefix are used to create
-#    dashboard url links defined in a field's link: property
-#    by mapping fields in an explore/view to dashboard filters
-#--> Use | between field and filter
-#    Use || between each mapped pair
-#--> When specifying the field name use view_name.field_name although
-#    view name is optional when link build also includes
-#    liquid variable qualify_filter_names = false
-#--> Example syntanx:
+# The constants with the link_map_ prefix are used map fields in an Explore/view to either:
+# 1. dashboard filter names
+# 2. fields in a different Explore
+#
+# To define the mapping:
+# - Use | between field and filter
+# - Use || between each mapped pair
+# - When specifying the field name use view_name.field_name although view name is optional when the link property also includes
+#   the liquid variable use_qualified_filter_names = false
+# - Example mapping syntax:
 #       value: "invoice_date|date||business_unit_name|business_unit"
-#    In this example, any filters for invoice_date will be passed to
-#    the dashboard filter named date. Any filters for field business_unit_name
-#    will be passed to the dashboard filter named business unit.
-#--> Additional fields can be appended to these constants when defining
-#    the link property
-#--> Example use that will add link to Booking Amount to open the Order Line Details dashboard:
+#    In this example, any filters for invoice_date will be passed to the dashboard filter named date.
+#    Any filters for field business_unit_name will be passed to the dashboard filter named business unit.
+# - Additional mapping pairs can be appended to these constants when defining the link property.
+# - Example link property of Booking Amount which opens the Order Line Details dashboard using the constant
+#   link_map_sales_orders_to_order_details to define the filters_mapping:
 #       measure: total_booking_amount_target_currency_formatted {
 #           link: {
 #             label: "Order Line Details"
 #             icon_url: "/favicon.ico"
 #             url: "
-#                @{link_generate_variable_defaults}
+#                @{link_action_set_variable_defaults}
 #               {% assign link = link_generator._link %}
-#               {% assign qualify_filter_names = false %}
+#               {% assign use_qualified_filter_names = false %}
 #               {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 #               {% assign model = _model._name %}
 #               {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
 #               {% assign default_filters='is_booking=Yes'%}
-#               {% assign default_filters_override = false %}
-#               @{link_generate_dashboard_url}
+#               {% assign use_override_for_default_filters = false %}
+#               @{link_action_generate_dashboard_url}
 #               "
 #             }
 #         }
 
-# link_map_sales_invoices_to_invoice_details
+#--> link_map_sales_invoices_to_invoice_details
 #{ Maps fields found in explores sales_invoices and sales_invoices_daily_agg
 #  to dashboard filters on dashboard otc_billing_invoice_line_details
 constant: link_map_sales_invoices_to_invoice_details {
@@ -376,7 +436,7 @@ constant: link_map_sales_invoices_to_invoice_details {
 }
 #}
 
-# link_map_sales_orders_to_order_details
+#--> link_map_sales_orders_to_order_details
 #{ Maps fields found in explores sales_orders and sales_orders_daily_agg
 #  to dashboard filters on dashboard otc_order_line_item_details
 constant: link_map_sales_orders_to_order_details {
@@ -384,7 +444,7 @@ constant: link_map_sales_orders_to_order_details {
 }
 #}
 
-# link_map_sales_orders_to_order_details_extra_mapping
+#--> link_map_sales_orders_to_order_details_extra_mapping
 #{
 #--> The field selected_product_dimension_description can represent either
 #    an item_description or a category_description depending on the value
@@ -408,7 +468,7 @@ constant: link_map_sales_orders_to_order_details_extra_mapping {
 }
 #}
 
-# link_map_invoices_to_order_details
+#--> link_map_invoices_to_order_details
 #{ Maps fields found in explores sales_invoices and sales_invoices_daily_agg
 #  to dashboard filters on dashboard otc_order_line_item_details
 constant: link_map_invoices_to_order_details {
@@ -418,15 +478,35 @@ constant: link_map_invoices_to_order_details {
 
 #} end constants for link maps
 
-
 #########################################################
 # LINK_VIS: Set config properties
 #{
-#--> Constants with the link_vis prefix are used to create
-#    dashboard url links defined in a field's link: property
-#    by defining config values for select visualization types
-#    and patterns
-
+# Constants with the link_vis prefix define configuration values for
+# common visualization types and patterns. When defining a field's link property,
+# use one of these constants to pass the desired viz configuration to the url.
+#
+# Each of these generates a liquid variable called {{vis_config}} and you can
+# append additional parameters to this as needed once you add the constant to the
+# link property.
+#
+# Example link property for Total Sales which opens a drill modal with
+# a line chart for sales by month with the reference to
+# link_vis_line_chart_1_date_1_measure.
+#
+#   measure: total_sales_amount_target_currency_formatted {
+#     link: {
+#           label: "Show Sales by Month"
+#           url: "@{link_action_set_variable_defaults}
+#                   {% assign link = link_generator._link %}
+#                   {% assign view_header = _explore._name | append: '.' %}
+#                   {% assign view_detail = _view._name | append: '.' %}
+#                   {% assign measure = 'total_sales_amount_target_currency' | prepend: view_detail %}
+#                   {% assign date_dimension = 'ordered_month' | prepend: view_header %}
+#                   {% assign drill_fields =  date_dimension | append: ',' | append: measure %}
+#                 @{link_vis_line_chart_1_date_1_measure}
+#                 @{link_generate_explore_url}"
+#           }
+#       }
 
 constant: link_vis_table {
   value: "{% assign vis_config = '{\"type\":\"looker_grid\"}' | url_encode | prepend: '&vis_config=' %}"
@@ -460,55 +540,73 @@ constant: link_vis_single {
   value: "{% assign vis_config = '{\"type\":\"single_value\"}' | url_encode | prepend: '&vis_config=' %}"
 }
 
+#--> link_vis_line_chart_1_date_1_measure
+# creates a line chart for a given measure. The liquid variable measure must be created before calling the constant.
+# For example:
+#   {% assign measure = sales_orders__lines.total_sales_amount_target_currency %}
+#   @{link_vis_line_chart_1_date_1_measure}
 constant: link_vis_line_chart_1_date_1_measure {
-  #Required
-  #measure
   value: "{% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#468faf\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}"
 }
 
-#} end constanst for link vis
+#} end constants for link vis
 
-constant: link_generate_variable_defaults {
+#########################################################
+# LINK_ACTION: Take an action in building link url
+#{
+# The constants with the link_action_ prefix take a specific action to creating
+# a final url. Actions like defining defaults, extracting context, matching
+# filters to destination, etc...
+
+#-->link_action_set_variable_defaults
+# Set default values for liquid variables used to build the url.
+# Add this constant to the link property first to establish the defaults.
+# Then you can customize any of these as needed.
+constant: link_action_set_variable_defaults {
   value: "
   {% comment %} Variables to default if not created {% endcomment %}
-  {% comment %} User Customizable Parameters {% endcomment %}
-  {% assign drill_fields = '' %}
-  {% assign pivots = '' %}
-  {% assign subtotals = '' %}
-  {% assign sorts = '' %}
-  {% assign limit = '500' %}
-  {% assign column_limit = '50' %}
-  {% assign total = '' %}
-  {% assign row_total = '' %}
-  {% assign query_timezone = '' %}
-  {% assign dynamic_fields = '' %}
-  {% assign qualify_filter_name = true %}
+  {% comment %} Default Parameters Customizable by LookML Developer {% endcomment %}
+    {% assign drill_fields = '' %}
+    {% assign pivots = '' %}
+    {% assign subtotals = '' %}
+    {% assign sorts = '' %}
+    {% assign limit = '500' %}
+    {% assign column_limit = '50' %}
+    {% assign total = '' %}
+    {% assign row_total = '' %}
+    {% assign query_timezone = '' %}
+    {% assign dynamic_fields = '' %}
 
   {% comment %} Default Visualizations Parameters {% endcomment %}
-  @{link_vis_table}
+    @{link_vis_table}
 
-  {% comment %} Default Behavior Parameters {% endcomment %}
-  {% assign default_filters_override = false %}
-  {% assign default_filters = '' %}
-  {% assign new_page = false %}
-  {% assign different_explore = false %}
-  {% assign target_model = '' %}
-  {% assign target_explore = '' %}
+  {% comment %} Default Behavior Parameters Customizable by LookML Developer {% endcomment %}
+    {% assign use_override_for_default_filters = false %}
+    {% assign default_filters = '' %}
+    {% assign use_different_explore = false %}
+    {% assign target_model = '' %}
+    {% assign target_explore = '' %}
+    {% assign use_qualified_filter_names = true %}
+    {% assign use_dashboard_url_variable = false %}
 
-  {% comment %} Variables to be built in code below {% endcomment %}
-  {% assign filters_mapping = '' %}
-  {% assign target_content_filters = '' %}
-  {% assign target_default_content_filters = '' %}
-  {% assign link_host = '' %}
+  {% comment %} Variables to be built in other link_action_ constants {% endcomment %}
+    {% assign filters_mapping = '' %}
+    {% assign target_content_filters = '' %}
   "
 }
 
-constant: link_host {
-  #Could assign a user_attribute since it won't be used with the generator
-  value: "{% assign link_host = 'https://cortexdev.cloud.looker.com' %}"
-}
 
-constant: link_extract_context {
+#-->link_action_extract_context
+#{ Initial build of liquid variables if found in link_query_parameters:
+#   filters_array_destination
+#   dynamic_fields
+#   query_timezone
+# Loops through array link_query_parameters which is passed from either:
+#   link_action_generate_dashboard_url
+#   link_generate_dashboard_variable
+#   link_generate_explore_url
+#}
+constant: link_action_extract_context {
   value: "
   {% assign filters_array = '' %}
   {% for parameter in link_query_parameters %}
@@ -537,16 +635,46 @@ constant: link_extract_context {
   "
 }
 
-constant: link_match_filters_to_destination {
+#-->link_action_match_filters_to_destination
+#{ This constant creates the liquid variable filters_array_destination.
+# Takes input from:
+#   1. filters_mapping which is defined by the LookML developer in the link property. The mapping indicates how a source field
+#      maps to a dashboard filter or a field in a different Explore. The mapping pairs are defined in the form of :
+#         view_name.field_name|destination filter1||view_name.field_name2|destination filter2
+#      See constant link_map_sales_invoices_to_invoice_details for an example mapping.
+#   2. filters_array which is defined in constant link_action_extract_context
+#
+# Loops through each target filter and checks to see if the Explore field named in the mapping
+# has filters values captured. If so, builds the filters_array_destination variable with the destination filter
+# name and the source filter values.
+#
+# For example, a target dashboard has 3 filters: date, business_name and country and these are mapped
+# to Explore fields:
+#   sales_orders.ordered_date|date || sales_orders.business_org_name|business_name || sales_orders.country_name|country
+#
+# The source link url found 2 filters with these values: sales_orders.ordered_date = last 1 year
+# and sales_orders.country_name = USA.
+#
+# This constant creates filters_array_destination as destination filter|source filter value with each pair separated by comma:
+#     date|last 1 year,country|USA
+#
+# This constant is called in these other link_ constants:
+#   link_action_generate_dashboard_url
+#   link_generate_dashboard_variable
+#   link_generate_explore_url
+#}
+constant: link_action_match_filters_to_destination {
   value: "
   {% assign filters_mapping = filters_mapping | split: '||' %}
   {% assign filters_array = filters_array | split: ',' %}
   {% assign filters_array_destination = '' %}
 
-
   {% for source_filter in filters_array %}
     {% assign source_filter_key = source_filter | split:'|' | first %}
-    {% if qualify_filter_names == false %} {% assign source_filter_key = source_filter_key | split:'.' | last %}{% endif %}
+    {% if use_qualified_filter_names == false %}
+        {% comment %} Ignore view name and return field names only {% endcomment %}
+        {% assign source_filter_key = source_filter_key | split: '.' | last %}
+    {% endif %}
     {% assign source_filter_value = source_filter | split:'|' | last %}
 
     {% for destination_filter in filters_mapping %}
@@ -564,24 +692,34 @@ constant: link_match_filters_to_destination {
   "
 }
 
-constant: link_build_filter_string {
+#-->link_action_build_filter_string
+#{ - This constant creates the liquid variable filter_string.
+# - Takes input of filters_array_destination from constant link_action_match_filters_to_destination
+#   and builds url-encoded string formatted for Explore or dashboard.
+# - This constant is called in these other link_ constants:
+#     link_action_generate_dashboard_url
+#     link_generate_dashboard_variable
+#     link_generate_explore_url
+#}
+constant: link_action_build_filter_string {
   value: "
   {% assign filter_string = '' %}
   {% assign filters_array_destination = filters_array_destination | split: ',' %}
   {% for filter in filters_array_destination %}
-  {% if filter contains 'EMPTY' %}{%else%}
-    {% if filter != blank %}
-      {% assign filter_key = filter | split:'|' | first %}
-      {% assign filter_value = filter | split:'|' | last %}
-      {% if content == '/explore/' %}
-        {% assign filter_compile = 'f[' | append: filter_key | append:']=' | append: filter_value %}
-      {% else %}
-        {% assign filter_value = filter_value | encode_url %}
-        {% assign filter_compile = filter_key | append:'=' | append: filter_value %}
-      {% endif %}
-      {% assign filter_string = filter_string | append: filter_compile | append:'&' %}
+    {% if filter contains 'EMPTY' %}
+    {%else%}
+        {% if filter != blank %}
+          {% assign filter_key = filter | split:'|' | first %}
+          {% assign filter_value = filter | split:'|' | last %}
+            {% if content == '/explore/' %}
+              {% assign filter_compile = 'f[' | append: filter_key | append:']=' | append: filter_value %}
+            {% else %}
+              {% assign filter_value = filter_value | encode_url %}
+              {% assign filter_compile = filter_key | append:'=' | append: filter_value %}
+            {% endif %}
+          {% assign filter_string = filter_string | append: filter_compile | append:'&' %}
+        {% endif %}
     {% endif %}
-  {% endif %}
   {% endfor %}
   {% assign size = filter_string | size | minus: 1 %}
   {% if size > 0 %}
@@ -592,7 +730,16 @@ constant: link_build_filter_string {
   "
 }
 
-constant: link_build_default_filter_string {
+#-->link_action_build_default_filter_string
+#{ - This constant creates the liquid variable default_filter_string.
+# - Takes input of default_filters which is defined by the LookML developer in the link property
+#   and builds url-encoded string for formatted for an Explore or dashboard.
+# - This constant is called in these other link_ constants if default_filters is not blank:
+#     link_action_generate_dashboard_url
+#     link_generate_dashboard_variable
+#     link_generate_explore_url
+#}
+constant: link_action_build_default_filter_string {
   value: "
   {% assign default_filter_string = '' %}
   {% assign default_filters = default_filters | split: ',' %}
@@ -614,81 +761,53 @@ constant: link_build_default_filter_string {
   "
 }
 
-constant: link_generate_dashboard_url {
+#-->link_action_generate_dashboard_url
+#{ - Generates the final dashboard url and returns either:
+#     1. the url opened in the frontend UI when use_dashboard_url_variable == false (which is the default)
+#     2. a liquid variable named dashboard_url when use_dashboard_url_variable == true
+#
+#   - The dashboard navigation links used for the OTC dashboards is an example when
+#     you would want to return a liquid variable for the url. See template_dashboard_navigation.
+#
+#   - Makes calls to these other link_ constants:
+#       link_action_extract_context
+#       link_action_match_filters_to_destination
+#       link_action_build_filter_string
+#}
+constant: link_action_generate_dashboard_url {
   value: "
   {% assign content = '/dashboards/' %}
   {% assign link_query = link | split: '?' | last %}
   {% assign link_query_parameters = link_query | split: '&' %}
-  {% assign target_content_filters = '' %}
-  {% assign link_host = '' %}
 
-  {% if new_page %}
-  @{link_host}
-  {% endif %}
-
-  @{link_extract_context}
-  @{link_match_filters_to_destination}
-  @{link_build_filter_string}
+  @{link_action_extract_context}
+  @{link_action_match_filters_to_destination}
+  @{link_action_build_filter_string}
 
   {% if default_filters != '' %}
-  @{link_build_default_filter_string}
+    @{link_action_build_default_filter_string}
   {% endif %}
 
-  {% if default_filters_override == true and default_filters != '' %}
-  {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string %}
-  {% elsif default_filters_override == false and default_filters != '' %}
-  {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string %}
+  {% if use_override_for_default_filters == true and default_filters != '' %}
+    {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string %}
+  {% elsif use_override_for_default_filters == false and default_filters != '' %}
+    {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string %}
   {% else %}
-  {% assign target_content_filters = filter_string %}
+    {% assign target_content_filters = filter_string %}
   {% endif %}
 
-  {% comment %} Builds final link to be presented in frontend {% endcomment %}
-  {{ link_host | append:content | append:target_dashboard | append: '?' | append: target_content_filters }}
+  {% comment %} Builds final link to be presented as either a url in frontend or a liquid variable {% endcomment %}
+  {% assign dashboard_url = content | append: target_dashboard | append: '?' | append: target_content_filters %}
+  {% if use_dashboard_url_variable == false %}
+    {{ dashboard_url }}
+  {% endif %}
   "
 }
-
-
-constant: link_generate_dashboard_variable {
-  value: "
-  {% assign content = '/dashboards/' %}
-  {% assign link_query = link | split: '?' | last %}
-  {% assign link_query_parameters = link_query | split: '&' %}
-  {% assign target_content_filters = '' %}
-  {% assign host = '' %}
-
-  {% if new_page %}
-  @{link_host}
-  {% endif %}
-
-  @{link_extract_context}
-  @{link_match_filters_to_destination}
-  @{link_build_filter_string}
-
-  {% if default_filters != '' %}
-  @{link_build_default_filter_string}
-  {% endif %}
-
-  {% if default_filters_override == true and default_filters != '' %}
-  {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string %}
-  {% elsif default_filters_override == false and default_filters != '' %}
-  {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string %}
-  {% else %}
-  {% assign target_content_filters = filter_string %}
-  {% endif %}
-
-  {% comment %} Builds final link to be presented in frontend {% endcomment %}
-  {% assign dashboard_url = host | append:content | append:target_dashboard | append: '?' | append: target_content_filters %}
-  "
-}
-
-
 
 constant: link_build_explore {
   value: "
   {% assign explore_link = '' %}
-  {% if link_host != '' %}
-    {% assign explore_link = explore_link | append: host %}
-  {% endif %}
+
   {% if content != '' %}
     {% assign explore_link = explore_link | append: content %}
   {% endif %}
@@ -763,32 +882,28 @@ constant: link_generate_explore_url {
   {% assign link_query_parameters = link_query | split: '&' %}
   {% assign drill_fields = drill_fields | prepend:'fields='%}
 
-  {% if different_explore == false %}
+  {% if use_different_explore == false %}
     {% assign target_model = link_path[1] %}
     {% assign target_explore = link_path[2] %}
   {% endif %}
 
-  {% if new_page %}
-  @{link_host}
-  {% endif %}
+  @{link_action_extract_context}
 
-  @{link_extract_context}
-
-  {% if different_explore %}
-    @{link_match_filters_to_destination}
+  {% if use_different_explore %}
+    @{link_action_match_filters_to_destination}
   {% else %}
     {% assign filters_array_destination = filters_array %}
   {% endif %}
 
-  @{link_build_filter_string}
+  @{link_action_build_filter_string}
 
   {% if default_filters != '' %}
-    @{link_build_default_filter_string}
+    @{link_action_build_default_filter_string}
   {% endif %}
 
-  {% if default_filters_override == true and default_filters != '' %}
+  {% if use_override_for_default_filters == true and default_filters != '' %}
     {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string | prepend:'&' %}
-  {% elsif default_filters_override == false and default_filters != '' %}
+  {% elsif use_override_for_default_filters == false and default_filters != '' %}
    {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string | prepend:'&' %}
   {% else %}
     {% assign target_content_filters = filter_string | prepend:'&' %}
@@ -802,7 +917,7 @@ constant: link_generate_explore_url {
 
 constant: link_build_mappings_from_dash_bindings {
   value: "{% assign model_name = _model._name %}
-    {% if qualify_filter_names == true %}{% assign view_name = _view._name | append: '.' %}{%else%}{% assign view_name = '' %}{%endif%}
+    {% if use_qualified_filter_names == true %}{% assign view_name = _view._name | append: '.' %}{%else%}{% assign view_name = '' %}{%endif%}
     {% assign nav_items = dash_bindings._value | split: '||' %}
     {% assign dash_map = map_filter_numbers_to_dashboard_filter_names._value | split: '||' %}
     {% assign filters_mapping = ''%}
@@ -832,108 +947,9 @@ constant: link_build_mappings_from_dash_bindings {
           {% endfor %}"
 }
 
+#} end constants for link actions
 
-constant: link_generate_dashboard_nav_style {
-  value: "{% assign nav_style = parameter_navigation_style._parameter_value %}
-  {% case nav_style %}
-    {% when 'buttons' %}
-      {% assign core_style = 'border-collapse: separate; border-radius: 6px; border: 2px solid #dcdcdc; margin-left: 5px; margin-bottom: 5px; padding: 6px 10px; line-height: 1.5; user-select: none; font-size: 12px; font-style: tahoma; text-align: center; text-decoration: none; letter-spacing: 0px; white-space: normal; float: left;' %}
-      {% assign page_style = core_style | append: 'background-color: #ffffff; color: #000000; font-weight: normal;' %}
-      {% assign focus_page_style = core_style | append: 'background-color: #dbe8fb; color: #000000; font-weight: medium;' %}
-      {% assign div_style = 'text-align: center; display: inline-block; height: 40px;' %}
-      {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 40px;' %}
-
-    {% when 'tabs' %}
-      {% assign core_style = 'font-color: #4285F4; padding: 5px 10px; border-style: solid; border-radius: 5px 5px 0 0; float: left; line-height: 20px;'%}
-      {% assign page_style = core_style | append: 'border-width: 1px; border-color: #D3D3D3;' %}
-      {% assign focus_page_style = core_style | append: 'border-width: 3px; border-color: #808080 #808080 #F5F5F5 #808080; font-weight: bold; background-color: #F5F5F5;' %}
-      {% assign div_style = 'border-bottom: solid 2px #808080; padding: 4px 10px 0px 10px; height: 38px;' %}
-      {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 38px;' %}
-
-    {% when 'plain' %}
-      {% assign page_style = 'color: #0059D6; padding: 5px 15px; float: left; line-height: 40px;' %}
-      {% assign focus_page_style = page_style | append: 'font-weight:bold;font-size: 12px;' %}
-      {% assign div_style = 'float: left;' %}
-      {% assign span_style = 'font-size: 10px; display: table; margin:0 auto;' %}
-  {% endcase %}"
-}
-
-constant: link_derive_dashboard_nav_style {
-  value: "{% assign nav_style = navigation_style._parameter_value %}
-          {% case nav_style %}
-              {% when 'buttons' %}
-                  {% assign shared_style = 'display: block; border-spacing: 0; border-collapse: separate; border-radius: 6px; border: 1px solid #dcdcdc; margin-left: 0px; margin-bottom: 5px; padding: 6px 10px; line-height: 3; user-select: none; font-size: 14px; font-style: tahoma; text-align: center; text-decoration: none; letter-spacing: 1px; white-space: normal; float: left;' %}
-                  {% assign non_focus_page_style = shared_style | append: 'background-color: #ffffff; color: #000000; font-weight: normal;' %}
-                  {% assign focus_page_style = shared_style | append: 'background-color: #dbe8fb; color: #000000; font-weight: bold;' %}
-                  {% assign div_style = 'text-align: center; display: inline-block; height: 40px;' %}
-                  {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 40px;' %}
-
-              {% when 'tabs' %}
-                {% assign shared_style = 'font-color: #4285F4; padding: 0px 0px; border-style: solid; border-radius: 5px 5px 0 0; float: left; line-height: 20px; letter-spacing: 0px'%}
-                {% assign non_focus_page_style = shared_style | append: 'border-width: 1px; border-color: #D3D3D3;' %}
-                {% assign focus_page_style = shared_style | append: 'border-width: 2px; border-color: #808080 #808080 #F5F5F5 #808080; font-weight: bold; background-color: #F5F5F5;' %}
-                {% assign div_style = 'vertical-align: bottom; border-bottom: solid 2px #808080; padding: 6px 10px 8px 12px; height: 39px;' %}
-                {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 39px;' %}
-
-
-            {% when 'small' %}
-              {% assign non_focus_page_style = 'color: #0059D6; padding: 5px 15px; float: left; line-height: 40px;' %}
-              {% assign focus_page_style = non_focus_page_style | append: 'font-weight:bold;font-size: 12px;' %}
-              {% assign div_style = 'float: left;' %}
-              {% assign span_style = 'font-size: 10px; display: table; margin:0 auto;' %}
-            {% endcase %}"
-}
-
-constant: link_selected_button_style {
-  value: "
-  display: block;
-  border-spacing: 0;
-  border-collapse: separate;
-  border-radius: 6px;
-  border: 1px solid #dcdcdc;
-  margin-left: 0px;
-  margin-bottom: 5px;
-  padding: 6px 10px;
-  line-height: 1.5;
-  user-select: none
-  font-size: 12px;
-  font-style: tahoma;
-  text-align: center;
-  text-decoration: none;
-  letter-spacing: 0px;
-  white-space: normal;
-  float: left;
-  background-color: #dbe8fb;
-  color: #000000;
-  font-weight: medium;"
-}
-
-constant: link_unselected_button_style {
-  value: "
-  display: block;
-  border-spacing: 0;
-  border-collapse: separate;
-  border-radius: 6px;
-  border: 1px solid #dcdcdc;
-  margin-left: 0px;
-  margin-bottom: 5px;
-  padding: 6px 10px;
-  line-height: 1.5;
-  user-select: none;
-  font-size: 12px;
-  font-style: tahoma;
-  text-align: center;
-  text-decoration: none;
-  letter-spacing: 0px;
-  white-space: normal;
-  float: left;
-  background-color: #ffffff;
-  color: #000000;
-  font-weight: normal;"
-}
-
-
-
+#} end LINK_ constants
 
 #########################################################
 # TEST or DEMO DATA SPECIFIC CONSTANTS

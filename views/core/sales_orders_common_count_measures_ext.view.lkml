@@ -57,16 +57,16 @@ view: sales_orders_common_count_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_blocked=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
@@ -144,15 +144,15 @@ view: sales_orders_common_count_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_fulfilled=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
@@ -169,15 +169,15 @@ view: sales_orders_common_count_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_fulfilled_by_request_date=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
@@ -194,15 +194,15 @@ view: sales_orders_common_count_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_backordered=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
@@ -219,15 +219,15 @@ view: sales_orders_common_count_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='has_return=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
@@ -272,7 +272,7 @@ view: sales_orders_common_count_measures_ext {
     value_format_name: format_large_numbers_d1
     link: {
       label: "Show Sales Orders by Month"
-      url: "@{link_generate_variable_defaults}
+      url: "@{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign v = _view._name | append: '.' %}
       {% assign measure = 'sales_order_count' | prepend: v %}
@@ -286,14 +286,14 @@ view: sales_orders_common_count_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
@@ -312,15 +312,15 @@ view: sales_orders_common_count_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_fulfilled=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
@@ -339,16 +339,16 @@ view: sales_orders_common_count_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_fulfilled_by_request_date=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }

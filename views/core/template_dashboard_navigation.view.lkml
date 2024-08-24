@@ -200,32 +200,33 @@ view: template_dashboard_navigation {
     description: "Add to Single Value Visualization and the defined HTML styling will be shown. Returns a URL link for each dashboard."
     sql:  '' ;;
     html:
-      <!-- generate page_style and focus_page_style liquid variables used below -->
-      @{link_generate_dashboard_nav_style}
+      <!-- generate non_click_style and click_style liquid variables used below -->
+      @{link_style_dashboard_navigation}
       <div style="{{ div_style }}">
       <span style = "{{ span_style }}">
 
       <!-- initialize variables used in following steps-->
-        @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
 
       <!-- capture the full url of the dashboard including filters -->
-        {% assign link = link_generator._link %}
-        {% assign counter = 1 %}
-        {% assign qualify_filter_names = false %}
+      {% assign link = link_generator._link %}
+      {% assign counter = 1 %}
+      {% assign use_qualified_filter_names = false %}
 
       <!-- generate filters_mapping liquid variable passed into next step -->
-        @{link_build_mappings_from_dash_bindings}
-      <!-- generate dashboard_url liquid variable used below-->
-        @{link_generate_dashboard_variable}
+      @{link_build_mappings_from_dash_bindings}
+      <!-- generate dashboard_url liquid variable dashboard_url used in href below-->
+      {% assign use_dashboard_url_variable = true %}
+      @{link_action_generate_dashboard_url}
 
       {% assign focus_page = parameter_navigation_focus_page._parameter_value | times: 1 %}
 
       {% if parameter_navigation_focus_page._in_query and counter == focus_page %}
-        <span style="{{ focus_page_style }}">{{ dash_label }}</span>
-        {% elsif _explore._dashboard_url == target_dashboard %}
-        <span style="{{ focus_page_style }}">{{ dash_label }}</span>
-        {% else %}
-        <a style="{{ page_style }}" href="{{ dashboard_url }}">{{ dash_label }}</a>
+      <span style="{{ click_style }}">{{ dash_label }}</span>
+      {% elsif _explore._dashboard_url == target_dashboard %}
+      <span style="{{ click_style }}">{{ dash_label }}</span>
+      {% else %}
+      <a style="{{ non_click_style }}" href="{{ dashboard_url }}">{{ dash_label }}</a>
       {% endif %}
       <!-- increment counter by 1 -->
       {% assign counter = counter | plus: 1 %}
@@ -256,18 +257,18 @@ view: template_dashboard_navigation {
 
 # <div>
 #           <!-- initialize variables used in following steps-->
-#             @{link_generate_variable_defaults}
-#             @{link_generate_dashboard_nav_style}
+#             @{link_action_set_variable_defaults}
+#             @{link_style_dashboard_navigation}
 
 #     <!-- capture the full url of the dashboard including filters -->
 #     {% assign link = link_generator._link %}.
-#     {% assign qualify_filter_names = false %}
+#     {% assign use_qualified_filter_names = false %}
 
 
 #     {% assign focus_page = parameter_navigation_focus_page._parameter_value | times: 1 %}
 
 #     {% assign model_name = _model._name %}
-#     {% if qualify_filter_names == true %}{% assign view_name = _view._name | append: "." %}
+#     {% if use_qualified_filter_names == true %}{% assign view_name = _view._name | append: "." %}
 #     {% else %}{% assign view_name = ''%}
 #     {%endif%}
 #     {% assign nav_items = dash_bindings._value | split: '||' %}

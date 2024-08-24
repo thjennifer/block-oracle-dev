@@ -172,7 +172,7 @@ view: sales_orders_common_amount_measures_ext {
     value_format_name: format_large_numbers_d1
     link: {
       label: "Show Sales by Month"
-      url: "@{link_generate_variable_defaults}
+      url: "@{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign e = _explore._name | append: '.' %}
       {% assign v = _view._name | append: '.' %}
@@ -187,9 +187,9 @@ view: sales_orders_common_amount_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign append_extra_mapping = false %}
       {% assign expl = _explore._name %}
       {% if expl == 'sales_orders' %}
@@ -201,8 +201,8 @@ view: sales_orders_common_amount_measures_ext {
       {% endif %}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
@@ -219,16 +219,16 @@ view: sales_orders_common_amount_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_booking=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
@@ -244,7 +244,7 @@ view: sales_orders_common_amount_measures_ext {
 #-->  returns table of 100 customers sorted in descending order of total backlog amount
     link: {
       label: "Show Top 50 Customers with Highest Backlog"
-      url: "@{link_generate_variable_defaults}
+      url: "@{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign v = _view._name | append: '.' %} {% assign e = _explore._name | append: '.' %}
       {% assign measure = 'total_backlog_amount_target_currency' | prepend: v %}
@@ -260,7 +260,7 @@ view: sales_orders_common_amount_measures_ext {
 #-->  returns table of 100 customers sorted in descending order of total backlog amount
     link: {
       label: "Show Top 50 Categories with Highest Backlog"
-      url: "@{link_generate_variable_defaults}
+      url: "@{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign v = _view._name | append: '.' %} {% assign e = _explore._name | append: '.' %}
       {% assign measure = 'total_backlog_amount_target_currency' | prepend: v %}
@@ -277,16 +277,16 @@ view: sales_orders_common_amount_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_backlog=Yes'%}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
@@ -330,7 +330,7 @@ view: sales_orders_common_amount_measures_ext {
     sql: ${average_ordered_amount_per_order_target_currency} ;;
     link: {
       label: "Show Monthly Average Sales per Order"
-      url: "@{link_generate_variable_defaults}
+      url: "@{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign e = _explore._name | append: '.' %}
       {% assign v = _view._name | append: '.' %}
@@ -345,9 +345,9 @@ view: sales_orders_common_amount_measures_ext {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_generate_variable_defaults}
+      @{link_action_set_variable_defaults}
       {% assign link = link_generator._link %}
-      {% assign qualify_filter_names = false %}
+      {% assign use_qualified_filter_names = false %}
       @{link_map_sales_orders_to_order_details_extra_mapping}
       {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% if append_extra_mapping == true %}
@@ -355,8 +355,8 @@ view: sales_orders_common_amount_measures_ext {
       {% endif %}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
-      {% assign default_filters_override = false %}
-      @{link_generate_dashboard_url}
+      {% assign use_override_for_default_filters = false %}
+      @{link_action_generate_dashboard_url}
       "
     }
   }
