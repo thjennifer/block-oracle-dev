@@ -123,6 +123,96 @@ constant: label_view_for_dashboard_navigation {
 #} end constants for view labels
 
 #########################################################
+# IS_SELECTED or IN_QUERY
+#{
+# These constants check if fields are selected or queried. Actions can be taken based on true or false.
+# For example, in sales_orders_daily_agg, order counts can't be summed across filtered categories.
+# If categories are queried, return a warning or null for Order Count measures.
+#
+# The liquid parameter _is_selected returns true if the field you ask for:
+#     - is included in the query as a selected field
+#     - is included in the query using the required_fields parameter
+#
+# The liquid parameter _in_query returns true if the field you ask for:
+#     - is included in the query as a selected field
+#     - is included in the query as a filter
+#     - is included in the query using the required_fields parameter
+#
+
+#--> is_agg_category_in_query
+#{
+# Returns true if any of these category fields from
+# sales_orders_daily_agg__lines are in the query:
+#     category_id, category_description, category_name_code,
+#     item_organization_id, item_orgranization_name
+# To use this constant, complete the rest of the statement (what to do when true and false).
+# For example:
+#     measure: order_count {
+#       type: sum
+#       sql: @{is_agg_category_selected}NULL {%else} ${num_orders} {% endif %} ;;
+#     }
+#}
+constant: is_agg_category_in_query {
+  value: "{% if sales_orders_daily_agg__lines.category_id._in_query or
+  sales_orders_daily_agg__lines.category_description._in_query or
+  sales_orders_daily_agg__lines.category_name_code._in_query or
+  sales_orders_daily_agg__lines.item_organization_id._in_query or
+  sales_orders_daily_agg__lines.item_organization_name._in_query
+  %}"
+}
+
+#--> is_item_or_category_selected
+#{
+# Returns true if any of these item or category fields is selected:
+#     category_id, category_description, category_name_code,
+#     inventory_item_id, item_part_number, item_description,
+#     selected_product_dimension_id, selected_product_dimension_description
+# To use this constant, complete the rest of the statement (what to return when true and false).
+# For example:
+#     measure: average_cycle_time_days {
+#       type: average
+#       sql: @{is_item_or_category_selected}${cycle_time_days}{%- else -%}NULL{%- endif -%};;
+#     }
+#}
+constant: is_item_or_category_selected {
+  value: "{%- if inventory_item_id._is_selected or
+  item_part_number._is_selected or
+  item_description._is_selected or
+  category_id._is_selected or
+  category_description._is_selected or
+  category_name_code._is_selected or
+  selected_product_dimension_description._is_selected or
+  selected_product_dimension_id._is_selected
+  -%}"
+}
+
+#--> is_item_selected
+#{
+# - Returns true if any of these item or category fields is selected:
+#     inventory_item_id, item_part_number, item_description
+# - Returns true if Item is displayed using parameter_display_product_level and
+#   either selected_product_dimension_id or selected_product_dimension_description is selected.
+# - To use this constant, complete the rest of the statement (what to return when true and false).
+# - For example:
+#     measure: total_ordered_quantity_by_item {
+#       sql: @{is_item_selected}${ordered_quantity}{%- else -%}NULL {%- endif -%} ;;
+#       html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
+#     }
+#}
+constant: is_item_selected {
+  value: "{%- if inventory_item_id._is_selected or
+  item_part_number._is_selected or
+  item_description._is_selected or
+  (
+  parameter_display_product_level._parameter_value == 'Item' and
+  (selected_product_dimension_description._is_selected or selected_product_dimension_id._is_selected)
+  )
+  -%}"
+}
+
+#} end constants for is_selected or in_query
+
+#########################################################
 # LABEL: Currency
 #{
 # For fields using target currency, derive the label to use
@@ -229,94 +319,7 @@ constant: label_currency_if_selected {
 
 #} end constants for target currency labels
 
-#########################################################
-# IS_SELECTED or IN_QUERY
-#{
-# The liquid parameter _is_selected returns true if the field you ask for:
-#     - is included in the query as a selected field
-#     - is included in the query using the required_fields parameter
-#
-# The liquid parameter _in_query returns true if the field you ask for:
-#     - is included in the query as a selected field
-#     - is included in the query as a filter
-#     - is included in the query using the required_fields parameter
-#
-# These constants check if fields are selected or queried. Actions can be taken based on true or false.
-# For example, in sales_orders_daily_agg, order counts can't be summed across filtered categories.
-# If categories are queried, return a warning or null for Order Count measures.
 
-#--> is_agg_category_in_query
-#{
-# returns true if any of these category fields from
-# sales_orders_agg__lines is in the query:
-#     category_id, category_description, category_name_code,
-#     item_organization_id, item_orgranization_name
-# To use this constant, complete the rest of the statement (what to return when true and false).
-# For example:
-#     measure: order_count {
-#       type: sum
-#       sql: @{is_agg_category_selected}NULL {%else} ${num_orders} {% endif %} ;;
-#     }
-#}
-constant: is_agg_category_in_query {
-  value: "{% if sales_orders_daily_agg__lines.category_id._in_query or
-                sales_orders_daily_agg__lines.category_description._in_query or
-                sales_orders_daily_agg__lines.category_name_code._in_query or
-                sales_orders_daily_agg__lines.item_organization_id._in_query or
-                sales_orders_daily_agg__lines.item_organization_name._in_query
-                %}"
-}
-
-#--> is_item_or_category_selected
-#{
-# returns true if any of these item or category fields is selected:
-#     category_id, category_description, category_name_code,
-#     inventory_item_id, item_part_number, item_description,
-#     selected_product_dimension_id, selected_product_dimension_description
-# To use this constant, complete the rest of the statement (what to return when true and false).
-# For example:
-#     measure: average_cycle_time_days {
-#       type: average
-#       sql: @{is_item_or_category_selected}${cycle_time_days}{%- else -%}NULL{%- endif -%};;
-#     }
-#}
-constant: is_item_or_category_selected {
-  value: "{%- if inventory_item_id._is_selected or
-                 item_part_number._is_selected or
-                 item_description._is_selected or
-                 category_id._is_selected or
-                 category_description._is_selected or
-                 category_name_code._is_selected or
-                 selected_product_dimension_description._is_selected or
-                 selected_product_dimension_id._is_selected
-          -%}"
-}
-
-#--> is_item_selected
-#{
-# - Returns true if any of these item or category fields is selected:
-#     inventory_item_id, item_part_number, item_description
-# - Returns true if Item is displayed usng parameter_display_product_level and
-#   either selected_product_dimension_id or selected_product_dimension_description is selected.
-# - To use this constant, complete the rest of the statement (what to return when true and false).
-# - For example:
-#     measure: total_ordered_quantity_by_item {
-#       sql: @{is_item_selected}${ordered_quantity}{%- else -%}NULL {%- endif -%} ;;
-#       html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
-#     }
-#}
-constant: is_item_selected {
-  value: "{%- if inventory_item_id._is_selected or
-                 item_part_number._is_selected or
-                 item_description._is_selected or
-                (
-                parameter_display_product_level._parameter_value == 'Item' and
-                (selected_product_dimension_description._is_selected or selected_product_dimension_id._is_selected)
-                )
-          -%}"
-}
-
-#} end constants for is_selected or in_query
 
 #########################################################
 # LINK

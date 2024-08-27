@@ -172,6 +172,20 @@ view: +sales_orders {
     value_format_name: decimal_0
   }
 
+  measure: min_ordered_date {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: date
+    sql: MIN(${ordered_date}) ;;
+  }
+
+  measure: max_ordered_date {
+    hidden: no
+    view_label: "TEST STUFF"
+    type: date
+    sql: MAX(${ordered_date}) ;;
+  }
+
   measure: sum_total_sales_amount_target_currency {
     hidden: no
     view_label: "TEST STUFF"

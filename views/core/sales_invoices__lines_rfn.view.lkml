@@ -69,6 +69,14 @@ view: +sales_invoices__lines {
     full_suggestions: yes
   }
 
+  dimension: is_intercompnay_with_symbols {
+    hidden: yes
+    sql: ${is_intercompany} ;;
+    can_filter: no
+    html: @{html_symbols_for_yes} ;;
+
+  }
+
 
 #########################################################
 # DIMENSIONS: Order Details
