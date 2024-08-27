@@ -83,7 +83,7 @@ view: +sales_orders__lines {
   parameter: parameter_display_product_level {
     hidden: no
     type: unquoted
-    view_label: "@{view_label_for_filters}"
+    view_label: "@{label_view_for_filters}"
     label: "Display Categories or Items"
     description: "Select whether to display categories or items in report. Use with dimensions Selected Product Dimension ID and Selected Product Dimension Description"
     allowed_value: {label: "Category" value: "Category"}
@@ -520,7 +520,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Item Prices and Cost"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${unit_list_price} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -529,7 +529,7 @@ view: +sales_orders__lines {
     hidden: no
     type: number
     group_label: "Item Prices and Cost"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${unit_selling_price} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -538,7 +538,7 @@ view: +sales_orders__lines {
     hidden: no
     group_label: "Item Prices and Cost"
     description: "Pre-tax unit list price minus pre-tax unit selling price. Reported in target currency"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${unit_list_price_target_currency} - ${unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -597,7 +597,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${ordered_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -606,7 +606,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${booking_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -615,7 +615,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${backlog_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -624,7 +624,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${fulfilled_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -633,7 +633,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${shipped_amount} * ${sales_orders.currency_conversion_rate} ;;
     value_format_name: decimal_2
   }
@@ -642,7 +642,7 @@ view: +sales_orders__lines {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${invoiced_amount} * ${sales_orders.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -721,7 +721,7 @@ view: +sales_orders__lines {
       {% assign default_filters = 'sales_orders__lines.is_cancelled=No' %}
       {% assign sorts = 'sales_orders__lines.difference_ordered_fulfilled_quantity+desc,sales_orders__lines.ordered_amount_target_currency+desc,sales_orders.ordered_date+desc' %}
       @{link_vis_table}
-      @{link_generate_explore_url}
+      @{link_action_generate_explore_url}
       "
     }
   }
@@ -768,7 +768,7 @@ view: +sales_orders__lines {
       {% assign default_filters = 'sales_orders__lines.is_cancelled=No, sales_orders__lines.is_fulfilled=Yes' %}
       {% assign sorts = 'sales_orders__lines.cycle_time_days+desc' %}
       @{link_vis_table}
-      @{link_generate_explore_url}
+      @{link_action_generate_explore_url}
       "
     }
   }
@@ -895,7 +895,7 @@ view: +sales_orders__lines {
           {% assign limit = 50 %}
           {% assign default_filters = 'sales_orders__lines.line_category_code=ORDER,sales_orders__lines.is_backordered=Yes' %}
           @{link_vis_table}
-          @{link_generate_explore_url}
+          @{link_action_generate_explore_url}
       "
     }
   }

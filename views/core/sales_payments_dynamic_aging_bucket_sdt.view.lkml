@@ -50,14 +50,14 @@ view: sales_payments_dynamic_aging_bucket_sdt {
 
   parameter: parameter_aging_bucket_size {
     type: number
-    view_label: "@{view_label_for_filters}"
+    view_label: "@{label_view_for_filters}"
     label: "Aging Bucket: Number Days per Bucket"
     default_value: "30"
   }
 
   parameter: parameter_aging_bucket_count {
     type: number
-    view_label: "@{view_label_for_filters}"
+    view_label: "@{label_view_for_filters}"
     label: "Aging Bucket: Number of Ranges"
     default_value: "4"
   }

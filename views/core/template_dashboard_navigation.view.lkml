@@ -113,7 +113,7 @@
 view: template_dashboard_navigation {
   extension: required
 
-  view_label: "@{view_label_for_dashboard_navigation}"
+  view_label: "@{label_view_for_dashboard_navigation}"
 
 #########################################################
 # Fields *requiring override* in extension
@@ -214,9 +214,9 @@ view: template_dashboard_navigation {
       {% assign use_qualified_filter_names = false %}
 
       <!-- generate filters_mapping liquid variable passed into next step -->
-      @{link_build_mappings_from_dash_bindings}
+      @{link_map_filters_from_navigation_dash_bindings}
       <!-- generate dashboard_url liquid variable dashboard_url used in href below-->
-      {% assign use_dashboard_url_variable = true %}
+      {% assign use_url_variable = true %}
       @{link_action_generate_dashboard_url}
 
       {% assign focus_page = parameter_navigation_focus_page._parameter_value | times: 1 %}
@@ -230,6 +230,7 @@ view: template_dashboard_navigation {
       {% endif %}
       <!-- increment counter by 1 -->
       {% assign counter = counter | plus: 1 %}
+      <!-- end for loop which began in link_map_filters_from_navigation_dash_bindings -->
       {% endfor %}
       </span>
       </div>

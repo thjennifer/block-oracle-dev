@@ -199,7 +199,7 @@ view: +sales_orders__lines {
     hidden: no
     type: string
     view_label: "TEST STUFF"
-    label: "@{label_defaults}{%- assign field_name = 'XXX Something Different' -%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'XXX Something Different' -%}@{label_currency_if_selected}"
     sql: '1'  ;;
   }
 
@@ -208,7 +208,7 @@ view: +sales_orders__lines {
     hidden: no
     type: string
     view_label: "TEST STUFF"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: '1'  ;;
   }
 
@@ -216,7 +216,7 @@ view: +sales_orders__lines {
     hidden: no
     type: string
     view_label: "TEST STUFF"
-    label: "@{label_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: '1' ;;
   }
 

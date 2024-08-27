@@ -65,7 +65,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${total_adjusted}  ;;
     value_format_name: decimal_2
   }
@@ -74,7 +74,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${total_applied}  ;;
     value_format_name: decimal_2
   }
@@ -83,7 +83,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${total_credited}  ;;
     value_format_name: decimal_2
   }
@@ -92,7 +92,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${total_discounted}  ;;
     value_format_name: decimal_2
   }
@@ -101,7 +101,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${total_original}  ;;
     value_format_name: decimal_2
   }
@@ -110,7 +110,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${total_remaining}  ;;
     value_format_name: decimal_2
   }
@@ -119,7 +119,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}{%- assign field_name = 'Tax Amount Original'-%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Original'-%}@{label_currency_if_selected}"
     sql: ${total_tax_original}  ;;
     value_format_name: decimal_2
   }
@@ -128,7 +128,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}{%- assign field_name = 'Tax Amount Remaining'-%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Remaining'-%}@{label_currency_if_selected}"
     sql: ${total_tax_remaining}  ;;
     value_format_name: decimal_2
   }
@@ -137,7 +137,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}{%- assign field_name = 'Past Due Receivables'-%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Past Due Receivables'-%}@{label_currency_if_selected}"
     sql: ${total_overdue_remaining}   ;;
     value_format_name: decimal_2
   }
@@ -146,7 +146,7 @@ view: +sales_payments_daily_agg__amounts {
     hidden: yes
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${total_doubtful_remaining}   ;;
     value_format_name: decimal_2
   }

@@ -248,7 +248,7 @@ view: +sales_invoices {
     hidden: no
     type: number
     group_label: "Invoice Totals"
-    label: "@{label_defaults}{%- assign field_name = 'Invoice Revenue Amount' -%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Revenue Amount' -%}@{label_currency_if_selected}"
     description: "Total amount recognized as revenue for accounting purposes for the entire invoice (in target currency)"
     sql: ${total_revenue_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -258,7 +258,7 @@ view: +sales_invoices {
     hidden: no
     type: number
     group_label: "Invoice Totals"
-    label: "@{label_defaults}{%- assign field_name = 'Invoice Tax Amount' -%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Tax Amount' -%}@{label_currency_if_selected}"
     description: "Total tax amount of invoice in target currency"
     sql: ${total_tax_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -268,7 +268,7 @@ view: +sales_invoices {
     hidden: no
     type: number
     group_label: "Invoice Totals"
-    label: "@{label_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
     description: "Total transaction amount of invoice in target currency"
     sql: ${total_transaction_amount} * ${currency_conversion_rate}   ;;
     value_format_name: decimal_2

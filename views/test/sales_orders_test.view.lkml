@@ -283,7 +283,7 @@ view: +sales_orders {
       {% assign m = 'ordered_month' | prepend: v %}
       {% assign drill_fields =  m | append: ',' | append: measure %}
       @{link_vis_line_chart_1_date_1_measure}
-      @{link_generate_explore_url}
+      @{link_action_generate_explore_url}
       "
     }
   }
@@ -414,7 +414,7 @@ view: +sales_orders {
       {% endif %}
 
       {% comment %} Builds final link to be presented in frontend {% endcomment %}
-      @{link_build_explore}
+      @{link_action_build_explore}
 
       <br> explore_link: {{explore_link}} <br>
 

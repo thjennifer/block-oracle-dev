@@ -448,7 +448,7 @@ view: +sales_orders {
     hidden: no
     type: number
     group_label: "Order Totals"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     description: "Total amount for an order in target currency"
     sql: COALESCE(${total_ordered_amount},0) * ${currency_conversion_rate} ;;
     value_format_name: decimal_2
@@ -458,7 +458,7 @@ view: +sales_orders {
     hidden: no
     type: number
     group_label: "Order Totals"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     description: "Total sales amount for an order in target currency. Includes only lines with line category code of 'ORDER'"
     sql: COALESCE(${total_sales_ordered_amount},0) * ${currency_conversion_rate} ;;
     value_format_name: decimal_2
@@ -532,7 +532,7 @@ view: +sales_orders {
       {% assign drill_fields = 'sales_orders.has_backorder, sales_orders.is_held, sales_orders.sales_order_count, sales_orders.percent_of_sales_orders' %}
       {% assign default_filters = 'sales_orders.is_blocked=Yes' %}
       @{link_vis_table}
-      @{link_generate_explore_url}
+      @{link_action_generate_explore_url}
       "
     }
 #--> returns table of blocked orders
@@ -545,7 +545,7 @@ view: +sales_orders {
       {% assign default_filters = 'sales_orders.is_blocked=Yes' %}
       {% assign sorts = 'sales_orders.total_sales_amount_target_currency+desc' %}
       @{link_vis_table}
-      @{link_generate_explore_url}
+      @{link_action_generate_explore_url}
       "
     }
   }
@@ -650,7 +650,7 @@ view: +sales_orders {
       {% assign limit = 50 %}
       {% assign default_filters = 'sales_orders__lines.line_category_code=ORDER,sales_orders__lines.is_backordered=Yes' %}
       @{link_vis_table}
-      @{link_generate_explore_url}
+      @{link_action_generate_explore_url}
       "
     }
   }
@@ -668,7 +668,7 @@ view: +sales_orders {
       {% assign default_filters = 'sales_orders.has_return_line=Yes' %}
       {% assign sorts='sales_orders.order_number, sales_orders__lines.line_number' %}
       @{link_vis_table}
-      @{link_generate_explore_url}
+      @{link_action_generate_explore_url}
       "
     }
   }

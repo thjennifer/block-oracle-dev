@@ -64,7 +64,7 @@
 #
 #   5. Updated hidden and label properties of filter1 to filter9. Also updated filter1 to use "type: date".
 #
-#   6. Added view_label = "@{view_label_for_dashboard_navigation}" for how these fields appear in the Explore
+#   6. Added view_label = "@{label_view_for_dashboard_navigation}" for how these fields appear in the Explore
 #}
 #
 # HOW TO USE FOR NAVIGATION {
@@ -113,7 +113,7 @@ include: "/views/core/template_dashboard_navigation.view"
 view: otc_dashboard_navigation_ext {
   extends: [template_dashboard_navigation]
 
-  view_label: "@{view_label_for_dashboard_navigation}"
+  view_label: "@{label_view_for_dashboard_navigation}"
 
   parameter: parameter_navigation_subject {
     hidden: no

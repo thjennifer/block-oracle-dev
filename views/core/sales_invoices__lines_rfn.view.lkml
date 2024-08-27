@@ -281,7 +281,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: number
     group_label: "Item Prices and Discounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     description: "Post-tax list price of item converted to target currency"
     sql: ${unit_list_price} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -291,7 +291,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: number
     group_label: "Item Prices and Discounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     description: "Actual pre-tax price charged to customer converted to target currency"
     sql: ${unit_selling_price} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -301,7 +301,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: number
     group_label: "Item Prices and Discounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     description: "Actual post-tax price charged to customer converted to target currency"
     sql: ${gross_unit_selling_price} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -312,7 +312,7 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Item Prices and Discounts"
     description: "Post-tax unit list price minus post-tax unit selling price. Reported in target currency"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${unit_discount_price} * ${sales_invoices.currency_conversion_rate} ;;
     value_format_name: decimal_2
   }
@@ -391,7 +391,7 @@ view: +sales_invoices__lines {
   dimension: revenue_amount_target_currency {
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     description: "Amount in target currency recognized as revenue for accounting purposes"
     sql: ${revenue_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -400,7 +400,7 @@ view: +sales_invoices__lines {
   dimension: gross_transaction_amount_target_currency {
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}{%- assign field_name = 'Gross Invoice Amount' -%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Gross Invoice Amount' -%}@{label_currency_if_selected}"
     description: "Gross transaction amount with taxes and before any discounts in target currency"
     sql: ${gross_transaction_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -409,7 +409,7 @@ view: +sales_invoices__lines {
   dimension: transaction_amount_target_currency {
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
     description: "Invoice line pre-tax transaction amount in target currency"
     sql: ${transaction_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
@@ -418,7 +418,7 @@ view: +sales_invoices__lines {
   dimension: tax_amount_target_currency {
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${tax_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     description: "Tax amount in target currency associated with the transaction line"
     value_format_name: decimal_2
@@ -427,7 +427,7 @@ view: +sales_invoices__lines {
   dimension: discount_amount_target_currency {
     type: number
     group_label: "Amounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${discount_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     description: "Item Invoiced Quantity * Unit Discount Price in target currency"
     value_format_name: decimal_2
@@ -488,7 +488,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: average
     group_label: "Average Unit Prices & Discounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     description: "Average post-tax unit list price in target currency"
     sql: ${unit_list_price_target_currency} ;;
     value_format_name: decimal_2
@@ -498,7 +498,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: average
     group_label: "Average Unit Prices & Discounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     description: "Average pre-tax unit price charged to customer in target currency"
     sql: ${unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
@@ -508,7 +508,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: average
     group_label: "Average Unit Prices & Discounts"
-    label: "@{label_defaults}@{label_field_name}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     description: "Average post-tax unit price charged to customer in target currency"
     sql: ${gross_unit_selling_price_target_currency} ;;
     value_format_name: decimal_2
@@ -518,7 +518,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: average
     group_label: "Average Unit Prices & Discounts"
-    label: "@{label_defaults}{%- assign field_name = 'Average Unit List Price when Discount' -%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Average Unit List Price when Discount' -%}@{label_currency_if_selected}"
     description: "Average post-tax unit list price in target currency across invoice lines when there is a discount"
     sql: ${unit_list_price_target_currency} ;;
     filters: [is_discount_selling_price: "Yes"]
@@ -545,7 +545,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: average
     group_label: "Average Unit Prices & Discounts"
-    label: "@{label_defaults}{%- assign field_name = 'Average Unit Selling Price when Discount' -%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Average Unit Selling Price when Discount' -%}@{label_currency_if_selected}"
     description: "Average pre-tax unit price charged to customer in target currency when there is a discount"
     sql: ${unit_selling_price_target_currency} ;;
     filters: [is_discount_selling_price: "Yes"]
@@ -572,7 +572,7 @@ view: +sales_invoices__lines {
     hidden: no
     type: average
     group_label: "Average Unit Prices & Discounts"
-    label: "@{label_defaults}{%- assign field_name = 'Average Gross Unit Selling Price when Discount' -%}@{label_currency_if_selected}"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Average Gross Unit Selling Price when Discount' -%}@{label_currency_if_selected}"
     description: "Average post-tax unit price charged to customer in target currency when there is a discount"
     sql: ${gross_unit_selling_price_target_currency} ;;
     filters: [is_discount_selling_price: "Yes"]

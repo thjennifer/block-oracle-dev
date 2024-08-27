@@ -279,7 +279,7 @@ view: sales_orders_common_count_measures_ext {
       {% assign m = 'ordered_month' | prepend: v %}
       {% assign drill_fields =  m | append: ',' | append: measure %}
       @{link_vis_line_chart_1_date_1_measure}
-      @{link_generate_explore_url}
+      @{link_action_generate_explore_url}
       "
     }
     link: {

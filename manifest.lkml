@@ -13,29 +13,16 @@ constant: REPORTING_DATASET {
   export: override_required
 }
 
-# constant: CONNECTION_NAME {
-
-#   value: "qa-thjennifer1"
-#   export: override_required
-# }
-
-# constant: GCP_PROJECT_ID {
-
-#   value: "thjennifer1"
-#   export: override_required
-# }
 
 #########################################################
 # CATEGORY SET and DEFAULT TARGET DATE
 #{
-# define values for category set and default target date based
-# on user attribute values
-
+# Define values for category set and default target date based on user attribute values.
 constant: category_set {
   value: "{% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}'{{category_set}}'"
 }
 
-# if usng test data set target date to 3/28/2024 to match dates in that dataset otherwise use current date
+# If using test data, set target date to 3/28/2024 to match dates in that dataset otherwise use current date.
 constant: default_target_date {
   value:  "{%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}
   {%- if test_data == 'YES' -%}
@@ -48,19 +35,18 @@ constant: default_target_date {
 #########################################################
 # HTML FORMATS
 #{
-# formatting values using html property
-
+# Format values using a field's html property.
 
 #--> html_format_big_numbers
 #{
 # Formats positive and negative numbers by appending B, M, K, or no suffix based on magnitude.
-# example use:
+# Example use:
 #   measure: sum_ordered_amount {
 #     type: sum
 #     sql: ${ordered_amount_target_currency} ;;
 #     html: @{html_format_big_numbers} ;;
 #   }
-
+#}
 constant: html_format_big_numbers {
   value: "
   {%- if value < 0 -%}
@@ -82,17 +68,16 @@ constant: html_format_big_numbers {
 
   "
 }
-#}
 
 #--> symbols for yesno type fields
-# assign symbol for Yes values only, No values only or both Yes/No values
 #{
-# For yes/no type fields, displays symbols instead of Yes/No values.
-# example use:
+# For yes/no type fields, displays a symbol for Yes values only, No values only or both Yes/No values.
+# Example use:
 #   dimension: is_fulfilled {
 #     type: yesno
 #     html: @{html_symbols_for_yes_no} ;;
 #   }
+#}
 constant: html_symbols_for_yes_no {
   value: "{% if value == true %}✅ {% else %}❌{% endif %}"
 }
@@ -105,43 +90,40 @@ constant: html_symbols_for_yes {
 constant: html_symbols_for_no {
   value: "{% if value == false %}❌{% else %}  {% endif %}"
 }
-#}
 
 #--> warning messages
 #{
-# For measures in source currency, returns a warning message
-# if currency_code field is missing from query.
-#
-# example use:
-# measure: total_amount_adjusted_in_source_currency {
-#   type: sum
-#   sql: {%- if currency_code._is_selected -%}${amount_adjusted}{%- else -%}NULL{%- endif -%} ;;
-#   html: @{html_message_source_currency} ;;
-# }
+# For measures reported in source currency, returns a warning message if currency_code field is missing from the query.
+# Example use:
+#   measure: total_amount_adjusted_in_source_currency {
+#     type: sum
+#     sql: {%- if currency_code._is_selected -%}${amount_adjusted}{%- else -%}NULL{%- endif -%} ;;
+#     html: @{html_message_source_currency} ;;
+#   }
+#}
 constant: html_message_source_currency {
   value: "{%- if currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%}"
 }
-#}
+
 #} end constants for html formats
 
 #########################################################
-# LABELS: Views
+# LABEL: View
 #{
-# define view labels which impact Explore readability
+# Defines view labels which impact Explore readability.
 
-#--> view labels
-constant: view_label_for_filters {
+constant: label_view_for_filters {
   value: "🔍 Filters"
 }
 
-constant: view_label_for_dashboard_navigation {
+constant: label_view_for_dashboard_navigation {
   value: "🛠 Dashboard Navigation"
 }
 
 #} end constants for view labels
 
 #########################################################
-# LABELS: Target Currency Fields
+# LABEL: Currency
 #{
 # For fields using target currency, derive the label to use
 # when the field is selected in a chart and when the field is shown
@@ -156,37 +138,37 @@ constant: view_label_for_dashboard_navigation {
 #
 # Example Use Cases:
 #{
-# Example use with defaults:
+# Example use case: defaults
 #   measure: total_amount_adjusted_target_currency {
-#     label: @{label_defaults}@{label_field_name}@{label_currency_if_selected}
+#     label: @{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}
 #   }
-#   Total Amount Adjusted (USD)
-#   Total Amount Adjusted (Target Currency)
+#     Total Amount Adjusted (USD)
+#     Total Amount Adjusted (Target Currency)
 #
-# Example use with removal of total_ prefix:
+# Example use case: remove 'total_' prefix:
 #   measure: total_amount_adjusted_target_currency {
-#     label: @{label_defaults}{%- assign remove_total_prefix = true -%}@{label_field_name}@{label_currency_if_selected}
+#     label: @{label_currency_defaults}{%- assign remove_total_prefix = true -%}@{label_currency_field_name}@{label_currency_if_selected}
 #   }
-#   Amount Adjusted (USD)
-#   Amount Adjusted (Target Currency)
+#     Amount Adjusted (USD)
+#     Amount Adjusted (Target Currency)
 #
-# Example use with addition of Formatted to Explore label:
+# Example use case: keep 'Formatted' in Explore label:
 #   measure: total_amount_adjusted_target_currency_formatted {
-#     label: @{label_defaults}{%- assign add_formatted = true -%}@{label_field_name}@{label_currency_if_selected}
+#     label: @{label_currency_defaults}{%- assign add_formatted = true -%}@{label_currency_field_name}@{label_currency_if_selected}
 #   }
-#   Total Amount Adjusted (USD)
-#   Total Amount Adjusted (Target Currency) Formatted
+#     Total Amount Adjusted (USD)
+#     Total Amount Adjusted (Target Currency) Formatted
 #
-# Example use custom value provided for field_name:
+# Example use case: provide custom value for field_name:
 #   measure: total_amount_adjusted_target_currency {
-#     label: @{label_defaults}{%- assign field_name = 'Adjusted Amount' -%}@{label_currency_if_selected}
+#     label: @{label_currency_defaults}{%- assign field_name = 'Adjusted Amount' -%}@{label_currency_if_selected}
 #   }
-#   Adjusted Amount (USD)
-#   Adjusted Amount (Target Currency)
+#     Adjusted Amount (USD)
+#     Adjusted Amount (Target Currency)
 #}
 
-#--> label_defaults
-#   - Initial values for liquid variables that will be used to create the label.
+#--> label_currency_defaults
+#   - Used to set initial values for liquid variables that will be used to create the dynamic label measures based on target currency.
 #       currency = value in parameter_target_currency that will be appended to label when field is selected.
 #       field_name = blank
 #       remove_words = '_target_currency, _formatted' meaning these words will not be in label.
@@ -194,7 +176,7 @@ constant: view_label_for_dashboard_navigation {
 #       add_words = ' (Target Currency)' will be appended to field_name and displayed in the Explore
 #       add_formatted = false. When true, ' Formatted' will be added to label displayed in the Explore
 #   - These defaults can be overridden when defining the label property.
-constant: label_defaults {
+constant: label_currency_defaults {
   value: "{%- assign currency = otc_common_parameters_xvw.parameter_target_currency._parameter_value | remove: \"'\" -%}
   {%- assign field_name = '' -%}
   {%- assign remove_words = '_target_currency,_formatted' -%}
@@ -204,13 +186,17 @@ constant: label_defaults {
   "
 }
 
-#--> label_field_name
-#   - Creates liquid variable {{ field_name }} for use in 'label' property.
-#   - Captures _field._name and removes words defined in liquid variable remove_words and remove_total_prefix.
-#   - Capitalizes remaining words.
+#--> label_currency_field_name
+#{
+# Creates a liquid variable called field_name for use in 'label' property.
+# Derived by:
+#   - Capturing name of field with liquid parameter _field._name and removing any words defined in liquid variable remove_words.
+#   - Removing the word "total_", if remove_total_prefix == true.
+#   - Replacing '_' with spaces and capitalizing remaining words.
 #   - For example, a dimension named total_ordered_amount_target_currency will return
-#     Total Ordered Amount
-constant: label_field_name {
+#     Total Ordered Amount for field_name
+#}
+constant: label_currency_field_name {
   value: "{%- assign fname = _field._name | split: '.' | last -%}
   {%- if remove_total_prefix == true -%}{% assign remove_words = remove_words | append: ',total_'-%}{%- endif -%}
   {%- assign remove_words = remove_words | split: ','%}
@@ -227,12 +213,11 @@ constant: label_field_name {
 }
 
 #--> label_currency_if_selected
-#   - Builds label to use when a field is selected for a chart and when it is listed in Explore.
-#   - Derives from field name itself with some unnecessary words removed.
-#   - If field is selected for a query, appends the target currency value else appends phrase ' (Target Currency)' to the field
-#   - For example, for a dimension named total_ordered_amount_target_currency and a selected currency of USD, you will see:
-#       Total Ordered Amount (USD) when shown in chart and
-#       Total Ordered Amount (Target Currency) when shown in the Explore
+#{
+# Appends one of the following to field_name to complete the label:
+#   - Phrase  '  (Target Currency)' or the phrase in the liquid variable add_words if _field._is_selected is false
+#   - Target currency value in parentheses if _field._is_selected is true.
+#}
 constant: label_currency_if_selected {
   value: "
   {%- if add_formatted == true -%}{%- assign add_words = add_words | append: ' Formatted' -%}{%- endif -%}
@@ -247,22 +232,21 @@ constant: label_currency_if_selected {
 #########################################################
 # IS_SELECTED or IN_QUERY
 #{
-# _is_selected returns true if the field you ask for:
+# The liquid parameter _is_selected returns true if the field you ask for:
 #     - is included in the query as a selected field
 #     - is included in the query using the required_fields parameter
 #
-# _in_query returns true if the field you ask for:
+# The liquid parameter _in_query returns true if the field you ask for:
 #     - is included in the query as a selected field
 #     - is included in the query as a filter
 #     - is included in the query using the required_fields parameter
 #
-# These constants check if fields are selected or queried.
-# Actions can be taken based on true or false. For example,
-# in sales_orders_daily_agg, order counts can't be summed
-# across filtered categories. If categories are queried,
-# return a warning or null for Order Count measures.
+# These constants check if fields are selected or queried. Actions can be taken based on true or false.
+# For example, in sales_orders_daily_agg, order counts can't be summed across filtered categories.
+# If categories are queried, return a warning or null for Order Count measures.
 
 #--> is_agg_category_in_query
+#{
 # returns true if any of these category fields from
 # sales_orders_agg__lines is in the query:
 #     category_id, category_description, category_name_code,
@@ -273,6 +257,7 @@ constant: label_currency_if_selected {
 #       type: sum
 #       sql: @{is_agg_category_selected}NULL {%else} ${num_orders} {% endif %} ;;
 #     }
+#}
 constant: is_agg_category_in_query {
   value: "{% if sales_orders_daily_agg__lines.category_id._in_query or
                 sales_orders_daily_agg__lines.category_description._in_query or
@@ -282,8 +267,8 @@ constant: is_agg_category_in_query {
                 %}"
 }
 
-
 #--> is_item_or_category_selected
+#{
 # returns true if any of these item or category fields is selected:
 #     category_id, category_description, category_name_code,
 #     inventory_item_id, item_part_number, item_description,
@@ -294,6 +279,7 @@ constant: is_agg_category_in_query {
 #       type: average
 #       sql: @{is_item_or_category_selected}${cycle_time_days}{%- else -%}NULL{%- endif -%};;
 #     }
+#}
 constant: is_item_or_category_selected {
   value: "{%- if inventory_item_id._is_selected or
                  item_part_number._is_selected or
@@ -306,18 +292,19 @@ constant: is_item_or_category_selected {
           -%}"
 }
 
-
 #--> is_item_selected
-# - returns true if any of these item or category fields is selected:
+#{
+# - Returns true if any of these item or category fields is selected:
 #     inventory_item_id, item_part_number, item_description
-# - returns true if Item is displayed usng parameter_display_product_level and
+# - Returns true if Item is displayed usng parameter_display_product_level and
 #   either selected_product_dimension_id or selected_product_dimension_description is selected.
-# To use this constant, complete the rest of the statement (what to return when true and false).
-# For example:
+# - To use this constant, complete the rest of the statement (what to return when true and false).
+# - For example:
 #     measure: total_ordered_quantity_by_item {
 #       sql: @{is_item_selected}${ordered_quantity}{%- else -%}NULL {%- endif -%} ;;
 #       html:  @{is_item_selected}{{rendered_value}}{%- else -%}Add item to query as a dimension.{%- endif -%};;
 #     }
+#}
 constant: is_item_selected {
   value: "{%- if inventory_item_id._is_selected or
                  item_part_number._is_selected or
@@ -345,7 +332,8 @@ constant: is_item_selected {
 # where the user clicked in the data/visualization pane.
 #
 # Using a dummy measure called link_generator, when a user clicks on a measure in an Explore or Dashboard,
-# these constants will capture the full url, parse it to get the applied filters and then build a new url link to desired target:
+# these constants will capture the full url, parse it to get the applied filters and then build
+# a new url link to desired target:
 #   - a drill modal with table or visulization
 #   - an Explore page with a new visualization
 #   - another Dashboard
@@ -354,18 +342,19 @@ constant: is_item_selected {
 #########################################################
 # LINK_STYLE
 #{
-# defines different styles for url link
+# Defines different display styles for a url link.
 
 #--> link_style_dashboard_navigation
+#{
 # Defines the multiple styles available for dashboard links:
 #     buttons, tabs or plain
 # The options here should match the allowed values in parameter_navigation_style
 # found in template_dashboard_navigation.
 #
 # Generates liquid variables for click_style and non_click_style.
-# These styles will be applied when displaying the dashboard urls in
-# a single value visualization. See the html property
-# of the dimension template_dashboard_navigation.navigation_links.
+# These styles will be applied when displaying the dashboard urls in a single value visualization.
+# See the html property of the dimension template_dashboard_navigation.navigation_links.
+#}
 constant: link_style_dashboard_navigation {
   value: "{% assign nav_style = parameter_navigation_style._parameter_value %}
   {% case nav_style %}
@@ -392,9 +381,9 @@ constant: link_style_dashboard_navigation {
 #} end constants for link style
 
 #########################################################
-# LINK_MAP: Map explore fields to dashboard filters
+# LINK_MAP: Map explore fields to filters
 #{
-# The constants with the link_map_ prefix are used map fields in an Explore/view to either:
+# The constants with the link_map_ prefix are used to map fields in an Explore/view to either:
 # 1. dashboard filter names
 # 2. fields in a different Explore
 #
@@ -402,13 +391,13 @@ constant: link_style_dashboard_navigation {
 # - Use | between field and filter
 # - Use || between each mapped pair
 # - When specifying the field name use view_name.field_name although view name is optional when the link property also includes
-#   the liquid variable use_qualified_filter_names = false
+#   the liquid variable use_qualified_filter_names == false
 # - Example mapping syntax:
 #       value: "invoice_date|date||business_unit_name|business_unit"
 #    In this example, any filters for invoice_date will be passed to the dashboard filter named date.
 #    Any filters for field business_unit_name will be passed to the dashboard filter named business unit.
 # - Additional mapping pairs can be appended to these constants when defining the link property.
-# - Example link property of Booking Amount which opens the Order Line Details dashboard using the constant
+# - Example measure which opens a dashboard using the constant
 #   link_map_sales_orders_to_order_details to define the filters_mapping:
 #       measure: total_booking_amount_target_currency_formatted {
 #           link: {
@@ -431,26 +420,28 @@ constant: link_style_dashboard_navigation {
 #--> link_map_sales_invoices_to_invoice_details
 #{ Maps fields found in explores sales_invoices and sales_invoices_daily_agg
 #  to dashboard filters on dashboard otc_billing_invoice_line_details
+#}
 constant: link_map_sales_invoices_to_invoice_details {
   value: "invoice_date|date||business_unit_name|business_unit||bill_to_customer_country|customer_country||bill_to_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency"
 }
-#}
 
 #--> link_map_sales_orders_to_order_details
 #{ Maps fields found in explores sales_orders and sales_orders_daily_agg
 #  to dashboard filters on dashboard otc_order_line_item_details
+#}
 constant: link_map_sales_orders_to_order_details {
   value: "ordered_date|date||business_unit_name|business_unit||parameter_customer_type|customer_type||selected_customer_country|customer_country||selected_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_language|item_language||open_closed_cancelled|order_status||order_category_code|order_category_code||line_category_code|line_category_code"
 }
-#}
+
 
 #--> link_map_sales_orders_to_order_details_extra_mapping
 #{
-#--> The field selected_product_dimension_description can represent either
-#    an item_description or a category_description depending on the value
-#    in parameter_display_product_level.
-#--> This constant will map selected_product_dimension_description to the
-#    correct dashboard filter either item_description or item_category.
+# - The field selected_product_dimension_description can represent either
+#   an item_description or a category_description depending on the value
+#   in parameter_display_product_level.
+# - This constant will map selected_product_dimension_description to the
+#   correct dashboard filter either item_description or item_category.
+#}
 constant: link_map_sales_orders_to_order_details_extra_mapping {
   value: "{%- assign extra_mapping = '' -%}
           {%- if sales_orders__lines.selected_product_dimension_description._in_query -%}
@@ -466,15 +457,70 @@ constant: link_map_sales_orders_to_order_details_extra_mapping {
               {%- assign append_extra_mapping = false -%}
           {%- endif -%}"
 }
-#}
 
 #--> link_map_invoices_to_order_details
 #{ Maps fields found in explores sales_invoices and sales_invoices_daily_agg
 #  to dashboard filters on dashboard otc_order_line_item_details
+#}
 constant: link_map_invoices_to_order_details {
   value: "parameter_target_currency|target_currency||parameter_language|item_language||order_header_number|order_number"
 }
+
+#--> link_map_filters_from_navigation_dash_bindings
+#{
+# - Generates liquid variable filters_mapping used in building a dashboard url.
+# - For dashboard navigation defined using an extension of template_dashboard_navigation,
+#   the LookML developer uses the dash_bindings and map_filter_numbers_to_dashboard_filter_names dimensions
+#   to map filters 1 to N to filters of one or more dashboards.
+# - This constant reads the value of this dimension and the dash_bindings dimension to
+#   generate the liquid variable filters_mapping in the required syntax.
+# - See template_dashboard_navigation.navigation_links dimension for example of how this constant is used.
 #}
+constant: link_map_filters_from_navigation_dash_bindings {
+value: "{% assign filters_mapping = ''%}
+
+    <!-- Capture model_name and view_name (if needed to qualify field name) -->
+        {% assign model_name = _model._name %}
+        {% if use_qualified_filter_names == true %}
+          {% assign view_name = _view._name | append: '.' %}
+        {%else%}
+          {% assign view_name = '' %}
+        {%endif%}
+
+    <!-- Create nav_items array from dash_bindings and dash_map from map_filter_numbers_to_dashboard_filter_names. -->
+        {% assign nav_items = dash_bindings._value | split: '||' %}
+        {% assign dash_map = map_filter_numbers_to_dashboard_filter_names._value | split: '||' %}
+
+    <!-- Begin loop through the array of dashboards. -->
+    <!-- Note this for loop ends outside of this constant in the navigation_links html property -->
+        {% for nav_item in nav_items %}
+            {% assign nav_parts = nav_item | split: '|' %}
+            {% assign dash_label = nav_parts[1] %}
+
+    <!-- Assign target_dashboard name and ensure any LookML dashboard names provided follow proper naming syntax. -->
+        {% assign target_dashboard = nav_parts[0] %}
+        {% assign check_target_type = target_dashboard | plus: 0 %}
+        <!-- If check_target_type == 0 then dashboard name is a string and not a user-defined dashboard. -->
+           {% if check_target_type == 0 %}
+        <!-- For dashboards with '::', keep the name as is. Otherwise, add the model name and '::' to ensure proper reference to the LookML dashboard. -->
+              {% if target_dashboard contains '::' %}{% else %}
+                {% assign target_dashboard = model_name | append: '::' | append: target_dashboard %}
+              {% endif %}
+            {% endif %}
+
+    <!-- Create filters_mapping variable by looping through the mapped pairs -->
+        {% assign dash_filter_set = nav_parts[2] | split: ',' %}
+        {% for dash_filter in dash_filter_set %}
+            {% for map_item in dash_map %}
+                {% assign map_item_key = map_item | split:'|' | first %}
+                {% if dash_filter == map_item_key %}
+                    {% assign map_item_value = map_item | split:'|' | last %}
+                    {% assign filter_name = view_name | append: 'filter' | append: dash_filter | append: '|' | append: map_item_value | append: '||' %}
+                    {% assign filters_mapping = filters_mapping | append: filter_name  %}
+                  {% endif %}
+              {% endfor %}
+          {% endfor %}"
+}
 
 #} end constants for link maps
 
@@ -489,9 +535,8 @@ constant: link_map_invoices_to_order_details {
 # append additional parameters to this as needed once you add the constant to the
 # link property.
 #
-# Example link property for Total Sales which opens a drill modal with
-# a line chart for sales by month with the reference to
-# link_vis_line_chart_1_date_1_measure.
+# Example measure that opens a drill modal with a line chart for sales by month
+# with the reference to link_vis_line_chart_1_date_1_measure.
 #
 #   measure: total_sales_amount_target_currency_formatted {
 #     link: {
@@ -504,7 +549,7 @@ constant: link_map_invoices_to_order_details {
 #                   {% assign date_dimension = 'ordered_month' | prepend: view_header %}
 #                   {% assign drill_fields =  date_dimension | append: ',' | append: measure %}
 #                 @{link_vis_line_chart_1_date_1_measure}
-#                 @{link_generate_explore_url}"
+#                 @{link_action_generate_explore_url}"
 #           }
 #       }
 
@@ -541,7 +586,7 @@ constant: link_vis_single {
 }
 
 #--> link_vis_line_chart_1_date_1_measure
-# creates a line chart for a given measure. The liquid variable measure must be created before calling the constant.
+# Creates a line chart for a given measure. The liquid variable measure must be defined before calling the constant.
 # For example:
 #   {% assign measure = sales_orders__lines.total_sales_amount_target_currency %}
 #   @{link_vis_line_chart_1_date_1_measure}
@@ -559,9 +604,11 @@ constant: link_vis_line_chart_1_date_1_measure {
 # filters to destination, etc...
 
 #-->link_action_set_variable_defaults
-# Set default values for liquid variables used to build the url.
-# Add this constant to the link property first to establish the defaults.
+#{
+#Set default values for liquid variables used to build the url.
+# Always add this constant to the link property first to establish the defaults.
 # Then you can customize any of these as needed.
+#}
 constant: link_action_set_variable_defaults {
   value: "
   {% comment %} Variables to default if not created {% endcomment %}
@@ -587,7 +634,7 @@ constant: link_action_set_variable_defaults {
     {% assign target_model = '' %}
     {% assign target_explore = '' %}
     {% assign use_qualified_filter_names = true %}
-    {% assign use_dashboard_url_variable = false %}
+    {% assign use_url_variable = false %}
 
   {% comment %} Variables to be built in other link_action_ constants {% endcomment %}
     {% assign filters_mapping = '' %}
@@ -595,16 +642,15 @@ constant: link_action_set_variable_defaults {
   "
 }
 
-
 #-->link_action_extract_context
 #{ Initial build of liquid variables if found in link_query_parameters:
 #   filters_array_destination
 #   dynamic_fields
 #   query_timezone
-# Loops through array link_query_parameters which is passed from either:
+# Loops through array link_query_parameters which is created in either:
 #   link_action_generate_dashboard_url
 #   link_generate_dashboard_variable
-#   link_generate_explore_url
+#   link_action_generate_explore_url
 #}
 constant: link_action_extract_context {
   value: "
@@ -661,7 +707,7 @@ constant: link_action_extract_context {
 # This constant is called in these other link_ constants:
 #   link_action_generate_dashboard_url
 #   link_generate_dashboard_variable
-#   link_generate_explore_url
+#   link_action_generate_explore_url
 #}
 constant: link_action_match_filters_to_destination {
   value: "
@@ -699,7 +745,7 @@ constant: link_action_match_filters_to_destination {
 # - This constant is called in these other link_ constants:
 #     link_action_generate_dashboard_url
 #     link_generate_dashboard_variable
-#     link_generate_explore_url
+#     link_action_generate_explore_url
 #}
 constant: link_action_build_filter_string {
   value: "
@@ -731,13 +777,13 @@ constant: link_action_build_filter_string {
 }
 
 #-->link_action_build_default_filter_string
-#{ - This constant creates the liquid variable default_filter_string.
+#{
+# - Creates the liquid variable default_filter_string.
 # - Takes input of default_filters which is defined by the LookML developer in the link property
-#   and builds url-encoded string for formatted for an Explore or dashboard.
+#   and builds url-encoded string formatted for an Explore or dashboard.
 # - This constant is called in these other link_ constants if default_filters is not blank:
 #     link_action_generate_dashboard_url
-#     link_generate_dashboard_variable
-#     link_generate_explore_url
+#     link_action_generate_explore_url
 #}
 constant: link_action_build_default_filter_string {
   value: "
@@ -763,16 +809,24 @@ constant: link_action_build_default_filter_string {
 
 #-->link_action_generate_dashboard_url
 #{ - Generates the final dashboard url and returns either:
-#     1. the url opened in the frontend UI when use_dashboard_url_variable == false (which is the default)
-#     2. a liquid variable named dashboard_url when use_dashboard_url_variable == true
+#     a. the url opened in the frontend UI when use_url_variable == false (which is the default)
+#     b. a liquid variable named dashboard_url which can be referenced in a field's html property when use_url_variable == true
 #
 #   - The dashboard navigation links used for the OTC dashboards is an example when
 #     you would want to return a liquid variable for the url. See template_dashboard_navigation.
-#
-#   - Makes calls to these other link_ constants:
-#       link_action_extract_context
-#       link_action_match_filters_to_destination
-#       link_action_build_filter_string
+# Steps Taken:
+#   1. Assigns values to these liquid variables:
+#         content is set to explore
+#         link_path as derived from {{link}} which the LookML Developer adds when settting the field's link property
+#         link_query_parameters
+#   2. Calls link_action_extract_context
+#   3. Calls link_action_match_filters_to_destination
+#   4. Calls link_action_build_filter_string
+#   5. If default_filters is not blank calls link_action_build_default_filter_string
+#   6. Assigns value to target_content_filter based on true or false value for use_override_for_default_filters
+#   7. If use_url_variable == false returns url that opens a dashboard in UI
+#      else returns liquid variable called dashboard_url which can be referenced in a field's html property.
+
 #}
 constant: link_action_generate_dashboard_url {
   value: "
@@ -798,13 +852,36 @@ constant: link_action_generate_dashboard_url {
 
   {% comment %} Builds final link to be presented as either a url in frontend or a liquid variable {% endcomment %}
   {% assign dashboard_url = content | append: target_dashboard | append: '?' | append: target_content_filters %}
-  {% if use_dashboard_url_variable == false %}
+  {% if use_url_variable == false %}
     {{ dashboard_url }}
   {% endif %}
   "
 }
 
-constant: link_build_explore {
+#-->link_action_build_explore
+#{ Generates the liquid variable explore_link by appending
+#  each of these liquid variables when not blank:
+#    liquid variable                 source
+#    ---------------                 -----------
+#    content                         set to 'explore' in link_action_generate_explore_url
+#    target_model, target_explore    default '' or when use_different_explore==true set by LookML Developer
+#                                    else derived in link_action_generate_explore_url based on captured link value
+#    drill_fields                    default '' or set by LookML Developer
+#    target_content_filters          default '' or compiled in link_action_generate_explore_url from filter_string (see link_action_build_filter_string)
+#                                    and default_filter_string (see link_action_build_default_filter_string)
+#    vis_config                      default link_vis_table or set by LookML Developer with any of the link_vis_ constants or a custom value
+#    pivots                          default '' or set to specific set of fields by LookML Developer
+#    subtotals                       default '' or set to specific set of fields by LookML Developer
+#    sorts                           default '' or set to specific set of fields by LookML Developer
+#    limit                           row limit default of 500 or set by LookML Developer
+#    column_limit                    row limit default of 50 or set by LookML Develope
+#    total                           column total default '' or set to 'on' by LookML Developer
+#    row_total                       default '' or set to 'right' by LookML Developer
+#    query_timezone                  default '' or set by LookML Developer
+#    dynamic_fields                  default '' or set by LookML Developer
+#
+#}
+constant: link_action_build_explore {
   value: "
   {% assign explore_link = '' %}
 
@@ -873,7 +950,29 @@ constant: link_build_explore {
   "
 }
 
-constant: link_generate_explore_url {
+#-->link_action_generate_explore_url
+#{
+# Generates an Explore url and returns it as either:
+#   a. the Explore url opened as a drill modal in the frontend UI when use_url_variable == false (which is the default)
+#   b. a liquid variable named explore_link which can be referenced in a field's html property when use_url_variable == true
+#
+# Steps Taken:
+#   1. Assigns values to these liquid variables:
+#         content is set to explore
+#         link_path as derived from {{link}} which the LookML Developer adds when settting the field's link property
+#         link_query_parameters
+#         drill_fields
+#         target_model and target_explore if use_different_explore == false
+#   2. Calls link_action_extract_context
+#   3. If use_different_explore == true calls link_action_match_filters_to_destination else assigns value to filters_array_destination
+#   4. Calls link_action_build_filter_string
+#   5. If default_filters is not blank calls link_action_build_default_filter_string
+#   6. Assigns value to target_content_filter based on true or false value for use_override_for_default_filters
+#   7. Calls link_action_build_explore
+#   8. If use_url_variable == false returns final Explore url which opens a drill modal
+#      else returns liquid variable called explore_link which can be referenced in a field's html property.
+#}
+constant: link_action_generate_explore_url {
   value: "
   {% assign content = '/explore/' %}
   {% assign link_path =  link | split: '?' | first %}
@@ -910,46 +1009,16 @@ constant: link_generate_explore_url {
   {% endif %}
 
   {% comment %} Builds final link to be presented in frontend {% endcomment %}
-  @{link_build_explore}
-  {{explore_link}}
+  @{link_action_build_explore}
+  {% if use_url_variable == false %}
+    {{explore_link}}
+  {% endif %}
   "
-}
-
-constant: link_build_mappings_from_dash_bindings {
-  value: "{% assign model_name = _model._name %}
-    {% if use_qualified_filter_names == true %}{% assign view_name = _view._name | append: '.' %}{%else%}{% assign view_name = '' %}{%endif%}
-    {% assign nav_items = dash_bindings._value | split: '||' %}
-    {% assign dash_map = map_filter_numbers_to_dashboard_filter_names._value | split: '||' %}
-    {% assign filters_mapping = ''%}
-      {% for nav_item in nav_items %}
-        {% assign nav_parts = nav_item | split: '|' %}
-         {% assign dash_label = nav_parts[1] %}
-
-        {% assign target_dashboard = nav_parts[0] %}
-        {% assign check_target_type = target_dashboard | plus: 0 %}
-
-            {% if check_target_type == 0 %}
-              {% if target_dashboard contains '::' %}{% else %}
-                {% assign target_dashboard = model_name | append: '::' | append: target_dashboard %}
-              {% endif %}
-            {% endif %}
-
-          {% assign dash_filter_set = nav_parts[2] | split: ',' %}
-          {% for dash_filter in dash_filter_set %}
-              {% for map_item in dash_map %}
-                  {% assign map_item_key = map_item | split:'|' | first %}
-                  {% if dash_filter == map_item_key %}
-                    {% assign map_item_value = map_item | split:'|' | last %}
-                    {% assign filter_name = view_name | append: 'filter' | append: dash_filter | append: '|' | append: map_item_value | append: '||' %}
-                    {% assign filters_mapping = filters_mapping | append: filter_name  %}
-                  {% endif %}
-              {% endfor %}
-          {% endfor %}"
 }
 
 #} end constants for link actions
 
-#} end LINK_ constants
+#} end constants for links
 
 #########################################################
 # TEST or DEMO DATA SPECIFIC CONSTANTS

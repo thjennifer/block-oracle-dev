@@ -32,7 +32,7 @@
 #########################################################}
 
 view: otc_common_parameters_xvw {
-  label: "@{view_label_for_filters}"
+  label: "@{label_view_for_filters}"
 
   parameter: parameter_target_currency {
     hidden: no

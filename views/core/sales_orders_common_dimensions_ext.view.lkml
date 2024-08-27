@@ -98,7 +98,7 @@ view: sales_orders_common_dimensions_ext {
   parameter: parameter_customer_type {
     hidden: no
     type: unquoted
-    view_label: "@{view_label_for_filters}"
+    view_label: "@{label_view_for_filters}"
     label: "Customer Type"
     description: "Select customer type to use for Customer Name and Country to display and filter by"
     allowed_value: {label: "Bill To" value: "bill" }
