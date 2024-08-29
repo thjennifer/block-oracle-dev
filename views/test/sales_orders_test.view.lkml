@@ -215,10 +215,10 @@ view: +sales_orders {
     #     {% endif %}
     # ;;
     sql:  @{link_map_sales_orders_to_order_details_extra_mapping}
-      {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
+      {% assign source_to_destination_filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
       {% if append_extra_mapping == true %}
-        {% assign filters_mapping = filters_mapping | append: extra_mapping %}
-       {% endif %}'{{filters_mapping}}' ;;
+        {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | append: extra_mapping %}
+       {% endif %}'{{source_to_destination_filters_mapping}}' ;;
   }
 
 
@@ -290,14 +290,14 @@ view: +sales_orders {
     link: {
       label: "Show Sales Orders by Month (Common)"
       # url: "{{dummy_drill_monthly_orders._link}}"
-      url: "@{link_action_set_variable_defaults}
+      url: "@{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign v = _view._name | append: '.' %}
       {% assign measure = 'test3_sales_count' | prepend: v %}
       {% assign m = 'ordered_month' | prepend: v %}
       {% assign drill_fields =  m | append: ',' | append: measure %}
       @{link_vis_line_chart_1_date_1_measure}
-      @{link_action_generate_explore_url}
+      @{link_build_explore_url}
       "
     }
   }
@@ -314,7 +314,7 @@ view: +sales_orders {
 
     <div>
               <!-- initialize variables used in following steps-->
-                @{link_action_set_variable_defaults}
+                @{link_build_variable_defaults}
 
       <!-- capture the full url of the dashboard including filters -->
       {% assign link = link_generator._link %}.
@@ -345,8 +345,8 @@ view: +sales_orders {
       <br> target_model: {{target_model}} <br>
       <br> target_explore: {{target_explore}} <br>
 
-      <!-- start link_action_extract_context -->
-      {% assign filters_array = '' %}
+      <!-- start link_build_context -->
+      {% assign filters_array_source = '' %}
       {% for parameter in link_query_parameters %}
       {% assign parameter_key = parameter | split:'=' | first %}
       {% assign parameter_value = parameter | split:'=' | last %}
@@ -360,7 +360,7 @@ view: +sales_orders {
       {% assign slice_end = parameter_key_size | minus: slice_start | minus: 1 %}
       {% assign parameter_key = parameter_key | slice: slice_start, slice_end %}
       {% assign parameter_clean = parameter_key | append:'|' |append: parameter_value %}
-      {% assign filters_array =  filters_array | append: parameter_clean | append: ',' %}
+      {% assign filters_array_source =  filters_array_source | append: parameter_clean | append: ',' %}
       {% endif %}
       {% elsif parameter_key == 'dynamic_fields' %}
       {% assign dynamic_fields = parameter_value %}
@@ -368,15 +368,15 @@ view: +sales_orders {
       {% assign query_timezone = parameter_value %}
       {% endif %}
       {% endfor %}
-      {% assign size = filters_array | size | minus: 1 | at_least: 0 %}
-      {% assign filters_array = filters_array | slice: 0, size %}
+      {% assign size = filters_array_source | size | minus: 1 | at_least: 0 %}
+      {% assign filters_array_source = filters_array_source | slice: 0, size %}
 
-      <br> filters_array: {{filters_array}} <br>
+      <br> filters_array: {{ filters_array_source }} <br>
 
       {% if use_different_explore %}
-      @{link_action_match_filters_to_destination}
+      @{link_build_match_filters_to_destination}
       {% else %}
-      {% assign filters_array_destination = filters_array %}
+      {% assign filters_array_destination = filters_array_source %}
       {% endif %}
 
       <br> filters_array_destination: {{filters_array_destination}} <br>
@@ -416,19 +416,19 @@ view: +sales_orders {
       <br> filters_string: {{filter_string}} <br>
 
       {% if default_filters != '' %}
-      @{link_action_build_default_filter_string}
+      @{link_build_default_filter_string}
       {% endif %}
 
-      {% if use_override_for_default_filters == true and default_filters != '' %}
+      {% if use_default_filters_to_override == true and default_filters != '' %}
       {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string | prepend:'&' %}
-      {% elsif use_override_for_default_filters == false and default_filters != '' %}
+      {% elsif use_default_filters_to_override == false and default_filters != '' %}
       {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string | prepend:'&' %}
       {% else %}
       {% assign target_content_filters = filter_string | prepend:'&' %}
       {% endif %}
 
       {% comment %} Builds final link to be presented in frontend {% endcomment %}
-      @{link_action_build_explore}
+      @{link_build_explore_link_variable}
 
       <br> explore_link: {{explore_link}} <br>
 

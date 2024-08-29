@@ -234,10 +234,10 @@ view: +sales_orders__lines {
     # html: @{link_map_sales_orders_to_order_details_extra_mapping}{{extra_mapping}};;
     html: {% assign expl = _explore._name %}{{expl}} ;;
     # html: @{link_map_sales_orders_to_order_details_extra_mapping}
-    #   {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
+    #   {% assign source_to_destination_filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
     #   {% if append_extra_mapping == true %}
-    #     {% assign filters_mapping = filters_mapping | append: extra_mapping %}
-    #   {% endif %}{{filters_mapping}}
+    #     {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | append: extra_mapping %}
+    #   {% endif %}{{source_to_destination_filters_mapping}}
     #   ;;
   }
 

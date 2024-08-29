@@ -38,16 +38,13 @@ view: +sales_orders__lines__return_line_ids {
       label: "Order Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_action_set_variable_defaults}
+      @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign filters_mapping = 'return_line_id|line_id||parameter_target_currency|target_currency'%}
-
+      {% assign source_to_destination_filters_mapping = 'return_line_id|line_id||parameter_target_currency|target_currency'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
-
-      {% assign use_override_for_default_filters = false %}
-      @{link_action_generate_dashboard_url}"
+      @{link_build_dashboard_url}"
     }
   }
 

@@ -13,15 +13,15 @@ view: +sales_invoices__lines {
   #     label: "Invoice Line Details"
   #     icon_url: "/favicon.ico"
   #     url: "
-  #     @{link_action_set_variable_defaults}
+  #     @{link_build_variable_defaults}
   #     {% assign link = link_generator._link %}
-  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
+  #     {% assign source_to_destination_filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
 
   #     {% assign model = _model._name %}
   #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
   #     {% assign default_filters='is_discounted=Yes'%}
-  #     {% assign use_override_for_default_filters = false %}
-  #     @{link_action_generate_dashboard_url}
+  #     {% assign use_default_filters_to_override = false %}
+  #     @{link_build_dashboard_url}
   #     "
   #   }
   # }
@@ -35,14 +35,14 @@ view: +sales_invoices__lines {
   #     label: "Invoice Line Details"
   #     icon_url: "/favicon.ico"
   #     url: "
-  #     @{link_action_set_variable_defaults}
+  #     @{link_build_variable_defaults}
   #     {% assign link = link_generator._link %}
-  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
+  #     {% assign source_to_destination_filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
   #     {% assign model = _model._name %}
   #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
   #     {% assign default_filters='is_discounted=Yes'%}
-  #     {% assign use_override_for_default_filters = false %}
-  #     @{link_action_generate_dashboard_url}
+  #     {% assign use_default_filters_to_override = false %}
+  #     @{link_build_dashboard_url}
   #     "
   #   }
   # }
@@ -59,15 +59,15 @@ view: +sales_invoices__lines {
   #     label: "Invoice Line Details"
   #     icon_url: "/favicon.ico"
   #     url: "
-  #     @{link_action_set_variable_defaults}
+  #     @{link_build_variable_defaults}
   #     {% assign link = link_generator._link %}
-  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
+  #     {% assign source_to_destination_filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
   #     {% assign model = _model._name %}
   #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
-  #     {% assign use_override_for_default_filters = false %}
-  #     @{link_action_generate_dashboard_url}
+  #     {% assign use_default_filters_to_override = false %}
+  #     @{link_build_dashboard_url}
   #     "
   #   }
   # }
@@ -77,15 +77,15 @@ view: +sales_invoices__lines {
   #     label: "Invoice Line Details"
   #     icon_url: "/favicon.ico"
   #     url: "
-  #     @{link_action_set_variable_defaults}
+  #     @{link_build_variable_defaults}
   #     {% assign link = link_generator._link %}
-  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
+  #     {% assign source_to_destination_filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
   #     {% assign model = _model._name %}
   #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
-  #     {% assign use_override_for_default_filters = false %}
-  #     @{link_action_generate_dashboard_url}
+  #     {% assign use_default_filters_to_override = false %}
+  #     @{link_build_dashboard_url}
   #     "
   #   }
   # }
@@ -95,15 +95,15 @@ view: +sales_invoices__lines {
   #     label: "Invoice Line Details"
   #     icon_url: "/favicon.ico"
   #     url: "
-  #     @{link_action_set_variable_defaults}
+  #     @{link_build_variable_defaults}
   #     {% assign link = link_generator._link %}
-  #     {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
+  #     {% assign source_to_destination_filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}'%}
 
   #     {% assign model = _model._name %}
   #     {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
-  #     {% assign use_override_for_default_filters = false %}
-  #     @{link_action_generate_dashboard_url}
+  #     {% assign use_default_filters_to_override = false %}
+  #     @{link_build_dashboard_url}
   #     "
   #   }
   # }
@@ -189,7 +189,7 @@ view: +sales_invoices__lines {
   dimension: trap_link_pieces {
     type: string
     view_label: "TEST STUFF"
-    sql: @{link_action_set_variable_defaults}
+    sql: @{link_build_variable_defaults}
           {% assign link = link_generator._link %}'{{link}}';;
 
   }
@@ -197,7 +197,7 @@ view: +sales_invoices__lines {
   measure: trap_link_pieces_count {
     type: count
     view_label: "TEST STUFF"
-    # sql: @{link_action_set_variable_defaults}
+    # sql: @{link_build_variable_defaults}
     #   {% assign link = link_generator._link %}'{{link}}';;
      # ## opens drill modal with the selected filters
     # link: {
@@ -210,12 +210,12 @@ view: +sales_invoices__lines {
     #   label: "Invoice Line Details"
     #   icon_url: "/favicon.ico"
     #   url: "
-    #   @{link_action_set_variable_defaults}
+    #   @{link_build_variable_defaults}
     #   {% assign link = link_generator._link %}
-    #   {% assign filters_mapping = 'sales_invoices.invoice_date|date||sales_invoices.bill_to_customer_country|customer_country' %}
+    #   {% assign source_to_destination_filters_mapping = 'sales_invoices.invoice_date|date||sales_invoices.bill_to_customer_country|customer_country' %}
     #   {% assign model = _model._name %}
     #   {% assign target_dashboard = _model._name | append: '::otc_order_details' %}
-    #   {% assign use_override_for_default_filters = false %}
+    #   {% assign use_default_filters_to_override = false %}
     #   "
     # }
 
@@ -223,30 +223,30 @@ view: +sales_invoices__lines {
         label: "Invoice Line Details"
         icon_url: "/favicon.ico"
         url: "
-        @{link_action_set_variable_defaults}
+        @{link_build_variable_defaults}
         {% assign link = link_generator._link %}
-        {% assign filters_mapping = 'sales_invoices.invoice_date|date||sales_invoices.bill_to_customer_country|customer_country'%}
+        {% assign source_to_destination_filters_mapping = 'sales_invoices.invoice_date|date||sales_invoices.bill_to_customer_country|customer_country'%}
 
         {% assign model = _model._name %}
         {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
-        {% assign use_override_for_default_filters = false %}
-        @{link_action_generate_dashboard_url}
+        {% assign use_default_filters_to_override = false %}
+        @{link_build_dashboard_url}
     "
   }
 
   }
 
-  # breaking in link_action_match_filters_to_destination
-  # {% assign filters_mapping = filters_mapping | split: '||' %}
-  # {% assign filters_array = filters_array | split: ',' %}
+  # breaking in link_build_match_filters_to_destination
+  # {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | split: '||' %}
+  # {% assign filters_array_source = filters_array_source | split: ',' %}
   # {% assign filters_array_destination = '' %}
 
-  # {% for source_filter in filters_array %}
+  # {% for source_filter in filters_array_source %}
   #   {% assign source_filter_key = source_filter | split:'|' | first %}
   #   {% assign source_filter_value = source_filter | split:'|' | last %}
 
-  #   {% for destination_filter in filters_mapping %} {% comment %} This will loop through the value pairs to determine if there is a match to the destination {% endcomment %}
+  #   {% for destination_filter in source_to_destination_filters_mapping %} {% comment %} This will loop through the value pairs to determine if there is a match to the destination {% endcomment %}
   #     {% assign destination_filter_key = destination_filter | split:'|' | first %}
   #     {% assign destination_filter_value = destination_filter | split:'|' | last %}
   #     {% if source_filter_key == destination_filter_key %}
@@ -262,16 +262,16 @@ view: +sales_invoices__lines {
   #   label: "Open Order Details Dashboard"
   #   icon_url: "/favicon.ico"
   #   url: "
-  #   @{link_action_set_variable_defaults}
+  #   @{link_build_variable_defaults}
   #   {% assign link = link_generator._link %}
-  #   {% assign filters_mapping = '@{link_otc_shared_filters}' | strip_new_lines | append: '||across_sales_and_billing_summary_xvw.order_status|Order Status||deliveries.is_blocked|Is Blocked' %}
+  #   {% assign source_to_destination_filters_mapping = '@{link_otc_shared_filters}' | strip_new_lines | append: '||across_sales_and_billing_summary_xvw.order_status|Order Status||deliveries.is_blocked|Is Blocked' %}
 
   #   {% assign model = _model._name %}
   #   {% assign target_dashboard = _model._name | append: '::otc_order_details' %}
 
-  #   {% assign use_override_for_default_filters = false %}
+  #   {% assign use_default_filters_to_override = false %}
 
-  #   @{link_action_generate_dashboard_url}
+  #   @{link_build_dashboard_url}
   #   "
   # }
 
@@ -287,32 +287,32 @@ view: +sales_invoices__lines {
       label: "Invoice Line Details"
       icon_url: "/favicon.ico"
       url: "
-      @{link_action_set_variable_defaults}
+      @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign filters_mapping = '@{link_map_sales_invoices_to_invoice_details}'  | append: '||is_discount_selling_price|is_discounted||is_intercompany|is_intercompany' %}
+      {% assign source_to_destination_filters_mapping = '@{link_map_sales_invoices_to_invoice_details}'  | append: '||is_discount_selling_price|is_discounted||is_intercompany|is_intercompany' %}
 
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
-      {% assign use_override_for_default_filters = false %}
-      @{link_action_generate_dashboard_url}
+      {% assign use_default_filters_to_override = false %}
+      @{link_build_dashboard_url}
       "
     }
 
     # html: <div>
-    # @{link_action_set_variable_defaults}
-    # {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' %}
+    # @{link_build_variable_defaults}
+    # {% assign source_to_destination_filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' %}
     # {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
-    # <b>Filters Mapping: </b> {{filters_mapping}}
+    # <b>Filters Mapping: </b> {{source_to_destination_filters_mapping}}
     # <br><br><b>Target Dashboard: </b>{{target_dashboard}}
     # </div>;;
 
     # html: html:  <div>
-    # @{link_action_set_variable_defaults}
+    # @{link_build_variable_defaults}
 
     # {% assign link = link_generator._link %}
-    # {% assign filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' %}
+    # {% assign source_to_destination_filters_mapping = '@{link_sales_invoices_source_to_target_dashboard_filters}' %}
     # {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details_test' %}
 
     # <b>Target Dashboard: </b>{{target_dashboard}}
@@ -328,8 +328,8 @@ view: +sales_invoices__lines {
     # @{link_host}
     # {% endif %}
 
-    # <!-- start of link_action_extract_context code -->
-    # {% assign filters_array = '' %}
+    # <!-- start of link_build_context code -->
+    # {% assign filters_array_source = '' %}
     # {% for parameter in link_query_parameters %}
     # {% assign parameter_key = parameter | split:'=' | first %}
     # {% assign parameter_value = parameter | split:'=' | last %}
@@ -343,7 +343,7 @@ view: +sales_invoices__lines {
     #     {% assign slice_end = parameter_key_size | minus: slice_start | minus: 1 %}
     #     {% assign parameter_key = parameter_key | slice: slice_start, slice_end %}
     #     {% assign parameter_clean = parameter_key | append:'|' |append: parameter_value %}
-    #     {% assign filters_array =  filters_array | append: parameter_clean | append: ',' %}
+    #     {% assign filters_array_source =  filters_array_source | append: parameter_clean | append: ',' %}
     #     {% endif %}
     #     {% elsif parameter_key == 'dynamic_fields' %}
     #     {% assign dynamic_fields = parameter_value %}
@@ -351,23 +351,23 @@ view: +sales_invoices__lines {
     #     {% assign query_timezone = parameter_value %}
     #     {% endif %}
     #     {% endfor %}
-    #     {% assign size = filters_array | size | minus: 1 %}
-    #     {% assign filters_array = filters_array | slice: 0, size %}
+    #     {% assign size = filters_array_source | size | minus: 1 %}
+    #     {% assign filters_array_source = filters_array_source | slice: 0, size %}
     #     <br><br><b>source_filters_array: </b>
     #     {{filters_array}}
-    #     <!-- end link_action_extract_context code -->
+    #     <!-- end link_build_context code -->
 
-    #     <!-- start link_action_match_filters_to_destination -->
+    #     <!-- start link_build_match_filters_to_destination -->
 
-    #     {% assign filters_mapping = filters_mapping | split: '||' %}
-    #     {% assign filters_array = filters_array | split: ',' %}
+    #     {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | split: '||' %}
+    #     {% assign filters_array_source = filters_array_source | split: ',' %}
     #     {% assign filters_array_destination = '' %}
 
-    #     {% for source_filter in filters_array %}
+    #     {% for source_filter in filters_array_source %}
     #     {% assign source_filter_key = source_filter | split:'|' | first %}
     #     {% assign source_filter_value = source_filter | split:'|' | last %}
     #     <br><b>source_filter_key: </b>{{source_filter_key}}
-    #     {% for destination_filter in filters_mapping %}
+    #     {% for destination_filter in source_to_destination_filters_mapping %}
     #     {% comment %} This will loop through the value pairs to determine if there is a match to the destination {% endcomment %}
     #     {% assign destination_filter_key = destination_filter | split:'|' | first %}
     #     {% assign destination_filter_value = destination_filter | split:'|' | last %}
@@ -382,9 +382,9 @@ view: +sales_invoices__lines {
     #     {% assign filters_array_destination = filters_array_destination | slice: 0, size %}
     #     <br><br><b>filters_array_destination: </b>
     #     {{filters_array_destination}}
-    #     <!-- end link_action_match_filters_to_destination -->
+    #     <!-- end link_build_match_filters_to_destination -->
 
-    #     <!-- begin link_action_build_filter_string -->
+    #     <!-- begin link_build_filter_string -->
     #     {% assign filter_string = '' %}
     #     {% assign filters_array_destination = filters_array_destination | split: ',' %}
     #     {% for filter in filters_array_destination %}
@@ -404,10 +404,10 @@ view: +sales_invoices__lines {
     # {% assign filter_string = filter_string | slice: 0, size %}
     # <br><br><b>filter_string: </b>
     # {{filter_string}}
-    # <!-- end link_action_build_filter_string -->
+    # <!-- end link_build_filter_string -->
 
     # {% if default_filters != '' %}
-    # <!-- begin link_action_build_default_filter_string -->
+    # <!-- begin link_build_default_filter_string -->
     # {% assign default_filter_string = '' %}
     # {% assign default_filters = default_filters | split: ',' %}
     # {% for filter in default_filters %}
@@ -425,13 +425,13 @@ view: +sales_invoices__lines {
     # {% assign default_filter_string = default_filter_string | slice: 0, size %}
     # <br><br><b>default_filter_string: </b>
     # {{default_filter_string}}
-    # <!-- end link_action_build_default_filter_string -->
+    # <!-- end link_build_default_filter_string -->
 
     # {% endif %}
 
-    # {% if use_override_for_default_filters == true and default_filters != '' %}
+    # {% if use_default_filters_to_override == true and default_filters != '' %}
     # {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string %}
-    # {% elsif use_override_for_default_filters == false and default_filters != '' %}
+    # {% elsif use_default_filters_to_override == false and default_filters != '' %}
     # {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string %}
     # {% else %}
     # {% assign target_content_filters = filter_string %}

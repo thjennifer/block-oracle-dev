@@ -206,18 +206,18 @@ view: template_dashboard_navigation {
       <span style = "{{ span_style }}">
 
       <!-- initialize variables used in following steps-->
-      @{link_action_set_variable_defaults}
+      @{link_build_variable_defaults}
 
       <!-- capture the full url of the dashboard including filters -->
       {% assign link = link_generator._link %}
       {% assign counter = 1 %}
       {% assign use_qualified_filter_names = false %}
 
-      <!-- generate filters_mapping liquid variable passed into next step -->
+      <!-- generate source_to_destination_filters_mapping liquid variable passed into next step -->
       @{link_map_filters_from_navigation_dash_bindings}
       <!-- generate dashboard_url liquid variable dashboard_url used in href below-->
       {% assign use_url_variable = true %}
-      @{link_action_generate_dashboard_url}
+      @{link_build_dashboard_url}
 
       {% assign focus_page = parameter_navigation_focus_page._parameter_value | times: 1 %}
 
@@ -258,7 +258,7 @@ view: template_dashboard_navigation {
 
 # <div>
 #           <!-- initialize variables used in following steps-->
-#             @{link_action_set_variable_defaults}
+#             @{link_build_variable_defaults}
 #             @{link_style_dashboard_navigation}
 
 #     <!-- capture the full url of the dashboard including filters -->
@@ -295,7 +295,7 @@ view: template_dashboard_navigation {
 
 #     <br>{{target_dashboard}}<br>
 
-#     <!-- derive target filters_mapping -->
+#     <!-- derive target source_to_destination_filters_mapping -->
 #     {% assign dash_filter_set = nav_parts[2] | split: ',' %}
 #     {% for dash_filter in dash_filter_set %}
 #     {{dash_filter| append: ", "}}
@@ -307,12 +307,12 @@ view: template_dashboard_navigation {
 #     map_item_value: {{map_item_value}}<br>
 
 #     {% assign filter_name = view_name | append: 'filter' | append: dash_filter | append: '|' | append: map_item_value %}
-#     {% assign filters_mapping = filters_mapping | append: filter_name | append: '||' %}
+#     {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | append: filter_name | append: '||' %}
 
 #     {%endif%}
 #     {% endfor %}
 #     {% endfor %}
-#     <br> filters_mapping: {{filters_mapping}}
+#     <br> source_to_destination_filters_mapping: {{source_to_destination_filters_mapping}}
 #     @{link_generate_dashboard_variable}
 #     <br> final url: {{dashboard_url}}
 

@@ -527,25 +527,25 @@ view: +sales_orders {
     link: {
       label: "Show Sources of Blocks"
       url: "
-      @{link_action_set_variable_defaults}
+      @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign drill_fields = 'sales_orders.has_backorder, sales_orders.is_held, sales_orders.sales_order_count, sales_orders.percent_of_sales_orders' %}
       {% assign default_filters = 'sales_orders.is_blocked=Yes' %}
       @{link_vis_table}
-      @{link_action_generate_explore_url}
+      @{link_build_explore_url}
       "
     }
 #--> returns table of blocked orders
     link: {
       label: "Show Blocked Orders"
       url: "
-      @{link_action_set_variable_defaults}
+      @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign drill_fields = 'sales_orders.order_number, sales_orders.order_catgory_code, sales_orders.header_status, sales_orders.ordered_date, sales_orders.selected_customer_name, sales_orders.total_sales_amount_target_currency, sales_orders.has_backorder, sales_orders.is_held' %}
       {% assign default_filters = 'sales_orders.is_blocked=Yes' %}
       {% assign sorts = 'sales_orders.total_sales_amount_target_currency+desc' %}
       @{link_vis_table}
-      @{link_action_generate_explore_url}
+      @{link_build_explore_url}
       "
     }
   }
@@ -644,13 +644,13 @@ view: +sales_orders {
     link: {
       label: "Show Top 50 Items with Highest Amount on Backorder"
       url: "
-      @{link_action_set_variable_defaults}
+      @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign drill_fields = 'sales_orders__lines.item_part_number, sales_orders__lines.item_description, sales_orders__lines.category_description, sales_orders__lines.total_backordered_amount_target_currency' %}
       {% assign limit = 50 %}
       {% assign default_filters = 'sales_orders__lines.line_category_code=ORDER,sales_orders__lines.is_backordered=Yes' %}
       @{link_vis_table}
-      @{link_action_generate_explore_url}
+      @{link_build_explore_url}
       "
     }
   }
@@ -659,7 +659,7 @@ view: +sales_orders {
     link: {
       label: "Show Orders and Lines with Returns"
       url: "
-      @{link_action_set_variable_defaults}
+      @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign header_drill = 'sales_orders.order_number, sales_orders.order_category_code, sales_orders.header_status, sales_orders.ordered_date, sales_orders.selected_customer_name, sales_orders.total_sales_amount_target_currency' %}
       {% assign line_drill = 'sales_orders__lines.line_id, sales_orders__lines.line_number,sales_orders__lines.item_part_number, sales_orders__lines.item_description,sales_orders__lines.ordered_quantity, sales_orders__lines.quantity_uom,sales_orders__lines.ordered_amount_target_currency,sales_orders__lines.has_return' %}
@@ -668,7 +668,7 @@ view: +sales_orders {
       {% assign default_filters = 'sales_orders.has_return_line=Yes' %}
       {% assign sorts='sales_orders.order_number, sales_orders__lines.line_number' %}
       @{link_vis_table}
-      @{link_action_generate_explore_url}
+      @{link_build_explore_url}
       "
     }
   }

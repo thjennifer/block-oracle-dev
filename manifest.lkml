@@ -108,21 +108,6 @@ constant: html_message_source_currency {
 #} end constants for html formats
 
 #########################################################
-# LABEL: View
-#{
-# Defines view labels which impact Explore readability.
-
-constant: label_view_for_filters {
-  value: "🔍 Filters"
-}
-
-constant: label_view_for_dashboard_navigation {
-  value: "🛠 Dashboard Navigation"
-}
-
-#} end constants for view labels
-
-#########################################################
 # IS_SELECTED or IN_QUERY
 #{
 # These constants check if fields are selected or queried. Actions can be taken based on true or false.
@@ -211,6 +196,21 @@ constant: is_item_selected {
 }
 
 #} end constants for is_selected or in_query
+
+#########################################################
+# LABEL: View
+#{
+# Defines view labels which impact Explore readability.
+
+constant: label_view_for_filters {
+  value: "🔍 Filters"
+}
+
+constant: label_view_for_dashboard_navigation {
+  value: "🛠 Dashboard Navigation"
+}
+
+#} end constants for view labels
 
 #########################################################
 # LABEL: Currency
@@ -319,8 +319,6 @@ constant: label_currency_if_selected {
 
 #} end constants for target currency labels
 
-
-
 #########################################################
 # LINK
 #{
@@ -330,14 +328,14 @@ constant: label_currency_if_selected {
 # There are constants defined to support defining styles, mapping Explore fields to dashboard filters,
 # capturing and parsing urls plus generating filter strings and a new url path.
 #
-# Liquid has a parameter called {{link}}. This parameter is most useful only
-# on measures because it actually contains the the full URL (including pivots) of
+# Liquid has a parameter called {{link}}. This parameter is most useful
+# on measures because it actually contains the full URL (including pivots) of
 # where the user clicked in the data/visualization pane.
 #
-# Using a dummy measure called link_generator, when a user clicks on a measure in an Explore or Dashboard,
-# these constants will capture the full url, parse it to get the applied filters and then build
-# a new url link to desired target:
-#   - a drill modal with table or visulization
+# Using a dummy measure called link_generator, these constants will capture the full url
+# when a user clicks on a measure in an Explore or Dashboard. They will parse full url
+# to get the applied filters and then build a new url link to desired target:
+#   - a drill modal with table or visualization
 #   - an Explore page with a new visualization
 #   - another Dashboard
 
@@ -351,8 +349,8 @@ constant: label_currency_if_selected {
 #{
 # Defines the multiple styles available for dashboard links:
 #     buttons, tabs or plain
-# The options here should match the allowed values in parameter_navigation_style
-# found in template_dashboard_navigation.
+# These options should match the allowed values in parameter_navigation_style
+# found in template_dashboard_navigation and any extension of this template.
 #
 # Generates liquid variables for click_style and non_click_style.
 # These styles will be applied when displaying the dashboard urls in a single value visualization.
@@ -393,57 +391,55 @@ constant: link_style_dashboard_navigation {
 # To define the mapping:
 # - Use | between field and filter
 # - Use || between each mapped pair
-# - When specifying the field name use view_name.field_name although view name is optional when the link property also includes
-#   the liquid variable use_qualified_filter_names == false
+# - When the link property also includes the liquid variable use_qualified_filter_names set to false, specifying the view name is optional.
+#   This is particularly useful when dealing with multiple Explores containing common fields that require mapping to dashboard filters.
 # - Example mapping syntax:
 #       value: "invoice_date|date||business_unit_name|business_unit"
 #    In this example, any filters for invoice_date will be passed to the dashboard filter named date.
 #    Any filters for field business_unit_name will be passed to the dashboard filter named business unit.
 # - Additional mapping pairs can be appended to these constants when defining the link property.
 # - Example measure which opens a dashboard using the constant
-#   link_map_sales_orders_to_order_details to define the filters_mapping:
+#   link_map_sales_orders_to_order_details to define the source_to_destination_filters_mapping:
 #       measure: total_booking_amount_target_currency_formatted {
 #           link: {
 #             label: "Order Line Details"
 #             icon_url: "/favicon.ico"
 #             url: "
-#                @{link_action_set_variable_defaults}
+#                @{link_build_variable_defaults}
 #               {% assign link = link_generator._link %}
 #               {% assign use_qualified_filter_names = false %}
-#               {% assign filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
+#               {% assign source_to_destination_filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
 #               {% assign model = _model._name %}
 #               {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
 #               {% assign default_filters='is_booking=Yes'%}
-#               {% assign use_override_for_default_filters = false %}
-#               @{link_action_generate_dashboard_url}
+#               {% assign use_default_filters_to_override = false %}
+#               @{link_build_dashboard_url}
 #               "
 #             }
 #         }
 
 #--> link_map_sales_invoices_to_invoice_details
-#{ Maps fields found in explores sales_invoices and sales_invoices_daily_agg
-#  to dashboard filters on dashboard otc_billing_invoice_line_details
+#{ Maps fields found in Explores sales_invoices and sales_invoices_daily_agg
+#  to filters on dashboard otc_billing_invoice_line_details
 #}
 constant: link_map_sales_invoices_to_invoice_details {
   value: "invoice_date|date||business_unit_name|business_unit||bill_to_customer_country|customer_country||bill_to_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency"
 }
 
 #--> link_map_sales_orders_to_order_details
-#{ Maps fields found in explores sales_orders and sales_orders_daily_agg
-#  to dashboard filters on dashboard otc_order_line_item_details
+#{ Maps fields found in Explores sales_orders and sales_orders_daily_agg
+#  to filters on dashboard otc_order_line_item_details
 #}
 constant: link_map_sales_orders_to_order_details {
   value: "ordered_date|date||business_unit_name|business_unit||parameter_customer_type|customer_type||selected_customer_country|customer_country||selected_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_language|item_language||open_closed_cancelled|order_status||order_category_code|order_category_code||line_category_code|line_category_code"
 }
 
-
 #--> link_map_sales_orders_to_order_details_extra_mapping
 #{
-# - The field selected_product_dimension_description can represent either
-#   an item_description or a category_description depending on the value
-#   in parameter_display_product_level.
-# - This constant will map selected_product_dimension_description to the
-#   correct dashboard filter either item_description or item_category.
+# - To accommodate the dual purpose of the selected_product_dimension_description field, which can represent either an item description
+#   or a category description based on the parameter_display_product_level parameter,
+#   additional logic is required to ensure the correct mapping to the corresponding dashboard filter--either item_description or item_category.
+# - Returns a liquid variable called extra_mapping which can be appended to the source_to_destination_filters_mapping variable.
 #}
 constant: link_map_sales_orders_to_order_details_extra_mapping {
   value: "{%- assign extra_mapping = '' -%}
@@ -471,16 +467,16 @@ constant: link_map_invoices_to_order_details {
 
 #--> link_map_filters_from_navigation_dash_bindings
 #{
-# - Generates liquid variable filters_mapping used in building a dashboard url.
+# - Generates liquid variable source_to_destination_filters_mapping used in building a dashboard url.
 # - For dashboard navigation defined using an extension of template_dashboard_navigation,
 #   the LookML developer uses the dash_bindings and map_filter_numbers_to_dashboard_filter_names dimensions
 #   to map filters 1 to N to filters of one or more dashboards.
 # - This constant reads the value of this dimension and the dash_bindings dimension to
-#   generate the liquid variable filters_mapping in the required syntax.
+#   generate the liquid variable source_to_destination_filters_mapping in the required syntax.
 # - See template_dashboard_navigation.navigation_links dimension for example of how this constant is used.
 #}
 constant: link_map_filters_from_navigation_dash_bindings {
-value: "{% assign filters_mapping = ''%}
+value: "{% assign source_to_destination_filters_mapping = ''%}
 
     <!-- Capture model_name and view_name (if needed to qualify field name) -->
         {% assign model_name = _model._name %}
@@ -511,7 +507,7 @@ value: "{% assign filters_mapping = ''%}
               {% endif %}
             {% endif %}
 
-    <!-- Create filters_mapping variable by looping through the mapped pairs -->
+    <!-- Create source_to_destination_filters_mapping variable by looping through the mapped pairs -->
         {% assign dash_filter_set = nav_parts[2] | split: ',' %}
         {% for dash_filter in dash_filter_set %}
             {% for map_item in dash_map %}
@@ -519,7 +515,7 @@ value: "{% assign filters_mapping = ''%}
                 {% if dash_filter == map_item_key %}
                     {% assign map_item_value = map_item | split:'|' | last %}
                     {% assign filter_name = view_name | append: 'filter' | append: dash_filter | append: '|' | append: map_item_value | append: '||' %}
-                    {% assign filters_mapping = filters_mapping | append: filter_name  %}
+                    {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | append: filter_name  %}
                   {% endif %}
               {% endfor %}
           {% endfor %}"
@@ -538,13 +534,16 @@ value: "{% assign filters_mapping = ''%}
 # append additional parameters to this as needed once you add the constant to the
 # link property.
 #
+# Every link_vis_ constant requires the liquid variable drill_fields as a minimum input.
+# Additionally, some functions may require other inputs.
+#
 # Example measure that opens a drill modal with a line chart for sales by month
 # with the reference to link_vis_line_chart_1_date_1_measure.
 #
 #   measure: total_sales_amount_target_currency_formatted {
 #     link: {
 #           label: "Show Sales by Month"
-#           url: "@{link_action_set_variable_defaults}
+#           url: "@{link_build_variable_defaults}
 #                   {% assign link = link_generator._link %}
 #                   {% assign view_header = _explore._name | append: '.' %}
 #                   {% assign view_detail = _view._name | append: '.' %}
@@ -552,12 +551,18 @@ value: "{% assign filters_mapping = ''%}
 #                   {% assign date_dimension = 'ordered_month' | prepend: view_header %}
 #                   {% assign drill_fields =  date_dimension | append: ',' | append: measure %}
 #                 @{link_vis_line_chart_1_date_1_measure}
-#                 @{link_action_generate_explore_url}"
+#                 @{link_build_explore_url}"
 #           }
 #       }
 
 constant: link_vis_table {
   value: "{% assign vis_config = '{\"type\":\"looker_grid\"}' | url_encode | prepend: '&vis_config=' %}"
+}
+
+#--> link_viz_table_no_viz_in_cell
+# Creates table and cell visualization for measures is disabled
+constant: link_vis_table_no_cell_visualization {
+  value: "{% assign vis_config = '{\"type\":\"looker_grid\",\"series_cell_visualizations\":{}}' | url_encode | prepend: '&vis_config=' %}"
 }
 
 constant: link_vis_column {
@@ -594,28 +599,28 @@ constant: link_vis_single {
 #   {% assign measure = sales_orders__lines.total_sales_amount_target_currency %}
 #   @{link_vis_line_chart_1_date_1_measure}
 constant: link_vis_line_chart_1_date_1_measure {
-  value: "{% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#468faf\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}"
+  value: "{% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#468FAF\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}"
 }
 
 #} end constants for link vis
 
 #########################################################
-# LINK_ACTION: Take an action in building link url
+# LINK_BUILD: Steps building link url
 #{
-# The constants with the link_action_ prefix take a specific action to creating
-# a final url. Actions like defining defaults, extracting context, matching
+# The constants with the link_build_ prefix take a specific step or action in creating
+# a final URL. Steps like defining defaults, extracting context, matching
 # filters to destination, etc...
 
-#-->link_action_set_variable_defaults
+#-->link_build_variable_defaults
 #{
-#Set default values for liquid variables used to build the url.
+# Set default values for liquid variables used to build the url.
 # Always add this constant to the link property first to establish the defaults.
 # Then you can customize any of these as needed.
 #}
-constant: link_action_set_variable_defaults {
+constant: link_build_variable_defaults {
   value: "
-  {% comment %} Variables to default if not created {% endcomment %}
-  {% comment %} Default Parameters Customizable by LookML Developer {% endcomment %}
+  {% comment %} Default Parameters for Explores Only {% endcomment %}
+  {% comment %} Customizable by LookML Developer {% endcomment %}
     {% assign drill_fields = '' %}
     {% assign pivots = '' %}
     {% assign subtotals = '' %}
@@ -626,38 +631,45 @@ constant: link_action_set_variable_defaults {
     {% assign row_total = '' %}
     {% assign query_timezone = '' %}
     {% assign dynamic_fields = '' %}
-
-  {% comment %} Default Visualizations Parameters {% endcomment %}
-    @{link_vis_table}
-
-  {% comment %} Default Behavior Parameters Customizable by LookML Developer {% endcomment %}
-    {% assign use_override_for_default_filters = false %}
-    {% assign default_filters = '' %}
     {% assign use_different_explore = false %}
     {% assign target_model = '' %}
     {% assign target_explore = '' %}
+
+  {% comment %} Default visualization config parameter {% endcomment %}
+    @{link_vis_table}
+
+  {% comment %} Default parameters for either Explore or Dashboard {% endcomment %}
+  {% comment %} Customizable by LookML Developer {% endcomment %}
+    {% assign use_default_filters_to_override = false %}
+    {% assign default_filters = '' %}
     {% assign use_qualified_filter_names = true %}
     {% assign use_url_variable = false %}
 
-  {% comment %} Variables to be built in other link_action_ constants {% endcomment %}
-    {% assign filters_mapping = '' %}
+  {% comment %} Variables to be built in other link_build_ constants {% endcomment %}
+    {% assign source_to_destination_filters_mapping = '' %}
     {% assign target_content_filters = '' %}
   "
 }
 
-#-->link_action_extract_context
-#{ Initial build of liquid variables if found in link_query_parameters:
-#   filters_array_destination
+#-->link_build_context
+#{
+# Extracts the context from the URL captured when the business user clicks on the measure's link in either an Explore or dashboard.
+#
+# Requires the link variable to be included in the link url property:
+#     {% assign link = link_generator._link %}
+#
+# Is called from either:
+#   link_build_dashboard_url
+#   link_build_explore_url
+#
+# This constant loops through array link_query_parameters and generates these liquid variables if found:
+#   filters_array
 #   dynamic_fields
 #   query_timezone
-# Loops through array link_query_parameters which is created in either:
-#   link_action_generate_dashboard_url
-#   link_generate_dashboard_variable
-#   link_action_generate_explore_url
 #}
-constant: link_action_extract_context {
+constant: link_build_context {
   value: "
-  {% assign filters_array = '' %}
+  {% assign filters_array_source = '' %}
   {% for parameter in link_query_parameters %}
     {% assign parameter_key = parameter | split:'=' | first %}
     {% assign parameter_value = parameter | split:'=' | last %}
@@ -671,7 +683,7 @@ constant: link_action_extract_context {
           {% assign slice_end = parameter_key_size | minus: slice_start | minus: 1 %}
           {% assign parameter_key = parameter_key | slice: slice_start, slice_end %}
           {% assign parameter_clean = parameter_key | append:'|' |append: parameter_value %}
-          {% assign filters_array =  filters_array | append: parameter_clean | append: ',' %}
+          {% assign filters_array_source =  filters_array_source | append: parameter_clean | append: ',' %}
         {% endif %}
     {% elsif parameter_key == 'dynamic_fields' %}
       {% assign dynamic_fields = parameter_value %}
@@ -679,46 +691,49 @@ constant: link_action_extract_context {
       {% assign query_timezone = parameter_value %}
     {% endif %}
   {% endfor %}
-  {% assign size = filters_array | size | minus: 1 | at_least: 0 %}
-  {% assign filters_array = filters_array | slice: 0, size %}
+  {% assign size = filters_array_source | size | minus: 1 | at_least: 0 %}
+  {% assign filters_array_source = filters_array_source | slice: 0, size %}
   "
 }
 
-#-->link_action_match_filters_to_destination
-#{ This constant creates the liquid variable filters_array_destination.
-# Takes input from:
-#   1. filters_mapping which is defined by the LookML developer in the link property. The mapping indicates how a source field
-#      maps to a dashboard filter or a field in a different Explore. The mapping pairs are defined in the form of :
+#-->link_build_match_filters_to_destination
+#{
+# Builds the filters_array_destination variable with the destination filter names and the source filter values.
+# Requires these inputs:
+#   1. source_to_destination_filters_mapping variable from a measure's link property.
+#      The mapping indicates how a source field maps to a dashboard filter or a field in a different Explore.
+#      The mapping pairs are defined in the form of:
 #         view_name.field_name|destination filter1||view_name.field_name2|destination filter2
 #      See constant link_map_sales_invoices_to_invoice_details for an example mapping.
-#   2. filters_array which is defined in constant link_action_extract_context
+#   2. filters_array_source generated with constant link_build_context
 #
-# Loops through each target filter and checks to see if the Explore field named in the mapping
-# has filters values captured. If so, builds the filters_array_destination variable with the destination filter
-# name and the source filter values.
+# Is called from either:
+#   link_build_dashboard_url
+#   link_build_explore_url
+
+# Loops through each destination filter and checks to see if the field named in the source to
+# destination mapping has filter values captured.
 #
-# For example, a target dashboard has 3 filters: date, business_name and country and these are mapped
+# For example, a destination dashboard has 3 filters: date, business_name and country and these are mapped
 # to Explore fields:
-#   sales_orders.ordered_date|date || sales_orders.business_org_name|business_name || sales_orders.country_name|country
+#   sales_orders.ordered_date|date||
+#   sales_orders.business_org_name|business_name||
+#   sales_orders.country_name|country
 #
-# The source link url found 2 filters with these values: sales_orders.ordered_date = last 1 year
-# and sales_orders.country_name = USA.
+# The filters_array_source variable captured two filters with these values:
+#     sales_orders.ordered_date = last 1 year
+#     sales_orders.country_name = USA
 #
-# This constant creates filters_array_destination as destination filter|source filter value with each pair separated by comma:
-#     date|last 1 year,country|USA
-#
-# This constant is called in these other link_ constants:
-#   link_action_generate_dashboard_url
-#   link_generate_dashboard_variable
-#   link_action_generate_explore_url
+# The filters_array_destination variable is defined as:
+#         date|last 1 year,country|USA
 #}
-constant: link_action_match_filters_to_destination {
+constant: link_build_match_filters_to_destination {
   value: "
-  {% assign filters_mapping = filters_mapping | split: '||' %}
-  {% assign filters_array = filters_array | split: ',' %}
+  {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | split: '||' %}
+  {% assign filters_array_source = filters_array_source | split: ',' %}
   {% assign filters_array_destination = '' %}
 
-  {% for source_filter in filters_array %}
+  {% for source_filter in filters_array_source %}
     {% assign source_filter_key = source_filter | split:'|' | first %}
     {% if use_qualified_filter_names == false %}
         {% comment %} Ignore view name and return field names only {% endcomment %}
@@ -726,7 +741,7 @@ constant: link_action_match_filters_to_destination {
     {% endif %}
     {% assign source_filter_value = source_filter | split:'|' | last %}
 
-    {% for destination_filter in filters_mapping %}
+    {% for destination_filter in source_to_destination_filters_mapping %}
       {% comment %} This will loop through the value pairs to determine if there is a match to the destination {% endcomment %}
         {% assign destination_filter_key = destination_filter | split:'|' | first %}
         {% assign destination_filter_value = destination_filter | split:'|' | last %}
@@ -741,16 +756,17 @@ constant: link_action_match_filters_to_destination {
   "
 }
 
-#-->link_action_build_filter_string
-#{ - This constant creates the liquid variable filter_string.
-# - Takes input of filters_array_destination from constant link_action_match_filters_to_destination
-#   and builds url-encoded string formatted for Explore or dashboard.
-# - This constant is called in these other link_ constants:
-#     link_action_generate_dashboard_url
-#     link_generate_dashboard_variable
-#     link_action_generate_explore_url
+#-->link_build_filter_string
+#{
+# Creates the liquid variable filter_string as url-encoded string formatted for Explore or dashboard.
+#
+# Requires filters_array_destination from constant link_build_match_filters_to_destination.
+#
+# Is called from:
+#     link_build_dashboard_url
+#     link_build_explore_url
 #}
-constant: link_action_build_filter_string {
+constant: link_build_filter_string {
   value: "
   {% assign filter_string = '' %}
   {% assign filters_array_destination = filters_array_destination | split: ',' %}
@@ -770,25 +786,22 @@ constant: link_action_build_filter_string {
         {% endif %}
     {% endif %}
   {% endfor %}
-  {% assign size = filter_string | size | minus: 1 %}
-  {% if size > 0 %}
-    {% assign filter_string = filter_string | slice: 0, size %}
-  {% else %}
-    {% assign filter_string = '' %}
-  {% endif %}
+  {% assign size = filter_string | size | minus: 1 | at_least: 0 %}
+  {% assign filter_string = filter_string | slice: 0, size %}
   "
 }
 
-#-->link_action_build_default_filter_string
+#-->link_build_default_filter_string
 #{
-# - Creates the liquid variable default_filter_string.
-# - Takes input of default_filters which is defined by the LookML developer in the link property
-#   and builds url-encoded string formatted for an Explore or dashboard.
-# - This constant is called in these other link_ constants if default_filters is not blank:
-#     link_action_generate_dashboard_url
-#     link_action_generate_explore_url
+# Creates the liquid variable default_filter_string as url-encoded string formatted for an Explore or dashboard.
+#
+# Requires input of default_filters defined by LookML developer in the link property
+#
+# Is called by these link_ constants if default_filters is not blank:
+#     link_build_dashboard_url
+#     link_build_explore_url
 #}
-constant: link_action_build_default_filter_string {
+constant: link_build_default_filter_string {
   value: "
   {% assign default_filter_string = '' %}
   {% assign default_filters = default_filters | split: ',' %}
@@ -803,51 +816,65 @@ constant: link_action_build_default_filter_string {
     {% endif %}
     {% assign default_filter_string = default_filter_string | append: filter_compile | append:'&' %}
   {% endfor %}
-  {% assign size = default_filter_string | size | minus: 1 %}
-  {% if size > 0 %}
+  {% assign size = default_filter_string | size | minus: 1 | at_least: 0 %}
   {% assign default_filter_string = default_filter_string | slice: 0, size %}
-  {% endif %}
   "
 }
 
-#-->link_action_generate_dashboard_url
-#{ - Generates the final dashboard url and returns either:
+#-->link_build_dashboard_url
+#{
+# Generates the final dashboard url and returns either:
 #     a. the url opened in the frontend UI when use_url_variable == false (which is the default)
 #     b. a liquid variable named dashboard_url which can be referenced in a field's html property when use_url_variable == true
 #
-#   - The dashboard navigation links used for the OTC dashboards is an example when
-#     you would want to return a liquid variable for the url. See template_dashboard_navigation.
+# See navigation_links dimension in template_dashboard_navigation for an example of using the dashboard_url variable.
+#
+# Requires these to be added to a measure's link property::
+#   - @{link_build_variable_defaults}
+#   - the link variable to be included in the measure's link url property:
+#            {% assign link = link_generator._link %}
+#   - name of target_dashboard:
+#       {% assign model = _model._name %}
+#       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+#   - @{link_build_dashboard_url}
+#
+# Optional Inputs (see link_build_variable_defaults for default values) :
+#   - filters_mapping
+#   - use_qualified_filter_names
+#   - default_filters
+#   - use_default_filters_to_override
+#   - use_url_variable
+
 # Steps Taken:
 #   1. Assigns values to these liquid variables:
-#         content is set to explore
+#         content is set to '/dashboards/'
 #         link_path as derived from {{link}} which the LookML Developer adds when settting the field's link property
 #         link_query_parameters
-#   2. Calls link_action_extract_context
-#   3. Calls link_action_match_filters_to_destination
-#   4. Calls link_action_build_filter_string
-#   5. If default_filters is not blank calls link_action_build_default_filter_string
-#   6. Assigns value to target_content_filter based on true or false value for use_override_for_default_filters
+#   2. Calls link_build_context
+#   3. Calls link_build_match_filters_to_destination
+#   4. Calls link_build_filter_string
+#   5. If default_filters is not blank calls link_build_default_filter_string
+#   6. Builds target_content_filter based on value for use_default_filters_to_override
 #   7. If use_url_variable == false returns url that opens a dashboard in UI
 #      else returns liquid variable called dashboard_url which can be referenced in a field's html property.
-
 #}
-constant: link_action_generate_dashboard_url {
+constant: link_build_dashboard_url {
   value: "
   {% assign content = '/dashboards/' %}
   {% assign link_query = link | split: '?' | last %}
   {% assign link_query_parameters = link_query | split: '&' %}
 
-  @{link_action_extract_context}
-  @{link_action_match_filters_to_destination}
-  @{link_action_build_filter_string}
+  @{link_build_context}
+  @{link_build_match_filters_to_destination}
+  @{link_build_filter_string}
 
   {% if default_filters != '' %}
-    @{link_action_build_default_filter_string}
+    @{link_build_default_filter_string}
   {% endif %}
 
-  {% if use_override_for_default_filters == true and default_filters != '' %}
+  {% if use_default_filters_to_override == true and default_filters != '' %}
     {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string %}
-  {% elsif use_override_for_default_filters == false and default_filters != '' %}
+  {% elsif use_default_filters_to_override == false and default_filters != '' %}
     {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string %}
   {% else %}
     {% assign target_content_filters = filter_string %}
@@ -861,30 +888,30 @@ constant: link_action_generate_dashboard_url {
   "
 }
 
-#-->link_action_build_explore
+#-->link_build_explore_link_variable
 #{ Generates the liquid variable explore_link by appending
 #  each of these liquid variables when not blank:
 #    liquid variable                 source
 #    ---------------                 -----------
-#    content                         set to 'explore' in link_action_generate_explore_url
+#    content                         set to 'explore' in link_build_explore_url
 #    target_model, target_explore    default '' or when use_different_explore==true set by LookML Developer
-#                                    else derived in link_action_generate_explore_url based on captured link value
+#                                    else derived in link_build_explore_url based on captured link value
 #    drill_fields                    default '' or set by LookML Developer
-#    target_content_filters          default '' or compiled in link_action_generate_explore_url from filter_string (see link_action_build_filter_string)
-#                                    and default_filter_string (see link_action_build_default_filter_string)
+#    target_content_filters          default '' or compiled in link_build_explore_url from filter_string (see link_build_filter_string)
+#                                    and default_filter_string (see link_build_default_filter_string)
 #    vis_config                      default link_vis_table or set by LookML Developer with any of the link_vis_ constants or a custom value
-#    pivots                          default '' or set to specific set of fields by LookML Developer
-#    subtotals                       default '' or set to specific set of fields by LookML Developer
-#    sorts                           default '' or set to specific set of fields by LookML Developer
+#    pivots                          default '' or set to specific fields by LookML Developer
+#    subtotals                       default '' or set to specific fields by LookML Developer
+#    sorts                           default '' or set to specific fields by LookML Developer
 #    limit                           row limit default of 500 or set by LookML Developer
-#    column_limit                    row limit default of 50 or set by LookML Develope
+#    column_limit                    row limit default of 50 or set by LookML Developer
 #    total                           column total default '' or set to 'on' by LookML Developer
 #    row_total                       default '' or set to 'right' by LookML Developer
 #    query_timezone                  default '' or set by LookML Developer
 #    dynamic_fields                  default '' or set by LookML Developer
 #
 #}
-constant: link_action_build_explore {
+constant: link_build_explore_link_variable {
   value: "
   {% assign explore_link = '' %}
 
@@ -953,11 +980,42 @@ constant: link_action_build_explore {
   "
 }
 
-#-->link_action_generate_explore_url
+#-->link_build_explore_url
 #{
 # Generates an Explore url and returns it as either:
 #   a. the Explore url opened as a drill modal in the frontend UI when use_url_variable == false (which is the default)
 #   b. a liquid variable named explore_link which can be referenced in a field's html property when use_url_variable == true
+#
+# Requires these to be added to a measure's link property::
+#     - @{link_build_variable_defaults}
+#     - the link variable to be included in the measure's link url property:
+#             {% assign link = link_generator._link %}
+#     - one or more drill_fields:
+#         {% assign drill_fields = sales_orders.ordered_date,sales_orders__lines.tootal_sales_amount_target_currency %}
+#     - settings for vis_config. Pass as one of the look_vis_ constants or define directly.
+#         @{link_vis_line_chart_1_date_1_measure}
+#         OR
+#         {% assign vis_config = '{\"type\":\"looker_grid\",\"series_cell_visualizations\":{}}' | url_encode | prepend: '&vis_config=' %}
+#     - @{link_build_explore_url}
+#
+# Optional Inputs (see link_build_variable_defaults for default values) :
+#   use_different_explore
+#   target_model
+#   target_explore
+#   filters_mapping
+#   use_qualified_filter_names
+#   default_filters
+#   use_default_filters_to_override
+#   use_url_variable
+#   pivots
+#   subtotals
+#   sorts
+#   limit
+#   column_limit
+#   total
+#   row_total
+#   query_timezone
+#   dynamic_fields
 #
 # Steps Taken:
 #   1. Assigns values to these liquid variables:
@@ -966,16 +1024,17 @@ constant: link_action_build_explore {
 #         link_query_parameters
 #         drill_fields
 #         target_model and target_explore if use_different_explore == false
-#   2. Calls link_action_extract_context
-#   3. If use_different_explore == true calls link_action_match_filters_to_destination else assigns value to filters_array_destination
-#   4. Calls link_action_build_filter_string
-#   5. If default_filters is not blank calls link_action_build_default_filter_string
-#   6. Assigns value to target_content_filter based on true or false value for use_override_for_default_filters
-#   7. Calls link_action_build_explore
+#   2. Calls link_build_context
+#   3. If use_different_explore == true calls link_build_match_filters_to_destination else assigns
+#      filters_array_destination to match filters_array_source
+#   4. Calls link_build_filter_string
+#   5. If default_filters is not blank calls link_build_default_filter_string
+#   6. Assigns value to target_content_filter based on true or false value for use_default_filters_to_override
+#   7. Calls link_build_explore_link_variable
 #   8. If use_url_variable == false returns final Explore url which opens a drill modal
 #      else returns liquid variable called explore_link which can be referenced in a field's html property.
 #}
-constant: link_action_generate_explore_url {
+constant: link_build_explore_url {
   value: "
   {% assign content = '/explore/' %}
   {% assign link_path =  link | split: '?' | first %}
@@ -989,37 +1048,37 @@ constant: link_action_generate_explore_url {
     {% assign target_explore = link_path[2] %}
   {% endif %}
 
-  @{link_action_extract_context}
+  @{link_build_context}
 
   {% if use_different_explore %}
-    @{link_action_match_filters_to_destination}
+    @{link_build_match_filters_to_destination}
   {% else %}
-    {% assign filters_array_destination = filters_array %}
+    {% assign filters_array_destination = filters_array_source %}
   {% endif %}
 
-  @{link_action_build_filter_string}
+  @{link_build_filter_string}
 
   {% if default_filters != '' %}
-    @{link_action_build_default_filter_string}
+    @{link_build_default_filter_string}
   {% endif %}
 
-  {% if use_override_for_default_filters == true and default_filters != '' %}
+  {% if use_default_filters_to_override == true and default_filters != '' %}
     {% assign target_content_filters = filter_string | append:'&' | append: default_filter_string | prepend:'&' %}
-  {% elsif use_override_for_default_filters == false and default_filters != '' %}
+  {% elsif use_default_filters_to_override == false and default_filters != '' %}
    {% assign target_content_filters = default_filter_string | append:'&' | append: filter_string | prepend:'&' %}
   {% else %}
     {% assign target_content_filters = filter_string | prepend:'&' %}
   {% endif %}
 
   {% comment %} Builds final link to be presented in frontend {% endcomment %}
-  @{link_action_build_explore}
+  @{link_build_explore_link_variable}
   {% if use_url_variable == false %}
     {{explore_link}}
   {% endif %}
   "
 }
 
-#} end constants for link actions
+#} end constants for link build
 
 #} end constants for links
 
