@@ -487,6 +487,66 @@ view: +sales_invoices__lines {
 #} end amount measures
 
 #########################################################
+# MEASURES: Amounts in Source Currency
+#{
+
+  measure: total_transaction_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Invoice Amount in Source Currency"
+    description: "Sum of invoice transaction amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_invoices.currency_code._is_selected -%}${transaction_amount}{%- else -%}NULL{%- endif -%} ;;
+    value_format_name: decimal_2
+    html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+  measure: total_revenue_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Revenue Amount in Source Currency"
+    description: "Sum of invoice revenue amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_invoices.currency_code._is_selected -%}${revenue_amount}{%- else -%}NULL{%- endif -%} ;;
+    value_format_name: decimal_2
+    html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+  measure: total_gross_transaction_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Gross Invoice Amount in Source Currency"
+    description: "Sum of gross invoice revenue amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_invoices.currency_code._is_selected -%}${gross_transaction_amount}{%- else -%}NULL{%- endif -%} ;;
+    value_format_name: decimal_2
+    html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+  measure: total_tax_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Tax Amount in Source Currency"
+    description: "Sum of tax amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_invoices.currency_code._is_selected -%}${tax_amount}{%- else -%}NULL{%- endif -%} ;;
+    value_format_name: decimal_2
+    html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+  measure: total_discount_amount_in_source_currency {
+    hidden: no
+    type: sum
+    group_label: "Amounts in Source Currency"
+    label: "Total Discount Amount in Source Currency"
+    description: "Sum of discount amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    sql: {%- if sales_invoices.currency_code._is_selected -%}${discount_amount}{%- else -%}NULL{%- endif -%} ;;
+    value_format_name: decimal_2
+    html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
+  }
+
+
+#########################################################
 # MEASURES: Average Unit Prices and Discounts
 #{
 
