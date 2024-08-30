@@ -264,7 +264,7 @@
             format: '{y:.0f}%',
             color: '#000000',
             align: 'left',
-            allowQverlap: false,
+            allowOverlap: false,
           },
           },
         ],

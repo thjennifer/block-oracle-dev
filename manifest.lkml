@@ -259,10 +259,10 @@ constant: label_view_for_dashboard_navigation {
 
 #--> label_currency_defaults
 #   - Used to set initial values for liquid variables that will be used to create the dynamic label measures based on target currency.
-#       currency = value in parameter_target_currency that will be appended to label when field is selected.
+#       currency = value in parameter_target_currency that will be appended to the label when the field is selected.
 #       field_name = blank
-#       remove_words = '_target_currency, _formatted' meaning these words will not be in label.
-#       remove_total_prefix = false. When true 'total_' will also be removed from label.
+#       remove_words = '_target_currency, _formatted' meaning these words will not be in the label.
+#       remove_total_prefix = false. When true 'total_' will also be removed from the label.
 #       add_words = ' (Target Currency)' will be appended to field_name and displayed in the Explore
 #       add_formatted = false. When true, ' Formatted' will be added to label displayed in the Explore
 #   - These defaults can be overridden when defining the label property.
@@ -361,7 +361,7 @@ constant: link_style_dashboard_navigation {
   {% case nav_style %}
     {% when 'buttons' %}
         {% assign core_style = 'border-collapse: separate; border-radius: 6px; border: 2px solid #dcdcdc; margin-left: 5px; margin-bottom: 5px; padding: 6px 10px; line-height: 1.5; user-select: none; font-size: 12px; font-style: tahoma; text-align: center; text-decoration: none; letter-spacing: 0px; white-space: normal; float: left;' %}
-        {% assign non_click_style = core_style | append: 'background-color: #ffffff; color: #000000; font-weight: normal;' %}
+        {% assign non_click_style = core_style | append: 'background-color: #FFFFFF; color: #000000; font-weight: normal;' %}
         {% assign click_style = core_style | append: 'background-color: #dbe8fb; color: #000000; font-weight: medium;' %}
         {% assign div_style = 'text-align: center; display: inline-block; height: 40px;' %}
         {% assign span_style = 'font-size: 16px; padding: 6px 10px 0 10px; height: 40px;' %}
@@ -848,7 +848,7 @@ constant: link_build_default_filter_string {
 # Steps Taken:
 #   1. Assigns values to these liquid variables:
 #         content is set to '/dashboards/'
-#         link_path as derived from {{link}} which the LookML Developer adds when settting the field's link property
+#         link_path as derived from {{link}} which the LookML Developer adds when setting the field's link property
 #         link_query_parameters
 #   2. Calls link_build_context
 #   3. Calls link_build_match_filters_to_destination
@@ -856,7 +856,7 @@ constant: link_build_default_filter_string {
 #   5. If default_filters is not blank calls link_build_default_filter_string
 #   6. Builds target_content_filter based on value for use_default_filters_to_override
 #   7. If use_url_variable == false returns url that opens a dashboard in UI
-#      else returns liquid variable called dashboard_url which can be referenced in a field's html property.
+#      else returns a liquid variable called dashboard_url which can be referenced in a field's html property.
 #}
 constant: link_build_dashboard_url {
   value: "
@@ -1020,7 +1020,7 @@ constant: link_build_explore_link_variable {
 # Steps Taken:
 #   1. Assigns values to these liquid variables:
 #         content is set to explore
-#         link_path as derived from {{link}} which the LookML Developer adds when settting the field's link property
+#         link_path as derived from {{link}} which the LookML Developer adds when setting the field's link property
 #         link_query_parameters
 #         drill_fields
 #         target_model and target_explore if use_different_explore == false
@@ -1032,7 +1032,7 @@ constant: link_build_explore_link_variable {
 #   6. Assigns value to target_content_filter based on true or false value for use_default_filters_to_override
 #   7. Calls link_build_explore_link_variable
 #   8. If use_url_variable == false returns final Explore url which opens a drill modal
-#      else returns liquid variable called explore_link which can be referenced in a field's html property.
+#      else returns a liquid variable called explore_link which can be referenced in a field's html property.
 #}
 constant: link_build_explore_url {
   value: "

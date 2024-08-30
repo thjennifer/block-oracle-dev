@@ -399,7 +399,7 @@
         <div style="text-align: left;">
         Customers are ranked in descending order by Total Discount Amount across non-Intercompany invoice lines.
         </br></br>Average Unit List Price and Average Unit Selling Price across invoice lines with a discount are shown as columns.
-        </br></br>The Average Discount % taken as well as the Frequncy of Discounts (as % of invoice lines) are also shown as lines.
+        </br></br>The Average Discount % taken as well as the Frequency of Discounts (as % of invoice lines) are also shown as lines.
         </br></br>Discounts are calculated by subtracting the Gross Unit Selling Price from the Unit List Price as both prices are inclusive of taxes.
         If the Gross Unit Selling Price is unavailable, the pre-tax price is used, possibly leading to inflated discounts.
         </div>

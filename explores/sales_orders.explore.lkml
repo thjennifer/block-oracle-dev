@@ -34,7 +34,7 @@
 # TARGET CURRENCY CODE
 #   - This Explore shows only 1 Target Currency at a time based on the value in
 #     parameter_target_currency.
-#       * Users can change value of parameter on provided LookML dashboards or Explore.
+#       * Users can change the parameter value on provided LookML dashboards or Explore.
 #       * In the provided LookML dashboards, the default value for this parameter is the value in
 #         the user attribute cortex_oracle_ebs_default_currency.
 #   - This filter condition is applied in the view currency_conversion_sdt.

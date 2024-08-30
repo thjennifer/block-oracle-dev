@@ -14,7 +14,7 @@
 # TARGET CURRENCY CODE
 #   - This Explore shows only 1 Target Currency at a time based on the value in
 #     parameter_target_currency.
-#       * Users can change value of parameter on provided LookML dashboards or Explore.
+#       * Users can change the parameter value on provided LookML dashboards or Explore.
 #       * In the provided LookML dashboards, the default value for this parameter is the value in
 #         the user attribute cortex_oracle_ebs_default_currency.
 #   - This filter condition is applied in the view currency_conversion_sdt.
@@ -26,11 +26,11 @@
 #   - Users can change filter values as necessary.
 #
 # OTHER NOTES
-#   - The view definition for sales_payments include a subset of the available fields.
+#   - The view definition for sales_payments includes a subset of the available fields.
 #     To include/exclude additional fields in the Explore, refer to the view definition and
 #     adjust a field's hidden property.
 #
-#   - The common parameter named parameter_language is not used in this explore so the FIELDS property excludes it.
+#   - The common parameter named parameter_language is not used in this Explore so the FIELDS property excludes it.
 #
 #########################################################}
 

@@ -3,7 +3,7 @@ datagroup: cortex_default_datagroup {
 }
 
 datagroup: one_time {
-  # pdt will be create when initially called but not updated again
+  # pdt will be created when initially called but not updated again
   sql_trigger: SELECT 1 ;;
   description: "Triggered only one time"
 }

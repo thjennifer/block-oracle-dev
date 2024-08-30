@@ -18,11 +18,11 @@
 #   - Users can change filter values as necessary.
 #
 # OTHER NOTES
-#   - The view definition for sales_payments_dso_days_agg_pdt include a subset of the available fields.
+#   - The view definition for sales_payments_dso_days_agg_pdt includes a subset of the available fields.
 #     To include/exclude additional fields in the Explore, refer to the view definition and
 #     adjust a field's hidden property.
 #
-#   - The common parameter named parameter_language is not used in this explore so the FIELDS property excludes it.
+#   - The common parameter named parameter_language is not used in this Explore so the FIELDS property excludes it.
 #
 #########################################################}
 

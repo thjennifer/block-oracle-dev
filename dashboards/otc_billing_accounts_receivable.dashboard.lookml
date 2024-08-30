@@ -198,7 +198,7 @@
       Average time, in days, for which the receivables are outstanding.
       </br></br>Calculated as:
       <p style="text-align: center;">(Ending Receivables Balance / Credit Sales) * N</p>
-      where N is number of days in period.
+      where N is the number of days in the period.
       </br></br>User can choose 30, 90 or 365 days for the calculation with the dashboard parameter:
       <span style="color:#AECBFA;">
       </br>&ensp;&ensp;&ensp;DSO: # Days for Calculation
@@ -452,7 +452,7 @@
       </br> 1. Click the three-dot menu at the top right of tile
       and select 'Explore from here'.
       </br></br>2. In the Visualization pane, click EDIT.
-      </br></br>3. Click on Plot tab and edit 'Limit Displayed Rows' property.
+      </br></br>3. Click on the Plot tab and edit 'Limit Displayed Rows' property.
       </div>
     listen:
       date: sales_payments.transaction_date

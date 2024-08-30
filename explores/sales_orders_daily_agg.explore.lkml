@@ -21,7 +21,7 @@
 # TARGET CURRENCY CODE
 #   - This Explore shows only 1 Target Currency at a time based on the value in
 #     parameter_target_currency.
-#       * Users can change value of parameter on provided LookML dashboards or Explore.
+#       * Users can change the parameter value on provided LookML dashboards or Explore.
 #       * In the provided LookML dashboards, the default value for this parameter is based on the value in
 #         the user attribute cortex_oracle_ebs_default_currency.
 #   - This filter condition is defined in two spots:
@@ -44,7 +44,7 @@
 #     sales_orders_daily_agg__lines__amounts does not need to be included in the Explore.
 #     However, you can optionally include by uncommenting the join statement below.
 #
-#   - The common parameter named parameter_language is not used in this explore so the FIELDS property excludes it.
+#   - The common parameter named parameter_language is not used in this Explore so the FIELDS property excludes it.
 #
 #########################################################}
 

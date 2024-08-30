@@ -165,9 +165,9 @@
         label: Custom
         type: continuous
         stops:
-        - color: "#468faf"
+        - color: "#468FAF"
           offset: 0
-        - color: "#013a63"
+        - color: "#013A63"
           offset: 100
       options:
         steps: 5
