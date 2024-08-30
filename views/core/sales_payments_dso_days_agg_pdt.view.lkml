@@ -3,8 +3,8 @@
 # Generate a daily PDT that computes DSO values for each
 # Target Currency and DSO # days combination.
 #
-# Possible DSO days are: 30, 90 or 365 as defined in query below.
-# To change this, edit SQL line containing ARRAY[30,90,365].
+# Possible DSO days are: 30, 90 or 365 as defined in the query below.
+# To change this, edit the SQL line containing ARRAY[30,90,365].
 #
 # DSO Start and End Date are derived based on either:
 #     current_date
@@ -24,8 +24,8 @@
 # NOTES
 # - Only Invoice rows are used in DSO calc (IS_PAYMENT_TRANSACTION = false)
 # - The dimensions dso_days and target_currency_code will be included in days_sales_outstanding calculation
-#   even if not included in query. If query returns more rows than expected, add these two dimensions
-#   to the query or filter to single value for each.
+#   even if not included in the query. If query returns more rows than expected, add these two dimensions
+#   to the query or filter to a single value for each.
 #########################################################}
 include: "/views/core/otc_common_currency_fields_ext.view"
 
@@ -181,8 +181,8 @@ view: sales_payments_dso_days_agg_pdt {
     }
 
 #--> The dimensions dso_days and target_currency_code will be included in days_sales_outstanding calculation even
-#--> if not included in query. If query returns more rows than expected, add these two dimensions to the query
-#--> or filter to single value for each.
+#--> if not included in the query. If query returns more rows than expected, add these two dimensions to the query
+#--> or filter to a single value for each.
     measure: days_sales_outstanding {
       type: number
       sql: SAFE_DIVIDE(${total_amount_due_remaining_target_currency},${total_amount_original_target_currency}) * ANY_VALUE(${dso_days}) ;;

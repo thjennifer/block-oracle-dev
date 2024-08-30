@@ -5,8 +5,7 @@
 #
 # SOURCES
 # Refines View sales_invoices__lines__item_descriptions
-# Extends View:
-#   otc_common_item_descriptions_ext
+# Extends View otc_common_item_descriptions_ext
 #
 # REFERENCED BY
 # not used but could optionally be added to Explore sales_invoices

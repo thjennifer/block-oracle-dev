@@ -6,7 +6,7 @@
 #     sales_payments_daily_agg
 #     sales_payments_daily_agg__amounts
 #
-# To use extend into desired view.
+# To use, extend into the desired view.
 #
 # Fully defines these measures including sql: property:
 #   total_amount_adjusted_target_currency
@@ -50,7 +50,7 @@ view: sales_payments_common_amount_measures_ext {
     type: sum
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign remove_total_prefix = true -%}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Total mount adjusted in target currency"
+    description: "Total amount adjusted in target currency"
     sql: ${amount_adjusted_target_currency} ;;
     value_format_name: decimal_2
   }
@@ -197,7 +197,7 @@ view: sales_payments_common_amount_measures_ext {
     type: number
     group_label: "Amounts Formatted as Large Numbers"
     label: "@{label_currency_defaults}{%- assign remove_total_prefix = true -%}{%- assign add_formatted = true -%}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Total mount adjusted in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
+    description: "Total amount adjusted in target currency and formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${total_amount_adjusted_target_currency} ;;
     value_format_name: format_large_numbers_d1
     html: @{html_format_big_numbers} ;;

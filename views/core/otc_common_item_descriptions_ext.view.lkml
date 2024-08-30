@@ -1,6 +1,6 @@
 #########################################################{
 # PURPOSE
-# Provides consistent defintions and labels for:
+# Provides consistent definitions and labels for:
 #   item_description
 #   language_code
 #

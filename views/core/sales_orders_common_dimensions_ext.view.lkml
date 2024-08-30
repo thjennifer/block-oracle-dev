@@ -4,7 +4,7 @@
 # for customer-related dimensions used in both
 # sales_orders and sales_orders_daily_agg
 #
-# To use extend into desired view.
+# To use, extend into the desired view.
 #
 # Defines labels/descriptions for:
 #   bill_to_customer_country
@@ -32,7 +32,7 @@ view: sales_orders_common_dimensions_ext {
   extension: required
 
 #########################################################
-# Label Existing Custoemr Dimensions
+# Label Existing Customer Dimensions
 #{
   dimension: bill_to_customer_country {
     hidden: no

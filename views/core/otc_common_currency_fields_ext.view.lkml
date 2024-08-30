@@ -13,8 +13,7 @@
 #   sales_payments_daily_agg__amounts
 #   sales_payments_dso_days_agg_pdt
 #
-# Defines labels & dsecriptions for all views
-# and SQL for select views for dimensions:
+# Defines labels & descriptions for all views and SQL for select views for dimensions:
 #   target_currency_code
 #   is_incomplete_conversion
 #
@@ -56,7 +55,7 @@ view: otc_common_currency_fields_ext {
     type: max
     description: "Provides a note in html when a source currency could not be converted to target currency. Add this measure to a table or single value visualization to alert users that amounts in target currency may be understated"
     sql: ${is_incomplete_conversion} ;;
-    html: {% if value == true %}<span style='color: red; font-size: 16px;'>&#9888; </span> For timeframe and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
+    html: {% if value == true %}<span style='color: red; font-size: 16px;'>&#9888; </span> For time frame and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
   }
 
 }

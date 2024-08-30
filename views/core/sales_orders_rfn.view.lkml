@@ -98,7 +98,7 @@ view: +sales_orders {
 #########################################################
 # DIMENSIONS: Customer
 #{
-# selected_customer_name, _country and _type extebded from sales_orders_common_dimensions_ext
+# selected_customer_name, _country and _type extended from sales_orders_common_dimensions_ext
 
   dimension: bill_to_customer_name {
     hidden: no
@@ -316,7 +316,7 @@ view: +sales_orders {
     type: yesno
     group_label: "Order Status"
     description: "Yes, if sales order can be met with available inventory (no items are backordered)"
-#--> did not use ${is_backordered} = No becuase would count orders where ${TABLE}.IS_BACKORDERED = NULL
+#--> did not use ${is_backordered} = No because would count orders where ${TABLE}.IS_BACKORDERED = NULL
     sql: ${TABLE}.HAS_BACKORDER = FALSE ;;
   }
 

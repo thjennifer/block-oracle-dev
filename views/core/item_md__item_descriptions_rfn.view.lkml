@@ -43,6 +43,7 @@ view: +item_md__item_descriptions {
   }
 
   measure: distinct_language_count {
+    hidden: no
     type: count_distinct
     sql: ${language} ;;
   }

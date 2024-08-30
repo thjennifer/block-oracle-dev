@@ -15,7 +15,6 @@
 #   sales_payments
 #   sales_payments_daily_agg
 #
-#
 # CUSTOMIZATIONS {
 # While the template_dashboard_navigation provides much of the logic needed, customizations
 # are required.
@@ -38,7 +37,7 @@
 #             sql: "1|date||2|business_unit||3|customer_type||4|customer_country" ;;
 #
 #   3. Updated dash_bindings dimension to:
-#       - use parameter_navigation_subject value to specificy 4 sets of dashboards:
+#       - use parameter_navigation_subject value to specify 4 sets of dashboards:
 #       subject               dashboard set
 #       ---------------       ---------------
 #       Orders                Order Status, Sales Performance, Order Fulfillment
@@ -77,10 +76,10 @@
 #
 #   2. Open the Explore and add "Dashboard Links" dimension to a Single Value Visualization.
 #
-#   3. Add these navigation paramaters to visualization and set to desired values:
-#         Navigation Style = Buttons (or if using lookml, buttons)
+#   3. Add these navigation parameters to visualization and set to desired values:
+#         Navigation Style = Buttons (or if using LookML, buttons)
 #         Navigation Focus Page = 1 (if adding to first dashboard listed, set to 2 if added viz to second dashboard)
-#         Navigation Subject Area = Orders (or if using lookml, orders)
+#         Navigation Subject Area = Orders (or if using LookML, orders)
 #
 #   4. Add navigation filters to the visualization. These filters will "listen" to the dashboard filters.
 #

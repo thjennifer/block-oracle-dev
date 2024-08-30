@@ -1,7 +1,7 @@
 #########################################################{
 # PURPOSE
 # Provides a template for dynamically creating and formatting HTML links for
-# navigation between dashboards including the transfer of filter values.
+# navigation between dashboards, including transferring filter values.
 #
 # SOURCE
 # none (This template can only be EXTENDED into another view)
@@ -22,7 +22,7 @@
 # To add or modify styles, edit or add related Constants in the Manifest file
 #
 # FILTERS
-# This template allows a dasboard to pass up to 20 possible filters. The dimensions are
+# This template allows a dashboard to pass up to 20 possible filters. The dimensions are
 # named filter1 to filter20 and hidden by default.
 # Modify this template to add more filter dimensions as needed.
 #
@@ -33,19 +33,19 @@
 # 2. Add "extend: template_dashboard_navigation" property (use name of this view)
 # 3. Edit dimension map_filter_numbers_to_dashboard_filter_names.
 #     - Update the "sql" property with the mapping of filter numbers to dashboard filter names.
-#     - For each filter that needs to be passed between dashboards, assign a generic filter number 1 to N.
+#     - For each filter that must be passed between dashboards, assign a generic filter number 1 to N.
 #     - This can be a broad list of filters that do not need to appear on every dashboard but should appear on at least 2 dashboards.
 #     - Filters unique to a single dashboard do not need to be included here (as values do not pass to other dashboards).
 #     - Use | between number and dashboard filter name
 #     - Use || between each filter
 #     - Note if dashboard filter name contains a space use + to represent the space (e.g. Order Date should be entered as Order+Date)
-#     - You will specifiy the specific set of filters used in a dashboard in the dimension dash_bindings
+#     - You will specify the specific set of filters used in a dashboard in the dimension dash_bindings
 #     - An example for 4 dashboard filters:
 #           sql: '1|date||2|business_unit||3|customer_type||4|customer_country' ;;
 #
 # 4. Edit dash_bindings dimension
 #    - Update the "sql" property with ID, Link Text and Filter Set of each dashboard:
-#       ID - For UDD dashboards use numeric id. For LookML dashboards use dashboard name with or without model name.
+#       ID - For UDD dashboards use numeric id. For a LookML dashboard, use dashboard name with or without model name.
 #           131
 #           model_name::dashboard_name1
 #           dashboard_name1
@@ -66,7 +66,7 @@
 #    Note, when extending, allowed values are additive, so only add values beyond 2.
 #
 # 6. Edit filter1 to filterN (up to 20) dimensions to set the type, unhide and/or label.
-#    Make sure filter dimension's type matches the field it is mapped to. For example, if filter1 is linked to a date field,
+#    Make sure the filter dimension's type matches the field it is mapped to. For example, if filter1 is linked to a date field,
 #    change the type to date. The filter dimensions are string by default.
 #    Note if only using in LookML dashboards, the filter dimensions can remain hidden.
 #
@@ -134,7 +134,7 @@ view: template_dashboard_navigation {
 #} end required overrides
 
 #########################################################
-# Fields *optionally overriden* in extension
+# Fields *optional override* in extension
 #{
 
   # use parameter to choose navigation style

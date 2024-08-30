@@ -28,7 +28,7 @@
 # CAVEATS
 # - This view includes Payments related to Invoices, Cash Receipts, etc...
 #   Use payment_class_code (e.g., 'INV' vs. 'PMT') or is_payment_transaction to pick which to include.
-# - Amounts where target_currency matches value of parameter_target_currency are defined in this view.
+# - Amounts where target_currency matches the value of parameter_target_currency are defined in this view.
 # - If test data is used, references sales_payments_daily_agg_test_data_sdt instead of table sales_payments_daily_agg.
 #   so that doubtful receivables can be re-calculated using the test data target end date. See sql_table_name property.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
@@ -278,7 +278,7 @@ view: +sales_payments_daily_agg {
   measure: average_days_to_payment {
     hidden: no
     type: number
-    description: "For Invoice payment class code, the average umber of days between payment close date and invoice date"
+    description: "For Invoice payment class code, the average number of days between payment close date and invoice date"
     sql: SAFE_DIVIDE(${invoice_total_days_to_payment},${invoice_closed_transaction_count}) ;;
     value_format_name: decimal_1
   }

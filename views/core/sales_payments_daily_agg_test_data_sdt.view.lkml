@@ -31,7 +31,7 @@ view: sales_payments_daily_agg_test_data_sdt {
   PAYMENT_CLASS_CODE,
   ANY_VALUE(IS_PAYMENT_TRANSACTION) AS IS_PAYMENT_TRANSACTION,
   -- These measures use ANY_VALUE because this block is only aggregating the currency amounts
-  -- into an array, so non-amount measures should not be re-aggregated to avoid over counting.
+  -- into an array, so non-amount measures should not be re-aggregated to avoid over-counting.
   ANY_VALUE(NUM_PAYMENTS) AS NUM_PAYMENTS,
   ANY_VALUE(NUM_CLOSED_PAYMENTS) AS NUM_CLOSED_PAYMENTS,
   ANY_VALUE(TOTAL_DAYS_TO_PAYMENT) AS TOTAL_DAYS_TO_PAYMENT,

@@ -1,6 +1,6 @@
 #########################################################{
 # PURPOSE
-# Provides consistent defintions and labels for:
+# Provides consistent definitions and labels for:
 #   category_id
 #   category_name_code
 #   category_description

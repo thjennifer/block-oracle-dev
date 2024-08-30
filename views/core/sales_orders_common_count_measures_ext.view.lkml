@@ -3,7 +3,7 @@
 # Provide the same labels/descriptions and/or definitions
 # for measures used in both sales_orders and sales_orders_daily_agg
 #
-# To use extend into desired view.
+# To use, extend into the desired view.
 #
 # Defines label/descriptions for:
 #   order_count
@@ -296,7 +296,7 @@ view: sales_orders_common_count_measures_ext {
     }
   }
 
-#--> Converts Percent to 0 - 100 scale to support shared tooltips on dasbhoard
+#--> Converts Percent to 0 - 100 scale to support shared tooltips on dashboard
 #--> hidden from Explore
   measure: fulfilled_order_percent_formatted {
     hidden: yes
@@ -323,7 +323,7 @@ view: sales_orders_common_count_measures_ext {
     }
   }
 
-#--> Converts Percent to 0 - 100 scale to support shared tooltips on dasbhoard
+#--> Converts Percent to 0 - 100 scale to support shared tooltips on dashboard
 #--> hidden from Explore
   measure: fulfilled_by_request_date_order_percent_formatted {
     hidden: yes

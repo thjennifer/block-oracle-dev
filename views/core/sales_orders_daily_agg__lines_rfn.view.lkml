@@ -29,11 +29,11 @@
 #     sales_orders_daily_agg__lines__amounts - provides Total Amounts converted to Target Currencies by Item Categories & Item Organization
 #
 # NOTES
-# - Amounts where target_currency matches value of parameter_target_currency are defined in this view.
+# - Amounts where target_currency matches the value of parameter_target_currency are defined in this view.
 # - View appears in Explore as Sales Orders Daily Agg: Item Categories.
 # - This table includes both ORDER and RETURN lines. Use line_category_code to pick which to include.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
-# - When field name is duplicated in header sales_orders_daily_agg, the sql property is restated to use the ${TABLE} reference.
+# - When the field name is duplicated in header sales_orders_daily_agg, the sql property is restated to use the ${TABLE} reference.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #
 #########################################################}
@@ -112,7 +112,7 @@ view: +sales_orders_daily_agg__lines {
 # Pulls amounts from AMOUNTS Repeated Struct so that a separate view
 # does not have to be included in Explore.
 #
-# Target Currency Coce and Is Incomplete Conversion extended from
+# Target Currency Code and Is Incomplete Conversion extended from
 # otc_common_currency_fields_ext
 #
 # Only the Amount for the Target Currency Code that matches the value

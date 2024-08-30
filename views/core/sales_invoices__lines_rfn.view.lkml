@@ -22,15 +22,15 @@
 #
 # REPEATED STRUCTS
 # - Also includes Repeated Structs for Item Descriptions and Item Categories. Select fields from
-#   these Repeated Structs have been defined here so these do not have to be unnested. See each related view which
-#   could be added to Explore if needed:
+#   these Repeated Structs have been defined here so these do not have to be unnested. See each related
+#   view which could be added to Explore if needed:
 #     sales_invoices__lines__item_descriptions
 #     sales_invoices__lines__item_categories
 #
 # NOTES
 # - This view includes both ORDER and RETURN lines. Use line_category_code to pick which to include.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
-# - When field name is duplicated in header (like creation date), the sql property is restated to use the ${TABLE} reference.
+# - When the field name is duplicated in the header (like creation date), the sql property is restated to use the ${TABLE} reference.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #
 #########################################################}
@@ -346,7 +346,7 @@ view: +sales_invoices__lines {
     hidden: yes
     type: number
     group_label: "Item Prices and Discounts"
-    description: "Perecent discount off unit list price"
+    description: "Percent discount off unit list price"
     sql: 1 - SAFE_DIVIDE(${gross_unit_selling_price},${unit_list_price}) ;;
     value_format_name: percent_1
   }
@@ -495,7 +495,7 @@ view: +sales_invoices__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Invoice Amount in Source Currency"
-    description: "Sum of invoice transaction amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of invoice transaction amount in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if sales_invoices.currency_code._is_selected -%}${transaction_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
@@ -506,7 +506,7 @@ view: +sales_invoices__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Revenue Amount in Source Currency"
-    description: "Sum of invoice revenue amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of invoice revenue amount in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if sales_invoices.currency_code._is_selected -%}${revenue_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
@@ -517,7 +517,7 @@ view: +sales_invoices__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Gross Invoice Amount in Source Currency"
-    description: "Sum of gross invoice revenue amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of gross invoice revenue amount in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if sales_invoices.currency_code._is_selected -%}${gross_transaction_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
@@ -528,7 +528,7 @@ view: +sales_invoices__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Tax Amount in Source Currency"
-    description: "Sum of tax amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of tax amount in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if sales_invoices.currency_code._is_selected -%}${tax_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
@@ -539,7 +539,7 @@ view: +sales_invoices__lines {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Total Discount Amount in Source Currency"
-    description: "Sum of discount amount in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of discount amount in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if sales_invoices.currency_code._is_selected -%}${discount_amount}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;

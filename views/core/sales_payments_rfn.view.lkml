@@ -163,7 +163,7 @@ view: +sales_payments {
 
   dimension_group: exchange {
     hidden: no
-    description: "Date to use for exchange rate calculation. If exchange date is not populated, transaction date is used."
+    description: "Date to use for exchange rate calculation. If the exchange date is not populated, the transaction date is used."
   }
 
   dimension_group: payment_close {
@@ -507,7 +507,7 @@ view: +sales_payments {
   measure: average_days_to_payment {
     hidden: no
     type: average
-    description: "Average umber of days between payment close date and invoice date"
+    description: "Average number of days between payment close date and invoice date"
     sql: ${days_to_payment} ;;
     filters: [payment_class_code: "INV"]
     value_format_name: decimal_1
@@ -524,7 +524,7 @@ view: +sales_payments {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Amount Adjusted in Source Currency"
-    description: "Sum of amount adjusted in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of amount adjusted in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_adjusted}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: @{html_message_source_currency} ;;
@@ -535,7 +535,7 @@ view: +sales_payments {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Amount Applied in Source Currency"
-    description: "Sum of amount applied in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of amount applied in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_applied}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: @{html_message_source_currency} ;;
@@ -546,7 +546,7 @@ view: +sales_payments {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Amount Credited in Source Currency"
-    description: "Sum of amount credited in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of amount credited in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_credited}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: @{html_message_source_currency} ;;
@@ -557,7 +557,7 @@ view: +sales_payments {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Amount Discounted in Source Currency"
-    description: "Sum of amount discounted in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of amount discounted in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_discounted}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: @{html_message_source_currency} ;;
@@ -568,7 +568,7 @@ view: +sales_payments {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Amount Due Original in Source Currency"
-    description: "Sum of amount due original in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of amount due original in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_due_original}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: @{html_message_source_currency} ;;
@@ -579,7 +579,7 @@ view: +sales_payments {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Amount Due Remaining in Source Currency"
-    description: "Sum of amount due remaining in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of amount due remaining in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${amount_due_remaining}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: @{html_message_source_currency} ;;
@@ -590,7 +590,7 @@ view: +sales_payments {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Tax Original in Source Currency"
-    description: "Sum of tax original in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of tax original in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${tax_original}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: @{html_message_source_currency} ;;
@@ -601,7 +601,7 @@ view: +sales_payments {
     type: sum
     group_label: "Amounts in Source Currency"
     label: "Tax Remaining in Source Currency"
-    description: "Sum of tax remaining in source currency. Currency (Source) is required field to avoid summing across multiple currencies. If currency not included, a warning message is returned."
+    description: "Sum of tax remaining in source currency. Currency (Source) is a required field to avoid summing across multiple currencies. If currency is not included, a warning message is returned."
     sql: {%- if currency_code._is_selected -%}${tax_remaining}{%- else -%}NULL{%- endif -%} ;;
     value_format_name: decimal_2
     html: @{html_message_source_currency} ;;

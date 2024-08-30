@@ -13,7 +13,7 @@
 #   - Includes Repeated Struct for ITEM_DESCRIPTIONS as
 #     an item may have multiple descriptions in different languages.
 #   - Includes Repeated Struct for ITEM_CATEGORIES as
-#     an item may be part of one ore more catgory sets
+#     an item may be part of one or more category sets
 #   - These defined in separate views to allow UNNESTING:
 #       item_md__item_descriptions
 #       item_md__item_categories
@@ -22,7 +22,6 @@
 #   - Select dimensions are edited for labels and/or value formats
 #   - Full set of fields available can be found in base view
 #       /views/base/item_md.view
-#
 #########################################################}
 
 include: "/views/base/item_md.view"

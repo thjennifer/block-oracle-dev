@@ -6,9 +6,9 @@
 #    sales_orders_daily_agg__lines
 #    sales_orders_daily_agg__lines__amounts
 #
-# To use, extend into desired view.
+# To use, extend into the desired view.
 #
-# Defines label/descriptions for:
+# Defines label/description for:
 #   average_ordered_amount_per_order_target_currency
 #
 # Fully defines these measures including sql: property
@@ -49,7 +49,7 @@ view: sales_orders_common_amount_measures_ext {
     value_format_name: decimal_2
   }
 
-#} end labls & descriptions
+#} end labels & descriptions
 
 #########################################################
 # MEASURES: Amounts

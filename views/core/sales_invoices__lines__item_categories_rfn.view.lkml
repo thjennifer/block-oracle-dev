@@ -15,7 +15,7 @@
 #    category_id, category_description, category_name_code
 #
 # NOTES
-# - Catgory IDs and descriptions for the category_set_name matching the
+# - Category IDs and descriptions for the category_set_name matching the
 #   value of user attribute cortex_oracle_ebs_default_category_set_name are
 #   pulled into sales_invoices__lines so this view is not used.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.

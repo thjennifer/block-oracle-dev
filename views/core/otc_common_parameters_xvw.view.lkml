@@ -1,7 +1,6 @@
 #########################################################{
 # PURPOSE
-# Provides consistent defintions and labels for
-# parameters used in OTC-related explores.
+# Provides consistent definitions and labels for parameters used in OTC-related Explores.
 #   parameter_target_currency
 #   parameter_language
 #   parameter_category_set_name (hidden)

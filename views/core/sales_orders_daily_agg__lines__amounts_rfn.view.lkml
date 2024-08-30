@@ -19,8 +19,8 @@
 # NOTES
 # - Amounts where target currency matches value of parameter_target_currency are
 #   pulled into sales_orders_daily_agg__lines so this view is not used
-# - Original fields TOTAL_ORDERED, etc... replaced with dimensions like ordered_amount_target_currency to
-#   faciltate extending order amount measures across multiple views.
+# - Original fields TOTAL_ORDERED, etc... replaced with dimensions like ordered_amount_target_currency
+#   to facilitate extending order amount measures across multiple views.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - Full suggestions set to yes so that filter suggestions populate properly for nested fields.
 #
