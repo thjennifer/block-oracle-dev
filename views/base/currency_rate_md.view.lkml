@@ -3,6 +3,7 @@ view: currency_rate_md {
 
   dimension_group: conversion {
     type: time
+    description: "Date that the conversion is calculated from"
     timeframes: [raw, date, week, month, quarter, year]
     convert_tz: no
     datatype: date
@@ -10,18 +11,22 @@ view: currency_rate_md {
   }
   dimension: conversion_rate {
     type: number
+    description: "Currency conversion rate"
     sql: ${TABLE}.CONVERSION_RATE ;;
   }
   dimension: conversion_type {
     type: string
+    description: "Currency conversion type"
     sql: ${TABLE}.CONVERSION_TYPE ;;
   }
   dimension: from_currency {
     type: string
+    description: "Source currency type"
     sql: ${TABLE}.FROM_CURRENCY ;;
   }
   dimension: to_currency {
     type: string
+    description: "Target currency type"
     sql: ${TABLE}.TO_CURRENCY ;;
   }
   measure: count {
