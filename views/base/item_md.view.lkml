@@ -1,4 +1,3 @@
-
 view: item_md {
   sql_table_name: `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.ItemMD` ;;
 

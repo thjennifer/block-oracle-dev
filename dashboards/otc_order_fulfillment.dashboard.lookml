@@ -1,6 +1,6 @@
 #########################################################{
-# Order Sales Performance dashboard provides insights into
-# delivery performance over time, items with longest average
+# Order Fulfillment dashboard provides insights into
+# fulfillment performance over time, items with longest average
 # order cycle time and items having fulfillment issues.
 #
 # Extends otc_template_orders and modifies to:

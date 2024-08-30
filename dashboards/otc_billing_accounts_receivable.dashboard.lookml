@@ -1,9 +1,9 @@
 #########################################################{
-# Accounts Receivable dashboard provides an oAnalysis of
+# Accounts Receivable dashboard provides an analysis of
 # receivables, encompassing both current and overdue amounts.
 # Also identifies customers with the highest outstanding
 # receivables, along with an assessment of the duration
-# of their overdue payments..
+# of their overdue payments.
 #
 # Extends otc_template_billing and modifies to:
 #   update business_unit, customer_country, customer_name to
