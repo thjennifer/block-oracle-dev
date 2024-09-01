@@ -58,6 +58,11 @@ view: +sales_invoices__lines {
     full_suggestions: yes
   }
 
+  dimension: line_number {
+    hidden: no
+    full_suggestions: yes
+  }
+
   dimension: line_description {
     hidden: no
     full_suggestions: yes
@@ -65,18 +70,16 @@ view: +sales_invoices__lines {
 
   dimension: is_intercompany {
     hidden: no
-    description: "Yes indicates transaction was internal within the company"
     full_suggestions: yes
   }
 
   dimension: is_intercompnay_with_symbols {
     hidden: yes
     sql: ${is_intercompany} ;;
+    description: "✅ if transaction was internal within the company"
     can_filter: no
     html: @{html_symbols_for_yes} ;;
-
   }
-
 
 #########################################################
 # DIMENSIONS: Order Details
@@ -141,13 +144,15 @@ view: +sales_invoices__lines {
 #{
 # Fiscal Dates extended from otc_common_fiscal_gl_dates_ext and grouped under Ledger Date.
 
-  dimension_group: ledger {hidden: no}
+  dimension_group: ledger {
+    hidden: no
+    description: "Date when the invoice line was applied to the ledger"
+  }
 
   dimension_group: creation_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"
-    description: "Creation timestamp of record in Oracle source table"
     sql: ${TABLE}.CREATION_TS ;;
   }
 
@@ -155,7 +160,6 @@ view: +sales_invoices__lines {
     hidden: no
     timeframes: [raw, date, time]
     label: "Last Update"
-    description: "Last update timestamp of record in Oracle source table"
     sql: ${TABLE}.LAST_UPDATE_TS ;;
   }
 
@@ -171,7 +175,6 @@ view: +sales_invoices__lines {
   dimension: inventory_item_id {
     hidden: no
     label: "Item ID"
-    description: "Unique identifier for inventory item"
     value_format_name: id
     full_suggestions: yes
   }
@@ -204,7 +207,6 @@ view: +sales_invoices__lines {
     hidden: no
     group_label: "Quantities"
     label: "Quantity UoM"
-    description: "Unit of Measure for the Line Quantity"
     sql: UPPER(${TABLE}.QUANTITY_UOM) ;;
     full_suggestions: yes
   }
@@ -251,8 +253,6 @@ view: +sales_invoices__lines {
     hidden: no
     group_label: "Item Prices and Discounts"
     label: "Unit List Price (Source Currency)"
-    # sql: ROUND(${TABLE}.UNIT_LIST_PRICE,2) ;;
-    description: "Post-tax list price of item"
     value_format_name: decimal_2
   }
 
@@ -260,8 +260,6 @@ view: +sales_invoices__lines {
     hidden: no
     group_label: "Item Prices and Discounts"
     label: "Unit Selling Price (Source Currency)"
-    description: "Actual price charged to customer, pre-tax"
-    # sql: ROUND(${TABLE}.UNIT_SELLING_PRICE,2) ;;
     value_format_name: decimal_2
   }
 
@@ -269,8 +267,6 @@ view: +sales_invoices__lines {
     hidden: no
     group_label: "Item Prices and Discounts"
     label: "Gross Unit Selling Price (Source Currency)"
-    description: "Actual price charged to customer, post-tax"
-    # sql: ROUND(${TABLE}.GROSS_UNIT_SELLING_PRICE,2) ;;
     value_format_name: decimal_2
   }
 
@@ -278,8 +274,6 @@ view: +sales_invoices__lines {
     hidden: no
     group_label: "Item Prices and Discounts"
     label: "Unit Discount Amount (Source Currency)"
-    description: "Post-tax unit list price minus post-tax unit selling price"
-    # sql: ROUND(${TABLE}.UNIT_DISCOUNT_PRICE,2) ;;
     value_format_name: decimal_2
   }
 
@@ -327,13 +321,13 @@ view: +sales_invoices__lines {
     hidden: no
     type: yesno
     group_label: "Item Prices and Discounts"
-    description: "Yes if line item was sold at a discounted price"
+    description: "Indicates whether the item was sold at a discounted price"
     sql: ${unit_discount_price} <> 0 ;;
     full_suggestions: yes
   }
 
   dimension: is_discount_selling_price_with_symbols {
-    hidden: no
+    hidden: yes
     type: string
     group_label: "Item Prices and Discounts"
     description: "✅ if line item was sold at a discounted price"
@@ -375,14 +369,12 @@ view: +sales_invoices__lines {
   dimension: transaction_amount {
     group_label: "Amounts"
     label: "Invoice Amount (Source Currency)"
-    description: "Invoice line amount in source currency"
     value_format_name: decimal_2
   }
 
   dimension: tax_amount {
     group_label: "Amounts"
     label: "Tax Amount (Source Currency)"
-    description: "Tax amount associated with the transaction line"
     value_format_name: decimal_2
   }
 
@@ -425,8 +417,8 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    sql: ${tax_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     description: "Tax amount in target currency associated with the transaction line"
+    sql: ${tax_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
@@ -434,8 +426,8 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    sql: ${discount_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     description: "Item Invoiced Quantity * Unit Discount Price in target currency"
+    sql: ${discount_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
 
@@ -448,6 +440,7 @@ view: +sales_invoices__lines {
   measure: invoice_line_count {
     hidden: no
     type: count
+    description: "Distinct count of invoice lines"
     drill_fields: [invoice_line_details*]
   }
 

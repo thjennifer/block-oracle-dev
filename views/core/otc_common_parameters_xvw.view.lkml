@@ -37,6 +37,7 @@ view: otc_common_parameters_xvw {
     hidden: no
     type: string
     label: "Target Currency"
+    description: "When converting amounts, choose the desired currency"
     suggest_explore: currency_rate_md
     suggest_dimension: currency_rate_md.to_currency
     default_value: "USD"

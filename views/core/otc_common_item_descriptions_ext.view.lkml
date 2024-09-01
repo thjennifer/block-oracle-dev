@@ -22,6 +22,7 @@ view: otc_common_item_descriptions_ext {
     group_label: "{%- assign v = _view._name -%}
                   {%- assign group_c = 'sales_orders__lines||sales_invoices__lines' | split: '||' -%}
                   {%- if group_c contains v -%}Item Categories & Descriptions{%- endif -%}"
+    description: "Item description text"
     sql: {%- assign v = _view._name -%}
          {%- assign group_b = 'sales_orders__lines__item_descriptions||sales_invoices__lines__item_descriptions||item_md__item_descriptions' | split: '||' -%}
          {%- assign group_c = 'sales_orders__lines||sales_invoices__lines' | split: '||' -%}
@@ -42,6 +43,7 @@ view: otc_common_item_descriptions_ext {
     group_label: "{%- assign v = _view._name -%}
                   {%- assign group_c = 'sales_orders__lines||sales_invoices__lines' | split: '||' -%}
                   {%- if group_c contains v -%}Item Categories & Descriptions{%- endif -%}"
+    description: "Language code of the item description"
     sql: {%- assign v = _view._name -%}
          {%- assign group_b = 'sales_orders__lines__item_descriptions||sales_invoices__lines__item_descriptions||item_md__item_descriptions' | split: '||' -%}
          {%- assign group_c = 'sales_orders__lines||sales_invoices__lines' | split: '||' -%}

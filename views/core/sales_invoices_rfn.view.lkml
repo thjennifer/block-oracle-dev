@@ -35,7 +35,6 @@ view: +sales_invoices {
   dimension: invoice_id {
     hidden: no
     primary_key: yes
-    description: "Distinct ID of invoice"
     value_format_name: id
   }
 
@@ -56,7 +55,6 @@ view: +sales_invoices {
 
   dimension: ledger_id {
     hidden: no
-    description: "ID of ledger or set of books"
     value_format_name: id
   }
 
@@ -103,47 +101,45 @@ view: +sales_invoices {
     hidden: no
   }
 
-#--> invoice month_num, quarter_num and year_num in table so
-#--> adding to Invoice Date group label to appear with other dates
+#--> invoice month_num, quarter_num and year_num in table rather than derived
+#--> so adding to Invoice Date group label to appear with other dates
   dimension: invoice_month_num {
     hidden: no
     group_label: "Invoice Date"
     group_item_label: "Month Number"
-    description: "Invoice Month as Number 1 to 12"
+    description: "Invoice month as number 1 to 12"
   }
 
   dimension: invoice_quarter_num {
     hidden: no
     group_label: "Invoice Date"
     group_item_label: "Quarter Number"
-    description: "Invoice Quarter as Number 1 to 4"
+    description: "Invoice quarter as number 1 to 4"
   }
 
   dimension: invoice_year_num {
     hidden: no
     group_label: "Invoice Date"
     group_item_label: "Year Number"
-    description: "Invoice Year as Integer"
+    description: "Invoice year as integer"
     value_format_name: id
   }
 
   dimension_group: exchange {
     hidden: no
-    description: "Date the exchange rate is calculated. If missing, invoice date is used"
+    description: "Date that the exchange rate is calculated. If missing, invoice date is used"
   }
 
   dimension_group: creation_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"
-    description: "Creation timestamp of record in Oracle source table"
   }
 
   dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Last Update"
-    description: "Last update timestamp of record in Oracle source table"
   }
 
 #} end dates
@@ -179,7 +175,6 @@ view: +sales_invoices {
 
   dimension: is_complete {
     hidden: no
-    description: "Yes if invoice is complete else No"
   }
 
   dimension: is_complete_with_symbols {
@@ -201,7 +196,6 @@ view: +sales_invoices {
     hidden: no
     group_label: "Currency Conversion"
     label: "Currency (Source)"
-    description: "{%- assign v = _view._name | split: '_' -%}Currency of the {{v[1] | remove: 's' | append: '.'}}"
   }
 
   dimension: currency_conversion_rate {
@@ -249,7 +243,7 @@ view: +sales_invoices {
     type: number
     group_label: "Invoice Totals"
     label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Revenue Amount' -%}@{label_currency_if_selected}"
-    description: "Total amount recognized as revenue for accounting purposes for the entire invoice (in target currency)"
+    description: "Total amount in target currency recognized as revenue for accounting purposes across all invoice lines"
     sql: ${total_revenue_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -259,7 +253,7 @@ view: +sales_invoices {
     type: number
     group_label: "Invoice Totals"
     label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Tax Amount' -%}@{label_currency_if_selected}"
-    description: "Total tax amount of invoice in target currency"
+    description: "Total tax amount in target currency across all invoice lines"
     sql: ${total_tax_amount} * ${currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -269,7 +263,7 @@ view: +sales_invoices {
     type: number
     group_label: "Invoice Totals"
     label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
-    description: "Total transaction amount of invoice in target currency"
+    description: "Total transaction amount in target currency across all invoice lines"
     sql: ${total_transaction_amount} * ${currency_conversion_rate}   ;;
     value_format_name: decimal_2
   }
@@ -283,6 +277,7 @@ view: +sales_invoices {
   measure: invoice_count {
     hidden: no
     type: count
+    description: "Distinct count of invoices"
     drill_fields: [invoice_header_details*]
   }
 
@@ -290,6 +285,7 @@ view: +sales_invoices {
   measure: invoice_count_formatted {
     hidden: no
     type: number
+    description: "Distinct count of invoices formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${invoice_count} ;;
     # group_label: "Formatted for Large Numbers"
     value_format_name: format_large_numbers_d1

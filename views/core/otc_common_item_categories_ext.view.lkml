@@ -25,6 +25,7 @@ view: otc_common_item_categories_ext {
     group_label: "{%- assign v = _view._name -%}
                   {%- assign group_c = 'sales_orders__lines||sales_invoices__lines' | split: '||' -%}
                   {%- if group_c contains v -%}Item Categories & Descriptions{%- endif -%}"
+    description: "Foreign key identifying item categories"
     sql: {%- assign v = _view._name -%}
          {%- assign group_a = 'sales_orders_daily_agg__lines||sales_invoices_daily_agg' | split: '||' -%}
          {%- assign group_b = 'sales_orders__lines__item_categories||sales_invoices__lines__item_categories||item_md__item_categories' | split: '||' -%}
@@ -48,6 +49,7 @@ view: otc_common_item_categories_ext {
     group_label: "{%- assign v = _view._name -%}
                   {%- assign group_c = 'sales_orders__lines||sales_invoices__lines' | split: '||' -%}
                   {%- if group_c contains v -%}Item Categories & Descriptions{%- endif -%}"
+    description: "Item category name"
     sql: {%- assign v = _view._name -%}
          {%- assign group_a = 'sales_orders_daily_agg__lines||sales_invoices_daily_agg' | split: '||' -%}
          {%- assign group_b = 'sales_orders__lines__item_categories||sales_invoices__lines__item_categories||item_md__item_categories' | split: '||' -%}
@@ -69,6 +71,7 @@ view: otc_common_item_categories_ext {
     group_label: "{%- assign v = _view._name -%}
                   {%- assign group_c = 'sales_orders__lines||sales_invoices__lines' | split: '||' -%}
                   {%- if group_c contains v -%}Item Categories & Descriptions{%- endif -%}"
+    description: "Item category description"
     sql: {%- assign v = _view._name -%}
          {%- assign group_a = 'sales_orders_daily_agg__lines||sales_invoices_daily_agg' | split: '||' -%}
          {%- assign group_b = 'sales_orders__lines__item_categories||sales_invoices__lines__item_categories||item_md__item_categories' | split: '||' -%}

@@ -26,40 +26,34 @@ view: otc_common_fiscal_gl_dates_ext {
     hidden: no
     group_label: "Fiscal Date"
     label: "Fiscal GL Period Name"
-    description: "Accounting period name"
   }
 
   dimension: fiscal_period_set_name {
     hidden: no
     group_label: "Fiscal Date"
-    description: "Accounting calendar name"
   }
 
   dimension: fiscal_period_type {
     hidden: no
     group_label: "Fiscal Date"
-    description: "Accounting period type"
   }
 
   dimension: fiscal_gl_period_num {
     hidden: no
     group_label: "Fiscal Date"
     label: "Fiscal GL Period Number"
-    description: "Fiscal GL period of the ledger date as an integer"
   }
 
   dimension: fiscal_gl_quarter_num {
     hidden: no
     group_label: "Fiscal Date"
     label: "Fiscal GL Quarter Number"
-    description: "Fiscal GL Quarter of the ledger date as an integer"
   }
 
   dimension: fiscal_gl_year_num {
     hidden: no
     group_label: "Fiscal Date"
     label: "Fiscal GL Year Number"
-    description: "Fiscal GL Year of the ledger date as an integer"
     value_format_name: id
   }
 
