@@ -42,7 +42,7 @@ include: "/views/core/otc_dashboard_navigation_ext.view"
 
 
 explore: sales_payments {
-
+  description: "Retrieve information about invoice payments including Amount Due Original, Amount Due Remaining, and other Account Receivable details."
   fields: [ALL_FIELDS*,-otc_common_parameters_xvw.parameter_language]
 
   always_filter: {

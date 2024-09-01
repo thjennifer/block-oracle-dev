@@ -15,6 +15,7 @@
 #   Explore sales_payments
 #
 # EXTENDED FIELDS
+#   fiscal_gl_date, fiscal_gl_period_name, etc...
 #   target_currency_code, is_incomplete_conversion, alert_note_for_incomplete_currency_conversion,
 #   total_amount_adjusted_target_currency, total_amount_applied_target_currency, etc...
 #
@@ -25,7 +26,7 @@
 #   Invoice ID will be populated when payment_class_code <> 'PMT'.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 # - Includes fields which reference CURRENCY_CONVERSION_SDT so this view must be included in the
-#   Sales Orders Explore.
+#   Sales Payments Explore.
 #########################################################}
 
 include: "/views/base/sales_payments.view"

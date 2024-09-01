@@ -1,8 +1,8 @@
 #########################################################{
 # PURPOSE
 # Provides daily payment totals by Business Unit, Bill To Customer, and Payment Class Code.
-# Also includes amounts including Amount Due Original, Amount Due Remaining, and other totals
-# in one or more Target Currencies.
+# Also includes amounts like Amount Due Original, Amount Due Remaining, and other totals
+# in one or more target currencies."
 #
 # SOURCES
 # base view: sales_payments_daily_agg
@@ -48,7 +48,7 @@ include: "/views/core/otc_dashboard_navigation_ext.view"
 
 explore: sales_payments_daily_agg {
   label: "Sales Payments Daily Aggregate"
-  description: "Provides daily payment totals by Business Unit, Bill To Customer, and Payment Class Code. Also includes amounts like including Amount Due Original, Amount Due Remaining, and other totals in one or more Target Currencies."
+  description: "Provides daily payment totals by Business Unit, Bill To Customer, and Payment Class Code. Also includes amounts like Amount Due Original, Amount Due Remaining, and other totals in one or more target currencies."
 
   fields: [ALL_FIELDS*,-otc_common_parameters_xvw.parameter_language]
 

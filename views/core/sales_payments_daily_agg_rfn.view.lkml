@@ -25,7 +25,7 @@
 # Includes repeated structs AMOUNTS (defined in separate views for unnesting):
 #     sales_payments_daily_agg__amounts - provides Total Amounts converted to Target Currencies
 #
-# CAVEATS
+# NOTES
 # - This view includes Payments related to Invoices, Cash Receipts, etc...
 #   Use payment_class_code (e.g., 'INV' vs. 'PMT') or is_payment_transaction to pick which to include.
 # - Amounts where target_currency matches the value of parameter_target_currency are defined in this view.

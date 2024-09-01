@@ -44,7 +44,7 @@ view: otc_common_currency_fields_ext {
                    {%- if v contains 'amounts' or v contains 'dso' -%}{%- else -%}Currency Conversion{%- endif -%}"
     description: "Yes, if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies"
     sql:  {%- assign v = _view._name -%}
-          {%- assign group_a = 'sales_orders_daily_agg__lines||sales_invoices_daily_agg||sales_payments_daily_agg' | split: '||' -%}
+          {%- assign group_a = 'sales_orders_daily_agg__lines||sales_invoices_daily_agg||sales_payments_daily_agg||sales_applied_receivables_daily_agg' | split: '||' -%}
           {%- if group_a contains v -%}
              (select MAX(IS_INCOMPLETE_CONVERSION) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code})
           {%- endif -%};;

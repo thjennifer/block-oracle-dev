@@ -32,9 +32,8 @@ include: "/views/core/sales_payments_common_amount_measures_ext.view"
 
 
 view: +sales_payments_daily_agg__amounts {
-
-  extends: [otc_common_currency_fields_ext, sales_payments_common_amount_measures_ext]
   fields_hidden_by_default: yes
+  extends: [otc_common_currency_fields_ext, sales_payments_common_amount_measures_ext]
 
   dimension: key {
     hidden: yes
