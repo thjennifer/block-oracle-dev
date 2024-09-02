@@ -8,6 +8,12 @@
 #
 # To use, extend into desired view.
 #
+# Define all but sql: property for amount dimensions:
+#   revenue_amount_target_currency
+#   transaction_amount_target_currency
+#   tax_amount_target_currency
+#   discount_amount_target_currency
+#
 # Fully defines these measures including sql: property
 # and link where applicable:
 #   total_transaction_amount_target_currency (labeled Total Invoice Amount)
@@ -21,8 +27,58 @@
 #   total_tax_amount_target_currency_formatted
 #########################################################}
 
-view: sales_invoices_common_amount_measures_ext {
+view: sales_invoices_common_amount_fields_ext {
   extension: required
+
+#########################################################
+# DIMENSIONS: Amounts
+#{
+# define all but SQL property
+
+  dimension: revenue_amount_target_currency {
+    hidden: yes
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of revenue amounts across all lines converted to target currency
+    {%- else -%}Amount recognized as revenue for accounting purposes converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: transaction_amount_target_currency {
+    hidden: yes
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of pre-tax transaction amounts across all lines converted to target currency
+    {%- else -%}Invoice line pre-tax transaction amount converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: tax_amount_target_currency {
+    hidden: yes
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of tax amounts across all lines converted to target currency
+    {%- else -%}Tax amount associated with the transaction line converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: discount_amount_target_currency {
+    hidden: yes
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of discount amounts across all lines converted to target currency
+    {%- else -%}Item Invoiced Quantity * Unit Discount Price in target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+#} end amount dimensions
 
 #########################################################
 # MEASURES: Amounts

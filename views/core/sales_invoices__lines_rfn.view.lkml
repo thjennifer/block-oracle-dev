@@ -9,7 +9,7 @@
 #   otc_common_fiscal_gl_dates_ext
 #   otc_common_item_descriptions_ext
 #   otc_common_item_categories_ext
-#   sales_invoices_common_amount_measures_ext
+#   sales_invoices_common_amount_fields_ext
 #
 # REFERENCED BY
 # Explore sales_invoices
@@ -39,10 +39,10 @@ include: "/views/base/sales_invoices__lines.view"
 include: "/views/core/otc_common_fiscal_gl_dates_ext.view"
 include: "/views/core/otc_common_item_descriptions_ext.view"
 include: "/views/core/otc_common_item_categories_ext.view"
-include: "/views/core/sales_invoices_common_amount_measures_ext.view"
+include: "/views/core/sales_invoices_common_amount_fields_ext.view"
 
 view: +sales_invoices__lines {
-  extends: [otc_common_fiscal_gl_dates_ext, otc_common_item_descriptions_ext, otc_common_item_categories_ext, sales_invoices_common_amount_measures_ext]
+  extends: [otc_common_fiscal_gl_dates_ext, otc_common_item_descriptions_ext, otc_common_item_categories_ext, sales_invoices_common_amount_fields_ext]
 
   fields_hidden_by_default: yes
 
@@ -350,7 +350,9 @@ view: +sales_invoices__lines {
 #########################################################
 # DIMENSIONS: Amounts
 #{
-# amounts hidden as measures are shown instead
+# hidden from explore because measures for each are defined.
+# other properties for _target_currency dimensions extended from sales_payments_common_amount_fields_ext
+
   dimension: revenue_amount {
     group_label: "Amounts"
     label: "Revenue Amount (Source Currency)"
@@ -387,12 +389,7 @@ view: +sales_invoices__lines {
   }
 
   dimension: revenue_amount_target_currency {
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Amount recognized as revenue for accounting purposes converted to target currency"
     sql: ${revenue_amount} * ${sales_invoices.currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
   dimension: gross_transaction_amount_target_currency {
@@ -405,30 +402,15 @@ view: +sales_invoices__lines {
   }
 
   dimension: transaction_amount_target_currency {
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
-    description: "Invoice line pre-tax transaction amount converted to target currency"
     sql: ${transaction_amount} * ${sales_invoices.currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
   dimension: tax_amount_target_currency {
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Tax amount associated with the transaction line converted to target currency"
     sql: ${tax_amount} * ${sales_invoices.currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
   dimension: discount_amount_target_currency {
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Item Invoiced Quantity * Unit Discount Price in target currency"
     sql: ${discount_amount} * ${sales_invoices.currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
 #} end amount dimensions
@@ -454,7 +436,7 @@ view: +sales_invoices__lines {
 #########################################################
 # MEASURES: Amounts
 #{
-# defined in and extended from sales_invoices_common_amount_measures_ext
+# defined in and extended from sales_invoices_common_amount_fields_ext
 # updated here for drill fields or links
 
   measure: total_transaction_amount_target_currency {

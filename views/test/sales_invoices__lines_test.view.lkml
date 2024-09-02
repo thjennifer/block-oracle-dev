@@ -1,5 +1,5 @@
 include: "/views/core/sales_invoices__lines_rfn.view"
-include: "/views/test/sales_invoices_common_amount_measures_ext_test.view"
+include: "/views/test/sales_invoices_common_amount_fields_ext_test.view"
 include: "/views/test/otc_common_item_categories_ext_test.view"
 
 view: +sales_invoices__lines {

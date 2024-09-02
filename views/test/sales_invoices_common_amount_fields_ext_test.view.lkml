@@ -1,6 +1,6 @@
-include: "/views/core/sales_invoices_common_amount_measures_ext.view"
+include: "/views/core/sales_invoices_common_amount_fields_ext.view"
 
-view: +sales_invoices_common_amount_measures_ext {
+view: +sales_invoices_common_amount_fields_ext {
     extension: required
 
 

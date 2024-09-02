@@ -59,7 +59,7 @@ view: sales_payments_common_amount_fields_ext {
 #{
 # define all but SQL property
   dimension: amount_adjusted_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
@@ -70,7 +70,7 @@ view: sales_payments_common_amount_fields_ext {
   }
 
   dimension: amount_applied_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
@@ -81,7 +81,7 @@ view: sales_payments_common_amount_fields_ext {
   }
 
   dimension: amount_credited_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
@@ -92,7 +92,7 @@ view: sales_payments_common_amount_fields_ext {
   }
 
   dimension: amount_discounted_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
@@ -103,7 +103,7 @@ view: sales_payments_common_amount_fields_ext {
   }
 
   dimension: amount_due_original_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
@@ -114,7 +114,7 @@ view: sales_payments_common_amount_fields_ext {
   }
 
   dimension: amount_due_remaining_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
@@ -136,7 +136,7 @@ view: sales_payments_common_amount_fields_ext {
   }
 
   dimension: tax_remaining_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Remaining' -%}@{label_currency_if_selected}"
@@ -147,7 +147,7 @@ view: sales_payments_common_amount_fields_ext {
   }
 
   dimension: overdue_receivables_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Past Due Receivables' -%}@{label_currency_if_selected}"
@@ -158,7 +158,7 @@ view: sales_payments_common_amount_fields_ext {
   }
 
   dimension: doubtful_receivables_target_currency {
-    hidden: no
+    hidden: yes
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"

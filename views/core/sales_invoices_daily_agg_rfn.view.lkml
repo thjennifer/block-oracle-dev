@@ -14,7 +14,7 @@
 #   Refines base view sales_invoices_daily_agg
 #   Extends view otc_common_item_categories_ext
 #   Extends view otc_common_currency_fields_ext
-#   Extends view sales_invoices_common_amount_measures_ext
+#   Extends view sales_invoices_common_amount_fields_ext
 #
 # REFERENCED BY
 #   Explore sales_invoices_daily_agg
@@ -36,13 +36,13 @@
 include: "/views/base/sales_invoices_daily_agg.view"
 include: "/views/core/otc_common_item_categories_ext.view"
 include: "/views/core/otc_common_currency_fields_ext.view"
-include: "/views/core/sales_invoices_common_amount_measures_ext.view"
+include: "/views/core/sales_invoices_common_amount_fields_ext.view"
 
 view: +sales_invoices_daily_agg {
 
   fields_hidden_by_default: yes
 
-  extends: [otc_common_item_categories_ext,otc_common_currency_fields_ext,sales_invoices_common_amount_measures_ext]
+  extends: [otc_common_item_categories_ext,otc_common_currency_fields_ext,sales_invoices_common_amount_fields_ext]
 
   dimension: key {
     hidden: yes
@@ -194,45 +194,22 @@ view: +sales_invoices_daily_agg {
 # DIMENSIONS: Amounts in Target Currency
 #{
 # amounts hidden as measures are shown instead
+# other field properties extended from sales_invoices_common_amount_fields_ext
 
   dimension: revenue_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Sum of revenue amounts across all lines converted to target currency"
     sql: (select SUM(TOTAL_REVENUE) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: transaction_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Amount'-%}@{label_currency_if_selected}"
-    description: "Sum of pre-tax transaction amounts across all lines converted to target currency"
     sql: (select SUM(TOTAL_REVENUE) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: tax_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Sum of tax amounts across all lines converted to target currency"
     sql: (select SUM(TOTAL_TAX) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: discount_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Sum of discount amounts across all lines converted to target currency"
     sql: (select SUM(TOTAL_DISCOUNT) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
 #} end amount dimensions

@@ -291,7 +291,7 @@ view: +sales_payments {
 # DIMENSIONS: Amounts
 #{
 # hidden from explore because measures for each are defined.
-# other properties for _target_currency dimensions extedned from sales_payments_common_amount_fields_ext
+# other properties for _target_currency dimensions extended from sales_payments_common_amount_fields_ext
 
   dimension: amount_adjusted {
     hidden: yes
