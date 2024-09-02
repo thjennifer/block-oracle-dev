@@ -9,7 +9,7 @@
 # Extends Views:
 #   otc_common_fiscal_gl_dates_ext
 #   otc_common_currency_fields_ext
-#   sales_payments_common_amount_measures_ext
+#   sales_payments_common_amount_fields_ext
 #
 # REFERENCED BY
 #   Explore sales_payments
@@ -32,11 +32,11 @@
 include: "/views/base/sales_payments.view"
 include: "/views/core/otc_common_fiscal_gl_dates_ext.view"
 include: "/views/core/otc_common_currency_fields_ext.view"
-include: "/views/core/sales_payments_common_amount_measures_ext.view"
+include: "/views/core/sales_payments_common_amount_fields_ext.view"
 
 
 view: +sales_payments {
-  extends: [otc_common_fiscal_gl_dates_ext,otc_common_currency_fields_ext,sales_payments_common_amount_measures_ext]
+  extends: [otc_common_fiscal_gl_dates_ext,otc_common_currency_fields_ext,sales_payments_common_amount_fields_ext]
   fields_hidden_by_default: yes
 
   dimension: payment_schedule_id {
@@ -291,6 +291,7 @@ view: +sales_payments {
 # DIMENSIONS: Amounts
 #{
 # hidden from explore because measures for each are defined.
+# other properties for _target_currency dimensions extedned from sales_payments_common_amount_fields_ext
 
   dimension: amount_adjusted {
     hidden: yes
@@ -349,103 +350,43 @@ view: +sales_payments {
   }
 
   dimension: amount_adjusted_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Amount adjusted in target currency"
     sql: ${amount_adjusted} * ${currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
   dimension: amount_applied_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Amount applied in target currency"
     sql: ${amount_applied} * ${currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
   dimension: amount_credited_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Amount credited in target currency"
     sql: ${amount_credited} * ${currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
   dimension: amount_discounted_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Amount discounted in target currency"
     sql: ${amount_discounted} * ${currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
   dimension: amount_due_original_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
     sql: ${amount_due_original} * ${currency_conversion_rate}  ;;
-    description: "Amount due originally in target currency"
-    value_format_name: decimal_2
   }
 
   dimension: amount_due_remaining_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Amount due remaining in target currency"
     sql: ${amount_due_remaining} * ${currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
   dimension: tax_original_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Original' -%}@{label_currency_if_selected}"
-    description: "Original tax amount charged on the transaction in target currency"
     sql: ${tax_original} * ${currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
   dimension: tax_remaining_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Remaining' -%}@{label_currency_if_selected}"
-    description: "Remaining tax amount charged on the transaction in target currency"
     sql: ${tax_remaining} * ${currency_conversion_rate}  ;;
-    value_format_name: decimal_2
   }
 
   dimension: overdue_receivables_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}{%- assign field_name = 'Past Due Receivables' -%}@{label_currency_if_selected}"
-    description: "Amount in target currency still remaining for open and overdue invoice"
     sql: IF(${is_payment_transaction}=FALSE AND ${is_open_and_overdue},${amount_due_remaining_target_currency},0)   ;;
-    value_format_name: decimal_2
   }
 
   dimension: doubtful_receivables_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Amount in target currency still remaining for invoice more than 90 days overdue"
     sql: IF(${is_payment_transaction}=FALSE AND ${is_doubtful},${amount_due_remaining_target_currency},0)   ;;
-    value_format_name: decimal_2
   }
 
 #} end amount dimensions
@@ -601,7 +542,7 @@ view: +sales_payments {
 #########################################################
 # MEASURES: Amounts in Target Currency
 #{
-# updates to measures extended from sales_payments_common_amount_measures_ext
+# updates to measures extended from sales_payments_common_amount_fields_ext
 # and/or new measures
 
 

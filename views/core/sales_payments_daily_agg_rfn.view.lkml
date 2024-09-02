@@ -11,7 +11,7 @@
 #   Refines base view sales_payments_daily_agg
 #   Extends views:
 #     otc_common_currency_fields_ext
-#     sales_payments_common_amount_measures_ext
+#     sales_payments_common_amount_fields_ext
 #   References sales_payments_daily_agg_test_data_sdt if test data is used
 #
 # REFERENCED BY
@@ -37,12 +37,12 @@
 
 include: "/views/base/sales_payments_daily_agg.view"
 include: "/views/core/otc_common_currency_fields_ext.view"
-include: "/views/core/sales_payments_common_amount_measures_ext.view"
+include: "/views/core/sales_payments_common_amount_fields_ext.view"
 include: "/views/core/sales_payments_daily_agg_test_data_sdt.view"
 
 
 view: +sales_payments_daily_agg {
-  extends: [otc_common_currency_fields_ext, sales_payments_common_amount_measures_ext]
+  extends: [otc_common_currency_fields_ext, sales_payments_common_amount_fields_ext]
   fields_hidden_by_default: yes
 
   sql_table_name: {%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}{%- if test_data == 'YES' -%}${sales_payments_daily_agg_test_data_sdt.SQL_TABLE_NAME}{%- else -%}`@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesPaymentsDailyAgg`{%- endif -%} ;;
@@ -140,105 +140,46 @@ view: +sales_payments_daily_agg {
 # DIMENSIONS: Amounts
 #{
 # amounts hidden as measures are shown instead
+# other field properties extended from sales_payments_common_amount_fields_ext
 
   dimension: amount_adjusted_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Sum of the amount adjusted across payments converted to target currency"
     sql: (select SUM(TOTAL_ADJUSTED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: amount_applied_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Sum of the amount applied across payments converted to target currency"
     sql: (select SUM(TOTAL_APPLIED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: amount_credited_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Sum of the amount credited across payments converted to target currency"
     sql: (select SUM(TOTAL_CREDITED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: amount_discounted_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Sum of the discount amount across payments converted to target currency"
     sql: (select SUM(TOTAL_DISCOUNTED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: amount_due_original_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Sum of the original amount due across payments converted to target currency"
     sql: (select SUM(TOTAL_ORIGINAL) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: amount_due_remaining_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Sum of the remaining amount due across payments converted to target currency"
     sql: (select SUM(TOTAL_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: tax_original_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Original'-%}@{label_currency_if_selected}"
-    description: "Sum of the original tax amount across payments converted to target currency"
     sql: (select SUM(TOTAL_TAX_ORIGINAL) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: tax_remaining_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Remaining'-%}@{label_currency_if_selected}"
-    description: "Sum of the remaining tax remaining across payments converted to target currency"
     sql: (select SUM(TOTAL_TAX_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: overdue_receivables_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}{%- assign field_name = 'Past Due Receivables'-%}@{label_currency_if_selected}"
-    description: "Sum of the overdue remaining amount due across payments converted to target currency"
     sql: (select SUM(TOTAL_OVERDUE_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: doubtful_receivables_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
-    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Sum of the doubtful overdue remaining amount across payments converted to target currency"
     sql: (select SUM(TOTAL_DOUBTFUL_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
 #} end amount dimensions

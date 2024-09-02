@@ -1,12 +1,24 @@
 #########################################################{
 # PURPOSE
-# Provide the same labels/descriptions and/or definitions for measures
-# used in:
+# Provide the same labels/descriptions and/or definitions for
+# target currency fields used in:
 #     sales_payments
 #     sales_payments_daily_agg
 #     sales_payments_daily_agg__amounts
 #
 # To use, extend into the desired view.
+#
+# Define all but sql: property for amount dimensions:
+#   amount_adjusted_target_currency
+#   amount_applied_target_currency
+#   amount_credited_target_currency
+#   amount_discounted_target_currency
+#   amount_due_original_target_currency
+#   amount_due_remaining_target_currency
+#   tax_original_target_currency
+#   tax_remaining_target_currency
+#   overdue_receivables_target_currency
+#   doubtful_receivables_target_currency
 #
 # Fully defines these measures including sql: property:
 #   total_amount_adjusted_target_currency
@@ -39,8 +51,124 @@
 #
 #########################################################}
 
-view: sales_payments_common_amount_measures_ext {
+view: sales_payments_common_amount_fields_ext {
   extension: required
+
+#########################################################
+# DIMENSIONS: Amounts
+#{
+# define all but SQL property
+  dimension: amount_adjusted_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of the amount adjusted across payments converted to target currency
+    {%- else -%}Amount adjusted converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: amount_applied_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of the amount applied across payments converted to target currency
+    {%- else -%}Amount applied converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: amount_credited_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of the amount credited across payments converted to target currency
+    {%- else -%}Amount credited converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: amount_discounted_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of the amount discounted across payments converted to target currency
+    {%- else -%}Amount discounted converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: amount_due_original_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of the amount due originally across payments converted to target currency
+    {%- else -%}Amount due originally converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: amount_due_remaining_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of the amount due remaining across payments converted to target currency
+    {%- else -%}Amount due remaining converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: tax_original_target_currency {
+    hidden: yes
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Original' -%}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of the original tax amount across payments converted to target currency
+    {%- else -%}Original tax amount charged on the transaction converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: tax_remaining_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Remaining' -%}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of the remaining tax amount across payments converted to target currency
+    {%- else -%}Remaining tax amount charged on the transaction converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: overdue_receivables_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}{%- assign field_name = 'Past Due Receivables' -%}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of the overdue remaining amount across payments converted to target currency
+    {%- else -%}Amount still remaining for open and overdue invoices converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+  dimension: doubtful_receivables_target_currency {
+    hidden: no
+    type: number
+    group_label: "Amounts"
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "{%- assign v = _view._name | split: '_' -%}
+    {%- if v contains 'agg' -%}Sum of the doubtful overdue remaining amount across payments converted to target currency
+    {%- else -%}Amount still remaining for invoices more than 90 days overdue converted to target currency{%- endif -%}"
+    value_format_name: decimal_2
+  }
+
+#} end amount dimensions
 
 #########################################################
 # MEASURES: Amounts
