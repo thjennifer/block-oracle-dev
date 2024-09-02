@@ -53,7 +53,7 @@ view: otc_common_currency_fields_ext {
   measure: alert_note_for_incomplete_currency_conversion {
     hidden: no
     type: max
-    description: "Provides a note in html when a source currency could not be converted to target currency. Add this measure to a table or single value visualization to alert users that amounts in target currency may be understated"
+    description: "Provides a note in HTML when a source currency could not be converted to target currency. Add this measure to a table or single value visualization to alert users that amounts in target currency may be understated"
     sql: ${is_incomplete_conversion} ;;
     html: {% if value == true %}<span style='color: red; font-size: 16px;'>&#9888; </span> For time frame and target currency selected, some source currencies could not be converted to the target currency. Reported amounts may be understated. Please confirm Currency Conversion table is up-to-date.{% else %}{%endif%} ;;
   }

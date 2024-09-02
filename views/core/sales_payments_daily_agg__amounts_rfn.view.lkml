@@ -43,12 +43,14 @@ view: +sales_payments_daily_agg__amounts {
 
   dimension: target_currency_code {
     #label: defined in otc_common_currency_fields_ext
+    description:  "Code indicating the target currency into which the source currency is converted"
     sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
     full_suggestions: yes
   }
 
   dimension: is_incomplete_conversion {
     #label: defined in otc_common_currency_fields_ext
+    description: "Indicates whether some of the source currency amounts could not be converted into the target currency because of missing conversion rates from CurrencyRateMD. If yes, should check if CurrencyRateMD table is missing any dates or currencies"
     sql: COALESCE(${TABLE}.IS_INCOMPLETE_CONVERSION,FALSE) ;;
     full_suggestions: yes
   }
@@ -65,6 +67,7 @@ view: +sales_payments_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the amount adjusted across payments converted to target currency"
     sql: ${total_adjusted}  ;;
     value_format_name: decimal_2
   }
@@ -74,6 +77,7 @@ view: +sales_payments_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the amount applied across payments converted to target currency"
     sql: ${total_applied}  ;;
     value_format_name: decimal_2
   }
@@ -83,6 +87,7 @@ view: +sales_payments_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the amount credited across payments converted to target currency"
     sql: ${total_credited}  ;;
     value_format_name: decimal_2
   }
@@ -92,6 +97,7 @@ view: +sales_payments_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the discount amount across payments converted to target currency"
     sql: ${total_discounted}  ;;
     value_format_name: decimal_2
   }
@@ -101,6 +107,7 @@ view: +sales_payments_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the original amount due across payments converted to target currency"
     sql: ${total_original}  ;;
     value_format_name: decimal_2
   }
@@ -110,6 +117,7 @@ view: +sales_payments_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the remaining amount due across payments converted to target currency"
     sql: ${total_remaining}  ;;
     value_format_name: decimal_2
   }
@@ -119,6 +127,7 @@ view: +sales_payments_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Original'-%}@{label_currency_if_selected}"
+    description: "Sum of the original tax amount across payments converted to target currency"
     sql: ${total_tax_original}  ;;
     value_format_name: decimal_2
   }
@@ -128,6 +137,7 @@ view: +sales_payments_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Remaining'-%}@{label_currency_if_selected}"
+    description: "Sum of the remaining tax remaining across payments converted to target currency"
     sql: ${total_tax_remaining}  ;;
     value_format_name: decimal_2
   }
@@ -137,6 +147,7 @@ view: +sales_payments_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Past Due Receivables'-%}@{label_currency_if_selected}"
+    description: "Sum of the overdue remaining amount due across payments converted to target currency"
     sql: ${total_overdue_remaining}   ;;
     value_format_name: decimal_2
   }
@@ -146,6 +157,7 @@ view: +sales_payments_daily_agg__amounts {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the doubtful overdue remaining amount across payments converted to target currency"
     sql: ${total_doubtful_remaining}   ;;
     value_format_name: decimal_2
   }

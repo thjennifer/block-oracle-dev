@@ -55,12 +55,11 @@ view: +sales_payments_daily_agg {
 
    dimension: payment_class_code {
     hidden: no
-    description: "Class of payment including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee, BR - Bills Receivable, CB - Chargeback, PMT - cash receipts,"
+    description: "Class of payment including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee, BR - Bills Receivable, CB - Chargeback, and PMT - cash receipts"
   }
 
   dimension: is_payment_transaction {
     hidden: no
-    description: "Yes if Payment Class Code = 'PMT' else No"
   }
 
   dimension: business_unit_id {
@@ -116,21 +115,21 @@ view: +sales_payments_daily_agg {
     hidden: no
     group_label: "Transaction Date"
     group_item_label: "Month Number"
-    description: "Transaction Month as Number 1 to 12"
+    description: "Transaction month as number 1 to 12"
   }
 
   dimension: transaction_quarter_num {
     hidden: no
     group_label: "Transaction Date"
     group_item_label: "Quarter Number"
-    description: "Transaction Quarter as Number 1 to 4"
+    description: "Transaction qarter as number 1 to 4"
   }
 
   dimension: transaction_year_num {
     hidden: no
     group_label: "Transaction Date"
     group_item_label: "Year Number"
-    description: "Transaction Year as Integer"
+    description: "Transaction year as integer"
     value_format_name: id
   }
 
@@ -147,6 +146,7 @@ view: +sales_payments_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the amount adjusted across payments converted to target currency"
     sql: (select SUM(TOTAL_ADJUSTED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -156,6 +156,7 @@ view: +sales_payments_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the amount applied across payments converted to target currency"
     sql: (select SUM(TOTAL_APPLIED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -165,6 +166,7 @@ view: +sales_payments_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the amount credited across payments converted to target currency"
     sql: (select SUM(TOTAL_CREDITED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -174,6 +176,7 @@ view: +sales_payments_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the discount amount across payments converted to target currency"
     sql: (select SUM(TOTAL_DISCOUNTED) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -183,6 +186,7 @@ view: +sales_payments_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the original amount due across payments converted to target currency"
     sql: (select SUM(TOTAL_ORIGINAL) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -192,6 +196,7 @@ view: +sales_payments_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the remaining amount due across payments converted to target currency"
     sql: (select SUM(TOTAL_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -201,6 +206,7 @@ view: +sales_payments_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Original'-%}@{label_currency_if_selected}"
+    description: "Sum of the original tax amount across payments converted to target currency"
     sql: (select SUM(TOTAL_TAX_ORIGINAL) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -210,6 +216,7 @@ view: +sales_payments_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Tax Amount Remaining'-%}@{label_currency_if_selected}"
+    description: "Sum of the remaining tax remaining across payments converted to target currency"
     sql: (select SUM(TOTAL_TAX_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -219,6 +226,7 @@ view: +sales_payments_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Past Due Receivables'-%}@{label_currency_if_selected}"
+    description: "Sum of the overdue remaining amount due across payments converted to target currency"
     sql: (select SUM(TOTAL_OVERDUE_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -228,6 +236,7 @@ view: +sales_payments_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of the doubtful overdue remaining amount across payments converted to target currency"
     sql: (select SUM(TOTAL_DOUBTFUL_REMAINING) FROM ${TABLE}.AMOUNTS WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -240,6 +249,7 @@ view: +sales_payments_daily_agg {
   measure: transaction_count {
     hidden: no
     type: sum
+    description: "Total number of payments"
     sql: ${num_payments} ;;
     value_format_name: decimal_0
   }
@@ -247,6 +257,7 @@ view: +sales_payments_daily_agg {
   measure: closed_transaction_count {
     hidden: no
     type: sum
+    description: "Total number of closed transactions"
     sql: ${num_closed_payments} ;;
     value_format_name: decimal_0
   }
@@ -254,6 +265,7 @@ view: +sales_payments_daily_agg {
   measure: invoice_closed_transaction_count {
     hidden: no
     type: sum
+    label: "Closed Invoice Payment Count"
     description: "For Invoice payment class code, the number of closed payments"
     sql: ${num_closed_payments} ;;
     filters: [payment_class_code: "INV"]

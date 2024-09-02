@@ -56,24 +56,23 @@ view: +sales_payments {
 
   dimension: payment_class_code {
     hidden: no
-    description: "Class of payment including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee, BR - Bills Receivable, CB - Chargeback, PMT - cash receipts,"
+    description: "Class of payment including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee, BR - Bills Receivable, CB - Chargeback, and PMT - cash receipts"
   }
 
   dimension: is_payment_transaction {
     hidden: no
-    description: "Yes if Payment Class Code = 'PMT' else No."
   }
 
   dimension: cash_receipt_id {
     hidden: no
     label: "Receipt ID"
-    description: "Cash Receipt ID associated with transaction. Note, value will only be populated when payment class code = 'PMT'."
+    description: "Foreign key identifying the associated cash receipt for payment transactions. Note, value will only be populated when payment class code = 'PMT'."
     value_format_name: id
   }
 
   dimension: invoice_id {
     hidden: no
-    description: "Invoice ID associated with transaction. Note, value will be null when payment class code = 'PMT'."
+    description: "Foreign key identifying the associated invoice for non-payment transactions. Note, value will be null when payment class code = 'PMT'."
     value_format_name: id
   }
 
@@ -84,7 +83,6 @@ view: +sales_payments {
 
   dimension: ledger_id {
     hidden: no
-    description: "ID of ledger or set of books"
     value_format_name: id
   }
 
@@ -92,7 +90,6 @@ view: +sales_payments {
     hidden: no
     description: "Name of ledger or set of books"
   }
-
 
 #########################################################
 # DIMENSIONS: Customer
@@ -136,26 +133,27 @@ view: +sales_payments {
     hidden: no
     group_label: "Transaction Date"
     group_item_label: "Month Number"
-    description: "Transaction Month as Number 1 to 12"
+    description: "Transaction month as number 1 to 12"
   }
 
   dimension: transaction_quarter_num {
     hidden: no
     group_label: "Transaction Date"
     group_item_label: "Quarter Number"
-    description: "Transaction Quarter as Number 1 to 4"
+    description: "Transaction quarter as number 1 to 4"
   }
 
   dimension: transaction_year_num {
     hidden: no
     group_label: "Transaction Date"
     group_item_label: "Year Number"
-    description: "Transaction Year as Integer"
+    description: "Transaction year as integer"
     value_format_name: id
   }
 
   dimension_group: ledger {
     hidden: no
+    description: "Date when the payment transaction was applied to the ledger"
   }
 
   dimension_group: due {
@@ -164,7 +162,7 @@ view: +sales_payments {
 
   dimension_group: exchange {
     hidden: no
-    description: "Date to use for exchange rate calculation. If the exchange date is not populated, the transaction date is used."
+    description: "Date that the exchange rate is calculated. If missing, transaction date is used"
   }
 
   dimension_group: payment_close {
@@ -175,14 +173,12 @@ view: +sales_payments {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"
-    description: "Creation timestamp of record in Oracle source table"
   }
 
   dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Last Update"
-    description: "Last update timestamp of record in Oracle source table"
   }
 
 #} end dates
@@ -200,6 +196,7 @@ view: +sales_payments {
   dimension: is_closed {
     hidden: no
     group_label: "Payment Status"
+    description: "Indicates if payment is closed (i.e., payment close date is not null)"
     type: yesno
     sql: ${payment_close_date} IS NOT NULL ;;
   }
@@ -208,7 +205,6 @@ view: +sales_payments {
   dimension: is_open_and_overdue {
     hidden: no
     group_label: "Payment Status"
-    description: "Yes if due date < current date and amount due remaining > 0 else No"
     sql:  {%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}
           {%- if test_data == 'YES' -%}
              ${due_raw} < DATE(@{default_target_date}) AND ${is_open}
@@ -220,7 +216,6 @@ view: +sales_payments {
   dimension: is_doubtful {
     hidden: no
     group_label: "Payment Status"
-    description: "Yes if 'Is Open and Overdue' = Yes and 'Days Overdue' > 90 else No"
     sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
          {% if test_data == 'YES' %}
             ${days_overdue} > 90 AND ${is_open}
@@ -231,7 +226,6 @@ view: +sales_payments {
   dimension: was_closed_late {
     hidden: no
     group_label: "Payment Status"
-    description: "Yes if payment is closed (amount due remaining = 0) and Due < Payment Close Date else No"
   }
 
 #} end status dimensions
@@ -244,7 +238,7 @@ view: +sales_payments {
 #--> if test data is used, re-compute using the target end date of the test dataset.
   dimension: days_overdue {
     hidden: yes
-    description: "If open and overdue, number of days past due date"
+    # description: "If open and overdue, number of days past due date"
     sql: {% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
          {% if test_data == 'YES' %}
              IF(${is_open_and_overdue},DATE_DIFF(DATE(@{default_target_date}), ${due_raw}, DAY),NULL)
@@ -254,12 +248,12 @@ view: +sales_payments {
 
   dimension: days_late {
     hidden: yes
-    description: "If payment was closed late, number of days after the due date the payment closed"
+    # description: "If payment was closed late, number of days after the due date the payment closed"
   }
 
   dimension: days_to_payment {
     hidden: yes
-    description: "For payment class code = INV, the number of days between payment close date and invoice date"
+    # description: "For payment class code = INV, the number of days between payment close date and invoice date"
   }
 
 
@@ -275,7 +269,6 @@ view: +sales_payments {
     hidden: no
     group_label: "Currency Conversion"
     label: "Currency (Source)"
-    description: "{%- assign v = _view._name | split: '_' -%}Currency of the {{v[1] | remove: 's' | append: '.'}}"
   }
 
   dimension: currency_conversion_rate {
@@ -303,7 +296,6 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Adjusted (Source Currency)"
-    description: "Amount adjusted"
     value_format_name: decimal_2
   }
 
@@ -311,7 +303,6 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Applied (Source Currency)"
-    description: "Amount applied"
     value_format_name: decimal_2
   }
 
@@ -319,7 +310,6 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Credited (Source Currency)"
-    description: "Amount credited"
     value_format_name: decimal_2
   }
 
@@ -327,7 +317,6 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Discounted (Source Currency)"
-    description: "Amount discounted"
     value_format_name: decimal_2
   }
 
@@ -335,7 +324,6 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Due Original (Source Currency)"
-    description: "Amount due originally"
     value_format_name: decimal_2
   }
 
@@ -343,7 +331,6 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Amount Due Remaining (Source Currency)"
-    description: "Amount due remaining"
     value_format_name: decimal_2
   }
 
@@ -351,7 +338,6 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Tax Amount Original (Source Currency)"
-    description: "Original tax amount charged on the transaction"
     value_format_name: decimal_2
   }
 
@@ -359,7 +345,6 @@ view: +sales_payments {
     hidden: yes
     group_label: "Amounts"
     label: "Tax Amount Remaining (Source Currency)"
-    description: "Remaining tax amount charged on the transaction"
     value_format_name: decimal_2
   }
 
@@ -471,12 +456,14 @@ view: +sales_payments {
   measure: transaction_count {
     hidden: no
     type: count
+    description: "Distinct count of transactions"
     drill_fields: [payment_details*]
   }
 
   measure: closed_transaction_count {
     hidden: no
     type: count
+    description: "Distinct count of closed transactions"
     filters: [is_closed: "Yes"]
     drill_fields: [payment_details*]
   }
@@ -484,7 +471,8 @@ view: +sales_payments {
   measure: invoice_closed_transaction_count {
     hidden: no
     type: count
-    description: "For Invoice payment class code, the number of closed payments"
+    label: "Closed Invoice Payment Count"
+    description: "For Invoice payment class code, the number of closed payments (Payment Class Code = 'INV' and Is Closed = 'Yes')"
     filters: [is_closed: "Yes",payment_class_code: "INV"]
     drill_fields: [payment_details*]
   }
@@ -508,7 +496,7 @@ view: +sales_payments {
   measure: average_days_to_payment {
     hidden: no
     type: average
-    description: "Average number of days between payment close date and invoice date"
+    description: "For Invoice payment class code, the average number of days between payment close date and invoice date"
     sql: ${days_to_payment} ;;
     filters: [payment_class_code: "INV"]
     value_format_name: decimal_1

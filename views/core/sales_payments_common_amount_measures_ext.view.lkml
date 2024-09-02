@@ -170,6 +170,7 @@ view: sales_payments_common_amount_measures_ext {
   measure: percent_of_total_receivables {
     hidden: no
     type: percent_of_total
+    description: "Percent of total receivables (amount due remaining)"
     sql: ${total_receivables_target_currency} ;;
   }
 

@@ -61,7 +61,7 @@ explore: sales_payments {
   join: sales_payments_dynamic_aging_bucket_sdt {
     view_label: "Sales Payments"
     type: left_outer
-    sql_on: ${sales_payments.days_overdue} BETWEEN ${sales_payments_dynamic_aging_bucket_sdt.start_days} AND ${sales_payments_dynamic_aging_bucket_sdt.end_days} ;;
+    sql_on: COALESCE(${sales_payments.days_overdue},0) BETWEEN ${sales_payments_dynamic_aging_bucket_sdt.start_days} AND ${sales_payments_dynamic_aging_bucket_sdt.end_days} ;;
     relationship: many_to_one
   }
 

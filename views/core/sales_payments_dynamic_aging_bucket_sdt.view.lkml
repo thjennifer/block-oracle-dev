@@ -22,7 +22,7 @@
 #   '30 Days Past Due' and will include invoices that are between 1 and 30 days old. The following bucket will be called
 #   '60 Days Past Due' and will include invoices that are between 31 and 60 days old. And the third bucket will be called
 #   '61+ Days Past Due' and will include invoices greater than or equal to 61 days old.
-#   A 'Current' bucket where age is <=0 days will also be included.
+#   A 'Current' bucket for invoices 0 or fewer days overdue will also be included.
 #
 #########################################################}
 
@@ -52,6 +52,7 @@ view: sales_payments_dynamic_aging_bucket_sdt {
     type: number
     view_label: "@{label_view_for_filters}"
     label: "Aging Bucket: Number Days per Bucket"
+    description: "Specify the duration of each overdue age range in days. For instance, entering 30 will create ranges like 1 to 30 days, 31 to 60 days, and so on."
     default_value: "30"
   }
 
@@ -59,6 +60,7 @@ view: sales_payments_dynamic_aging_bucket_sdt {
     type: number
     view_label: "@{label_view_for_filters}"
     label: "Aging Bucket: Number of Ranges"
+    description: "Input the desired number of overdue age ranges. For instance, entering 4 will result in 4 overdue ranges. Additionally, a 'Current' category will be created to encompass invoices with 0 or fewer days overdue."
     default_value: "4"
   }
 
@@ -83,6 +85,7 @@ view: sales_payments_dynamic_aging_bucket_sdt {
   dimension: start_days {
     hidden: no
     group_label: "Aging Buckets"
+    description: "The minimum number of days overdue within the aging bucket"
     type: number
     sql: ${TABLE}.start_days ;;
   }
@@ -90,6 +93,7 @@ view: sales_payments_dynamic_aging_bucket_sdt {
   dimension: end_days {
     hidden: no
     group_label: "Aging Buckets"
+    description: "The maximum number of days overdue within the aging bucket"
     type: number
     sql: ${TABLE}.end_days ;;
   }
