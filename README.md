@@ -11,14 +11,15 @@ Jumpstart your Order-to-Cash (aka O2C, or OTC) analytics journey on BigQuery in 
 
 <h3> Order to Cash Operational Reports </h3>
 
-- **Order Status** - Overview of order-related metrics, including order volume, a breakdown of the order flow status from booking to billing,
-and an analysis of order status.
-- **Sales Performance** - Insights into top sales performers including items, categories, customers, business units, and order sources.
-- **Order Fulfillment** - Tracks fulfillment performance over time, highlighting items with the longest average order cycle time and those experiencing fulfillment challenges.
-- **Order Line Details** - View details of a subset of sales orders satisfying a set of filter criteria.  For example, see details of all blocked orders in a given time frame.
-- **Billing & Invoicing** - Overview of invoice volume and amounts including monthly trends. Also highlights customers with highest discounts.
-- **Accounts Receivables** - Analyzes current and overdue receivables, identifying customers with highest outstanding amounts and duration of overdue payments.
-- **Invoice Line Details** - View details of a subset of invoices satisfying a set of filter criteria.  For example, see details of all open invoices in a given time frame.
+| **Dashboard** | **Description**                            |
+|---------------|--------------------------------------------|
+| **Order Status** | Overview of order-related metrics, including order volume, a breakdown of the order flow status from booking to billing, and an analysis of order status. |
+| **Sales Performance** | Insights into top sales performers including items, categories, customers, business units, and order sources. |
+| **Order Fulfillment** | Tracks fulfillment performance over time, highlighting items with the longest average order cycle time and those experiencing fulfillment challenges. |
+| **Order Line Details** | View details of a subset of sales orders satisfying a set of filter criteria.  For example, see details of all blocked orders in a given time frame. |
+| **Billing & Invoicing** | Overview of invoice volume and amounts including monthly trends. Also highlights customers with highest discounts. |
+| **Accounts Receivables** | Analyzes current and overdue receivables, identifying customers with highest outstanding amounts and duration of overdue payments. |
+| **Invoice Line Details** | View details of a subset of invoices satisfying a set of filter criteria.  For example, see details of all open invoices in a given time frame. |
 
 <h2><span style="color:#2d7eea">Required Data</span></h2>
 
