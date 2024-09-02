@@ -28,9 +28,8 @@
 # Includes repeated structs AMOUNTS (defined in separate views for unnesting):
 #     sales_invoices_daily_agg__amounts - provides Total Amounts converted to Target Currencies by Item Categories & Item Organization
 #
-# CAVEATS
-# - Amounts where target_currency matches the value
-#   in parameter_target_currency are defined in this view.
+# NOTES
+# - Amounts where target_currency matches the value in parameter_target_currency are defined in this view.
 # - Fields hidden by default. Update field's 'hidden' property to show/hide.
 #########################################################}
 
@@ -169,21 +168,21 @@ view: +sales_invoices_daily_agg {
     hidden: no
     group_label: "Invoice Date"
     group_item_label: "Month Number"
-    description: "Invoice Month as Number 1 to 12"
+    description: "Invoice month as number 1 to 12"
   }
 
   dimension: invoice_quarter_num {
     hidden: no
     group_label: "Invoice Date"
     group_item_label: "Quarter Number"
-    description: "Invoice Quarter as Number 1 to 4"
+    description: "Invoice quarter as number 1 to 4"
   }
 
   dimension: invoice_year_num {
     hidden: no
     group_label: "Invoice Date"
     group_item_label: "Year Number"
-    description: "Invoice Year as Integer"
+    description: "Invoice year as integer"
     value_format_name: id
   }
 
@@ -201,6 +200,7 @@ view: +sales_invoices_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of revenue amounts across all lines converted to target currency"
     sql: (select SUM(TOTAL_REVENUE) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -210,6 +210,7 @@ view: +sales_invoices_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Amount'-%}@{label_currency_if_selected}"
+    description: "Sum of pre-tax transaction amounts across all lines converted to target currency"
     sql: (select SUM(TOTAL_REVENUE) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -219,6 +220,7 @@ view: +sales_invoices_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of tax amounts across all lines converted to target currency"
     sql: (select SUM(TOTAL_TAX) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
     value_format_name: decimal_2
   }
@@ -228,6 +230,7 @@ view: +sales_invoices_daily_agg {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Sum of discount amounts across all lines converted to target currency"
     sql: (select SUM(TOTAL_DISCOUNT) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
     value_format_name: decimal_2
   }

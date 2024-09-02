@@ -31,9 +31,9 @@ view: otc_common_currency_fields_ext {
   dimension: target_currency_code {
     hidden: no
     group_label: "{%- assign v = _view._name | split: '_' -%}
-                  {%- if v contains 'amounts' or v contains 'dso' -%}{%- else -%}Currency Conversion{%- endif -%}"
+                  {%- if v contains 'amounts' or v contains 'dso' or v contains 'agg' -%}{%- else -%}Currency Conversion{%- endif -%}"
     label: "Currency (Target)"
-    description:  "The target currency code represents the currency into which the source currency is converted"
+    description:  "Code indicating the target currency into which the source currency is converted"
     sql: {% parameter otc_common_parameters_xvw.parameter_target_currency %} ;;
   }
 
@@ -41,8 +41,8 @@ view: otc_common_currency_fields_ext {
     hidden: no
     type: yesno
     group_label: "{%- assign v = _view._name | split: '_' -%}
-                   {%- if v contains 'amounts' or v contains 'dso' -%}{%- else -%}Currency Conversion{%- endif -%}"
-    description: "Yes, if any source currencies could not be converted into target currency for a given date. If yes, should confirm CurrencyRateMD table is complete and not missing any dates or currencies"
+                   {%- if v contains 'amounts' or v contains 'dso' or v contains 'agg' -%}{%- else -%}Currency Conversion{%- endif -%}"
+    description: "Indicates whether some of the source currency amounts could not be converted into the target currency because of missing conversion rates from CurrencyRateMD. If yes, should check if CurrencyRateMD table is missing any dates or currencies"
     sql:  {%- assign v = _view._name -%}
           {%- assign group_a = 'sales_orders_daily_agg__lines||sales_invoices_daily_agg||sales_payments_daily_agg||sales_applied_receivables_daily_agg' | split: '||' -%}
           {%- if group_a contains v -%}

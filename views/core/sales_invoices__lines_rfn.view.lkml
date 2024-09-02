@@ -390,7 +390,7 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Amount in target currency recognized as revenue for accounting purposes"
+    description: "Amount recognized as revenue for accounting purposes converted to target currency"
     sql: ${revenue_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -399,7 +399,7 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Gross Invoice Amount' -%}@{label_currency_if_selected}"
-    description: "Gross transaction amount with taxes and before any discounts in target currency"
+    description: "Gross transaction amount with taxes and before any discounts converted to target currency"
     sql: ${gross_transaction_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -408,7 +408,7 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}{%- assign field_name = 'Invoice Amount' -%}@{label_currency_if_selected}"
-    description: "Invoice line pre-tax transaction amount in target currency"
+    description: "Invoice line pre-tax transaction amount converted to target currency"
     sql: ${transaction_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }
@@ -417,7 +417,7 @@ view: +sales_invoices__lines {
     type: number
     group_label: "Amounts"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Tax amount in target currency associated with the transaction line"
+    description: "Tax amount associated with the transaction line converted to target currency"
     sql: ${tax_amount} * ${sales_invoices.currency_conversion_rate}  ;;
     value_format_name: decimal_2
   }

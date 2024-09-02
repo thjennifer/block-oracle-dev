@@ -182,7 +182,7 @@ view: sales_invoices__lines {
   }
   dimension: unit_discount_price {
     type: number
-    description: "Difference between the post-tax actual selling price and post-tax list price"
+    description: "Difference between the post-tax list price and post-tax actual selling price"
     sql: UNIT_DISCOUNT_PRICE ;;
   }
   dimension: unit_list_price {

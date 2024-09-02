@@ -1,147 +1,147 @@
 view: sales_invoices {
   sql_table_name: `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesInvoices` ;;
 
-  dimension: bill_to_customer_country {
-    type: string
-    description: "Billed customer country name"
-    sql: ${TABLE}.BILL_TO_CUSTOMER_COUNTRY ;;
-  }
-  dimension: bill_to_customer_name {
-    type: string
-    description: "Billed customer account name"
-    sql: ${TABLE}.BILL_TO_CUSTOMER_NAME ;;
-  }
-  dimension: bill_to_customer_number {
-    type: string
-    description: "Billed customer account number"
-    sql: ${TABLE}.BILL_TO_CUSTOMER_NUMBER ;;
-  }
-  dimension: bill_to_site_use_id {
-    type: number
-    description: "Foreign key identifying the Site Use entity that was billed to"
-    sql: ${TABLE}.BILL_TO_SITE_USE_ID ;;
-  }
-  dimension: business_unit_id {
-    type: number
-    description: "Foreign key identifying the business unit that performed this transaction"
-    sql: ${TABLE}.BUSINESS_UNIT_ID ;;
-  }
-  dimension: business_unit_name {
-    type: string
-    description: "Business unit name"
-    sql: ${TABLE}.BUSINESS_UNIT_NAME ;;
-  }
-  dimension_group: creation_ts {
-    type: time
-    description: "Timestamp when the header record was created in the source system"
-    timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.CREATION_TS ;;
-  }
-  dimension: currency_code {
-    type: string
-    description: "Code indicating the type of currency that the invoice was placed in"
-    sql: ${TABLE}.CURRENCY_CODE ;;
-  }
-  dimension_group: exchange {
-    type: time
-    description: "Date that the exchange rate is calculated"
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.EXCHANGE_DATE ;;
-  }
-  dimension_group: invoice {
-    type: time
-    description: "Date the invoice was created"
-    timeframes: [raw, date, week, month, quarter, year]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.INVOICE_DATE ;;
-  }
-  dimension: invoice_id {
-    type: number
-    description: "Primary key identifying the invoice header"
-    sql: ${TABLE}.INVOICE_ID ;;
-  }
-  dimension: invoice_month_num {
-    type: number
-    description: "Month the invoice was created"
-    sql: ${TABLE}.INVOICE_MONTH_NUM ;;
-  }
-  dimension: invoice_number {
-    type: string
-    description: "Invoice number"
-    sql: ${TABLE}.INVOICE_NUMBER ;;
-  }
-  dimension: invoice_quarter_num {
-    type: number
-    description: "Quarter the invoice was created"
-    sql: ${TABLE}.INVOICE_QUARTER_NUM ;;
-  }
-  dimension: invoice_type {
-    type: string
-    description: "Invoice type including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee"
-    sql: ${TABLE}.INVOICE_TYPE ;;
-  }
-  dimension: invoice_type_id {
-    type: number
-    description: "Foreign key identifying the invoice type"
-    sql: ${TABLE}.INVOICE_TYPE_ID ;;
-  }
-  dimension: invoice_type_name {
-    type: string
-    description: "Invoice type name"
-    sql: ${TABLE}.INVOICE_TYPE_NAME ;;
-  }
-  dimension: invoice_year_num {
-    type: number
-    description: "Year the invoice was created"
-    sql: ${TABLE}.INVOICE_YEAR_NUM ;;
-  }
-  dimension: is_complete {
-    type: yesno
-    description: "Indicates whether the invoice is complete"
-    sql: ${TABLE}.IS_COMPLETE ;;
-  }
-  dimension_group: last_update_ts {
-    type: time
-    description: "Timestamp when the header record was last updated in the source system"
-    timeframes: [raw, time, date, week, month, quarter, year]
-    sql: ${TABLE}.LAST_UPDATE_TS ;;
-  }
-  dimension: ledger_id {
-    type: number
-    description: "Foreign key identifying the ledger (set of books)"
-    sql: ${TABLE}.LEDGER_ID ;;
-  }
-  dimension: ledger_name {
-    type: string
-    description: "Ledger name"
-    sql: ${TABLE}.LEDGER_NAME ;;
-  }
-  dimension: lines {
-    hidden: yes
-    sql: ${TABLE}.LINES ;;
-  }
-  dimension: total_revenue_amount {
-    type: number
-    description: "Total revenue amount across all invoice lines"
-    sql: ${TABLE}.TOTAL_REVENUE_AMOUNT ;;
-  }
-  dimension: total_tax_amount {
-    type: number
-    description: "Total tax amount across all invoice lines"
-    sql: ${TABLE}.TOTAL_TAX_AMOUNT ;;
-  }
-  dimension: total_transaction_amount {
-    type: number
-    description: "Total transaction amount across all invoice lines"
-    sql: ${TABLE}.TOTAL_TRANSACTION_AMOUNT ;;
-  }
-  measure: count {
-    type: count
-    drill_fields: [ledger_name, business_unit_name, bill_to_customer_name, invoice_type_name]
-  }
+dimension: bill_to_customer_country {
+  type: string
+  description: "Billed customer country name"
+  sql: ${TABLE}.BILL_TO_CUSTOMER_COUNTRY ;;
+}
+dimension: bill_to_customer_name {
+  type: string
+  description: "Billed customer account name"
+  sql: ${TABLE}.BILL_TO_CUSTOMER_NAME ;;
+}
+dimension: bill_to_customer_number {
+  type: string
+  description: "Billed customer account number"
+  sql: ${TABLE}.BILL_TO_CUSTOMER_NUMBER ;;
+}
+dimension: bill_to_site_use_id {
+  type: number
+  description: "Foreign key identifying the Site Use entity that was billed to"
+  sql: ${TABLE}.BILL_TO_SITE_USE_ID ;;
+}
+dimension: business_unit_id {
+  type: number
+  description: "Foreign key identifying the business unit that performed this transaction"
+  sql: ${TABLE}.BUSINESS_UNIT_ID ;;
+}
+dimension: business_unit_name {
+  type: string
+  description: "Business unit name"
+  sql: ${TABLE}.BUSINESS_UNIT_NAME ;;
+}
+dimension_group: creation_ts {
+  type: time
+  description: "Timestamp when the header record was created in the source system"
+  timeframes: [raw, time, date, week, month, quarter, year]
+  sql: ${TABLE}.CREATION_TS ;;
+}
+dimension: currency_code {
+  type: string
+  description: "Code indicating the type of currency that the invoice was placed in"
+  sql: ${TABLE}.CURRENCY_CODE ;;
+}
+dimension_group: exchange {
+  type: time
+  description: "Date that the exchange rate is calculated"
+  timeframes: [raw, date, week, month, quarter, year]
+  convert_tz: no
+  datatype: date
+  sql: ${TABLE}.EXCHANGE_DATE ;;
+}
+dimension_group: invoice {
+  type: time
+  description: "Date the invoice was created"
+  timeframes: [raw, date, week, month, quarter, year]
+  convert_tz: no
+  datatype: date
+  sql: ${TABLE}.INVOICE_DATE ;;
+}
+dimension: invoice_id {
+  type: number
+  description: "Primary key identifying the invoice header"
+  sql: ${TABLE}.INVOICE_ID ;;
+}
+dimension: invoice_month_num {
+  type: number
+  description: "Month the invoice was created"
+  sql: ${TABLE}.INVOICE_MONTH_NUM ;;
+}
+dimension: invoice_number {
+  type: string
+  description: "Invoice number"
+  sql: ${TABLE}.INVOICE_NUMBER ;;
+}
+dimension: invoice_quarter_num {
+  type: number
+  description: "Quarter the invoice was created"
+  sql: ${TABLE}.INVOICE_QUARTER_NUM ;;
+}
+dimension: invoice_type {
+  type: string
+  description: "Invoice type including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee"
+  sql: ${TABLE}.INVOICE_TYPE ;;
+}
+dimension: invoice_type_id {
+  type: number
+  description: "Foreign key identifying the invoice type"
+  sql: ${TABLE}.INVOICE_TYPE_ID ;;
+}
+dimension: invoice_type_name {
+  type: string
+  description: "Invoice type name"
+  sql: ${TABLE}.INVOICE_TYPE_NAME ;;
+}
+dimension: invoice_year_num {
+  type: number
+  description: "Year the invoice was created"
+  sql: ${TABLE}.INVOICE_YEAR_NUM ;;
+}
+dimension: is_complete {
+  type: yesno
+  description: "Indicates whether the invoice is complete"
+  sql: ${TABLE}.IS_COMPLETE ;;
+}
+dimension_group: last_update_ts {
+  type: time
+  description: "Timestamp when the header record was last updated in the source system"
+  timeframes: [raw, time, date, week, month, quarter, year]
+  sql: ${TABLE}.LAST_UPDATE_TS ;;
+}
+dimension: ledger_id {
+  type: number
+  description: "Foreign key identifying the ledger (set of books)"
+  sql: ${TABLE}.LEDGER_ID ;;
+}
+dimension: ledger_name {
+  type: string
+  description: "Ledger name"
+  sql: ${TABLE}.LEDGER_NAME ;;
+}
+dimension: lines {
+  hidden: yes
+  sql: ${TABLE}.LINES ;;
+}
+dimension: total_revenue_amount {
+  type: number
+  description: "Total revenue amount across all invoice lines"
+  sql: ${TABLE}.TOTAL_REVENUE_AMOUNT ;;
+}
+dimension: total_tax_amount {
+  type: number
+  description: "Total tax amount across all invoice lines"
+  sql: ${TABLE}.TOTAL_TAX_AMOUNT ;;
+}
+dimension: total_transaction_amount {
+  type: number
+  description: "Total transaction amount across all invoice lines"
+  sql: ${TABLE}.TOTAL_TRANSACTION_AMOUNT ;;
+}
+measure: count {
+  type: count
+  drill_fields: [ledger_name, business_unit_name, bill_to_customer_name, invoice_type_name]
+}
 }
 
 # view: sales_invoices__lines {
@@ -164,6 +164,11 @@ view: sales_invoices {
 #     description: "Credited quantity"
 #     sql: CREDITED_QUANTITY ;;
 #   }
+#   dimension: fiscal_gl_period_name {
+#     type: string
+#     description: "Accounting period name"
+#     sql: FISCAL_GL_PERIOD_NAME ;;
+#   }
 #   dimension: fiscal_gl_period_num {
 #     type: number
 #     description: "Accounting period based on the ledger date"
@@ -178,11 +183,6 @@ view: sales_invoices {
 #     type: number
 #     description: "Accounting year based on the ledger date"
 #     sql: FISCAL_GL_YEAR_NUM ;;
-#   }
-#   dimension: fiscal_period_name {
-#     type: string
-#     description: "Accounting period name"
-#     sql: FISCAL_PERIOD_NAME ;;
 #   }
 #   dimension: fiscal_period_set_name {
 #     type: string
@@ -271,6 +271,11 @@ view: sales_invoices {
 #     description: "Foreign key identifying the order header"
 #     sql: ORDER_HEADER_ID ;;
 #   }
+#   dimension: order_header_number {
+#     type: number
+#     description: "Order header number"
+#     sql: ORDER_HEADER_NUMBER ;;
+#   }
 #   dimension: order_source_id {
 #     type: number
 #     description: "Foreign key identifying the order source"
@@ -322,7 +327,7 @@ view: sales_invoices {
 #   }
 #   dimension: unit_discount_price {
 #     type: number
-#     description: "Difference between the post-tax actual selling price and post-tax list price"
+#     description: "Difference between the post-tax list price and post-tax actual selling price"
 #     sql: UNIT_DISCOUNT_PRICE ;;
 #   }
 #   dimension: unit_list_price {
