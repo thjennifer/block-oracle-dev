@@ -13,7 +13,7 @@
 # Extends views:
 #   otc_common_item_categories_ext
 #   otc_common_currency_fields_ext
-#   sales_orders_common_amount_measures_ext
+#   sales_orders_common_amount_fields_ext
 #
 # REFERENCED BY
 # Explore sales_orders_daily_agg
@@ -38,18 +38,15 @@
 #
 #########################################################}
 
-
 include: "/views/base/sales_orders_daily_agg__lines.view"
 include: "/views/core/otc_common_item_categories_ext.view"
 include: "/views/core/otc_common_currency_fields_ext.view"
-include: "/views/core/sales_orders_common_amount_measures_ext.view"
-
-
+include: "/views/core/sales_orders_common_amount_fields_ext.view"
 
 view: +sales_orders_daily_agg__lines {
   fields_hidden_by_default: yes
   label: "Sales Orders Daily Agg: Item Categories"
-  extends: [otc_common_item_categories_ext, otc_common_currency_fields_ext, sales_orders_common_amount_measures_ext]
+  extends: [otc_common_item_categories_ext, otc_common_currency_fields_ext, sales_orders_common_amount_fields_ext]
 
   dimension: key {
     hidden: yes
@@ -66,7 +63,7 @@ view: +sales_orders_daily_agg__lines {
   dimension: is_sales_order {
     hidden: yes
     type: yesno
-    description: "Line Category Code equals Order (and is not a return)"
+    description: "Indicates Line Category Code equals ORDER"
     sql: ${line_category_code} = 'ORDER' ;;
     full_suggestions: yes
   }
@@ -118,54 +115,31 @@ view: +sales_orders_daily_agg__lines {
 # Only the Amount for the Target Currency Code that matches the value
 # in otc_common_parameters_xvw.parameter_target_currency is returned.
 #
-# Dimensions hidden from Explore as Measures are shown instead
+# Dimensions hidden from Explore as Measures are shown instead.
+# Other field properties extended from sales_orders_common_amount_fields_ext
 
   dimension: ordered_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
     sql: (select SUM(TOTAL_ORDERED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: booking_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
     sql: (select SUM(TOTAL_BOOKING) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: backlog_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
     sql: (select SUM(TOTAL_BACKLOG) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: fulfilled_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
     sql: (select SUM(TOTAL_FULFILLED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: shipped_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
     sql: (select SUM(TOTAL_SHIPPED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code}) ;;
-    value_format_name: decimal_2
   }
 
   dimension: invoiced_amount_target_currency {
-    hidden: yes
-    type: number
-    group_label: "Amounts"
     sql: (select SUM(TOTAL_INVOICED) FROM sales_orders_daily_agg__lines.amounts WHERE TARGET_CURRENCY_CODE = ${target_currency_code} ) ;;
-    value_format_name: decimal_2
   }
 
 #} end amount dimensions
@@ -212,17 +186,15 @@ view: +sales_orders_daily_agg__lines {
 #########################################################
 # MEASURES: Amounts
 #{
-# updates to measures extended from sales_orders_common_amount_measures_ext
+# updates to measures extended from sales_orders_common_amount_fields_ext
 # and/or new measures
 
 #--> Returns NULL if Category or Item Organization is in query as order counts cannot be summed across categories
   measure: average_ordered_amount_per_order_target_currency {
     hidden: no
     type: number
-    #label defined in sales_orders_common_amount_measures_ext
-    #description defined in sales_orders_common_amount_measures_ext
+    #label & description defined in sales_orders_common_amount_fields_ext
     sql: SAFE_DIVIDE(${total_ordered_amount_target_currency},(${sales_orders_daily_agg.non_cancelled_order_count})) ;;
-    #value format defined in sales_orders_common_amount_measures_ext
   }
 
 #} end amounts

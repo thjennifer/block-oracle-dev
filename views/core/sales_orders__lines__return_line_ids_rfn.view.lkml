@@ -30,6 +30,7 @@ view: +sales_orders__lines__return_line_ids {
   dimension: return_line_id {
     type: number
     value_format_name: id
+    description: "Return Line ID of the return line that reference this order line"
     sql: COALESCE(sales_orders__lines__return_line_ids,-1) ;;
     full_suggestions: yes
     html: {% if value > 0 %}{{value}}{% else %} {% endif %} ;;

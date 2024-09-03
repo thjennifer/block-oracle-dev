@@ -80,7 +80,7 @@ view: sales_orders_common_count_measures_ext {
 
   measure: fulfilled_order_count {
     label: "In-Full Order Count"
-    description: "Number of orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)"
+    description: "Number of orders that are fulfilled completely (inventory is reserved and ready to be shipped for all order lines)"
   }
 
   measure: fulfilled_by_request_date_order_count {
@@ -135,7 +135,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: no
     type: number
     label: "In-Full Percent"
-    description: "The percentage of orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)"
+    description: "The percentage of orders that are fulfilled completely (inventory is reserved and ready to be shipped for all order lines)"
     sql: SAFE_DIVIDE(${fulfilled_order_count},${order_count}) ;;
     value_format_name: percent_1
 #--> link to order line details dashboards with filter for is_fulfilled = Yes
@@ -267,6 +267,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: no
     type: number
     group_label: "Counts Formatted as Large Numbers"
+    description: "Count of orders with category code not equal to RETURN formatted for large values (e.g., 2.3M or 75.2K)"
     sql: ${sales_order_count} ;;
     value_format_name: format_large_numbers_d1
     link: {
@@ -302,7 +303,7 @@ view: sales_orders_common_count_measures_ext {
     hidden: yes
     type: number
     label: "In-Full Percent"
-    description: "The percentage of orders that are fulfilled (inventory is reserved and ready to be shipped) completely (all order lines are fulfilled)"
+    description: "The percentage of orders that are fulfilled completely (inventory is reserved and ready to be shipped for all order lines)"
     sql: ${fulfilled_order_percent} * 100 ;;
     value_format_name: decimal_1
     html: {{rendered_value}}% ;;

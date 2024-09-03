@@ -7,7 +7,7 @@
 # Refines View sales_orders_daily_agg__lines__amounts (defined in /views/base folder)
 # Extends View:
 #   otc_common_currency_fields_ext
-#   sales_orders_common_amount_measures_ext
+#   sales_orders_common_amount_fields_ext
 #
 # REFERENCED BY
 # not used but could optionally be added to sales_orders_daily_agg explore
@@ -28,13 +28,13 @@
 
 include: "/views/base/sales_orders_daily_agg__lines__amounts.view"
 include: "/views/core/otc_common_currency_fields_ext.view"
-include: "/views/core/sales_orders_common_amount_measures_ext.view"
+include: "/views/core/sales_orders_common_amount_fields_ext.view"
 
 
 view: +sales_orders_daily_agg__lines__amounts {
 
   fields_hidden_by_default: yes
-  extends: [otc_common_currency_fields_ext, sales_orders_common_amount_measures_ext]
+  extends: [otc_common_currency_fields_ext, sales_orders_common_amount_fields_ext]
 
   dimension: key {
     hidden: yes
@@ -43,13 +43,15 @@ view: +sales_orders_daily_agg__lines__amounts {
   }
 
   dimension: target_currency_code {
-    # label, description defined in otc_common_currency_fields_ext
+    # label defined in otc_common_currency_fields_ext
+    description:  "Code indicating the target currency into which the source currency is converted"
     sql: COALESCE(${TABLE}.TARGET_CURRENCY_CODE,{% parameter otc_common_parameters_xvw.parameter_target_currency %}) ;;
     full_suggestions: yes
   }
 
   dimension: is_incomplete_conversion {
-    # label, description defined in otc_common_currency_fields_ext
+    # label defined in otc_common_currency_fields_ext
+    description: "Indicates whether some of the source currency amounts could not be converted into the target currency because of missing conversion rates from CurrencyRateMD. If yes, should check if CurrencyRateMD table is missing any dates or currencies"
     sql: COALESCE(${TABLE}.IS_INCOMPLETE_CONVERSION,FALSE) ;;
     full_suggestions: yes
   }
@@ -57,6 +59,7 @@ view: +sales_orders_daily_agg__lines__amounts {
   dimension: is_sales_order {
     hidden: yes
     type: yesno
+    description: "Indicates Line Category Code equals ORDER"
     sql: ${sales_orders_daily_agg__lines.line_category_code} = 'ORDER' ;;
     full_suggestions: yes
   }
@@ -65,41 +68,30 @@ view: +sales_orders_daily_agg__lines__amounts {
 # DIMENSIONS: Amounts
 #{
 # Dimensions hidden from Explore as Measures are shown instead
+# Other field properties defined in sales_orders_common_amount_fields_ext
 
   dimension: ordered_amount_target_currency {
-    hidden: yes
     sql: ${total_ordered} ;;
-    value_format_name: decimal_2
   }
 
   dimension: booking_amount_target_currency {
-    hidden: yes
     sql: ${total_booking} ;;
-    value_format_name: decimal_2
   }
 
   dimension: backlog_amount_target_currency {
-    hidden: yes
     sql: ${total_backlog} ;;
-    value_format_name: decimal_2
   }
 
   dimension: fulfilled_amount_target_currency {
-    hidden: yes
     sql: ${total_fulfilled} ;;
-    value_format_name: decimal_2
   }
 
   dimension: shipped_amount_target_currency {
-    hidden: yes
     sql: ${total_shipped} ;;
-    value_format_name: decimal_2
   }
 
   dimension: invoiced_amount_target_currency {
-    hidden: yes
     sql: ${total_invoiced} ;;
-    value_format_name: decimal_2
   }
 
 #} end amounts as dimensions
@@ -107,17 +99,15 @@ view: +sales_orders_daily_agg__lines__amounts {
 #########################################################
 # MEASURES: Amounts
 #{
-# updates to measures extended from sales_orders_common_amount_measures_ext
+# updates to measures extended from sales_orders_common_amount_fields_ext
 # and/or new measures
 
 #--> Returns NULL if Category or Item Organization is in query as order counts cannot be summed across categories
   measure: average_ordered_amount_per_order_target_currency {
     hidden: no
     type: number
-    #label defined in sales_orders_common_amount_measures_ext
-    #description defined in sales_orders_common_amount_measures_ext
+    #label & description defined in sales_orders_common_amount_fields_ext
     sql: SAFE_DIVIDE(${total_ordered_amount_target_currency},(${sales_orders_daily_agg.non_cancelled_order_count})) ;;
-    #value format defined in sales_orders_common_amount_measures_ext
   }
 
 #} end measures

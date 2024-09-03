@@ -76,124 +76,134 @@ view: sales_payments_dso_days_agg_pdt {
               TARGET_CURRENCY_CODE  ;;
     }
 
-    dimension: key {
-      hidden: yes
-      type: string
-      primary_key: yes
-      sql: CONCAT(${dso_days},${bill_to_site_use_id},${business_unit_id},${target_currency_code} ) ;;
-    }
+  dimension: key {
+    hidden: yes
+    type: string
+    primary_key: yes
+    sql: CONCAT(${dso_days},${bill_to_site_use_id},${business_unit_id},${target_currency_code} ) ;;
+  }
 
-    dimension: dso_days {
-      hidden: yes
-      type: number
-      label: "DSO Days"
-      sql: ${TABLE}.DSO_DAYS ;;
-    }
+  dimension: dso_days {
+    hidden: yes
+    type: number
+    label: "DSO Days"
+    sql: ${TABLE}.DSO_DAYS ;;
+  }
 
-    dimension: dso_days_string {
-      hidden: no
-      label: "DSO Days"
-      type: string
-      sql: CAST(${dso_days} AS STRING) ;;
-      order_by_field: dso_days
-    }
+  dimension: dso_days_string {
+    hidden: no
+    label: "DSO Days"
+    description: "Number of days used to calculate Days Sales Outstanding"
+    type: string
+    sql: CAST(${dso_days} AS STRING) ;;
+    order_by_field: dso_days
+  }
 
-    dimension: dso_start_date {
-      type: date
-      datatype: date
-      label: "DSO Start Date"
-      sql: ${TABLE}.DSO_START_DATE ;;
-    }
+  dimension: dso_start_date {
+    type: date
+    datatype: date
+    label: "DSO Start Date"
+    description: "Start date of the period used to calculate Days Sales Outstanding"
+    sql: ${TABLE}.DSO_START_DATE ;;
+  }
 
-    dimension: dso_end_date {
-      type: date
-      datatype: date
-      label: "DSO End Date"
-      sql: ${TABLE}.DSO_END_DATE ;;
-    }
+  dimension: dso_end_date {
+    type: date
+    datatype: date
+    label: "DSO End Date"
+    description: "End date of the period used to calculate Days Sales Outstanding"
+    sql: ${TABLE}.DSO_END_DATE ;;
+  }
 
-    dimension: bill_to_site_use_id {
-      type: number
-      sql: ${TABLE}.BILL_TO_SITE_USE_ID ;;
-    }
+  dimension: bill_to_customer_country {
+    type: string
+    group_label: "Bill to Customer"
+    description: "Billed customer country name"
+    sql: ${TABLE}.BILL_TO_CUSTOMER_COUNTRY ;;
+  }
+  dimension: bill_to_customer_name {
+    type: string
+    group_label: "Bill to Customer"
+    description: "Billed customer account name"
+    sql: ${TABLE}.BILL_TO_CUSTOMER_NAME ;;
+  }
+  dimension: bill_to_customer_number {
+    type: string
+    group_label: "Bill to Customer"
+    description: "Billed customer account number"
+    sql: ${TABLE}.BILL_TO_CUSTOMER_NUMBER ;;
+  }
+  dimension: bill_to_site_use_id {
+    type: number
+    group_label: "Bill to Customer"
+    description: "Foreign key identifying the Site Use entity that was billed to"
+    sql: ${TABLE}.BILL_TO_SITE_USE_ID ;;
+  }
+  dimension: business_unit_id {
+    type: number
+    description: "Foreign key identifying the business unit that performed this transaction"
+    sql: ${TABLE}.BUSINESS_UNIT_ID ;;
+  }
+  dimension: business_unit_name {
+    type: string
+    description: "Business unit name"
+    sql: ${TABLE}.BUSINESS_UNIT_NAME ;;
+  }
 
-    dimension: bill_to_customer_number {
-      type: string
-      sql: ${TABLE}.BILL_TO_CUSTOMER_NUMBER ;;
-    }
+  dimension: target_currency_code {
+    #type, label and description defined in otc_common_currency_fields_ext
+    sql: ${TABLE}.TARGET_CURRENCY_CODE ;;
+  }
 
-    dimension: bill_to_customer_name {
-      type: string
-      sql: ${TABLE}.BILL_TO_CUSTOMER_NAME ;;
-    }
+  dimension: total_original {
+    hidden: yes
+    type: number
+    sql: ${TABLE}.TOTAL_ORIGINAL ;;
+  }
 
-    dimension: bill_to_customer_country {
-      type: string
-      sql: ${TABLE}.BILL_TO_CUSTOMER_COUNTRY ;;
-    }
+  dimension: total_remaining {
+    hidden: yes
+    type: number
+    sql: ${TABLE}.TOTAL_REMAINING ;;
+  }
 
-    dimension: business_unit_id {
-      type: number
-      sql: ${TABLE}.BUSINESS_UNIT_ID ;;
-    }
+  dimension: is_incomplete_conversion {
+    #type, label and description defined in otc_common_currency_fields_ext
+    sql: ${TABLE}.IS_INCOMPLETE_CONVERSION ;;
+  }
 
-    dimension: business_unit_name {
-      type: string
-      sql: ${TABLE}.BUSINESS_UNIT_NAME ;;
-    }
+  measure: total_amount_original_target_currency {
+    hidden: no
+    type: sum
+    label: "Amount Original (Target Currency)"
+    description: "Total amount due originally in target currency where payment class code <> 'PMT'"
+    sql: ${total_original} ;;
+    value_format_name: decimal_2
+  }
 
-    dimension: target_currency_code {
-      #type, label and description defined in otc_common_currency_fields_ext
-      sql: ${TABLE}.TARGET_CURRENCY_CODE ;;
-    }
-
-    dimension: total_original {
-      hidden: yes
-      type: number
-      sql: ${TABLE}.TOTAL_ORIGINAL ;;
-    }
-
-    dimension: total_remaining {
-      hidden: yes
-      type: number
-      sql: ${TABLE}.TOTAL_REMAINING ;;
-    }
-
-    dimension: is_incomplete_conversion {
-      #type, label and description defined in otc_common_currency_fields_ext
-      sql: ${TABLE}.IS_INCOMPLETE_CONVERSION ;;
-    }
-
-    measure: total_amount_original_target_currency {
-      hidden: no
-      type: sum
-      label: "Amount Original (Target Currency)"
-      sql: ${total_original} ;;
-      value_format_name: decimal_2
-    }
-
-    measure: total_amount_due_remaining_target_currency {
-      hidden: no
-      type: sum
-      label: "Amount Due Remaining (Target Currency)"
-      sql: ${total_remaining} ;;
-      value_format_name: decimal_2
-    }
+  measure: total_amount_due_remaining_target_currency {
+    hidden: no
+    type: sum
+    label: "Amount Due Remaining (Target Currency)"
+    description: "Total amount due remaining in target currency where payment class code <> 'PMT'"
+    sql: ${total_remaining} ;;
+    value_format_name: decimal_2
+  }
 
 #--> The dimensions dso_days and target_currency_code will be included in days_sales_outstanding calculation even
 #--> if not included in the query. If query returns more rows than expected, add these two dimensions to the query
 #--> or filter to a single value for each.
-    measure: days_sales_outstanding {
-      type: number
-      sql: SAFE_DIVIDE(${total_amount_due_remaining_target_currency},${total_amount_original_target_currency}) * ANY_VALUE(${dso_days}) ;;
-      value_format_name: decimal_1
-      required_fields: [dso_days,target_currency_code]
-      drill_fields: [dso_details*]
-    }
+  measure: days_sales_outstanding {
+    type: number
+    description: "Average time, in days, for which the receivables are outstanding. Calculated as: (Ending Receivables Balance / Credit Sales) * N where N is the number of days in the period. Choose 30, 90 or 365 days for the calculation."
+    sql: SAFE_DIVIDE(${total_amount_due_remaining_target_currency},${total_amount_original_target_currency}) * ANY_VALUE(${dso_days}) ;;
+    value_format_name: decimal_1
+    required_fields: [dso_days,target_currency_code]
+    drill_fields: [dso_details*]
+  }
 
-    set: dso_details{
-      fields: [dso_days, bill_to_customer_name,bill_to_customer_country,days_sales_outstanding]
-    }
+  set: dso_details{
+    fields: [dso_days, bill_to_customer_name,bill_to_customer_country,days_sales_outstanding]
+  }
 
-
-    }
+}

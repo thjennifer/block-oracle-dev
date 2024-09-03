@@ -119,6 +119,7 @@ view: sales_orders_common_dimensions_ext {
     {% elsif cust == 'ship' %}Ship To
     {% endif %}Customer Number
     {%else%}Selected Customer Number{%endif%}"
+    description: "Customer number reflecting selected customer type"
     sql:{% assign cust = parameter_customer_type._parameter_value %}
         {% if cust == 'bill' %}${bill_to_customer_number}
         {% elsif cust == 'sold' %}${sold_to_customer_number}
@@ -137,6 +138,7 @@ view: sales_orders_common_dimensions_ext {
               {% elsif cust == 'ship' %}Ship To
             {% endif %}Customer
             {%else%}Selected Customer Name{%endif%}"
+    description: "Customer name reflecting selected customer type"
     sql:{% assign cust = parameter_customer_type._parameter_value %}
         {% if cust == 'bill' %}${bill_to_customer_name}
           {% elsif cust == 'sold' %}${sold_to_customer_name}
@@ -155,6 +157,7 @@ view: sales_orders_common_dimensions_ext {
     {% elsif cust == 'ship' %}Ship To
     {% endif %}Country
     {%else%}Selected Customer Country{%endif%}"
+    description: "Customer country reflecting selected customer type"
     sql:{% assign cust = parameter_customer_type._parameter_value %}
         {% if cust == 'bill' %}${bill_to_customer_country}
         {% elsif cust == 'sold' %}${sold_to_customer_country}
@@ -166,6 +169,7 @@ view: sales_orders_common_dimensions_ext {
   dimension: selected_customer_type {
     hidden: no
     group_label: "Selected Customer Type"
+    description: "Customer type selected with parameter Customer Type"
     sql:  {% assign cust = parameter_customer_type._parameter_value %}
       '{{cust | capitalize | append: " To"}}';;
   }

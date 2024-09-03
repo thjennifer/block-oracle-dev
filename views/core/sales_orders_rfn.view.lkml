@@ -57,7 +57,6 @@ view: +sales_orders {
 
   dimension: ledger_id {
     hidden: no
-    description: "ID of ledger or set of books"
     value_format_name: id
   }
 
@@ -106,6 +105,7 @@ view: +sales_orders {
   }
 
   dimension: bill_to_customer_country {
+    hidden: no
     sql: COALESCE(${TABLE}.BILL_TO_CUSTOMER_COUNTRY,"Unknown") ;;
   }
 
@@ -115,6 +115,7 @@ view: +sales_orders {
   }
 
   dimension: sold_to_customer_country {
+    hidden: no
     sql: COALESCE(${TABLE}.SOLD_TO_CUSTOMER_COUNTRY,"Unknown") ;;
   }
 
@@ -124,6 +125,7 @@ view: +sales_orders {
   }
 
   dimension: ship_to_customer_country {
+    hidden: no
     sql: COALESCE(${TABLE}.SHIP_TO_CUSTOMER_COUNTRY,"Unknown") ;;
   }
 
@@ -142,21 +144,21 @@ view: +sales_orders {
     hidden: no
     group_label: "Ordered Date"
     group_item_label: "Month Number"
-    description: "Ordered Month as Number 1 to 12"
+    description: "Ordered month as number 1 to 12"
   }
 
   dimension: ordered_quarter_num {
     hidden: no
     group_label: "Ordered Date"
     group_item_label: "Quarter Number"
-    description: "Ordered Quarter as Number 1 to 4"
+    description: "Ordered quarter as number 1 to 4"
   }
 
   dimension: ordered_year_num {
     hidden: no
     group_label: "Ordered Date"
     group_item_label: "Year Number"
-    description: "Ordered Year as Integer"
+    description: "Ordered year as integer"
     value_format_name: id
   }
 
@@ -177,43 +179,37 @@ view: +sales_orders {
     hidden: no
     group_label: "Fiscal Date"
     group_item_label: "Fiscal Period Number"
-    description: "Accounting period based on the ordered date"
    }
 
   dimension: fiscal_period_name {
     hidden: no
     group_label: "Fiscal Date"
-    description: "Accounting period name"
   }
 
   dimension: fiscal_period_set_name {
     hidden: no
     group_label: "Fiscal Date"
-    description: "Accounting calendar name"
   }
 
   dimension: fiscal_period_type {
     hidden: no
     group_label: "Fiscal Date"
-    description: "Accounting period type"
   }
 
   dimension: fiscal_quarter_num {
     hidden: no
     group_label: "Fiscal Date"
     group_item_label: "Fiscal Quarter Number"
-    description: "Accounting quarter based on the ordered date"
   }
 
   dimension: fiscal_year_num {
     hidden: no
     group_label: "Fiscal Date"
     group_item_label: "Fiscal Year Number"
-    description: "Accounting year based on the ordered date"
     value_format_name: id
   }
 
-  dimension: fiscal_gl_year_period {
+  dimension: fiscal_year_period {
     hidden: no
     type: string
     group_label: "Fiscal Date"
@@ -226,14 +222,12 @@ view: +sales_orders {
     hidden: no
     timeframes: [raw, date, time]
     label: "Creation"
-    description: "Creation timestamp of record in Oracle source table"
   }
 
   dimension_group: last_update_ts {
     hidden: no
     timeframes: [raw, date, time]
     label: "Last Update"
-    description: "Last update timestamp of record in Oracle source table"
   }
 
 #} end dates
@@ -252,32 +246,28 @@ view: +sales_orders {
     hidden: no
     group_label: "Order Status"
     label: "Has Backorder"
-    description: "Yes if at least one order line does not enough available inventory to fill"
   }
 
   dimension: has_cancelled {
     hidden: no
     group_label: "Order Status"
-    description: "At least one order line was cancelled. Use IS_CANCELLED to check if the entire order is cancelled"
   }
 
   dimension: has_hold {
     hidden: no
     group_label: "Order Status"
-    label: "Has Been On Hold"
-    description: "Order has been held at some point in process flow. Use Is Held to identify if order is currently on hold"
+    label: "Has Been on Hold"
   }
 
   dimension: has_return_line {
     hidden: no
     group_label: "Order Status"
-    description: "Yes if sales order has at least 1 line with a return"
   }
 
   dimension: has_return_line_with_symbols {
     hidden: no
     group_label: "Order Status with Symbols"
-    description: "✅ if sales order has at least 1 line with a return."
+    description: "✅ if order has at least 1 line with a return"
     sql: COALESCE(${has_return_line},false) ;;
     html: @{html_symbols_for_yes} ;;
   }
@@ -286,14 +276,14 @@ view: +sales_orders {
     hidden: no
     type: yesno
     group_label: "Order Status"
-    description: "Yes if order is either held or has an item on backorder"
+    description: "Indicates whether order is currently on hold or has an item on backorder"
     sql: ${has_backorder} OR ${is_held} ;;
   }
 
   dimension: is_blocked_with_symbols {
     hidden: no
     group_label: "Order Status with Symbols"
-    description: "🟥 if order is either held or has an item on backorder."
+    description: "🟥 if order is currently on hold or has an item on backorder"
     sql: COALESCE(${is_blocked},false);;
     html: {% if value == true %}🟥 {% else %}   {% endif %}  ;;
   }
@@ -301,13 +291,12 @@ view: +sales_orders {
   dimension: is_booked {
     hidden: no
     group_label: "Order Status"
-    description: "The header is in or past the booked phase"
   }
 
   dimension: is_cancelled {
     hidden: no
     group_label: "Order Status"
-    description: "Entire order is cancelled"
+    description: "Indicates whether the enitre order is cancelled"
   }
 
 #--> not displayed in Explore but used in filtered measure Fillable Sales Order Count
@@ -315,16 +304,16 @@ view: +sales_orders {
     hidden: yes
     type: yesno
     group_label: "Order Status"
-    description: "Yes, if sales order can be met with available inventory (no items are backordered)"
+    description: "Indicates whether order can be met with available inventory (no items are backordered)"
 #--> did not use ${is_backordered} = No because would count orders where ${TABLE}.IS_BACKORDERED = NULL
     sql: ${TABLE}.HAS_BACKORDER = FALSE ;;
   }
 
+#--> derived as LOGICAL_AND(Lines.IS_FULFILLED)
   dimension: is_fulfilled {
     hidden: no
     group_label: "Order Status"
-    description: "Yes if all order lines are fulfilled (inventory is reserved and ready to be shipped)"
-    # derived as LOGICAL_AND(Lines.IS_FULFILLED)
+    description: "Indicates if all order lines are fulfilled (inventory is reserved and ready to be shipped)"
   }
 
   dimension: is_fulfilled_with_symbols {
@@ -335,13 +324,12 @@ view: +sales_orders {
     html: @{html_symbols_for_yes};;
   }
 
-
   dimension: is_fulfilled_by_request_date {
     hidden: no
     type: yesno
     group_label: "Order Status"
     label: "Is On-Time & In-Full (OTIF)"
-    description: "Yes if all lines of order are fulfilled by requested delivery date"
+    description: "Indicates if all order lines are fulfilled by requested delivery date"
     sql: ${num_lines} > 0 AND ${num_lines} = ${num_lines_fulfilled_by_request_date} ;;
   }
 
@@ -350,20 +338,18 @@ view: +sales_orders {
     type: yesno
     group_label: "Order Status"
     label: "Is Fulfilled by Promise Date"
-    description: "Yes if all lines of order are fulfilled by promised delivery date"
+    description: "Indicates if all order lines are fulfilled by promised delivery date"
     sql: ${num_lines} > 0 AND ${num_lines} = ${num_lines_fulfilled_by_promise_date} ;;
   }
 
   dimension: is_held {
     hidden: no
     group_label: "Order Status"
-    description: "Yes indicates order is Currently Held"
   }
 
   dimension: is_intercompany {
     hidden: no
     group_label: "Order Status"
-    description: "Yes indicates transaction was internal within the company"
   }
 
   dimension: is_open {
@@ -407,7 +393,6 @@ view: +sales_orders {
     hidden: no
     group_label: "Currency Conversion"
     label: "Currency (Source)"
-    description: "{%- assign v = _view._name | split: '_' -%}Currency of the {{v[1] | remove: 's' | append: '.'}}"
   }
 
   dimension: currency_conversion_rate {
@@ -419,6 +404,7 @@ view: +sales_orders {
   }
 
   dimension: is_incomplete_conversion {
+    # type, label, group_label, description defined in otc_common_currency_fields_ext
     sql: ${currency_code} <> ${target_currency_code} AND ${currency_conversion_sdt.from_currency} is NULL ;;
   }
 
@@ -432,7 +418,6 @@ view: +sales_orders {
     hidden: no
     group_label: "Order Totals"
     label: "Total Ordered Amount (Source Currency)"
-    description: "Total amount for an order in source currency"
     value_format_name: decimal_2
   }
 
@@ -440,7 +425,6 @@ view: +sales_orders {
     hidden: no
     group_label: "Order Totals"
     label: "Total Sales Amount (Source Currency)"
-    description: "Total sales amount for an order in source currency. Includes only lines with line category code of 'ORDER'"
     value_format_name: decimal_2
     }
 
@@ -449,7 +433,7 @@ view: +sales_orders {
     type: number
     group_label: "Order Totals"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Total amount for an order in target currency"
+    description: "Sum of ordered amounts for all order lines converted to target currency"
     sql: COALESCE(${total_ordered_amount},0) * ${currency_conversion_rate} ;;
     value_format_name: decimal_2
   }
@@ -459,7 +443,7 @@ view: +sales_orders {
     type: number
     group_label: "Order Totals"
     label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
-    description: "Total sales amount for an order in target currency. Includes only lines with line category code of 'ORDER'"
+    description: "Sum of ordered amounts for all order lines excluding RETURN lines converted to target currency"
     sql: COALESCE(${total_sales_ordered_amount},0) * ${currency_conversion_rate} ;;
     value_format_name: decimal_2
   }
@@ -502,8 +486,7 @@ view: +sales_orders {
   measure: sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [order_category_code: "-RETURN"]
     drill_fields: [header_details*]
   }
@@ -511,8 +494,7 @@ view: +sales_orders {
   measure: return_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [order_category_code: "RETURN"]
     drill_fields: [header_details*]
   }
@@ -520,8 +502,7 @@ view: +sales_orders {
   measure: blocked_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [is_blocked: "Yes"]
 #--> returns table showing blocked order count and percent of total by has_backorder and is_held
     link: {
@@ -553,8 +534,7 @@ view: +sales_orders {
   measure: cancelled_order_count {
     hidden: yes
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [is_cancelled: "Yes"]
   }
 
@@ -568,24 +548,21 @@ view: +sales_orders {
   measure: fulfilled_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [is_fulfilled: "Yes"]
   }
 
   measure: fulfilled_by_request_date_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [is_fulfilled_by_request_date : "Yes"]
   }
 
   measure: fulfilled_by_promise_date_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [is_fulfilled_by_promise_date : "Yes"]
   }
 
@@ -601,16 +578,14 @@ view: +sales_orders {
    measure: has_return_sales_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [has_return_line: "Yes", order_category_code: "-RETURN"]
   }
 
   measure: no_holds_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [has_hold: "No"]
     drill_fields: [header_details*]
   }
@@ -618,16 +593,14 @@ view: +sales_orders {
   measure: non_cancelled_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [is_cancelled: "No"]
   }
 
   measure: open_order_count {
     hidden: no
     type: count
-    #label defined in sales_orders_common_count_measures_ext
-    #description defined in sales_orders_common_count_measures_ext
+    #label & description defined in sales_orders_common_count_measures_ext
     filters: [is_open: "Yes"]
     # drill_fields: [header_details*]
   }

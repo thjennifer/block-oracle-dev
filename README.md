@@ -65,7 +65,7 @@ A Looker Admin should create the following user attributes and set their default
 | cortex_oracle_ebs_category_set_name  | Cortex Oracle EBS: Category Set Name      | String        | Edit            | No             | Primary Category Set Name used in your EBS system. If using Cortex Test Harness Data default value equals BE_INV_ITEM_CATEGORY_SET |
 | cortex_oracle_ebs_default_language   | Cortex Oracle EBS: Default Language  | String        | Edit            | No             | **US** (or primary language code used in your EBS system). If using Cortex Test Harness data, the available values are US (English) and ES (Spanish) |
 | cortex_oracle_ebs_default_currency | Cortex Oracle EBS: Default Target Currency | String | Edit | No | **USD** or desired currency like EUR, CAD or JPY |
-| cortex_oracle_ebs_use_test_data | Cortex Oracle EBS: Use Test Data (Yes or No) | Sting | Edit | No | Enter **Yes** if using Cortex Framework test harness data. Otherwise, enter No |
+| cortex_oracle_ebs_use_test_data | Cortex Oracle EBS: Use Test Data (Yes or No) | String | Edit | No | Enter **Yes** if using Cortex Framework test harness data. Otherwise, enter No |
 
 Each dashboard user can personalize these values by following these [instructions](https://cloud.google.com/looker/docs/user-account).
 
