@@ -93,7 +93,7 @@ view: +sales_orders_daily_agg__lines {
   dimension: category_set_name {
     sql: COALESCE(${TABLE}.ITEM_CATEGORY_SET_NAME,"Unknown") ;;
     full_suggestions: yes
-    }
+  }
 
 #--> category_id used instead so can hide this one and remove as primary key
   dimension: item_category_id {

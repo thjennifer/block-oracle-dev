@@ -38,7 +38,7 @@
 
 include: "/views/base/sales_orders__lines.view"
 include: "/views/core/otc_common_item_descriptions_ext.view"
-include: "/views/test/otc_common_item_categories_ext_test.view"
+include: "/views/core/otc_common_item_categories_ext.view"
 include: "/views/core/sales_orders_common_amount_fields_ext.view"
 
 view: +sales_orders__lines {

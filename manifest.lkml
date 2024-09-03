@@ -1081,28 +1081,3 @@ constant: link_build_explore_url {
 #} end constants for link build
 
 #} end constants for links
-
-#########################################################
-# TEST or DEMO DATA SPECIFIC CONSTANTS
-#{
-# design to toggle between test dataset or demo dataset
-# TO BE REMOVED FROM PRODUCTION
-
-constant: category_set_test {
-  value: "{%- if otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value == 'test' -%}
-  {% assign category_set = 'Purchasing' %}
-  {%- else -%}{% assign category_set = _user_attributes['cortex_oracle_ebs_category_set_name'] %}
-  {%- endif -%}'{{category_set}}'"
-}
-
-
-constant: default_target_date_test {
-  value: "{% assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase %}
-  {% if test_data == 'YES' %}
-  {% if otc_common_parameters_xvw.parameter_use_demo_or_test_data._parameter_value == 'demo' %}
-  {% assign td = '2024-03-28' %} {%else%} {% assign td = '2010-10-12' %}
-  {% endif %}
-  {%else%}{% assign td = now | date: '%Y-%m-%d' %}{%endif%}'{{td}}'"
-}
-
-#} end constants for test or demo data
