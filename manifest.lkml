@@ -559,10 +559,17 @@ constant: link_vis_table {
   value: "{% assign vis_config = '{\"type\":\"looker_grid\"}' | url_encode | prepend: '&vis_config=' %}"
 }
 
-#--> link_viz_table_no_viz_in_cell
+#--> link_viz_table_no_cell_visualization
 # Creates table and cell visualization for measures is disabled
 constant: link_vis_table_no_cell_visualization {
   value: "{% assign vis_config = '{\"type\":\"looker_grid\",\"series_cell_visualizations\":{}}' | url_encode | prepend: '&vis_config=' %}"
+}
+
+#--> link_vis_table_assign_cell_visualization
+# Creates table with developer-provided cell visualization in the form of:
+# {% assign cell_visualization = '\"sales_orders__lines.total_sales_amount_target_currency\":{\"is_active\":true},\"sales_orders__lines.total_shipped_amount_target_currency\":{\"is_active\":true}' %}
+constant: link_vis_table_assign_cell_visualization {
+  value: "{% assign vis_config = '{\"type\":\"looker_grid\",\"series_cell_visualizations\":{' | append: cell_visualization | append: '}}' | url_encode | prepend: '&vis_config=' %}"
 }
 
 constant: link_vis_column {

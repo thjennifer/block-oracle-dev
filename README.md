@@ -2,7 +2,7 @@
 
 <h2><span style="color:#2d7eea">What does this Looker Block do for me?</span></h2>
 
-Jumpstart your Order-to-Cash (aka O2C, or OTC) reporting journey on BigQuery in a rapid and cost-effective manner. Leverage or customize this Looker model to:
+Jumpstart your Order-to-Cash (aka O2C, or OTC) operational reports journey on BigQuery in a rapid and cost-effective manner. Leverage or customize this Looker model to:
 * Identify trends and patterns in your data
 * Spot potential problems early on
 * Make better decisions faster
