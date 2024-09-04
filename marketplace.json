@@ -3,7 +3,7 @@
   "category_label": "Models",
   "branding": {
     "image_uri": "https://marketplace-api.looker.com/block-icons/cortex_icon.png",
-    "tagline": "Common operational dashboard templates for data replicated from Oracle EBS into BigQuery leveraging the Cortex Framework."
+    "tagline": "Common operational dashboard templates for data replicated from Oracle EBS into BigQuery leveraging Cortex Framework."
   },
 
   "constants": {
