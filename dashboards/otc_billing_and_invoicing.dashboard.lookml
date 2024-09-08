@@ -64,7 +64,7 @@
         target_currency: otc_dashboard_navigation_ext.filter6
         order_source: otc_dashboard_navigation_ext.filter7
         item_category: otc_dashboard_navigation_ext.filter8
-
+#####################################################################################################
     - name: invoice_count
       title: Total Invoice Count
       explore: sales_invoices
@@ -85,14 +85,16 @@
       col: 0
       width: 6
       height: 2
-
+#####################################################################################################
     - name: invoice_amount
       title: Total Invoice Amount
       explore: sales_invoices_daily_agg
       type: single_value
-      fields: [sales_invoices_daily_agg.total_transaction_amount_target_currency_formatted
-              ,sales_invoices_daily_agg.total_discount_amount_target_currency_formatted,sales_invoices_daily_agg.total_tax_amount_target_currency_formatted]
-      hidden_fields: [sales_invoices_daily_agg.total_discount_amount_target_currency_formatted,sales_invoices_daily_agg.total_tax_amount_target_currency_formatted]
+      fields: [ sales_invoices_daily_agg.total_transaction_amount_target_currency_formatted,
+                sales_invoices_daily_agg.total_discount_amount_target_currency_formatted,
+                sales_invoices_daily_agg.total_tax_amount_target_currency_formatted]
+      hidden_fields: [sales_invoices_daily_agg.total_discount_amount_target_currency_formatted,
+                      sales_invoices_daily_agg.total_tax_amount_target_currency_formatted]
       listen:
         date: sales_invoices_daily_agg.invoice_date
         business_unit: sales_invoices_daily_agg.business_unit_name
@@ -108,15 +110,16 @@
       col: 6
       width: 6
       height: 2
-
-
+#####################################################################################################
     - name: discount_amount
       title: Total Discount Amount
       explore: sales_invoices_daily_agg
       type: single_value
-      fields: [sales_invoices_daily_agg.total_transaction_amount_target_currency_formatted
-              ,sales_invoices_daily_agg.total_discount_amount_target_currency_formatted,sales_invoices_daily_agg.total_tax_amount_target_currency_formatted]
-      hidden_fields: [sales_invoices_daily_agg.total_transaction_amount_target_currency_formatted,sales_invoices_daily_agg.total_tax_amount_target_currency_formatted]
+      fields: [ sales_invoices_daily_agg.total_transaction_amount_target_currency_formatted,
+                sales_invoices_daily_agg.total_discount_amount_target_currency_formatted,
+                sales_invoices_daily_agg.total_tax_amount_target_currency_formatted]
+      hidden_fields: [sales_invoices_daily_agg.total_transaction_amount_target_currency_formatted,
+                      sales_invoices_daily_agg.total_tax_amount_target_currency_formatted]
       listen:
         date: sales_invoices_daily_agg.invoice_date
         business_unit: sales_invoices_daily_agg.business_unit_name
@@ -131,20 +134,20 @@
         Total discount amount of invoices.
         </br></br>Discounts are calculated by subtracting the Gross Unit Selling Price from the Unit List Price as both prices are inclusive of taxes.
         If the Gross Unit Selling Price is unavailable, the pre-tax price is used, possibly leading to inflated discounts.
-
       row: 2
       col: 12
       width: 6
       height: 2
-
-
+#####################################################################################################
     - name: tax_amount
       title: Total Tax Amount
       explore: sales_invoices_daily_agg
       type: single_value
-      fields: [sales_invoices_daily_agg.total_transaction_amount_target_currency_formatted
-              ,sales_invoices_daily_agg.total_discount_amount_target_currency_formatted,sales_invoices_daily_agg.total_tax_amount_target_currency_formatted]
-      hidden_fields: [sales_invoices_daily_agg.total_transaction_amount_target_currency_formatted,sales_invoices_daily_agg.total_discount_amount_target_currency_formatted]
+      fields: [sales_invoices_daily_agg.total_transaction_amount_target_currency_formatted,
+              sales_invoices_daily_agg.total_discount_amount_target_currency_formatted,
+              sales_invoices_daily_agg.total_tax_amount_target_currency_formatted]
+      hidden_fields: [sales_invoices_daily_agg.total_transaction_amount_target_currency_formatted,
+                      sales_invoices_daily_agg.total_discount_amount_target_currency_formatted]
       listen:
         date: sales_invoices_daily_agg.invoice_date
         business_unit: sales_invoices_daily_agg.business_unit_name
@@ -160,12 +163,14 @@
       col: 18
       width: 6
       height: 2
-
+#####################################################################################################
     - name: invoices_by_month
       title: Invoice Volumes by Month
       explore: sales_invoices
       type: looker_line
-      fields: [sales_invoices.invoice_month, sales_invoices.invoice_count, sales_invoices__lines.total_transaction_amount_target_currency_formatted]
+      fields: [sales_invoices.invoice_month,
+              sales_invoices.invoice_count,
+              sales_invoices__lines.total_transaction_amount_target_currency_formatted]
       fill_fields: [sales_invoices.invoice_month]
       sorts: [sales_invoices.invoice_month desc]
       limit: 500
@@ -174,24 +179,16 @@
       show_view_names: false
       show_x_axis_label: false
       show_x_axis_ticks: true
-      y_axis_scale_mode: linear
       legend_position: center
       point_style: circle_outline
-      show_value_labels: false
-      label_density: 25
-      x_axis_scale: auto
-      y_axis_combined: true
-      show_null_points: false
-      interpolation: linear
-      y_axes: [{label: '', orientation: left, series: [{axisId: sales_invoices.invoice_count,
-              id: sales_invoices.invoice_count, name: Invoice Count}], showLabels: true,
-          showValues: true, unpinAxis: false, tickDensity: default, tickDensityCustom: 5,
-          type: linear}, {label: !!null '', orientation: right, series: [{axisId: sales_invoices__lines.total_transaction_amount_target_currency_formatted,
-              id: sales_invoices__lines.total_transaction_amount_target_currency_formatted,
-              name: Total Invoice Amount}], showLabels: true, showValues: true,
-          unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
-      x_axis_zoom: true
-      y_axis_zoom: true
+      y_axes: [{label: '', orientation: left,
+                series: [{axisId: sales_invoices.invoice_count,
+                              id: sales_invoices.invoice_count,
+                            name: Invoice Count}], showLabels: true, showValues: true, },
+          {label: '', orientation: right,
+            series: [{axisId: sales_invoices__line.total_transaction_amount_target_currency_formatted,
+                          id: sales_invoices__lines.total_transaction_amount_target_currency_formatted,
+                        name: Total Invoice Amount}], showLabels: true, showValues: true,}]
       series_types:
         sales_invoices.invoice_count: area
       series_colors:
@@ -218,23 +215,6 @@
             crosshairs: true,
           },
         }
-      # advanced_vis_config: |-
-      #   {
-      #     chart: {},
-      #     series: [{
-      #       name: "Invoice Count",
-      #       lineWidth: 5,
-      #       marker: {
-      #         enabled: false
-      #       },
-      #     }, ],
-      #     tooltip: {
-      #       backgroundColor: '#C0C0C0',
-      #       crosshairs: [true, true],
-      #       format: '<span style="font-size: 1.8em">{key}</span><br/>{#each points}<span style="color:{color}; font-weight: bold;">\u25CF {series.name}: </span>{y:,.0f}<br/>{/each}',
-      #       shared: true
-      #     },
-      #   }
       listen:
         date: sales_invoices.invoice_date
         business_unit: sales_invoices.business_unit_name
@@ -250,18 +230,24 @@
       col: 0
       width: 24
       height: 7
-
+#####################################################################################################
     - name: customer_discounts
       title: Customers with Highest Volume of Discounts
       explore: sales_invoices
       type: looker_line
-      fields: [sales_invoices.bill_to_site_use_id, sales_invoices.bill_to_customer_name,
-        sales_invoices.invoice_count, sales_invoices__lines.average_percent_discount_when_taken_formatted,
-        sales_invoices__lines.invoice_line_count, sales_invoices__lines.total_discount_amount_target_currency,
-        sales_invoices__lines.discount_invoice_line_percent_formatted, sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
-        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency]
-      hidden_fields: [sales_invoices.bill_to_site_use_id, sales_invoices.invoice_count,
-        sales_invoices__lines.invoice_line_count, sales_invoices__lines.total_discount_amount_target_currency]
+      fields: [sales_invoices.bill_to_site_use_id,
+                sales_invoices.bill_to_customer_name,
+                sales_invoices.invoice_count,
+                sales_invoices__lines.average_percent_discount_when_taken_formatted,
+                sales_invoices__lines.invoice_line_count,
+                sales_invoices__lines.total_discount_amount_target_currency,
+                sales_invoices__lines.discount_invoice_line_percent_formatted,
+                sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
+                sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency]
+      hidden_fields: [sales_invoices.bill_to_site_use_id,
+                      sales_invoices.invoice_count,
+                      sales_invoices__lines.invoice_line_count,
+                      sales_invoices__lines.total_discount_amount_target_currency]
       filters:
         sales_invoices__lines.is_intercompany: 'No'
       sorts: [sales_invoices__lines.total_discount_amount_target_currency desc]
@@ -272,17 +258,13 @@
       show_view_names: false
       show_y_axis_labels: true
       show_y_axis_ticks: true
-      y_axis_tick_density: default
-      y_axis_tick_density_custom: 5
       show_x_axis_label: false
+      x_axis_label_rotation: 0
       show_x_axis_ticks: true
       y_axis_scale_mode: linear
       legend_position: center
       point_style: circle
       show_value_labels: true
-      label_density: 25
-      x_axis_scale: auto
-      y_axis_combined: true
       show_null_points: false
       interpolation: step
       color_application:
@@ -291,20 +273,22 @@
         options:
           steps: 5
           reverse: false
-      y_axes: [{label: 'Avg Unit Prices when Discount', orientation: left, series: [{axisId: sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
-              id: sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
-              name: Average Unit List Price when Discount}, {axisId: sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency,
-              id: sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency,
-              name: Average Unit Selling Price when Discount}], showLabels: true,
-          showValues: true, valueFormat: "#,###", unpinAxis: false, tickDensity: default, type: linear},
-        {label: 'Discount percentages', orientation: right, series: [{axisId: sales_invoices__lines.average_percent_discount_when_taken_formatted,
-              id: sales_invoices__lines.average_percent_discount_when_taken_formatted, name: Average
-                % Discount}, {axisId: sales_invoices__lines.discount_invoice_line_percent_formatted,
-              id: sales_invoices__lines.discount_invoice_line_percent_formatted, name: Frequency of Discounts}], showLabels: true, showValues: true,
-              # maxValue: 1,
-          minValue: 0, unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
-      x_axis_zoom: true
-      y_axis_zoom: true
+      y_axes: [{label: 'Avg Unit Prices when Discount', orientation: left,
+                series: [{axisId: sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
+                              id: sales_invoices__lines.average_unit_list_price_when_discount_target_currency,
+                            name: Average Unit List Price when Discount},
+                         {axisId: sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency,
+                              id: sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency,
+                            name: Average Unit Selling Price when Discount}],
+                            showLabels: true, showValues: true, valueFormat: "#,###",},
+                {label: 'Discount percentages', orientation: right,
+                    series: [{axisId: sales_invoices__lines.average_percent_discount_when_taken_formatted,
+                                  id: sales_invoices__lines.average_percent_discount_when_taken_formatted,
+                                name: Average % Discount},
+                            {axisId: sales_invoices__lines.discount_invoice_line_percent_formatted,
+                                 id: sales_invoices__lines.discount_invoice_line_percent_formatted,
+                               name: Frequency of Discounts}],
+                  showLabels: true, showValues: true, minValue: 0, }]
       limit_displayed_rows: true
       limit_displayed_rows_values:
         show_hide: show
@@ -325,8 +309,6 @@
         sales_invoices__lines.average_percent_discount_when_taken_formatted: "#873e23"
       series_point_styles:
         sales_invoices__lines.average_percent_discount_when_taken_formatted: triangle
-
-
       advanced_vis_config: |-
         {
           series: [

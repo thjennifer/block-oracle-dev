@@ -63,13 +63,16 @@
       order_source: otc_dashboard_navigation_ext.filter7
       item_category: otc_dashboard_navigation_ext.filter8
       item_language: otc_dashboard_navigation_ext.filter9
-
+#####################################################################################################
   - name: in_full
     title: In Full %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
-    hidden_fields: [sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
+    fields: [ sales_orders.fulfilled_order_percent,
+              sales_orders.fulfilled_by_request_date_order_percent,
+              sales_orders.has_backorder_order_percent]
+    hidden_fields: [sales_orders.fulfilled_by_request_date_order_percent,
+                    sales_orders.has_backorder_order_percent]
     filters:
       sales_orders.order_category_code: '-RETURN'
     listen:
@@ -87,13 +90,16 @@
     col: 0
     width: 4
     height: 3
-
+#####################################################################################################
   - name: otif
     title: OTIF %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
-    hidden_fields: [sales_orders.fulfilled_order_percent,sales_orders.has_backorder_order_percent]
+    fields: [ sales_orders.fulfilled_order_percent,
+              sales_orders.fulfilled_by_request_date_order_percent,
+              sales_orders.has_backorder_order_percent]
+    hidden_fields: [sales_orders.fulfilled_order_percent,
+                    sales_orders.has_backorder_order_percent]
     filters:
       sales_orders.order_category_code: '-RETURN'
     listen:
@@ -111,13 +117,16 @@
     col: 0
     width: 4
     height: 3
-
+#####################################################################################################
   - name: backordered
     title: Backordered %
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.fulfilled_order_percent, sales_orders.fulfilled_by_request_date_order_percent,sales_orders.has_backorder_order_percent]
-    hidden_fields: [sales_orders.fulfilled_order_percent,sales_orders.fulfilled_by_request_date_order_percent]
+    fields: [ sales_orders.fulfilled_order_percent,
+              sales_orders.fulfilled_by_request_date_order_percent,
+              sales_orders.has_backorder_order_percent]
+    hidden_fields: [sales_orders.fulfilled_order_percent,
+                    sales_orders.fulfilled_by_request_date_order_percent]
     filters:
       sales_orders.order_category_code: '-RETURN'
     listen:
@@ -135,24 +144,23 @@
     col: 0
     width: 4
     height: 3
-
+#####################################################################################################
   - name: delivery_performance_by_month
     title: Delivery Performance by Month
     explore: sales_orders
     type: looker_line
-    fields: [sales_orders.ordered_month,sales_orders.fulfilled_order_percent_formatted,sales_orders.fulfilled_by_request_date_order_percent_formatted]
+    fields: [ sales_orders.ordered_month,
+              sales_orders.fulfilled_order_percent_formatted,
+              sales_orders.fulfilled_by_request_date_order_percent_formatted]
     sorts: [sales_orders.ordered_month]
     filters:
       sales_orders.order_category_code: '-RETURN'
     limit: 500
     legend_position: center
     point_style: none
-    y_axis_combined: true
     show_null_points: false
     interpolation: linear
     x_axis_label: Month
-    x_axis_zoom: true
-    y_axis_zoom: true
     series_types:
       sales_orders.fulfilled_order_percent_formatted: line
       sales_orders.fulfilled_by_request_date_order_percent_formatted: line
@@ -198,12 +206,14 @@
     col: 4
     width: 10
     height: 9
-
+#####################################################################################################
   - name: average_cycle_time
     title: Longest Average Order Cycle Time
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders__lines.selected_product_dimension_id,sales_orders__lines.selected_product_dimension_description, sales_orders__lines.average_cycle_time_days]
+    fields: [ sales_orders__lines.selected_product_dimension_id,
+              sales_orders__lines.selected_product_dimension_description,
+              sales_orders__lines.average_cycle_time_days]
     sorts: [sales_orders__lines.average_cycle_time_days desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
     filters:
@@ -216,36 +226,27 @@
     y_axis_gridlines: true
     show_y_axis_labels: true
     show_y_axis_ticks: true
-    y_axis_tick_density: default
+    # y_axis_tick_density: default
     show_x_axis_label: true
     show_x_axis_ticks: true
-    y_axis_scale_mode: linear
-    x_axis_reversed: false
-    y_axis_reversed: false
-    plot_size_by_field: false
+    # y_axis_scale_mode: linear
+    # x_axis_reversed: false
+    # y_axis_reversed: false
+    # plot_size_by_field: false
     limit_displayed_rows: true
-    legend_position: center
-    point_style: none
-    show_value_labels: false
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
-    ordering: none
-    show_null_labels: false
-    show_totals_labels: false
-    show_silhouette: false
-    totals_color: "#808080"
-    y_axes: [{label: Average Order Cycle Time, orientation: bottom, series: [{axisId: sales_orders__lines.average_cycle_time_days,
-            id: sales_orders__lines.average_cycle_time_days, name: Average
-              of Order Cycle Time}], showLabels: false, showValues: false, unpinAxis: false,
-        tickDensity: custom, tickDensityCustom: 1, type: linear}]
-    x_axis_label: ""
-    x_axis_zoom: true
-    y_axis_zoom: true
     limit_displayed_rows_values:
       show_hide: show
       first_last: first
       num_rows: '10'
+    legend_position: center
+    point_style: none
+    show_value_labels: false
+    y_axes: [{label: Average Order Cycle Time, orientation: bottom,
+            series: [{axisId: sales_orders__lines.average_cycle_time_days,
+                          id: sales_orders__lines.average_cycle_time_days,
+                          name: Average of Order Cycle Time}], showLabels: false, showValues: false,
+        tickDensity: custom, tickDensityCustom: 1, type: linear}]
+    x_axis_label: ""
     series_colors:
       sales_orders__lines.average_cycle_time_days: "#B3DEE2"
     reference_lines: [{reference_type: line, range_start: min, range_end: max, margin_top: deviation,
@@ -302,14 +303,16 @@
     col: 14
     width: 10
     height: 9
-
+#####################################################################################################
   - name: delivery_efficiency
     title: Order vs Fulfillment Efficiency
     explore: sales_orders
     type: looker_line
-    fields: [sales_orders__lines.inventory_item_id, sales_orders__lines.item_description,
-    sales_orders__lines.total_ordered_quantity_by_item_formatted, sales_orders__lines.total_fulfilled_quantity_by_item_formatted,
-    sales_orders__lines.difference_ordered_fulfilled_quantity_by_item]
+    fields: [ sales_orders__lines.inventory_item_id,
+              sales_orders__lines.item_description,
+              sales_orders__lines.total_ordered_quantity_by_item_formatted,
+              sales_orders__lines.total_fulfilled_quantity_by_item_formatted,
+              sales_orders__lines.difference_ordered_fulfilled_quantity_by_item]
     sorts: [sales_orders__lines.difference_ordered_fulfilled_quantity_by_item desc]
     hidden_fields: [sales_orders__lines.inventory_item_id]
     filters:
@@ -321,36 +324,25 @@
     show_view_names: false
     show_y_axis_labels: true
     show_y_axis_ticks: true
-    y_axis_tick_density: default
-    y_axis_tick_density_custom: 5
     show_x_axis_label: false
     show_x_axis_ticks: true
-    limit_displayed_rows: true
     legend_position: center
     point_style: circle
     show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
     show_null_points: true
     interpolation: step
-    y_axes: [{label: 'Quantities', orientation: left, series: [{axisId: sales_orders__lines.total_ordered_quantity_by_item_formatted,
-          id: sales_orders__lines.total_ordered_quantity_by_item_formatted, name: Total Ordered
-            Quantity}, {axisId: sales_orders__lines.total_fulfilled_quantity_by_item_formatted,
-          id: sales_orders__lines.total_fulfilled_quantity_by_item_formatted, name: Total Fulfilled
-            Quantity}], showLabels: true, showValues: true, unpinAxis: false, tickDensity: default,
-      type: linear}, {label: 'Difference', orientation: right, series: [{axisId: sales_orders__lines.difference_ordered_fulfilled_quantity_by_item,
-          id: sales_orders__lines.difference_ordered_fulfilled_quantity_by_item, name: Difference
-            Ordered Fulfilled Quantity By Item}], showLabels: true, showValues: true,
-      unpinAxis: false, tickDensity: default, type: linear}]
+    y_axes: [{label: 'Quantities', orientation: left,
+              series: [{axisId: sales_orders__lines.total_ordered_quantity_by_item_formatted,
+                            id: sales_orders__lines.total_ordered_quantity_by_item_formatted,
+                          name: Total Ordered Quantity},
+                      {axisId: sales_orders__lines.total_fulfilled_quantity_by_item_formatted,
+                           id: sales_orders__lines.total_fulfilled_quantity_by_item_formatted,
+                         name: Total Fulfilled Quantity}], showLabels: true, showValues: true, },
+            {label: 'Difference', orientation: right,
+              series: [{axisId: sales_orders__lines.difference_ordered_fulfilled_quantity_by_item,
+                            id: sales_orders__lines.difference_ordered_fulfilled_quantity_by_item,
+                          name: Difference Ordered Fulfilled Quantity By Item}], showLabels: true, showValues: true,}]
     x_axis_label: Item
-    x_axis_zoom: true
-    y_axis_zoom: true
-    limit_displayed_rows_values:
-      show_hide: show
-      first_last: first
-      num_rows: '10'
-    hidden_series: []
     series_types:
       sales_orders__lines.total_ordered_quantity_by_item_formatted: column
       sales_orders__lines.total_fulfilled_quantity_by_item_formatted: column

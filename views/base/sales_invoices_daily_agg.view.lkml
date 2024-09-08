@@ -108,6 +108,16 @@ dimension: item_organization_name {
   description: "Item organization name"
   sql: ${TABLE}.ITEM_ORGANIZATION_NAME ;;
 }
+dimension: num_intercompany_lines {
+  type: number
+  description: "Total number of invoice lines across intercompany invoices"
+  sql: ${TABLE}.NUM_INTERCOMPANY_LINES ;;
+}
+dimension: num_invoice_lines {
+  type: number
+  description: "Total number of invoice lines across invoices"
+  sql: ${TABLE}.NUM_INVOICE_LINES ;;
+}
 dimension: order_source_id {
   type: number
   description: "Foreign key identifying the order source"
@@ -126,12 +136,12 @@ measure: count {
 # ----- Sets of fields for drilling ------
 set: detail {
   fields: [
-    item_category_name,
-    invoice_type_name,
-    item_category_set_name,
     business_unit_name,
     item_organization_name,
     bill_to_customer_name,
+    item_category_name,
+    invoice_type_name,
+    item_category_set_name,
     order_source_name
   ]
 }

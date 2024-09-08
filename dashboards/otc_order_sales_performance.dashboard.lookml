@@ -72,12 +72,14 @@
       order_source: otc_dashboard_navigation_ext.filter7
       item_category: otc_dashboard_navigation_ext.filter8
       item_language: otc_dashboard_navigation_ext.filter9
-
+#####################################################################################################
   - name: top_products_by_sales
     title: Top Products by Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.total_sales_amount_target_currency_formatted]
+    fields: [ sales_orders__lines.selected_product_dimension_id,
+              sales_orders__lines.selected_product_dimension_description,
+              sales_orders__lines.total_sales_amount_target_currency_formatted]
     sorts: [sales_orders__lines.total_sales_amount_target_currency_formatted desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
     filters:
@@ -85,17 +87,13 @@
       sales_orders__lines.line_category_code: 'ORDER'
     limit: 10
     show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
     series_colors:
       {sales_orders__lines.total_sales_amount_target_currency_formatted: "#74A09F"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.total_sales_amount_target_currency_formatted,
-            id: sales_orders__lines.total_sales_amount_target_currency_formatted
-            }], showLabels: true, showValues: false,
-        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
-    x_axis_zoom: true
-    y_axis_zoom: true
+    y_axes: [{label: '', orientation: bottom,
+              series: [{axisId: sales_orders__lines.total_sales_amount_target_currency_formatted,
+                            id: sales_orders__lines.total_sales_amount_target_currency_formatted
+                      }], showLabels: true, showValues: false,
+        }]
     advanced_vis_config: |-
       {
         tooltip: {
@@ -134,12 +132,14 @@
     col: 0
     width: 12
     height: 10
-
+#####################################################################################################
   - name: top_products_by_avg_sales
     title: Top Products by Average Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders__lines.selected_product_dimension_id, sales_orders__lines.selected_product_dimension_description, sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted]
+    fields: [ sales_orders__lines.selected_product_dimension_id,
+              sales_orders__lines.selected_product_dimension_description,
+              sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted]
     sorts: [sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted desc]
     hidden_fields: [sales_orders__lines.selected_product_dimension_id]
     filters:
@@ -147,16 +147,13 @@
       sales_orders__lines.line_category_code: 'ORDER'
     limit: 10
     show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
     series_colors:
       {sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted: "#53575E"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted,
-            id: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted, name: Avg Sales per Order}], showLabels: true, showValues: false,
-        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
-    x_axis_zoom: true
-    y_axis_zoom: true
+    y_axes: [{label: '', orientation: bottom,
+              series: [{axisId: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted,
+                            id: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted,
+                            name: Avg Sales per Order}], showLabels: true, showValues: false,
+       }]
     advanced_vis_config: |-
       {
         tooltip: {
@@ -197,16 +194,20 @@
     col: 12
     width: 12
     height: 10
-
+#####################################################################################################
   - name: top_customers_by_sales
     title: Top Customers by Sales
     explore: sales_orders_daily_agg
     type: looker_bar
-    fields: [sales_orders_daily_agg.selected_customer_number, sales_orders_daily_agg.selected_customer_name,
-      sales_orders_daily_agg__lines.percent_of_total_sales, sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
-      sales_orders_daily_agg__lines.total_sales_amount_target_currency, sales_orders_daily_agg__lines.cumulative_sales_amount_target_currency]
+    fields: [ sales_orders_daily_agg.selected_customer_number,
+              sales_orders_daily_agg.selected_customer_name,
+              sales_orders_daily_agg__lines.percent_of_total_sales,
+              sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
+              sales_orders_daily_agg__lines.total_sales_amount_target_currency,
+              sales_orders_daily_agg__lines.cumulative_sales_amount_target_currency]
     sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted desc]
-    hidden_fields: [sales_orders_daily_agg.selected_customer_number, sales_orders_daily_agg__lines.percent_of_total_sales,
+    hidden_fields: [sales_orders_daily_agg.selected_customer_number,
+                    sales_orders_daily_agg__lines.percent_of_total_sales,
                     sales_orders_daily_agg__lines.cumulative_sales_amount_target_currency,
                     sales_orders_daily_agg__lines.total_sales_amount_target_currency]
     filters:
@@ -226,24 +227,21 @@
     legend_position: center
     point_style: circle
     show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
-            id: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
-            name: Total Sales Amount}], showLabels: false, showValues: false,
-        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear},
-      {label: !!null '', orientation: bottom, series: [{axisId: cumulative_percent_of_total_sales,
-            id: cumulative_percent_of_total_sales, name: Cumulative Percent of Total
-              Sales}], showLabels: false, showValues: false, unpinAxis: false, tickDensity: default,
-        tickDensityCustom: 5, type: linear}]
-    x_axis_zoom: true
-    y_axis_zoom: true
+    y_axes: [{label: '', orientation: bottom,
+              series: [{axisId: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
+                            id: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
+                          name: Total Sales Amount}],
+                          showLabels: false, showValues: false,},
+            {label: '', orientation: bottom,
+              series: [{axisId: cumulative_percent_of_total_sales,
+                            id: cumulative_percent_of_total_sales,
+                            name: Cumulative Percent of Total Sales}],
+                            showLabels: false, showValues: false, }]
     series_types:
       cumulative_percent_of_total_sales: line
     series_colors:
       sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted: "#74A09F"
-      cumulative_percent_of_total_sales: "#000"
+      cumulative_percent_of_total_sales: "#000000"
     advanced_vis_config: |-
       {
         series: [
@@ -300,12 +298,14 @@
     col: 0
     width: 12
     height: 10
-
+#####################################################################################################
   - name: top_customers_by_avg_sales
     title: Top Customers by Average Sales
     explore: sales_orders
     type: looker_bar
-    fields: [sales_orders.selected_customer_number, sales_orders.selected_customer_name, sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted]
+    fields: [ sales_orders.selected_customer_number,
+              sales_orders.selected_customer_name,
+              sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted]
     sorts: [sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted desc]
     hidden_fields: [sales_orders.selected_customer_number]
     filters:
@@ -313,17 +313,16 @@
       sales_orders__lines.line_category_code: 'ORDER'
     limit: 10
     show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
+    # label_density: 25
+    # x_axis_scale: auto
+    # y_axis_combined: true
     series_colors:
       {sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted: "#53575E"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted,
-            id: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted
-    }], showLabels: true, showValues: false,
-        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
-    x_axis_zoom: true
-    y_axis_zoom: true
+    y_axes: [{label: '', orientation: bottom,
+              series: [{axisId: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted,
+                            id: sales_orders__lines.average_ordered_amount_per_order_target_currency_formatted}], showLabels: true, showValues: false,}]
+    # x_axis_zoom: true
+    # y_axis_zoom: true
     advanced_vis_config: |-
       {
         tooltip: {
@@ -360,12 +359,14 @@
     col: 12
     width: 12
     height: 10
-
+#####################################################################################################
   - name: top_business_units_by_sales
     title: Top Business Units by Sales
     explore: sales_orders_daily_agg
     type: looker_bar
-    fields: [sales_orders_daily_agg.business_unit_id,sales_orders_daily_agg.business_unit_name,sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted]
+    fields: [ sales_orders_daily_agg.business_unit_id,
+              sales_orders_daily_agg.business_unit_name,
+              sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted]
     sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted desc]
     hidden_fields: [sales_orders_daily_agg.business_unit_id]
     filters:
@@ -378,21 +379,17 @@
     show_y_axis_ticks: true
     show_x_axis_label: false
     show_x_axis_ticks: true
-    limit_displayed_rows: false
     legend_position: center
     point_style: none
     show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
     series_colors:
       {sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted: "#74A09F"}
-    y_axes: [{label: '', orientation: bottom, series: [{axisId: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
-            id: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted, name: Total
-              Sales}], showLabels: true, showValues: false,
-        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
-    x_axis_zoom: true
-    y_axis_zoom: true
+    y_axes: [{label: '', orientation: bottom,
+              series: [{axisId: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
+                            id: sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
+                          name: Total Sales}],
+          showLabels: true, showValues: false,
+              }]
     advanced_vis_config: |-
       {
         tooltip: {
@@ -428,14 +425,15 @@
     col: 0
     width: 12
     height: 10
-
+#####################################################################################################
   - name: sales_by_order_source
     title: Sales by Order Source
     explore: sales_orders_daily_agg
     type: looker_pie
-    fields: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted, sales_orders_daily_agg.order_source_id,
-      sales_orders_daily_agg.order_source_name]
-    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted desc 0]
+    fields: [ sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted,
+              sales_orders_daily_agg.order_source_id,
+              sales_orders_daily_agg.order_source_name]
+    sorts: [sales_orders_daily_agg__lines.total_sales_amount_target_currency_formatted desc]
     hidden_fields: [sales_orders_daily_agg.order_source_id]
     filters:
       sales_orders_daily_agg.order_category_code: '-RETURN'
@@ -474,13 +472,6 @@
         }
       }
     show_value_labels: true
-    label_density: 25
-    x_axis_scale: auto
-    y_axis_combined: true
-    show_null_labels: false
-    show_totals_labels: false
-    x_axis_zoom: true
-    y_axis_zoom: true
     title_hidden: true
     listen:
       date: sales_orders_daily_agg.ordered_date

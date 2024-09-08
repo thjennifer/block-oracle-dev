@@ -95,16 +95,16 @@
     explore: sales_payments_daily_agg
     filters:
       otc_dashboard_navigation_ext.parameter_navigation_focus_page: '2'
-
+#####################################################################################################
   - name: total_receivables
     title: Total Receivables
     explore: sales_payments_daily_agg
     type: single_value
-    fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,
-            sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted,
-            sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
+    fields: [ sales_payments_daily_agg.total_receivables_target_currency_formatted,
+              sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted,
+              sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
     hidden_fields: [sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted,
-            sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
+                    sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -125,7 +125,7 @@
     col: 0
     width: 5
     height: 3
-
+#####################################################################################################
   - name: past_due_receivables
     title: Total Past Due Receivables
     explore: sales_payments_daily_agg
@@ -133,7 +133,8 @@
     fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,
              sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted,
              sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
-    hidden_fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
+    hidden_fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,
+                    sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -153,16 +154,16 @@
     col: 5
     width: 5
     height: 3
-
+#####################################################################################################
   - name: doubtful_receivables
     title: Total Doubtful Receivables
     explore: sales_payments_daily_agg
     type: single_value
-    fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,
+    fields: [ sales_payments_daily_agg.total_receivables_target_currency_formatted,
               sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted,
               sales_payments_daily_agg.total_doubtful_receivables_target_currency_formatted]
     hidden_fields: [sales_payments_daily_agg.total_receivables_target_currency_formatted,
-              sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted]
+                    sales_payments_daily_agg.total_overdue_receivables_target_currency_formatted]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     show_single_value_title: true
@@ -182,7 +183,7 @@
     col: 0
     width: 5
     height: 3
-
+#####################################################################################################
   - name: days_sales_outstanding
     title: Days Sales Outstanding
     explore: sales_payments_dso_days_agg_pdt
@@ -215,12 +216,13 @@
     col: 5
     width: 5
     height: 3
-
+#####################################################################################################
   - name: past_due_receivables_by_age
     title: Past Due Receivables by Age
     explore: sales_payments
     type: looker_bar
-    fields: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_overdue_receivables_target_currency_formatted]
+    fields: [ sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name,
+              sales_payments.total_overdue_receivables_target_currency_formatted]
     pivots: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     filters:
       sales_payments.is_open_and_overdue: 'Yes'
@@ -278,14 +280,17 @@
     col: 11
     width: 14
     height: 6
-
+#####################################################################################################
   - name: customers_with_highest_receivables
     title: Customers with Highest Receivables
     explore: sales_payments_daily_agg
     type: looker_bar
-    fields: [sales_payments_daily_agg.bill_to_customer_number, sales_payments_daily_agg.bill_to_customer_name,
-      sales_payments_daily_agg.total_receivables_target_currency_formatted, sales_payments_daily_agg.cumulative_total_receivables]
-    hidden_fields: [sales_payments_daily_agg.bill_to_customer_number, sales_payments_daily_agg.cumulative_total_receivables]
+    fields: [ sales_payments_daily_agg.bill_to_customer_number,
+              sales_payments_daily_agg.bill_to_customer_name,
+              sales_payments_daily_agg.total_receivables_target_currency_formatted,
+              sales_payments_daily_agg.cumulative_total_receivables]
+    hidden_fields: [sales_payments_daily_agg.bill_to_customer_number,
+                    sales_payments_daily_agg.cumulative_total_receivables]
     filters:
       sales_payments_daily_agg.is_payment_transaction: 'No'
     sorts: [sales_payments_daily_agg.percent_of_total_receivables desc]
@@ -293,7 +298,7 @@
       cumulative_percent_of_total_receivables: line
     series_colors:
       sales_payments_daily_agg.total_receivables_target_currency_formatted: "#2596be"
-      cumulative_percent_of_total_receivables: "#000"
+      cumulative_percent_of_total_receivables: "#000000"
     limit: 10
     total: true
     # Use Table Calculations for Cumulative Percent of Total Receivables
@@ -312,24 +317,25 @@
     show_y_axis_ticks: true
     show_x_axis_label: false
     show_x_axis_ticks: true
-    y_axis_scale_mode: linear
+    # y_axis_scale_mode: linear
     legend_position: center
     point_style: circle
     show_value_labels: true
-    x_axis_scale: auto
-    y_axis_combined: true
-    show_null_labels: false
-    show_totals_labels: false
+    # x_axis_scale: auto
+    # y_axis_combined: true
+    # show_null_labels: false
+    # show_totals_labels: false
     show_silhouette: false
-    y_axes: [{label: '', orientation: top, series: [{axisId: sales_payments_daily_agg.total_receivables_target_currency_formatted,
-            id: sales_payments_daily_agg.total_receivables_target_currency_formatted, name: Total Receivables
-              (USD)}], showLabels: false, showValues: false, unpinAxis: false, tickDensity: default,
-        tickDensityCustom: 5, type: linear}, {label: !!null '', orientation: bottom,
-        series: [{axisId: cumulative_percent_of_total_receivables, id: cumulative_percent_of_total_receivables,
-            name: Cumulative Percent of Total Receivables}], showLabels: false, showValues: false,
-        unpinAxis: false, tickDensity: default, tickDensityCustom: 5, type: linear}]
-    x_axis_zoom: true
-    y_axis_zoom: true
+    y_axes: [{label: '', orientation: top,
+              series: [{axisId: sales_payments_daily_agg.total_receivables_target_currency_formatted,
+                            id: sales_payments_daily_agg.total_receivables_target_currency_formatted,
+              }], showLabels: false, showValues: false, },
+        {label: '', orientation: bottom,
+          series: [{axisId: cumulative_percent_of_total_receivables,
+                        id: cumulative_percent_of_total_receivables,
+                      name: Cumulative Percent of Total Receivables}], showLabels: false, showValues: false,}]
+    # x_axis_zoom: true
+    # y_axis_zoom: true
     advanced_vis_config: |-
       {
         series: [
@@ -385,13 +391,15 @@
     col: 0
     width: 10
     height: 10
-
+#####################################################################################################
   - name: customer_receivables_by_age
     title: Customers with Highest Past Due Receivables by Age
     explore: sales_payments
     type: looker_bar
-    fields: [sales_payments.bill_to_customer_number, sales_payments.bill_to_customer_name,
-      sales_payments.total_overdue_receivables_target_currency_formatted, sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
+    fields: [ sales_payments.bill_to_customer_number,
+              sales_payments.bill_to_customer_name,
+              sales_payments.total_overdue_receivables_target_currency_formatted,
+              sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     pivots: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     hidden_fields: [sales_payments.bill_to_customer_number]
     hidden_pivots:
@@ -400,8 +408,8 @@
     filters:
       sales_payments.is_open_and_overdue: 'Yes'
       sales_payments.payment_class_code: '-PMT'
-    sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, sales_payments.total_receivables_target_currency_formatted
-        desc 4]
+    sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name,
+           sales_payments.total_receivables_target_currency_formatted desc 4]
     limit: 5000
     row_total: right
     show_y_axis_ticks: false
@@ -409,6 +417,10 @@
     show_x_axis_label: false
     stacking: normal
     limit_displayed_rows: true
+    limit_displayed_rows_values:
+      show_hide: show
+      first_last: first
+      num_rows: '10'
     legend_position: center
     show_value_labels: true
     show_null_labels: false
@@ -421,8 +433,8 @@
       options:
         steps: 5
         reverse: false
-    x_axis_zoom: true
-    y_axis_zoom: true
+    # x_axis_zoom: true
+    # y_axis_zoom: true
     advanced_vis_config: |-
       {
         tooltip: {
@@ -434,10 +446,6 @@
           shadow: true,
         },
       }
-    limit_displayed_rows_values:
-      show_hide: show
-      first_last: first
-      num_rows: '10'
     note_state: collapsed
     note_display: hover
     note_text: |-

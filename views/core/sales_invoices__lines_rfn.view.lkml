@@ -107,7 +107,7 @@ view: +sales_invoices__lines {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_invoices_to_order_details}'%}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_invoices_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       @{link_build_dashboard_url}
@@ -572,7 +572,7 @@ view: +sales_invoices__lines {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_invoices_to_invoice_details}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
       {% assign default_filters='is_discounted=Yes'%}
@@ -599,7 +599,7 @@ view: +sales_invoices__lines {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_invoices_to_invoice_details}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
       {% assign default_filters='is_discounted=Yes'%}
@@ -626,7 +626,7 @@ view: +sales_invoices__lines {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_invoices_to_invoice_details}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}' | append: '||sales_invoices__lines.is_discount_selling_price|is_discounted||sales_invoices__lines.is_intercompany|is_intercompany' %}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
       {% assign default_filters='is_discounted=Yes'%}

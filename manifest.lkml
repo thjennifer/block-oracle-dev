@@ -399,7 +399,7 @@ constant: link_style_dashboard_navigation {
 #    Any filters for field business_unit_name will be passed to the dashboard filter named business unit.
 # - Additional mapping pairs can be appended to these constants when defining the link property.
 # - Example measure which opens a dashboard using the constant
-#   link_map_sales_orders_to_order_details to define the source_to_destination_filters_mapping:
+#   link_map_otc_sales_orders_to_order_details to define the source_to_destination_filters_mapping:
 #       measure: total_booking_amount_target_currency_formatted {
 #           link: {
 #             label: "Order Line Details"
@@ -408,7 +408,7 @@ constant: link_style_dashboard_navigation {
 #                @{link_build_variable_defaults}
 #               {% assign link = link_generator._link %}
 #               {% assign use_qualified_filter_names = false %}
-#               {% assign source_to_destination_filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
+#               {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
 #               {% assign model = _model._name %}
 #               {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
 #               {% assign default_filters='is_booking=Yes'%}
@@ -418,30 +418,30 @@ constant: link_style_dashboard_navigation {
 #             }
 #         }
 
-#--> link_map_sales_invoices_to_invoice_details
+#--> link_map_otc_sales_invoices_to_invoice_details
 #{ Maps fields found in Explores sales_invoices and sales_invoices_daily_agg
 #  to filters on dashboard otc_billing_invoice_line_details
 #}
-constant: link_map_sales_invoices_to_invoice_details {
+constant: link_map_otc_sales_invoices_to_invoice_details {
   value: "invoice_date|date||business_unit_name|business_unit||bill_to_customer_country|customer_country||bill_to_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency"
 }
 
-#--> link_map_sales_orders_to_order_details
+#--> link_map_otc_sales_orders_to_order_details
 #{ Maps fields found in Explores sales_orders and sales_orders_daily_agg
 #  to filters on dashboard otc_order_line_item_details
 #}
-constant: link_map_sales_orders_to_order_details {
+constant: link_map_otc_sales_orders_to_order_details {
   value: "ordered_date|date||business_unit_name|business_unit||parameter_customer_type|customer_type||selected_customer_country|customer_country||selected_customer_name|customer_name||order_source_name|order_source||category_description|item_category||parameter_target_currency|target_currency||parameter_language|item_language||open_closed_cancelled|order_status||order_category_code|order_category_code||line_category_code|line_category_code"
 }
 
-#--> link_map_sales_orders_to_order_details_extra_mapping
+#--> link_map_otc_sales_orders_to_order_details_extra_mapping
 #{
 # - To accommodate the dual purpose of the selected_product_dimension_description field, which can represent either an item description
 #   or a category description based on the parameter_display_product_level parameter,
 #   additional logic is required to ensure the correct mapping to the corresponding dashboard filter--either item_description or item_category.
 # - Returns a liquid variable called extra_mapping which can be appended to the source_to_destination_filters_mapping variable.
 #}
-constant: link_map_sales_orders_to_order_details_extra_mapping {
+constant: link_map_otc_sales_orders_to_order_details_extra_mapping {
   value: "{%- assign extra_mapping = '' -%}
           {%- if sales_orders__lines.selected_product_dimension_description._in_query -%}
               {%- assign append_extra_mapping = true -%}
@@ -457,11 +457,11 @@ constant: link_map_sales_orders_to_order_details_extra_mapping {
           {%- endif -%}"
 }
 
-#--> link_map_invoices_to_order_details
+#--> link_map_otc_invoices_to_order_details
 #{ Maps fields found in explores sales_invoices and sales_invoices_daily_agg
 #  to dashboard filters on dashboard otc_order_line_item_details
 #}
-constant: link_map_invoices_to_order_details {
+constant: link_map_otc_invoices_to_order_details {
   value: "parameter_target_currency|target_currency||parameter_language|item_language||order_header_number|order_number"
 }
 
@@ -711,7 +711,7 @@ constant: link_build_context {
 #      The mapping indicates how a source field maps to a dashboard filter or a field in a different Explore.
 #      The mapping pairs are defined in the form of:
 #         view_name.field_name|destination filter1||view_name.field_name2|destination filter2
-#      See constant link_map_sales_invoices_to_invoice_details for an example mapping.
+#      See constant link_map_otc_sales_invoices_to_invoice_details for an example mapping.
 #   2. filters_array_source generated with constant link_build_context
 #
 # Is called from either:
@@ -966,7 +966,7 @@ constant: link_build_explore_link_variable {
   {% endif %}
 
   {% if total != '' %}
-    {% assign total = '&assign=' |append: total %}
+    {% assign total = '&total=' |append: total %}
     {% assign explore_link = explore_link | append: total %}
   {% endif %}
 

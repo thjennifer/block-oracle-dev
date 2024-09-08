@@ -155,7 +155,6 @@ view: +sales_invoices_daily_agg {
   }
 #} end item categories
 
-
 #########################################################
 # DIMENSIONS: Dates
 #{
@@ -189,7 +188,6 @@ view: +sales_invoices_daily_agg {
 
 #} end dates
 
-
 #########################################################
 # DIMENSIONS: Amounts in Target Currency
 #{
@@ -212,9 +210,98 @@ view: +sales_invoices_daily_agg {
     sql: (select SUM(TOTAL_DISCOUNT) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
   }
 
+  dimension: list_price_target_currency {
+    description: "Sum of post-tax list amounts across all lines"
+    sql: (select SUM(TOTAL_LIST) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
+  }
+
+  dimension: selling_price_target_currency {
+    description: "Sum of pre-tax selling amounts across all lines"
+    sql: (select SUM(TOTAL_SELLING) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
+  }
+
+  dimension: intercompany_list_price_target_currency {
+    description: "Sum of post-tax list amounts across all intercompany lines"
+    sql: (select SUM(TOTAL_LIST) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
+  }
+
+  dimension: intercompany_selling_price_target_currency {
+    description: "Sum of pre-tax selling amounts across all intercompany lines"
+    sql: (select SUM(TOTAL_SELLING) FROM sales_invoices_daily_agg.amounts WHERE TARGET_CURRENCY_CODE =  ${target_currency_code}) ;;
+  }
+
 #} end amount dimensions
 
+#########################################################
+# MEASURES: Average list and selling prices
+#{
+#
+  measure: total_list_price_target_currency  {
+    type: sum
+    sql:  ${list_price_target_currency};;
+  }
+
+  measure: total_selling_price_target_currency  {
+    type: sum
+    sql:  ${selling_price_target_currency};;
+  }
+
+  measure: total_intercompany_list_price_target_currency  {
+    type: sum
+    sql:  ${list_price_target_currency};;
+  }
+
+  measure: total_intercompany_selling_price_target_currency  {
+    type: sum
+    sql:  ${selling_price_target_currency};;
+  }
+
+  measure: total_invoice_lines {
+    type: sum
+    sql: ${num_invoice_lines} ;;
+  }
+
+  measure: total_intercompany_invoice_lines {
+    type: sum
+    sql: ${num_intercompany_lines} ;;
+  }
+
+  measure: average_list_price_target_currency {
+    hidden: no
+    type: number
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Average list price target currency"
+    sql: SAFE_DIVIDE(${total_list_price_target_currency},${total_invoice_lines}) ;;
+    value_format_name: decimal_2
+  }
+
+  measure: average_selling_price_target_currency {
+    hidden: no
+    type: number
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Average selling price target currency"
+    sql: SAFE_DIVIDE(${total_selling_price_target_currency},${total_invoice_lines}) ;;
+    value_format_name: decimal_2
+  }
+
+  measure: average_intercompany_list_price_target_currency {
+    hidden: no
+    type: number
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Average list price target currency for intercompany lines"
+    sql: SAFE_DIVIDE(${total_list_price_target_currency},${total_invoice_lines}) ;;
+    value_format_name: decimal_2
+  }
+
+  measure: average_intercompany_selling_price_target_currency {
+    hidden: no
+    type: number
+    label: "@{label_currency_defaults}@{label_currency_field_name}@{label_currency_if_selected}"
+    description: "Average selling price target currency for intercompany lines"
+    sql: SAFE_DIVIDE(${total_selling_price_target_currency},${total_invoice_lines}) ;;
+    value_format_name: decimal_2
+  }
 
 
-
+#} end average price measures
 }

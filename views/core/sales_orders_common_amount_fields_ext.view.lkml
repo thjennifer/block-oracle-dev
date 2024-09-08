@@ -274,9 +274,9 @@ view: sales_orders_common_amount_fields_ext {
       {% assign append_extra_mapping = false %}
       {% assign expl = _explore._name %}
       {% if expl == 'sales_orders' %}
-        @{link_map_sales_orders_to_order_details_extra_mapping}
+        @{link_map_otc_sales_orders_to_order_details_extra_mapping}
       {% endif %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
       {% if append_extra_mapping == true %}
         {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | append: extra_mapping %}
       {% endif %}
@@ -302,7 +302,7 @@ view: sales_orders_common_amount_fields_ext {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_booking=Yes'%}
@@ -359,7 +359,7 @@ view: sales_orders_common_amount_fields_ext {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
       {% assign default_filters='is_backlog=Yes'%}
@@ -427,8 +427,8 @@ view: sales_orders_common_amount_fields_ext {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_orders_to_order_details}'%}
-      @{link_map_sales_orders_to_order_details_extra_mapping}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
+      @{link_map_otc_sales_orders_to_order_details_extra_mapping}
       {% if append_extra_mapping == true %}
         {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | append: extra_mapping %}
       {% endif %}

@@ -35,13 +35,18 @@
   - name: dashboard_navigation
     filters:
       otc_dashboard_navigation_ext.parameter_navigation_focus_page: '1'
-
+#####################################################################################################
   - name: total_sales_orders
     title: Total Sales Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
-    hidden_fields: [sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
+    fields: [ sales_orders.sales_order_count_formatted,
+              sales_orders.has_return_sales_order_percent,
+              sales_orders.no_holds_order_percent,
+              sales_orders.blocked_order_count]
+    hidden_fields: [sales_orders.has_return_sales_order_percent,
+                    sales_orders.no_holds_order_percent,
+                    sales_orders.blocked_order_count]
     filters:
       sales_orders.order_category_code: '-RETURN'
     listen:
@@ -60,13 +65,18 @@
     col: 0
     width: 6
     height: 2
-
+#####################################################################################################
   - name: return_sales_order_percent
     title: Return Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
-    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
+    fields: [ sales_orders.sales_order_count_formatted,
+              sales_orders.has_return_sales_order_percent,
+              sales_orders.no_holds_order_percent,
+              sales_orders.blocked_order_count]
+    hidden_fields: [sales_orders.sales_order_count_formatted,
+                    sales_orders.no_holds_order_percent,
+                    sales_orders.blocked_order_count]
     filters:
       sales_orders.order_category_code: '-RETURN'
     listen:
@@ -85,13 +95,18 @@
     col: 6
     width: 6
     height: 2
-
+#####################################################################################################
   - name: no_holds_sales_order_percent
     title: One Touch Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
-    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.blocked_order_count]
+    fields: [ sales_orders.sales_order_count_formatted,
+              sales_orders.has_return_sales_order_percent,
+              sales_orders.no_holds_order_percent,
+              sales_orders.blocked_order_count]
+    hidden_fields: [sales_orders.sales_order_count_formatted,
+                    sales_orders.has_return_sales_order_percent,
+                    sales_orders.blocked_order_count]
     filters:
       sales_orders.order_category_code: '-RETURN'
     listen:
@@ -110,13 +125,18 @@
     col: 12
     width: 6
     height: 2
-
+#####################################################################################################
   - name: blocked_orders
     title: Blocked Orders
     explore: sales_orders
     type: single_value
-    fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent,sales_orders.blocked_order_count]
-    hidden_fields: [sales_orders.sales_order_count_formatted,sales_orders.has_return_sales_order_percent,sales_orders.no_holds_order_percent]
+    fields: [ sales_orders.sales_order_count_formatted,
+              sales_orders.has_return_sales_order_percent,
+              sales_orders.no_holds_order_percent,
+              sales_orders.blocked_order_count]
+    hidden_fields: [sales_orders.sales_order_count_formatted,
+                    sales_orders.has_return_sales_order_percent,
+                    sales_orders.no_holds_order_percent]
     filters:
       sales_orders.order_category_code: '-RETURN'
     listen:
@@ -135,16 +155,16 @@
     col: 18
     width: 6
     height: 2
-
+#####################################################################################################
   - name: bbb_funnel
     title: Booking to Billing
     explore: sales_orders_daily_agg
     type: looker_funnel
     fields: [sales_orders_daily_agg__lines.total_ordered_amount_target_currency_formatted,
-      sales_orders_daily_agg__lines.total_booking_amount_target_currency_formatted,
-      sales_orders_daily_agg__lines.total_backlog_amount_target_currency_formatted,
-      sales_orders_daily_agg__lines.total_shipped_amount_target_currency_formatted,
-      sales_orders_daily_agg__lines.total_invoiced_amount_target_currency_formatted]
+             sales_orders_daily_agg__lines.total_booking_amount_target_currency_formatted,
+             sales_orders_daily_agg__lines.total_backlog_amount_target_currency_formatted,
+             sales_orders_daily_agg__lines.total_shipped_amount_target_currency_formatted,
+             sales_orders_daily_agg__lines.total_invoiced_amount_target_currency_formatted]
     filters:
       sales_orders_daily_agg__lines.line_category_code: "ORDER"
       sales_orders_daily_agg.order_category_code: "-RETURN"
@@ -195,7 +215,7 @@
     col: 0
     width: 12
     height: 8
-
+#####################################################################################################
   - name: order_status_donut
     title: Order Status
     explore: sales_orders

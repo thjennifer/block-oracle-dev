@@ -219,19 +219,32 @@
     title: Orders with Line Item Details
     explore: sales_orders
     type: looker_grid
-    fields: [sales_orders.order_number, sales_orders.order_category_code,
-            sales_orders.open_closed_cancelled_with_symbols, sales_orders.is_fulfilled_with_symbols, sales_orders.is_blocked_with_symbols,
-            sales_orders.has_return_line_with_symbols, sales_orders.total_sales_amount_target_currency,
-            sales_orders__lines.line_id, sales_orders__lines.line_number,
-            sales_orders__lines.item_part_number, sales_orders__lines.item_description,
-            sales_orders.selected_customer_name, sales_orders.ordered_date,
-            sales_orders__lines.ordered_quantity, sales_orders__lines.quantity_uom, sales_orders__lines.fulfilled_quantity,
-            sales_orders__lines.unit_list_price_target_currency, sales_orders__lines.unit_discount_amount_target_currency,
+    fields: [sales_orders.order_number,
+            sales_orders.order_category_code,
+            sales_orders.open_closed_cancelled_with_symbols,
+            sales_orders.is_fulfilled_with_symbols,
+            sales_orders.is_blocked_with_symbols,
+            sales_orders.has_return_line_with_symbols,
+            sales_orders.total_sales_amount_target_currency,
+            sales_orders__lines.line_id,
+            sales_orders__lines.line_number,
+            sales_orders__lines.item_part_number,
+            sales_orders__lines.item_description,
+            sales_orders.selected_customer_name,
+            sales_orders.ordered_date,
+            sales_orders__lines.ordered_quantity,
+            sales_orders__lines.quantity_uom,
+            sales_orders__lines.fulfilled_quantity,
+            sales_orders__lines.unit_list_price_target_currency,
+            sales_orders__lines.unit_discount_amount_target_currency,
             sales_orders__lines.unit_selling_price_target_currency,
-            sales_orders__lines.ordered_amount_target_currency, sales_orders__lines.fulfilled_amount_target_currency,
+            sales_orders__lines.ordered_amount_target_currency,
+            sales_orders__lines.fulfilled_amount_target_currency,
             sales_orders.currency_conversion_rate,
-            sales_orders__lines.has_return_with_symbols, sales_orders__lines.is_backlog_with_symbols,
-            sales_orders__lines.is_booking_with_symbols, sales_orders__lines.is_backordered_with_symbols]
+            sales_orders__lines.has_return_with_symbols,
+            sales_orders__lines.is_backlog_with_symbols,
+            sales_orders__lines.is_booking_with_symbols,
+            sales_orders__lines.is_backordered_with_symbols]
     sorts: [sales_orders.order_number, sales_orders__lines.line_number]
     limit: 500
     show_view_names: false
@@ -320,8 +333,13 @@
     title: Summary
     explore: sales_orders
     type: looker_grid
-    fields: [sales_orders.sales_order_count,sales_orders.fulfilled_order_count, sales_orders.blocked_order_count, sales_orders.has_return_sales_order_count, sales_orders__lines.count_order_lines,
-             sales_orders__lines.total_sales_amount_target_currency,sales_orders__lines.total_fulfilled_amount_target_currency]
+    fields: [ sales_orders.sales_order_count,
+              sales_orders.fulfilled_order_count,
+              sales_orders.blocked_order_count,
+              sales_orders.has_return_sales_order_count,
+              sales_orders__lines.count_order_lines,
+              sales_orders__lines.total_sales_amount_target_currency,
+              sales_orders__lines.total_fulfilled_amount_target_currency]
     show_view_names: false
     show_row_numbers: false
     transpose: false

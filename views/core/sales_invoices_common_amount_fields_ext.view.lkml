@@ -150,7 +150,7 @@ view: sales_invoices_common_amount_fields_ext {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_invoices_to_invoice_details}'| append: '||invoice_month|date'%}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}'| append: '||invoice_month|date'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
       @{link_build_dashboard_url}
@@ -193,7 +193,7 @@ view: sales_invoices_common_amount_fields_ext {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_invoices_to_invoice_details}'%}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
       @{link_build_dashboard_url}
@@ -216,7 +216,7 @@ view: sales_invoices_common_amount_fields_ext {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_invoices_to_invoice_details}'%}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
       {% assign default_filters='is_discounted=Yes'%}

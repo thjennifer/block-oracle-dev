@@ -268,6 +268,24 @@ view: +sales_invoices {
     value_format_name: decimal_2
   }
 
+  dimension: num_intercompany_lines {
+    hidden: no
+    type: number
+    group_label: "Invoice Totals"
+    label: "Total Intercompany Invoice Lines"
+    description: "Number of intercompany lines in this invoice"
+    sql: ${TABLE}.NUM_INTERCOMPANY_LINES ;;
+  }
+
+  dimension: num_lines {
+    hidden: no
+    type: number
+    group_label: "Invoice Totals"
+    label: "Total Invoice Lines"
+    description: "Number of lines in this invoice"
+    sql: ${TABLE}.NUM_LINES ;;
+  }
+
 #} end invoice totals as dimensions
 
 #########################################################
@@ -298,7 +316,7 @@ view: +sales_invoices {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_sales_invoices_to_invoice_details}'%}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}'%}
       {% assign model = _model._name %}
       {% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}
       @{link_build_dashboard_url}
