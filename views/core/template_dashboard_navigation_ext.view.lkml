@@ -30,7 +30,7 @@
 # STEPS TO EXTEND THIS TEMPLATE {
 # When extending this template, make the REQUIRED customizations by following these steps:
 # 1. Create new view
-# 2. Add "extend: template_dashboard_navigation" property (use name of this view)
+# 2. Add "extend: template_dashboard_navigation_ext" property (use name of this view)
 # 3. Edit dimension map_filter_numbers_to_dashboard_filter_names.
 #     - Update the "sql" property with the mapping of filter numbers to dashboard filter names.
 #     - For each filter that must be passed between dashboards, assign a generic filter number 1 to N.
@@ -110,7 +110,7 @@
 #}
 #########################################################}
 
-view: template_dashboard_navigation {
+view: template_dashboard_navigation_ext {
   extension: required
 
   view_label: "@{label_view_for_dashboard_navigation}"

@@ -350,11 +350,11 @@ constant: label_currency_if_selected {
 # Defines the multiple styles available for dashboard links:
 #     buttons, tabs or plain
 # These options should match the allowed values in parameter_navigation_style
-# found in template_dashboard_navigation and any extension of this template.
+# found in template_dashboard_navigation_ext and any extension of this template.
 #
 # Generates liquid variables for click_style and non_click_style.
 # These styles will be applied when displaying the dashboard urls in a single value visualization.
-# See the html property of the dimension template_dashboard_navigation.navigation_links.
+# See the html property of the dimension template_dashboard_navigation_ext.navigation_links.
 #}
 constant: link_style_dashboard_navigation {
   value: "{% assign nav_style = parameter_navigation_style._parameter_value %}
@@ -468,12 +468,12 @@ constant: link_map_otc_invoices_to_order_details {
 #--> link_map_filters_from_navigation_dash_bindings
 #{
 # - Generates liquid variable source_to_destination_filters_mapping used in building a dashboard url.
-# - For dashboard navigation defined using an extension of template_dashboard_navigation,
+# - For dashboard navigation defined using an extension of template_dashboard_navigation_ext,
 #   the LookML developer uses the dash_bindings and map_filter_numbers_to_dashboard_filter_names dimensions
 #   to map filters 1 to N to filters of one or more dashboards.
 # - This constant reads the value of this dimension and the dash_bindings dimension to
 #   generate the liquid variable source_to_destination_filters_mapping in the required syntax.
-# - See template_dashboard_navigation.navigation_links dimension for example of how this constant is used.
+# - See template_dashboard_navigation_ext.navigation_links dimension for example of how this constant is used.
 #}
 constant: link_map_filters_from_navigation_dash_bindings {
 value: "{% assign source_to_destination_filters_mapping = ''%}
@@ -834,7 +834,7 @@ constant: link_build_default_filter_string {
 #     a. the url opened in the frontend UI when use_url_variable == false (which is the default)
 #     b. a liquid variable named dashboard_url which can be referenced in a field's html property when use_url_variable == true
 #
-# See navigation_links dimension in template_dashboard_navigation for an example of using the dashboard_url variable.
+# See navigation_links dimension in template_dashboard_navigation_ext for an example of using the dashboard_url variable.
 #
 # Requires these to be added to a measure's link property::
 #   - @{link_build_variable_defaults}

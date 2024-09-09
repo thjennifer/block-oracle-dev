@@ -4,7 +4,7 @@
 # related OTC Dashboards.
 #
 # SOURCE
-# Extends View template_dashboard_navigation
+# Extends View template_dashboard_navigation_ext
 #
 # REFERENCED BY
 # Explores:
@@ -16,7 +16,7 @@
 #   sales_payments_daily_agg
 #
 # CUSTOMIZATIONS {
-# While the template_dashboard_navigation provides much of the logic needed, customizations
+# While the template_dashboard_navigation_ext provides much of the logic needed, customizations
 # are required.
 #   1. Added a new parameter called parameter_navigation_subject to support
 #      multiple dashboard groupings for OTC:
@@ -107,10 +107,10 @@
 #}
 #########################################################}
 
-include: "/views/core/template_dashboard_navigation.view"
+include: "/views/core/template_dashboard_navigation_ext.view"
 
 view: otc_dashboard_navigation_ext {
-  extends: [template_dashboard_navigation]
+  extends: [template_dashboard_navigation_ext]
 
   view_label: "@{label_view_for_dashboard_navigation}"
 
