@@ -48,6 +48,8 @@ include: "/views/core/sales_invoices_daily_agg__amounts_rfn.view"
 explore: sales_invoices_daily_agg {
   hidden: no
   label: "Sales Invoices Daily Aggregate"
+  description: "Provides daily invoice totals by Business Unit, Bill To Customer, Invoice Type, Order Source and Item Category. Also includes Invoice Amount and other totals in one or more target currencies."
+
 
   sql_always_where: COALESCE(ITEM_CATEGORY_SET_NAME,'Unknown') in ('Unknown',@{category_set}) ;;
 

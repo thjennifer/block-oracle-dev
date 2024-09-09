@@ -63,6 +63,8 @@ include: "/views/core/sales_invoices__lines__item_descriptions_rfn.view"
 
 explore: sales_invoices {
   hidden: no
+  description: "Retrieve information about invoices, including both header-level attributes and line-item details"
+
   join: sales_invoices__lines {
     view_label: "Sales Invoices: Lines"
     sql: LEFT JOIN UNNEST(${sales_invoices.lines}) as sales_invoices__lines ;;

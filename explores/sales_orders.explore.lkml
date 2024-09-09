@@ -71,7 +71,7 @@ include: "/views/core/sales_orders__lines__cancel_reason_rfn.view"
 
 explore: sales_orders {
   hidden: no
-  description: "Retrieve information about sales orders, including both header-level attributes and line-item details"
+  description: "Retrieve information about sales orders, including both header-level attributes and line-item details."
 
   always_filter: {
     filters: [order_category_code: "-RETURN", sales_orders__lines.line_category_code: ""]
