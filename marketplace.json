@@ -1,0 +1,28 @@
+{
+  "label": "Cortex Framework for Oracle EBS",
+  "category_label": "Models",
+  "branding": {
+    "image_uri": "https://marketplace-api.looker.com/block-icons/cortex_icon.png",
+    "tagline": "Common operational dashboard templates for data replicated from Oracle EBS into BigQuery leveraging Cortex Framework content."
+  },
+
+  "constants": {
+    "CONNECTION_NAME": {
+      "label": "Connection Name",
+      "value_constraint": "connection"
+    },
+    "GCP_PROJECT_ID": {
+      "label": "GCP Project ID"
+    },
+    "REPORTING_DATASET": {
+      "label": "Reporting Dataset Name",
+      "description": "The dataset holding the reporting tables and views designed for Oracle EBS."
+    }
+  },
+  "models": [
+    {
+      "name": "cortex-oracle-ebs",
+      "connection_constant": "CONNECTION_NAME"
+    }
+  ]
+}
