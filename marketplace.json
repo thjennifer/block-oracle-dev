@@ -9,11 +9,11 @@
   "constants": {
     "CONNECTION_NAME": {
       "label": "Connection Name",
-      "value_constraint": "connection"
+      "value_constraint": "connection",
       "description": "Value of the BigQuery CONNECTION_NAME allowing Looker to query the Cortex Framework REPORTING dataset."
     },
     "GCP_PROJECT_ID": {
-      "label": "GCP Project ID"
+      "label": "GCP Project ID",
       "description": "The GCP project ID where the deployed Cortex Framework REPORTING dataset for Oracle EBS resides in BigQuery."
     },
     "REPORTING_DATASET": {
