@@ -179,6 +179,8 @@ view: +sales_invoices {
 
   dimension: is_complete_with_symbols {
     hidden: no
+    group_label: "Status with Symbols"
+    label: "Is Complete"
     description: "✅ if invoice is complete"
     sql: COALESCE(${is_complete},false) ;;
     html: @{html_symbols_for_yes} ;;

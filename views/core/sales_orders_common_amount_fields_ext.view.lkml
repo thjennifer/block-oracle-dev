@@ -327,7 +327,8 @@ view: sales_orders_common_amount_fields_ext {
       {% assign link = link_generator._link %}
       {% assign v = _view._name | append: '.' %} {% assign e = _explore._name | append: '.' %}
       {% assign measure = 'total_backlog_amount_target_currency' | prepend: v %}
-      {% assign d = 'selected_customer_name' | prepend: e %}
+      {% assign d = 'selected_customer_number, ' | prepend: e %}
+      {% assign d = d | append: e | append: 'selected_customer_name' %}
       {% assign drill_fields = d | append: ',' | append: measure %}
       {% assign default_filters = measure | append: '=%3E%200' %}
       {% assign limit = 50 %}

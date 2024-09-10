@@ -317,14 +317,9 @@
     show_y_axis_ticks: true
     show_x_axis_label: false
     show_x_axis_ticks: true
-    # y_axis_scale_mode: linear
     legend_position: center
     point_style: circle
     show_value_labels: true
-    # x_axis_scale: auto
-    # y_axis_combined: true
-    # show_null_labels: false
-    # show_totals_labels: false
     show_silhouette: false
     y_axes: [{label: '', orientation: top,
               series: [{axisId: sales_payments_daily_agg.total_receivables_target_currency_formatted,
@@ -334,8 +329,6 @@
           series: [{axisId: cumulative_percent_of_total_receivables,
                         id: cumulative_percent_of_total_receivables,
                       name: Cumulative Percent of Total Receivables}], showLabels: false, showValues: false,}]
-    # x_axis_zoom: true
-    # y_axis_zoom: true
     advanced_vis_config: |-
       {
         series: [
@@ -401,17 +394,19 @@
               sales_payments.total_overdue_receivables_target_currency_formatted,
               sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
     pivots: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name]
-    hidden_fields: [sales_payments.bill_to_customer_number]
-    hidden_pivots:
-      "$$$_row_total_$$$":
-        is_entire_pivot_hidden: true
+    dynamic_fields:
+      - category: table_calculation
+        expression: sum(pivot_row(${sales_payments.total_overdue_receivables_target_currency_formatted}))
+        label: Row Total
+        value_format_name: format_large_numbers_d1
+        _kind_hint: supermeasure
+        table_calculation: row_total
+        _type_hint: number
+    hidden_fields: [sales_payments.bill_to_customer_number, row_total]
     filters:
       sales_payments.is_open_and_overdue: 'Yes'
       sales_payments.payment_class_code: '-PMT'
-    sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name,
-           sales_payments.total_receivables_target_currency_formatted desc 4]
-    limit: 5000
-    row_total: right
+    sorts: [sales_payments_dynamic_aging_bucket_sdt.aging_bucket_name, row_total desc]
     show_y_axis_ticks: false
     show_y_axis_labels: false
     show_x_axis_label: false
@@ -433,8 +428,6 @@
       options:
         steps: 5
         reverse: false
-    # x_axis_zoom: true
-    # y_axis_zoom: true
     advanced_vis_config: |-
       {
         tooltip: {

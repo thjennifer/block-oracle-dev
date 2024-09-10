@@ -73,10 +73,12 @@ view: +sales_invoices__lines {
     full_suggestions: yes
   }
 
-  dimension: is_intercompnay_with_symbols {
+  dimension: is_intercompany_with_symbols {
     hidden: yes
-    sql: ${is_intercompany} ;;
+    group_label: "Line Status with Symbols"
+    label: "Item is Intercompany"
     description: "✅ if transaction was internal within the company"
+    sql: ${is_intercompany} ;;
     can_filter: no
     html: @{html_symbols_for_yes} ;;
   }
@@ -330,6 +332,7 @@ view: +sales_invoices__lines {
     hidden: yes
     type: string
     group_label: "Item Prices and Discounts"
+    label: "Item is Discounted"
     description: "✅ if line item was sold at a discounted price"
     sql: ${is_discount_selling_price} ;;
     html: @{html_symbols_for_yes} ;;

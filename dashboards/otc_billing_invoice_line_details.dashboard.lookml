@@ -146,17 +146,29 @@
     title: Invoice Line Details
     explore: sales_invoices
     type: looker_grid
-    fields: [sales_invoices.invoice_number, sales_invoices.invoice_type_name, sales_invoices.invoice_date,
-      sales_invoices.total_transaction_amount_target_currency, sales_invoices.total_tax_amount_target_currency,
-      sales_invoices.is_complete_with_symbols,sales_invoices.bill_to_customer_name,
-      sales_invoices__lines.order_header_number, sales_invoices__lines.order_source_name, sales_invoices__lines.line_number,
-      sales_invoices__lines.item_part_number, sales_invoices__lines.item_description,
-      sales_invoices__lines.category_description, sales_invoices__lines.invoiced_or_credited_quantity,
-      sales_invoices__lines.quantity_uom, sales_invoices__lines.unit_list_price_target_currency,
-      sales_invoices__lines.gross_unit_selling_price_target_currency, sales_invoices__lines.percent_discount,
-      sales_invoices__lines.transaction_amount_target_currency, sales_invoices__lines.discount_amount_target_currency,
-      sales_invoices__lines.tax_amount_target_currency,
-      sales_invoices__lines.is_discount_selling_price_with_symbols, sales_invoices__lines.is_intercompnay_with_symbols]
+    fields: [ sales_invoices.invoice_number,
+              sales_invoices.invoice_type_name,
+              sales_invoices.invoice_date,
+              sales_invoices.total_transaction_amount_target_currency,
+              sales_invoices.total_tax_amount_target_currency,
+              sales_invoices.is_complete_with_symbols,
+              sales_invoices.bill_to_customer_name,
+              sales_invoices__lines.order_header_number,
+              sales_invoices__lines.order_source_name,
+              sales_invoices__lines.line_number,
+              sales_invoices__lines.item_part_number,
+              sales_invoices__lines.item_description,
+              sales_invoices__lines.category_description,
+              sales_invoices__lines.invoiced_or_credited_quantity,
+              sales_invoices__lines.quantity_uom,
+              sales_invoices__lines.unit_list_price_target_currency,
+              sales_invoices__lines.gross_unit_selling_price_target_currency,
+              sales_invoices__lines.percent_discount,
+              sales_invoices__lines.transaction_amount_target_currency,
+              sales_invoices__lines.discount_amount_target_currency,
+              sales_invoices__lines.tax_amount_target_currency,
+              sales_invoices__lines.is_discount_selling_price_with_symbols,
+              sales_invoices__lines.is_intercompany_with_symbols]
     sorts: [sales_invoices.invoice_number, sales_invoices__lines.line_number]
     limit: 500
     show_view_names: false
@@ -181,8 +193,8 @@
     minimum_column_width: 75
     series_labels:
       sales_invoices__lines.is_discount_selling_price_with_symbols: Item is Discounted
-      sales_invoices__lines.is_intercompnay_with_symbols: Item is Intercompany
-      sales_invoices__lines.is_complete_with_symbols: Is Complete
+      sales_invoices__lines.is_intercompany_with_symbols: Item is Intercompany
+      sales_invoices.is_complete_with_symbols: Is Complete
     series_text_format:
       sales_invoices__lines.is_discount_selling_price_with_symbols:
         align: center
