@@ -78,6 +78,7 @@ view: +item_md {
   }
 
   dimension: unit_volume {value_format_name: decimal_2}
+
   dimension: unit_weight {value_format_name: decimal_2}
 
   dimension: volume_uom_code {

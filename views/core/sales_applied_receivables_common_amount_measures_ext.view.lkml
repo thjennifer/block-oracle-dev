@@ -1,3 +1,22 @@
+#########################################################{
+# PURPOSE
+# Provide the same labels/descriptions and/or definitions for
+# target currency fields used in:
+#     sales_applied_receivables
+#     sales_applied_receivables_daily_agg
+#     sales_applied_receivables_daily_agg__amounts
+#
+# To use, extend into the desired view.
+#
+# Fully defines these measures including sql: property:
+#   total_amount_applied_target_currency
+#   total_amount_received_target_currency
+#
+# Adds formatting and/or links to these measures for dashboard display:
+#   total_amount_applied_target_currency_formatted
+#   total_amount_received_target_currency_formatted
+#########################################################}
+
 view: sales_applied_receivables_common_amount_measures_ext {
   extension: required
 

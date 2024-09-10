@@ -31,11 +31,11 @@ include: "/views/core/otc_common_currency_fields_ext.view"
 
 view: sales_payments_dso_days_agg_pdt {
 
-    label: "Sales Payments DSO Days Agg"
+  label: "Sales Payments DSO Days Agg"
 
-    extends: [otc_common_currency_fields_ext]
+  extends: [otc_common_currency_fields_ext]
 
-    derived_table: {
+  derived_table: {
       datagroup_trigger: sales_payments_daily_agg_change
 
       sql: SELECT

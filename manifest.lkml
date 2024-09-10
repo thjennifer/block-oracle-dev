@@ -134,7 +134,7 @@ constant: html_message_source_currency {
 # For example:
 #     measure: order_count {
 #       type: sum
-#       sql: @{is_agg_category_selected}NULL {%else} ${num_orders} {% endif %} ;;
+#       sql: @{is_agg_category_in_query}NULL {% else %} ${num_orders} {% endif %} ;;
 #     }
 #}
 constant: is_agg_category_in_query {

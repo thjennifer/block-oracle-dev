@@ -186,9 +186,6 @@ view: template_dashboard_navigation_ext {
 
 #} end optional overrides
 
-
-
-
 #########################################################
 # Derive navigation links using liquid
 #{
@@ -246,85 +243,6 @@ view: template_dashboard_navigation_ext {
   }
 
 #} derive navigation_links
-
-
-# dimension: test_navigation_parts {
-#   type: string
-#   hidden: no
-#   label: "Test Navigation Parts"
-#   description: "Add to Single Value Visualization. Defined HTML styling will be shown"
-#   sql:  '' ;;
-#   html:
-
-# <div>
-#           <!-- initialize variables used in following steps-->
-#             @{link_build_variable_defaults}
-#             @{link_style_dashboard_navigation}
-
-#     <!-- capture the full url of the dashboard including filters -->
-#     {% assign link = link_generator._link %}.
-#     {% assign use_qualified_filter_names = false %}
-
-
-#     {% assign focus_page = parameter_navigation_focus_page._parameter_value | times: 1 %}
-
-#     {% assign model_name = _model._name %}
-#     {% if use_qualified_filter_names == true %}{% assign view_name = _view._name | append: "." %}
-#     {% else %}{% assign view_name = ''%}
-#     {%endif%}
-#     {% assign nav_items = dash_bindings._value | split: '||' %}
-#     {% assign dash_map = map_filter_numbers_to_dashboard_filter_names._value | split: '||' %}
-
-#     {% for nav_item in nav_items %}
-
-#     {% assign nav_parts = nav_item | split: '|' %}
-
-#     {% assign dash_label = nav_parts[1] %}
-#     <!-- derive target_dashboard ID -->
-#     {% assign target_dashboard = nav_parts[0] %}
-#     <!-- check if target_dashboard is numeric for UDD ids or string for LookML dashboards -->
-#     {% assign check_target_type = target_dashboard | plus: 0 %}
-#     <!-- if LookML Dashboard then append model name if not provided -->
-#     <!-- if check_target_type equals 0 then string else numeric-->
-#     {% if check_target_type == 0 %}
-#     <!-- if target_dashboard contains '::' then model_name is already provided-->
-#     {% if target_dashboard contains '::' %}{% else %}
-#     {% assign target_dashboard = model_name | append: '::' | append: target_dashboard %}
-#     {% endif %}
-#     {% endif %}
-
-#     <br>{{target_dashboard}}<br>
-
-#     <!-- derive target source_to_destination_filters_mapping -->
-#     {% assign dash_filter_set = nav_parts[2] | split: ',' %}
-#     {% for dash_filter in dash_filter_set %}
-#     {{dash_filter| append: ", "}}
-#     {% for map_item in dash_map %}
-#     {% assign map_item_key = map_item | split:'|' | first %}
-#     {% if dash_filter == map_item_key %}
-#     dash_filter {{dash_filter}} = map_item_key {{map_item_key}}
-#     {% assign map_item_value = map_item | split:'|' | last %}
-#     map_item_value: {{map_item_value}}<br>
-
-#     {% assign filter_name = view_name | append: 'filter' | append: dash_filter | append: '|' | append: map_item_value %}
-#     {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | append: filter_name | append: '||' %}
-
-#     {%endif%}
-#     {% endfor %}
-#     {% endfor %}
-#     <br> source_to_destination_filters_mapping: {{source_to_destination_filters_mapping}}
-#     @{link_generate_dashboard_variable}
-#     <br> final url: {{dashboard_url}}
-
-
-#     {% endfor %}
-
-#     </div>
-
-#     ;;
-# }
-
-
 
 
 }

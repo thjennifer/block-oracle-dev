@@ -523,6 +523,7 @@ view: +sales_invoices__lines {
     html: {%- if sales_invoices.currency_code._is_selected -%}{{rendered_value}}{%- else -%}Add Currency (Source) to query as dimension{%- endif -%} ;;
   }
 
+#} end amounts in source currency
 
 #########################################################
 # MEASURES: Average Unit Prices and Discounts
