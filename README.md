@@ -46,12 +46,16 @@ With the Looker project based on your forked repository, you can customize the L
 <h2><span style="color:#2d7eea"> Required Parameters</span></h2>
 > ⚠️ These required values are configured during the Marketplace Installation process, or if this model was installed from a forked Git repository, you will update the values for these constants in the `manifest.lkml` file for the project.
 
-- **CONNECTION**: Value of the BigQuery CONNECTION_NAME allowing Looker to query the Cortex Framework REPORTING dataset.
+- **CONNECTION NAME**: Name of the BigQuery Connection allowing Looker to query the Cortex Framework REPORTING dataset.
 
 - **GCP PROJECT ID**: The GCP project where the Oracle EBS reporting dataset resides in BigQuery (i.e., GCP project ID). [Identifying Project ID](https://cloud.google.com/resource-manager/docs/creating-managing-projects#identifying_projects).
 
 - **REPORTING DATASET**: The deployed Cortex Framework REPORTING dataset where the Oracle EBS views reside within the GCP BigQuery project.
 
+
+<h2><span style="color:#2d7eea"> Persistent Derived Tables Required</span></h2>
+
+The BigQuery connection used for this block must have [Persistent Derived Tables](https://cloud.google.com/looker/docs/derived-tables#persistent_derived_tables) enabled. For more information, see [Enabling PDTs on a Connection](https://cloud.google.com/looker/docs/db-config-google-bigquery#creating_a_temporary_dataset_for_persistent_derived_tables).
 
 <h2><span style="color:#2d7eea"> Required User Attributes</span></h2>
 
@@ -69,12 +73,31 @@ A Looker Admin should create the following user attributes and set their default
 
 Each dashboard user can personalize these values by following these [instructions](https://cloud.google.com/looker/docs/user-account).
 
+<h2><span style="color:#2d7eea">Test Data</span></h2>
+When utilizing the optional test harness data with this block, consider the following key points:
+
+- Sales Orders time frame from January 1, 2021 to April 4, 2024.
+- When the user attribute **cortex_oracle_ebs_use_test_data** is set to **Yes**, calculations based on the current date use March 28, 2024 instead. This adjustment ensures dimensions like age of receivables are accurately reflected in the test dataset.
+- The only available Category Set ID / Category Set Name is 1100000425 / BE_INV_ITEM_CATEGORY_SET. The user attribute **cortex_oracle_ebs_category_set_name** should be set to BE_INV_ITEM_CATEGORY_SET.
+- To showcase multiple languages and currencies during the deployment of [Cortex Framework for Oracle EBS](https://github.com/GoogleCloudPlatform/cortex-data-foundation), include USD and EUR as currency conversion targets and US and ES as languages. Here's a sample snippet from the _config.json_ file used in a deployment:
+
+```
+"OracleEBS": {
+       "itemCategorySetIds": [1100000425],
+        "currencyConversionType": "Corporate",
+        "currencyConversionTargets": ["USD","EUR"],
+        "languages": ["US","ES"],
+        "datasets": {
+            "cdc": "CORTEX_ORACLE_EBS_CDC",
+            "reporting": "CORTEX_ORACLE_EBS_REPORTING"
+        }
+    },
+```
+
+- In _Sales Invoices_ and _Sales Invoices Daily Agg_ the tax amount is 0 for all records.
+- Value for _Is\_Intercompany_ is 'No' for all records.
 
 <h2><span style="color:#2d7eea">Other Considerations</span></h2>
-
-- **Persistent Derived Tables**: If using this block with production data, you may want to convert some derived tables to [Persistent Derived Tables (PDTs)](https://cloud.google.com/looker/docs/derived-tables#use_cases_for_pdts) to improve query performance. Ensure your BigQuery Connection has enabled PDTs, then update any derived table syntax with the desired [persistence strategy](https://cloud.google.com/looker/docs/derived-tables#persistence_strategies).
-
-- **BI Engine Optimization**: Some calculations perform better with [BI Engine Optimization](https://cloud.google.com/blog/products/data-analytics/faster-queries-with-bigquery-bi-engine) enabled in BigQuery.
 
 - **Liquid Templating Language**: Some constants, views, Explores and dashboard use liquid templating language. For more information, see Looker's [Liquid Variable Reference](https://cloud.google.com/looker/docs/liquid-variable-reference) documentation.
 

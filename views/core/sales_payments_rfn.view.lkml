@@ -56,7 +56,6 @@ view: +sales_payments {
 
   dimension: payment_class_code {
     hidden: no
-    description: "Class of payment including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee, BR - Bills Receivable, CB - Chargeback, and PMT - cash receipts"
   }
 
   dimension: is_payment_transaction {

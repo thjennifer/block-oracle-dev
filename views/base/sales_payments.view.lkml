@@ -189,7 +189,7 @@ dimension: ledger_name {
 }
 dimension: payment_class_code {
   type: string
-  description: "Class of payment including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee, BR - Bills Receivable, CB - Chargeback, PMT - cash receipts,"
+  description: "Class of payment including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee, BR - Bills Receivable, CB - Chargeback, PMT - cash receipts"
   sql: ${TABLE}.PAYMENT_CLASS_CODE ;;
 }
 dimension_group: payment_close {

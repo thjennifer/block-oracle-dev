@@ -52,7 +52,7 @@ view: sales_payments_daily_agg {
   }
   dimension: payment_class_code {
     type: string
-    description: "Class of payment including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee, BR - Bills Receivable, CB - Chargeback, PMT - cash receipts,"
+    description: "Class of payment including: INV - Invoice, CM - Credit Memo, DM - Debit Memo, DEP - Deposit, GUAR - Guarantee, BR - Bills Receivable, CB - Chargeback, PMT - cash receipts"
     sql: ${TABLE}.PAYMENT_CLASS_CODE ;;
   }
   dimension: total_days_to_payment {
