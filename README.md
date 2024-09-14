@@ -66,20 +66,23 @@ A Looker Admin should create the following user attributes and set their default
 
 | **Required User Attribute Name** | **Label**                            | **Data Type** | **User Access** | **Hide Value** | **Default Value** |
 |----------------------------------|--------------------------------------|---------------|-----------------|----------------|-------------------|
-| cortex_oracle_ebs_category_set_name  | Cortex Oracle EBS: Category Set Name      | String        | Edit            | No             | Primary Category Set Name used in your EBS system. If using Cortex Test Harness Data default value equals BE_INV_ITEM_CATEGORY_SET |
-| cortex_oracle_ebs_default_language   | Cortex Oracle EBS: Default Language  | String        | Edit            | No             | **US** (or primary language code used in your EBS system). If using Cortex Test Harness data, the available values are US (English) and ES (Spanish) |
+| cortex_oracle_ebs_category_set_name  | Cortex Oracle EBS: Category Set Name      | String        | Edit            | No             | Primary Category Set Name used in your EBS system. If using Cortex Framework test data, the default value equals BE_INV_ITEM_CATEGORY_SET |
+| cortex_oracle_ebs_default_language   | Cortex Oracle EBS: Default Language  | String        | Edit            | No             | **US** (or primary language code used in your EBS system). If using Cortex Test data, the available values are US (English) and ES (Spanish) |
 | cortex_oracle_ebs_default_currency | Cortex Oracle EBS: Default Target Currency | String | Edit | No | **USD** or desired currency like EUR, CAD or JPY |
-| cortex_oracle_ebs_use_test_data | Cortex Oracle EBS: Use Test Data (Yes or No) | String | Edit | No | Enter **Yes** if using Cortex Framework test harness data. Otherwise, enter No |
+| cortex_oracle_ebs_use_test_data | Cortex Oracle EBS: Use Test Data (Yes or No) | String | Edit | No | Enter **Yes** if using Cortex Framework test  data. Otherwise, enter No |
 
 Each dashboard user can personalize these values by following these [instructions](https://cloud.google.com/looker/docs/user-account).
 
 <h2><span style="color:#2d7eea">Test Data</span></h2>
-When utilizing the optional test harness data with this block, consider the following key points:
+When utilizing the **optional** test data with this block, consider the following key points:
 
-- Sales Orders time frame from January 1, 2021 to April 4, 2024.
-- When the user attribute **cortex_oracle_ebs_use_test_data** is set to **Yes**, calculations based on the current date use March 28, 2024 instead. This adjustment ensures dimensions like age of receivables are accurately reflected in the test dataset.
-- The only available Category Set ID / Category Set Name is 1100000425 / BE_INV_ITEM_CATEGORY_SET. The user attribute **cortex_oracle_ebs_category_set_name** should be set to BE_INV_ITEM_CATEGORY_SET.
-- To showcase multiple languages and currencies during the deployment of [Cortex Framework for Oracle EBS](https://github.com/GoogleCloudPlatform/cortex-data-foundation), include USD and EUR as currency conversion targets and US and ES as languages. Here's a sample snippet from the _config.json_ file used in a deployment:
+- **Timeframes**: The test data covers Sales Orders from January 1, 2021 to April 4, 2024 and Invoices & Payments from January 2, 2021 to March 31, 2024.
+- **Date Adjustment**: When using test data (user attribute `cortex_oracle_ebs_use_test_data` is set to `Yes`), the current date is replaced with March 31, 2024 for calculations. This ensures accurate calculations for dimensions like age of receivables.
+- **Category Set**: The only available Category Set ID / Category Set Name is `1100000425 / BE_INV_ITEM_CATEGORY_SET`. The user attribute **cortex_oracle_ebs_category_set_name** should be set to `BE_INV_ITEM_CATEGORY_SET`.
+- **Business Unit**: Test data includes only one Business Unit named `BE1 operating unit`.
+- **Tax Amount**: In _Sales Invoices_ and _Sales Invoices Daily Agg_, the tax amount is 0 for all records.
+- **Intercompany**: For all records `Is_Intercompany` is set to No.
+- **Multiple languages and currencies**: To showcase multiple languages and currencies in the test data, during the deployment of [Cortex Framework for Oracle EBS](https://github.com/GoogleCloudPlatform/cortex-data-foundation), include USD and EUR as currency conversion targets and US and ES as languages. The following is a sample snippet from the `config.json` file used in a deployment:
 
 ```
 "OracleEBS": {
@@ -93,9 +96,6 @@ When utilizing the optional test harness data with this block, consider the foll
         }
     },
 ```
-
-- In _Sales Invoices_ and _Sales Invoices Daily Agg_ the tax amount is 0 for all records.
-- Value for _Is\_Intercompany_ is 'No' for all records.
 
 <h2><span style="color:#2d7eea">Other Considerations</span></h2>
 

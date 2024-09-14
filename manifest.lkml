@@ -26,7 +26,7 @@ constant: category_set {
 constant: default_target_date {
   value:  "{%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}
   {%- if test_data == 'YES' -%}
-  {%- assign td = '2024-03-28' -%} {%- else -%}
+  {%- assign td = '2024-03-31' -%} {%- else -%}
   {%- assign td = 'now' | date: '%Y-%m-%d' -%}{%- endif -%}'{{td}}'"
 }
 

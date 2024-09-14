@@ -63,16 +63,19 @@
 #
 #   5. Updated hidden and label properties of filter1 to filter9. Also updated filter1 to use "type: date".
 #
-#   6. Added view_label = "@{label_view_for_dashboard_navigation}" for how these fields appear in the Explore
+#   6. Added view_label = "@{label_view_for_dashboard_navigation}" for how these fields appear in the Explore.
+#
+#   7. Added derived_table sql: property to allow this view to also be a standalone Explore.
 #}
 #
 # HOW TO USE FOR NAVIGATION {
-#   1. Add to an Explore using a bare join
+#   1. Add to an Explore using a bare join (important if adding to a dashboard where you plan to use cross-filtering)
 #         explore: sales_orders {
 #         join: otc_dashboard_navigation_ext {
 #           relationship: one_to_one
 #           sql:  ;;
 #           }}
+#      Or Open the Explore OTC Dashboard Navigation (if planning to add to a dashboard where cross-filtering is disabled).
 #
 #   2. Open the Explore and add "Dashboard Links" dimension to a Single Value Visualization.
 #
@@ -114,6 +117,13 @@ view: otc_dashboard_navigation_ext {
 
   view_label: "@{label_view_for_dashboard_navigation}"
 
+#--> Added a simple derived table syntax to allow a standalone Explore
+#--> But to ensure that cross-filtering on a dashboard can be enabled, use bare join to include this view in the single Explore used for the dashboard.
+  derived_table: {
+    sql: SELECT 1 AS dummy_field ;;
+  }
+
+#--> Added new paramter for subject area that allows multiple dashboard sets to be defined.
   parameter: parameter_navigation_subject {
     hidden: no
     type: unquoted
@@ -124,7 +134,6 @@ view: otc_dashboard_navigation_ext {
     allowed_value: {value: "odetails" label: "Orders with Line Details"}
     allowed_value: {value: "bdetails" label: "Billing with Line Details"}
     default_value: "orders"
-    # suggest_persist_for: "1 seconds"
   }
 
   dimension: map_filter_numbers_to_dashboard_filter_names {
@@ -132,6 +141,7 @@ view: otc_dashboard_navigation_ext {
     # sql: "1|date||2|business_unit||3|customer_type||4|customer_country" ;;
   }
 
+#--> Added logic to define dashboard set based on the subject area selected with parameter_navigation_subject
   dimension: dash_bindings {
     hidden: yes
     type: string

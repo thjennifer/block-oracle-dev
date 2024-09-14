@@ -97,7 +97,7 @@
     advanced_vis_config: |-
       {
         tooltip: {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#FFFFFF',
           shadow: true,
           format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080; ">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
           footerFormat: '</table>',
@@ -157,7 +157,7 @@
     advanced_vis_config: |-
       {
         tooltip: {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#FFFFFF',
           shadow: true,
           format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080; ">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
             footerFormat: '</table>',
@@ -267,7 +267,7 @@
           },
         ],
         tooltip: {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#FFFFFF',
           shared: true,
           formatter: null,
           shadow: true,
@@ -326,7 +326,7 @@
     advanced_vis_config: |-
       {
         tooltip: {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#FFFFFF',
           shadow: true,
           format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080; ">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
             footerFormat: '</table>',
@@ -393,7 +393,7 @@
     advanced_vis_config: |-
       {
         tooltip: {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#FFFFFF',
           shadow: true,
           format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080; ">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
             footerFormat: '</table>',

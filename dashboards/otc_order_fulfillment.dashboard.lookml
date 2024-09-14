@@ -30,7 +30,7 @@
 - dashboard: otc_order_fulfillment
   title: Order Fulfillment
   description: "See delivery performance over time, items with longest average order cycle time, and items currently having fulfillment issues."
-
+  crossfilter_enabled: true
   extends: otc_template_orders
 
   filters:
@@ -51,6 +51,7 @@
   elements:
 
   - name: dashboard_navigation
+    explore: sales_orders
     filters:
       otc_dashboard_navigation_ext.parameter_navigation_focus_page: '3'
     listen:
@@ -179,8 +180,8 @@
           shared: true,
           crosshairs: true,
           shadow: true,
-          borderColor: '#cccccc',
-          backgroundColor: '#ffffff',
+          borderColor: '#CCCCCC',
+          backgroundColor: '#FFFFFF',
         },
         yAxis: {
           labels: {
@@ -226,13 +227,8 @@
     y_axis_gridlines: true
     show_y_axis_labels: true
     show_y_axis_ticks: true
-    # y_axis_tick_density: default
     show_x_axis_label: true
     show_x_axis_ticks: true
-    # y_axis_scale_mode: linear
-    # x_axis_reversed: false
-    # y_axis_reversed: false
-    # plot_size_by_field: false
     limit_displayed_rows: true
     limit_displayed_rows_values:
       show_hide: show
@@ -261,8 +257,8 @@
         footerFormat: '</table>',
         shared: true,
         crosshairs: true,
-        borderColor: '#cccccc',
-        backgroundColor: '#ffffff',
+        borderColor: '#CCCCCC',
+        backgroundColor: '#FFFFFF',
         shadow: true,
       },
       yAxis: [{
@@ -384,8 +380,8 @@
           footerFormat: '</table>',
           shared: true,
           crosshairs: true,
-          borderColor: '#cccccc',
-          backgroundColor: '#ffffff',
+          borderColor: '#CCCCCC',
+          backgroundColor: '#FFFFFF',
           shadow: true,
         },
         xAxis: {

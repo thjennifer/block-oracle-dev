@@ -92,7 +92,6 @@
 
   elements:
   - name: dashboard_navigation
-    explore: sales_payments_daily_agg
     filters:
       otc_dashboard_navigation_ext.parameter_navigation_focus_page: '2'
 #####################################################################################################
@@ -253,7 +252,7 @@
           format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080;">Past Due Receivables</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f} ({point.percentage:.0f}%)</td></tr>{/each}',
           footerFormat: '</table>',
           shared: true,
-          backgroundColor: '#ffffff',
+          backgroundColor: '#FFFFFF',
           shadow: true,
         },
       }
@@ -297,7 +296,7 @@
     series_types:
       cumulative_percent_of_total_receivables: line
     series_colors:
-      sales_payments_daily_agg.total_receivables_target_currency_formatted: "#2596be"
+      sales_payments_daily_agg.total_receivables_target_currency_formatted: "#2596BE"
       cumulative_percent_of_total_receivables: "#000000"
     limit: 10
     total: true
@@ -356,7 +355,7 @@
         },
         ],
         tooltip: {
-          backgroundColor: '#ffffff',
+          backgroundColor: '#FFFFFF',
           shared: true,
           formatter: null,
           shadow: true,
@@ -435,7 +434,7 @@
           footerFormat: '</table>',
           shared: true,
           crosshairs: true,
-          backgroundColor: '#ffffff',
+          backgroundColor: '#FFFFFF',
           shadow: true,
         },
       }

@@ -19,10 +19,6 @@
 
 - dashboard: otc_billing_invoice_line_details
   title: Invoice Line Details
-  layout: newspaper
-  preferred_viewer: dashboards-next
-  crossfilter_enabled: false
-  filters_location_top: false
   description: 'Provides a table of invoices including details like customer, items, invoiced quantities and amounts.'
 
   extends: otc_template_billing

@@ -53,8 +53,6 @@
 
   elements:
   - name: dashboard_navigation
-    filters:
-      otc_dashboard_navigation_ext.parameter_navigation_style: 'buttons'
     listen:
       date: otc_dashboard_navigation_ext.filter1
       business_unit: otc_dashboard_navigation_ext.filter2

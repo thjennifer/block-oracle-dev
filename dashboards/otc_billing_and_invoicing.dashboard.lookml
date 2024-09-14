@@ -53,7 +53,6 @@
 
   elements:
     - name: dashboard_navigation
-      explore: sales_invoices_daily_agg
       filters:
         otc_dashboard_navigation_ext.parameter_navigation_focus_page: '1'
       listen:
@@ -171,14 +170,14 @@
       fields: [sales_invoices.invoice_month,
               sales_invoices.invoice_count,
               sales_invoices__lines.total_transaction_amount_target_currency_formatted]
-      fill_fields: [sales_invoices.invoice_month]
       sorts: [sales_invoices.invoice_month desc]
-      limit: 500
       x_axis_gridlines: false
       y_axis_gridlines: true
       show_view_names: false
       show_x_axis_label: false
       show_x_axis_ticks: true
+      show_null_points: false
+      discontinuous_nulls: true
       legend_position: center
       point_style: circle_outline
       y_axes: [{label: '', orientation: left,
@@ -193,8 +192,8 @@
         sales_invoices.invoice_count: area
       series_colors:
         sales_invoices__lines.total_transaction_amount_target_currency_formatted: "#808080"
-        sales_invoices.invoice_count: "#2596be"
-      discontinuous_nulls: true
+        sales_invoices.invoice_count: "#2596BE"
+
       advanced_vis_config: |-
         {
           chart: {},
@@ -206,7 +205,7 @@
             },
           }, ],
           tooltip: {
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FFFFFF',
             shadow: true,
             format: '<table><th style="font-size: 1.8em;text-align: left;color: #808080; ">{key}</th></table><table>{#each points}<tr><th style="text-align: left;color:{point.color};">{series.name}:&nbsp;&nbsp;&nbsp;</th><td style="text-align: right;color:{point.color};" >{point.y:,.0f}</td></tr>{/each}',
             footerFormat: '</table>',
@@ -303,10 +302,10 @@
         sales_invoices__lines.average_unit_list_price_when_discount_target_currency: "Average Unit List Price"
         sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency: "Average Gross Unit Selling Price"
       series_colors:
-        sales_invoices__lines.average_unit_list_price_when_discount_target_currency: "#76b5c5"
-        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency: "#e28743"
-        sales_invoices__lines.discount_invoice_line_percent_formatted: "#192d54"
-        sales_invoices__lines.average_percent_discount_when_taken_formatted: "#873e23"
+        sales_invoices__lines.average_unit_list_price_when_discount_target_currency: "#76B5C5"
+        sales_invoices__lines.average_gross_unit_selling_price_when_discount_target_currency: "#E28743"
+        sales_invoices__lines.discount_invoice_line_percent_formatted: "#192D54"
+        sales_invoices__lines.average_percent_discount_when_taken_formatted: "#873E23"
       series_point_styles:
         sales_invoices__lines.average_percent_discount_when_taken_formatted: triangle
       advanced_vis_config: |-
@@ -322,7 +321,7 @@
               },
               dataLabels: {
                 format: '{y:.1f}%',
-                color: '#873e23',
+                color: '#873E23',
                 allowOverlap: false,
               },
             },
@@ -336,7 +335,7 @@
               },
               dataLabels: {
                 format: '{y:.1f}%',
-                color: '#192d54',
+                color: '#192D54',
                 allowOverlap: false,
               },
               type: 'line',
@@ -368,7 +367,7 @@
             },
           ],
           tooltip: {
-            backgroundColor: '#ffffff',
+            backgroundColor: '#FFFFFF',
             formatter: null,
             shared: true,
             crosshairs: true,

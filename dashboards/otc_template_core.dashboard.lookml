@@ -107,7 +107,7 @@
   elements:
   - name: dashboard_navigation
     type: single_value
-    explore: sales_orders_daily_agg
+    explore: otc_dashboard_navigation_ext
     fields: [otc_dashboard_navigation_ext.navigation_links]
     filters:
         otc_dashboard_navigation_ext.parameter_navigation_focus_page: '1'

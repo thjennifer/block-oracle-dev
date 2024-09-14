@@ -46,7 +46,7 @@
 
   elements:
   - name: dashboard_navigation
-    explore: sales_invoices_daily_agg
+    explore: otc_dashboard_navigation_ext
     filters:
       otc_dashboard_navigation_ext.parameter_navigation_subject: 'billing'
     listen:
