@@ -1,5 +1,7 @@
-datagroup: default_max_cache {
+datagroup: oracle_ebs_default_datagroup {
   max_cache_age: "12 hours"
+  sql_trigger: SELECT MAX(LAST_UPDATE_TS) FROM `@{GCP_PROJECT_ID}.@{REPORTING_DATASET}.SalesOrders` ;;
+  description: "Triggers when either the maximum cache age surpasses 12 hours or when the maximum value for the Last Update Timestamp in Sales Orders changes."
 }
 
 datagroup: sales_payments_daily_agg_change {
