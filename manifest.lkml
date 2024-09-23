@@ -465,6 +465,17 @@ constant: link_map_otc_invoices_to_order_details {
   value: "parameter_target_currency|target_currency||parameter_language|item_language||order_header_number|order_number"
 }
 
+constant: link_map_otc_order_details_id {
+  value: "{% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}"
+  # value: "{% assign target_dashboard = '153' %}"
+}
+
+constant: link_map_otc_invoice_details_id {
+  value: "{% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}"
+  # value: "{% assign target_dashboard = '156' %}"
+}
+
+
 #--> link_map_filters_from_navigation_dash_bindings
 #{
 # - Generates liquid variable source_to_destination_filters_mapping used in building a dashboard url.
@@ -520,6 +531,7 @@ value: "{% assign source_to_destination_filters_mapping = ''%}
               {% endfor %}
           {% endfor %}"
 }
+
 
 #} end constants for link maps
 

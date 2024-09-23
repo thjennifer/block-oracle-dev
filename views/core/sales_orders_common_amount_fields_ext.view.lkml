@@ -280,8 +280,7 @@ view: sales_orders_common_amount_fields_ext {
       {% if append_extra_mapping == true %}
         {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | append: extra_mapping %}
       {% endif %}
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      @{link_map_otc_order_details_id}
       @{link_build_dashboard_url}
       "
     }
@@ -303,8 +302,7 @@ view: sales_orders_common_amount_fields_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      @{link_map_otc_order_details_id}
       {% assign default_filters='is_booking=Yes'%}
       {% assign use_default_filters_to_override = true %}
       @{link_build_dashboard_url}
@@ -361,8 +359,7 @@ view: sales_orders_common_amount_fields_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      @{link_map_otc_order_details_id}
       {% assign default_filters='is_backlog=Yes'%}
       {% assign use_default_filters_to_override = true %}
       @{link_build_dashboard_url}
@@ -433,8 +430,7 @@ view: sales_orders_common_amount_fields_ext {
       {% if append_extra_mapping == true %}
         {% assign source_to_destination_filters_mapping = source_to_destination_filters_mapping | append: extra_mapping %}
       {% endif %}
-      {% assign model = _model._name %}
-      {% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}
+      @{link_map_otc_order_details_id}
       @{link_build_dashboard_url}
       "
     }
