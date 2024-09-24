@@ -319,7 +319,7 @@ view: +sales_invoices {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}'%}
-      @{link_map_otc_invoice_details_id}
+      @{link_map_otc_target_dash_id_invoice_details}
       @{link_build_dashboard_url}
       "
     }

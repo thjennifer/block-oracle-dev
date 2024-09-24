@@ -142,23 +142,24 @@ view: otc_dashboard_navigation_ext {
   }
 
 #--> Added logic to define dashboard set based on the subject area selected with parameter_navigation_subject
+# Uses constants to define the dashboard id|link text|filter set for each dashboard
   dimension: dash_bindings {
     hidden: yes
     type: string
     sql: {% assign subject = parameter_navigation_subject._parameter_value %}
           {% case subject %}
             {% when "orders" %}
-            "otc_order_status|Order Status|1,2,3,4,5,6,7,8||otc_order_sales_performance|Sales Performance|1,2,3,4,5,6,7,8,9||otc_order_fulfillment|Order Fulfillment|1,2,3,4,5,6,7,8,9"
+            "@{link_map_otc_dash_bindings_order_status}||@{link_map_otc_dash_bindings_order_sales_performance}||@{link_map_otc_dash_bindings_order_fulfillment}"
           {% when "billing" %}
-            "otc_billing_and_invoicing|Billing & Invoicing|1,2,3,4,5,6,7,8||otc_billing_accounts_receivable|Accounts Receivable|1,2,3,4,5,6"
+            "@{link_map_otc_dash_bindings_billing_and_invoicing}||@{link_map_otc_dash_bindings_billing_accounts_receivable}"
           {% when "odetails" %}
-            "otc_order_status|Order Status|1,2,3,4,5,6,7,8||otc_order_sales_performance|Sales Performance|1,2,3,4,5,6,7,8,9||otc_order_fulfillment|Order Fulfillment|1,2,3,4,5,6,7,8,9||otc_order_line_details|Orders with Line Details|1,2,3,4,5,6,7,8,9"
+            "@{link_map_otc_dash_bindings_order_status}||@{link_map_otc_dash_bindings_order_sales_performance}||@{link_map_otc_dash_bindings_order_fulfillment}||@{link_map_otc_dash_bindings_order_details}"
            {% when "bdetails" %}
-            "otc_billing_and_invoicing|Billing & Invoicing|1,2,3,4,5,6,7,8||otc_billing_accounts_receivable|Accounts Receivable|1,2,3,4,5,6||otc_billing_invoice_line_details|Invoice Details|1,2,3,4,5,6,7,8,9"
+            "@{link_map_otc_dash_bindings_billing_and_invoicing}||@{link_map_otc_dash_bindings_billing_accounts_receivable}||@{link_map_otc_dash_bindings_billing_invoice_details}"
           {% endcase %}
           ;;
     # sql: "otc_order_status|Order Status|1,2,3,4||otc_sales_performance|Sales Performance|1,2,3,4" ;;
-  }
+    }
 
   parameter: parameter_navigation_focus_page {
     allowed_value: {value: "3"}

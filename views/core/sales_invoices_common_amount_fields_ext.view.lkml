@@ -151,7 +151,7 @@ view: sales_invoices_common_amount_fields_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}'| append: '||invoice_month|date'%}
-      @{link_map_otc_invoice_details_id}
+      @{link_map_otc_target_dash_id_invoice_details}
       @{link_build_dashboard_url}
       "
     }
@@ -193,7 +193,7 @@ view: sales_invoices_common_amount_fields_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}'%}
-      @{link_map_otc_invoice_details_id}
+      @{link_map_otc_target_dash_id_invoice_details}
       @{link_build_dashboard_url}
       "
     }
@@ -215,7 +215,7 @@ view: sales_invoices_common_amount_fields_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_invoices_to_invoice_details}'%}
-      @{link_map_otc_invoice_details_id}
+      @{link_map_otc_target_dash_id_invoice_details}
       {% assign default_filters='is_discounted=Yes'%}
       {% assign use_default_filters_to_override = false %}
       @{link_build_dashboard_url}

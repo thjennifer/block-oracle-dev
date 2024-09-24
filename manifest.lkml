@@ -26,7 +26,7 @@ constant: category_set {
 constant: default_target_date {
   value:  "{%- assign test_data = _user_attributes['cortex_oracle_ebs_use_test_data'] | upcase -%}
   {%- if test_data == 'YES' -%}
-  {%- assign td = '2024-03-31' -%} {%- else -%}
+  {%- assign td = '2024-03-28' -%} {%- else -%}
   {%- assign td = 'now' | date: '%Y-%m-%d' -%}{%- endif -%}'{{td}}'"
 }
 
@@ -134,7 +134,7 @@ constant: html_message_source_currency {
 # For example:
 #     measure: order_count {
 #       type: sum
-#       sql: @{is_agg_category_in_query}NULL {% else %} ${num_orders} {% endif %} ;;
+#       sql: @{is_agg_category_selected}NULL {%else} ${num_orders} {% endif %} ;;
 #     }
 #}
 constant: is_agg_category_in_query {
@@ -382,8 +382,11 @@ constant: link_style_dashboard_navigation {
 #} end constants for link style
 
 #########################################################
-# LINK_MAP: Map explore fields to filters
+# LINK_MAP
 #{
+# Map explore fields to filters (begin with link_map_otc_)
+# or map dashboard ids to names and filter sets (begin with link_map_otc_dash_bindings_)
+#
 # The constants with the link_map_ prefix are used to map fields in an Explore/view to either:
 # 1. dashboard filter names
 # 2. fields in a different Explore
@@ -465,14 +468,96 @@ constant: link_map_otc_invoices_to_order_details {
   value: "parameter_target_currency|target_currency||parameter_language|item_language||order_header_number|order_number"
 }
 
-constant: link_map_otc_order_details_id {
-  value: "{% assign target_dashboard = _model._name | append: '::otc_order_line_item_details' %}"
-  # value: "{% assign target_dashboard = '153' %}"
+#--> link_map_otc_dash_bindings_*
+#{ For the dash_bindings dimension defined in the otc_dashboard_navigation_ext.view
+#  these constants provided the dashboard name/id, link text and numeric filters to be passed between dashboards in
+#  separated by '|'. For example:
+#   id | link text | filter set
+#   otc_order_status|Order Status|1,2,3,4,5,6,7,8
+#
+#  Note, if using User-defined dashboards instead of LookML dashboards, replace the first value with numeric
+#  dashboard id or dashboard slug
+#
+#       LookML dashboard name             link text                 filters used
+#       ---------------                   --------------------      ----------
+#       otc_order_status                  Order Status              1,2,3,4,5,6,7,8
+#       otc_order_sales_performance       Sales Performance         1,2,3,4,5,6,7,8,9
+#       otc_order_fulfillment             Order Fulfillment         1,2,3,4,5,6,7,8,9
+#       otc_order_line_item_details       Orders with Line Details  1,2,3,4,5,6,7,8,9
+#       otc_billing_and_invoicing         Billing & Invoicing       1,2,3,4,5,6,7,8
+#       otc_billing_accounts_receivable   Accounts Receivable       1,2,3,4,5,6
+#       otc_billing_invoice_line_details  Invoice Details           1,2,3,4,5,6,7,8,9
+#}
+constant: link_map_otc_dash_bindings_order_status {
+  value: "otc_order_status|Order Status|1,2,3,4,5,6,7,8"
 }
 
-constant: link_map_otc_invoice_details_id {
-  value: "{% assign target_dashboard = _model._name | append: '::otc_billing_invoice_line_details' %}"
-  # value: "{% assign target_dashboard = '156' %}"
+constant: link_map_otc_dash_bindings_order_sales_performance {
+  value: "otc_order_sales_performance|Sales Performance|1,2,3,4,5,6,7,8,9"
+}
+
+constant: link_map_otc_dash_bindings_order_fulfillment {
+  value: "otc_order_fulfillment|Order Fulfillment|1,2,3,4,5,6,7,8,9"
+}
+
+constant: link_map_otc_dash_bindings_order_details {
+  value: "otc_order_line_item_details|Orders with Line Details|1,2,3,4,5,6,7,8,9"
+}
+
+constant: link_map_otc_dash_bindings_billing_and_invoicing {
+  value: "otc_billing_and_invoicing|Billing and Invoicing|1,2,3,4,5,6,7,8"
+}
+
+constant: link_map_otc_dash_bindings_billing_accounts_receivable {
+  value: "otc_billing_accounts_receivable|Accounts Receivable|1,2,3,4,5,6"
+}
+
+constant: link_map_otc_dash_bindings_billing_invoice_details {
+  value: "otc_billing_invoice_line_details|Invoice Details|1,2,3,4,5,6,7,8,9"
+}
+
+
+#--> link_map_clean_target_dashboard
+#{ Takes input of liquid variable target_dashboard and checks if it is a string.
+# If numeric, do nothing.
+# If string, for names with '::' (full LookML dashboard reference) or
+# names of 22-character length without '_' (slug id) do nothing
+# else treat append model name for proper url reference of LookML dashboards:
+#   model name::lookml dashboard name
+# Outputs an updated target_dashboard liquid variable for LookML dashboards.
+#}
+
+constant: link_map_clean_target_dashboard {
+  value: "{% assign check_target_type = target_dashboard | plus: 0 %}
+          {% if check_target_type == 0 %}
+            {% assign name_size = target_dashboard | size %}
+       {% comment %} For names with '::' or length of 22 characters without '_', keep the name as is. {% endcomment %}
+       {% comment %} Otherwise, add the model name and '::' to ensure proper reference to the LookML dashboard. {% endcomment %}
+              {% if target_dashboard contains '::' %}
+              {% elsif name_size == 22 %}
+                 {% if target_dashboard contains '_' %}
+                    {% assign target_dashboard = _model._name | append: '::' | append: target_dashboard %}
+                 {% endif %}
+              {% else %}
+                {% assign target_dashboard = _model._name | append: '::' | append: target_dashboard %}
+              {% endif %}
+            {% endif %}"
+}
+
+#--> link_map_otc_target_dash_id_*
+#{ These constants assign either order details dashboard id or invoice details dashboard id to the liquid
+# variable target_dashboard.
+#
+# Used in Link property in order to open these dashboards from KPI measures.
+#}
+constant: link_map_otc_target_dash_id_order_details {
+  value: "{% assign target_dashboard = '@{link_map_otc_dash_bindings_order_details}' | split: '|' | first %}
+          @{link_map_clean_target_dashboard}"
+}
+
+constant: link_map_otc_target_dash_id_invoice_details {
+  value: "{% assign target_dashboard = '@{link_map_otc_dash_bindings_billing_invoice_details}' | split: '|' | first %}
+          @{link_map_clean_target_dashboard}"
 }
 
 
@@ -509,14 +594,7 @@ value: "{% assign source_to_destination_filters_mapping = ''%}
 
     <!-- Assign target_dashboard name and ensure any LookML dashboard names provided follow proper naming syntax. -->
         {% assign target_dashboard = nav_parts[0] %}
-        {% assign check_target_type = target_dashboard | plus: 0 %}
-        <!-- If check_target_type == 0 then dashboard name is a string and not a user-defined dashboard. -->
-           {% if check_target_type == 0 %}
-        <!-- For dashboards with '::', keep the name as is. Otherwise, add the model name and '::' to ensure proper reference to the LookML dashboard. -->
-              {% if target_dashboard contains '::' %}{% else %}
-                {% assign target_dashboard = model_name | append: '::' | append: target_dashboard %}
-              {% endif %}
-            {% endif %}
+        @{link_map_clean_target_dashboard}
 
     <!-- Create source_to_destination_filters_mapping variable by looping through the mapped pairs -->
         {% assign dash_filter_set = nav_parts[2] | split: ',' %}
@@ -531,7 +609,6 @@ value: "{% assign source_to_destination_filters_mapping = ''%}
               {% endfor %}
           {% endfor %}"
 }
-
 
 #} end constants for link maps
 

@@ -1,5 +1,4 @@
 include: "/views/core/otc_dashboard_navigation_ext.view"
-# include: "/demo/otc_dashboard_navigation_ext_rfn.view"
 
 explore: otc_dashboard_navigation_ext {
   hidden: no

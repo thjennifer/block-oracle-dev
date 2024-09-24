@@ -61,7 +61,7 @@ view: sales_orders_common_count_measures_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
-      @{link_map_otc_order_details_id}
+      @{link_map_otc_target_dash_id_order_details}
       {% assign default_filters='is_blocked=Yes'%}
       {% assign use_default_filters_to_override = true %}
       @{link_build_dashboard_url}
@@ -146,7 +146,7 @@ view: sales_orders_common_count_measures_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
-      @{link_map_otc_order_details_id}
+      @{link_map_otc_target_dash_id_order_details}
       {% assign default_filters='is_fulfilled=Yes'%}
       {% assign use_default_filters_to_override = true %}
       @{link_build_dashboard_url}
@@ -170,7 +170,7 @@ view: sales_orders_common_count_measures_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
-      @{link_map_otc_order_details_id}
+      @{link_map_otc_target_dash_id_order_details}
       {% assign default_filters='is_fulfilled_by_request_date=Yes'%}
       {% assign use_default_filters_to_override = true %}
       @{link_build_dashboard_url}
@@ -194,7 +194,7 @@ view: sales_orders_common_count_measures_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
-      @{link_map_otc_order_details_id}
+      @{link_map_otc_target_dash_id_order_details}
       {% assign default_filters='is_backordered=Yes'%}
       {% assign use_default_filters_to_override = true %}
       @{link_build_dashboard_url}
@@ -218,7 +218,7 @@ view: sales_orders_common_count_measures_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
-      @{link_map_otc_order_details_id}
+      @{link_map_otc_target_dash_id_order_details}
       {% assign default_filters='has_return=Yes'%}
       {% assign use_default_filters_to_override = true %}
       @{link_build_dashboard_url}
@@ -285,7 +285,7 @@ view: sales_orders_common_count_measures_ext {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
-      @{link_map_otc_order_details_id}
+      @{link_map_otc_target_dash_id_order_details}
       @{link_build_dashboard_url}
       "
     }
@@ -308,8 +308,8 @@ view: sales_orders_common_count_measures_ext {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
-      @{link_map_otc_order_details_id}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}' | append: '||ordered_month|date' %}
+      @{link_map_otc_target_dash_id_order_details}
       {% assign default_filters='is_fulfilled=Yes'%}
       {% assign use_default_filters_to_override = true %}
       @{link_build_dashboard_url}
@@ -334,8 +334,8 @@ view: sales_orders_common_count_measures_ext {
       @{link_build_variable_defaults}
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
-      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}'%}
-      @{link_map_otc_order_details_id}
+      {% assign source_to_destination_filters_mapping = '@{link_map_otc_sales_orders_to_order_details}' | append: '||ordered_month|date' %}
+      @{link_map_otc_target_dash_id_order_details}
       {% assign default_filters='is_fulfilled_by_request_date=Yes'%}
       {% assign use_default_filters_to_override = true %}
       @{link_build_dashboard_url}

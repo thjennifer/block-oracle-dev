@@ -43,7 +43,7 @@ view: +sales_orders__lines__return_line_ids {
       {% assign link = link_generator._link %}
       {% assign use_qualified_filter_names = false %}
       {% assign source_to_destination_filters_mapping = 'return_line_id|line_id||parameter_target_currency|target_currency'%}
-      @{link_map_otc_order_details_id}
+      @{link_map_otc_target_dash_id_order_details}
       @{link_build_dashboard_url}"
     }
   }
