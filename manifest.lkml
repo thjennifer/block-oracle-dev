@@ -1,15 +1,15 @@
 constant: CONNECTION_NAME {
-  value: "cortex-oracle-dev"
+  value: "cortex"
   export: override_required
 }
 
 constant: GCP_PROJECT_ID {
-  value: "kittycorn-dev-incorta"
+  value: "GCP Project ID"
   export: override_required
 }
 
 constant: REPORTING_DATASET {
-  value: "CORTEX_ORACLE_EBS_REPORTING"
+  value: "Reporting Dataset Name"
   export: override_required
 }
 
@@ -522,7 +522,7 @@ constant: link_map_otc_dash_bindings_billing_invoice_details {
 # If numeric, do nothing.
 # If string, for names with '::' (full LookML dashboard reference) or
 # names of 22-character length without '_' (slug id) do nothing
-# else treat append model name for proper url reference of LookML dashboards:
+# else append model name for proper url reference of LookML dashboards:
 #   model name::lookml dashboard name
 # Outputs an updated target_dashboard liquid variable for LookML dashboards.
 #}
@@ -690,10 +690,11 @@ constant: link_vis_single {
 }
 
 #--> link_vis_line_chart_1_date_1_measure
-# Creates a line chart for a given measure. The liquid variable measure must be defined before calling the constant.
+#{ Creates a line chart for a given measure. The liquid variable measure must be defined before calling the constant.
 # For example:
 #   {% assign measure = sales_orders__lines.total_sales_amount_target_currency %}
 #   @{link_vis_line_chart_1_date_1_measure}
+#}
 constant: link_vis_line_chart_1_date_1_measure {
   value: "{% assign vis_config = '{\"point_style\":\"circle\",\"series_colors\":{\"' | append: measure | append: '\":\"#468FAF\"},\"type\":\"looker_line\"}' | url_encode | prepend: '&vis_config=' %}"
 }
