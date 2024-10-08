@@ -1,15 +1,15 @@
 constant: CONNECTION_NAME {
-  value: "cortex"
+  value: "cortex-oracle-dev"
   export: override_required
 }
 
 constant: GCP_PROJECT_ID {
-  value: "GCP Project ID"
+  value: "kittycorn-dev-incorta"
   export: override_required
 }
 
 constant: REPORTING_DATASET {
-  value: "Reporting Dataset Name"
+  value: "CORTEX_ORACLE_EBS_REPORTING"
   export: override_required
 }
 
